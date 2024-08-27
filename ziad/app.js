@@ -1,12 +1,9 @@
 const path = require('path');
-
 const express = require('express');
+const registerRoutes = require('./routes/register');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const port = 3000;
-const saltRounds = 15;
-const pg = require('pg');
-require('dotenv').config();
 const cors = require('cors'); // If you need CORS
 
 
@@ -30,7 +27,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/auth', authRoutes);
-
+app.use('/register', registerRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -39,6 +36,7 @@ app.use((error, req, res, next) => {
   const data = error.data;
   res.status(status).json({ message: message, data: data });
 });
+
 
 
 app.listen(port, (error) => {

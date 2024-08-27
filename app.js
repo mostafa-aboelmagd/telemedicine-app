@@ -1,38 +1,48 @@
+const path = require('path');
 const express = require('express');
-const { User } = require('./classes');
-const { insertUser } = require('./database');
-const bcrypt = require('bcrypt');
-const { passwordValidation } = require('./functions');
-const app = express();
+const registerRoutes = require('./routes/register');
+const bodyParser = require('body-parser');
+const multer = require('multer');
 const port = 3000;
-const saltRounds = 15;
+const cors = require('cors'); // If you need CORS
 
-app.listen(port, (error) => {
-    if (error) {
-        console.error(error);
-        return;
-    }
-    console.log(`Server is running on port ${port}`);
+
+const authRoutes = require('./routes/auth');
+
+const app = express();
+
+
+// app.use(bodyParser.urlencoded()); // x-www-form-urlencoded <form>
+app.use(bodyParser.json()); // application/json
+
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'OPTIONS, GET, POST, PUT, PATCH, DELETE'
+  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
 });
 
-app.use(express.json());
+app.use('/auth', authRoutes);
+app.use('/register', registerRoutes);
+
+app.use((error, req, res, next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message: message, data: data });
+});
 
 
 
-app.post('/register', async (req, res) => {
-    const { fName, lName, email, password, gender, phone, role, birthYear } = req.body;
-    if (fName && lName && email && password && gender && phone && role && birthYear) {
-        const passwordFlag = passwordValidation(password);
-        if (passwordFlag) {
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
-            const user = new User(fName, lName, email, hashedPassword, gender, phone, role, birthYear);
-            const userFlag = await insertUser(user);
-            if (userFlag) {
-                return res.send('User registered successfully');
-            } 
-            return res.send('User already exists');
-        }
-        return res.send('Password must contain at least 8 characters, one number, one alphabet, and one special character');
-    }
-    return res.send('Please fill all the fields');
+app.listen(port, (error) => {
+  if (error) {
+      console.error(error);
+      return;
+  }
+  console.log(`Server is running on port ${port}`);
 });

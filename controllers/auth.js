@@ -1,30 +1,33 @@
 const { validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { User } = require('../classes');
-const { pool,insertUser } = require('../database');
-const { passwordValidation } = require('../functions');
-const saltRounds = 15;
+const pg = require('pg');
+require('dotenv').config();
 
+const { PGHOST, PGDATABASE, PGUSER } = process.env;
+let PGPASSWORD = process.env.PGPASSWORD;
+PGPASSWORD = decodeURIComponent(PGPASSWORD);
 
-exports.register = async(req, res, next) => {
+const pool = new pg.Pool({
+    user: PGUSER,
+    host: PGHOST,
+    database: PGDATABASE,
+    password: PGPASSWORD,
+    port: 5432,
+    ssl: {
+        rejectUnauthorized: true,
+      },
+});
 
-  const { fName, lName, email, password, gender, phone, role, birthYear } = req.body;
-    if (fName && lName && email && password && gender && phone && role && birthYear) {
-        const passwordFlag = passwordValidation(password);
-        if (passwordFlag) {
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
-            const user = new User(fName, lName, email, hashedPassword, gender, phone, role, birthYear);
-            const userFlag = await insertUser(user);
-            if (userFlag) {
-                return res.send('User registered successfully');
-            } 
-            return res.send('User already exists');
-        }
-        return res.send('Password must contain at least 8 characters, one number, one alphabet, and one special character');
+(async () => {
+    try {
+        const client = await pool.connect();
+        console.log('Connected to the database');
+        client.release();
+    } catch (error) {
+        console.error('Database connection error', error.stack);
     }
-    return res.send('Please fill all the fields');
-};
+})();
 
 exports.login = async (req, res, next) => {
   const email = req.body.email;

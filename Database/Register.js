@@ -52,7 +52,7 @@ const insertUser = async (user) => {
         return false;
     } try {
         await pool.query(
-            'INSERT INTO users(first_name, last_name, email, phone_number, gender, role, password_hash, brith_year) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+            'INSERT INTO users(first_name, last_name, email, phone_number, gender, role, password_hash, birth_year) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
             [user.fName, user.lName, user.email, user.phone, user.gender, user.role, user.password, user.birthYear]
         );
         console.log('User added successfully');
