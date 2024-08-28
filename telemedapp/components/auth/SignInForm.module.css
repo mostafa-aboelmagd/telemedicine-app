@@ -1,0 +1,64 @@
+/* SignInForm.module.css */
+.signInForm {
+  color: #444;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 450px;
+  margin: auto;
+}
+
+.h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 24px;
+  color: #444;
+  font-weight: 600;
+}
+
+.linksContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.link {
+  color: #0070f3;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #0070f3;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 16px;
+}
+
+.submitButton:disabled {
+  background-color: #ccc;
+  color: #444;
+  cursor: not-allowed;
+}
+.submitButton:hover:enabled {
+  background-color: #0088cc;
+}
+
+.signInPage {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
