@@ -1,14 +1,14 @@
 // app/auth/signin/page.tsx
-
-import styles from "../../page.module.css";
 import SignInForm from "@/components/auth/SignInForm";
 import ImageContainer from "@/components/auth/ImageContainer";
 
-export default function SignInPage() {
+function SignInPage() {
   return (
-    <div className={styles.main}>
+    <div className="flex h-screen font-sans bg-neutral-100 flex-col lg:flex-row">
       <SignInForm />
       <ImageContainer />
     </div>
   );
 }
+
+export default SignInPage;
