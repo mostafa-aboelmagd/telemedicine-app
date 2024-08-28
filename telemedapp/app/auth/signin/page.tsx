@@ -4,7 +4,7 @@ import ImageContainer from "@/components/auth/ImageContainer";
 
 function SignInPage() {
   return (
-    <div className="flex h-screen font-sans bg-neutral-100 flex-col lg:flex-row">
+    <div className="flex h-screen bg-neutral-100 flex-col lg:flex-row">
       <SignInForm />
       <ImageContainer />
     </div>

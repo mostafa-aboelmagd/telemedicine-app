@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import InputComponent from "./InputComponent"; // import the InputComponent
 import Link from "next/link";
 
-function SignupForm() {
+function SignUpForm() {
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -406,4 +406,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default SignUpForm;
