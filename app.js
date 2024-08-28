@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const registerRoutes = require('./routes/register');
+const doctorLoginRoutes = require('./routes/doctorLogin');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const port = 3000;
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 
 app.use('/auth', authRoutes);
 app.use('/register', registerRoutes);
+app.use('/login/doctor', doctorLoginRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

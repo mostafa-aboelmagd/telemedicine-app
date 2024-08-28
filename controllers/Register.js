@@ -1,6 +1,6 @@
 const { User } = require('../classes');
 const { insertUser } = require('../Database/Register');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { passwordValidation } = require('../functions');
 
 const saltRounds = 15;
