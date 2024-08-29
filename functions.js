@@ -15,6 +15,3 @@ const splitAndToLower = (str) => {
 }
 
 module.exports = {passwordValidation, splitAndToLower};
-
-
-module.exports = {passwordValidation, splitAndToLower};

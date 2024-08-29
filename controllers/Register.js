@@ -1,5 +1,5 @@
 const { User } = require('../classes');
-const { insertUser } = require('../Database/Register');
+const database = require('../Database/Register');
 const bcrypt = require('bcryptjs');
 const { passwordValidation } = require('../functions');
 
@@ -12,7 +12,7 @@ const patientRegister = async (req, res) => {
         if (passwordFlag) {
             const hashedPassword = await bcrypt.hash(password, saltRounds);
             const user = new User(fName, lName, email, hashedPassword, gender, phone, role, birthYear);
-            const userFlag = await insertUser(user);
+            const userFlag = await database.insertUser(user);
             if (userFlag) {
                 return res.send('User registered successfully');
             } 
