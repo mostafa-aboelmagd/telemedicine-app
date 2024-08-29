@@ -25,7 +25,7 @@ const Benefits = () => {
                             <h3 className='text-[#035fe9] font-bold'>Variety of options</h3>
                             <img className='absolute top-[-64px] right-0' src="assets/b3.svg" alt="" />
                         </div>
-                        <p>A large number of therapists in various specialties ready to help you with whatever you're facing.</p>
+                        <p>A large number of Doctors in various specialties ready to help you with whatever you're facing.</p>
                     </div>
                 </div>
             </div>

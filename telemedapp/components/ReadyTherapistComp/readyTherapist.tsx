@@ -8,7 +8,7 @@ const ReadyTherapist = () => {
                 <div className='text-[#343a40] font-bold text-3xl'>If you need to talk now, we are here to help you</div>
                 <div className='flex justify-between items-center'>
                     <div><img className='w-20 h-20' src="/assets/logo.png" alt="" /></div>
-                    <div className='flex items-center'><GoDotFill className='rounded-full bg-lime-600 max-w-1 max-h-1 p-1 mr-4' />1 therapists are ready to start now within 15 mins</div>
+                    <div className='flex items-center'><GoDotFill className='rounded-full bg-lime-600 max-w-1 max-h-1 p-1 mr-4' />1 Doctor are ready to start now within 15 mins</div>
                     <button className='border border-[#035fe9] rounded-lg text-[#035fe9] px-12 py-2'>Explore</button>
                 </div>
             </div>

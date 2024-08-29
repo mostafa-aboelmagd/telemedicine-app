@@ -12,7 +12,7 @@ const Connection = () => {
     return (
         <section className='mb-4'>
             <div className='flex flex-col space-y-8 max-w-[75%] mx-auto'>
-                <div className='text-[#343a40] font-bold text-3xl mx-auto'>We Connect You With Licensed Therapists</div>
+                <div className='text-[#343a40] font-bold text-3xl mx-auto'>We Connect You With Licensed Doctor</div>
                 <div className='text-[#035fe9] text-2xl mx-auto'>Select the speciality that fits your need.</div>
                 <div className='grid grid-cols-4 gap-x-8 gap-y-4'>
                     <div className='text-[#035fe9] bg-white rounded-2xl p-4 flex items-center justify-center space-x-4 text-xl font-medium shadow-xl'>

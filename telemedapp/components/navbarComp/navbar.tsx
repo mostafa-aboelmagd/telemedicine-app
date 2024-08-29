@@ -5,16 +5,20 @@ import Link from "next/link"; // Import Link from Next.js
 
 const Navbar = () => {
   return (
-    <nav className="h-14 bg-white border border-b-[1px] sticky top-0 z-10">
+    <nav className="h-14 bg-white border border-b-[1px] sticky top-0 z-10 mb-8">
       <div className="max-w-[75%] flex justify-between items-center mx-auto">
-        <div className="flex justify-center items-center">
-          <img className="w-14 h-14" src="assets/logo.png" alt="logo" />
-          <span className="text-xl">TeleMedPilot</span>
-        </div>
+        <Link href="/">
+          <div className="flex justify-center items-center">
+            <img className="w-14 h-14" src="assets/logo.png" alt="logo" />
+            <span className="text-xl">TeleMedPilot</span>
+          </div>
+        </Link>
         <div className="flex justify-between space-x-4 text-[#4d4d4f] text-sm font-light">
-          <button className="hover:text-[#035fe9]">Therapists List</button>
+          <Link href="/doctors">
+            <button className="hover:text-[#035fe9]">Doctor List</button>
+          </Link>
           <button className="hover:text-[#035fe9]">Tests</button>
-          <button className="hover:text-[#035fe9]">Find A therapist</button>
+          <button className="hover:text-[#035fe9]">Find A Doctor</button>
           <button className="hover:text-[#035fe9]">Blog</button>
         </div>
         <div className="flex justify-between items-center space-x-6">

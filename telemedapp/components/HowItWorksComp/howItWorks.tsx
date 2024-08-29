@@ -10,7 +10,7 @@ const HowItWorks = () => {
                         <img src="assets/hiw1.svg" alt="" />
                         <div className='flex flex-col justify-between space-y-8'>
                             <div className='text-[#035fe9] font-bold'>1. Signup as a customer</div>
-                            <div className='text-[#212529] text-xs'>Answer a few questions to get matched with the right therapist. You can also select the therapist yourself</div>
+                            <div className='text-[#212529] text-xs'>Answer a few questions to get matched with the right doctor. You can also select the doctor yourself</div>
                         </div>
                     </div>
                     <div className='flex space-x-8'>
@@ -24,7 +24,7 @@ const HowItWorks = () => {
                         <img src="assets/hiw3.svg" alt="" />
                         <div className='flex flex-col justify-between space-y-8'>
                             <div className='text-[#035fe9] font-bold'>3. Start your journey</div>
-                            <div className='text-[#212529] text-xs'>You can communicate with your therapist in different ways during the session: camera, mic, and chatting</div>
+                            <div className='text-[#212529] text-xs'>You can communicate with your doctor in different ways during the session: camera, mic, and chatting</div>
                         </div>
                     </div>
                 </div>
