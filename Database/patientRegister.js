@@ -29,14 +29,12 @@ const pool = new pg.Pool({
 const retrieveUser = async (email) => {
     try {
         const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-        if (result.rows.length > 0) {
+        if (result.rows.length) {
             console.log('User already exists', result.rows);
-            return true;
+            return result.rows;
         }
-
         console.log('No user found');
         return false;
-
     } catch (error) {
         console.error(error.stack);
         return false;
@@ -47,7 +45,7 @@ const retrieveUser = async (email) => {
 
 
 const insertUser = async (user) => {
-    const databaseUser = await retrieveUser(user.email);
+    let databaseUser = await retrieveUser(user.email);
     if (databaseUser) {
         return false;
     } try {
@@ -55,8 +53,13 @@ const insertUser = async (user) => {
             'INSERT INTO users(first_name, last_name, email, phone_number, gender, role, password_hash, birth_year) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
             [user.fName, user.lName, user.email, user.phone, user.gender, user.role, user.password, user.birthYear]
         );
-        console.log('User added successfully');
-        return true;
+        databaseUser = await retrieveUser(user.email);
+        if (databaseUser) {
+            console.log('User added successfully');
+            return databaseUser;
+        }
+        console.log('User not added');
+        return false;
     } catch (error) {
         console.error(error.stack);
         return false;

@@ -1,11 +1,9 @@
-const path = require('path');
 const express = require('express');
-const registerRoutes = require('./routes/register');
+const cookieParser = require('cookie-parser');
+const patientRegisterRoutes = require('./routes/patientRegister');
 const doctorLoginRoutes = require('./routes/doctorLogin');
-const bodyParser = require('body-parser');
-const multer = require('multer');
+// const doctorEditRoutes = require('./routes/doctorEdit');
 const port = 3000;
-const cors = require('cors'); // If you need CORS
 
 
 const authRoutes = require('./routes/auth');
@@ -13,9 +11,8 @@ const authRoutes = require('./routes/auth');
 const app = express();
 
 
-// app.use(bodyParser.urlencoded()); // x-www-form-urlencoded <form>
-app.use(bodyParser.json()); // application/json
-
+app.use(express.json()); 
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,8 +25,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/auth', authRoutes);
-app.use('/register', registerRoutes);
-app.use('/login/doctor', doctorLoginRoutes);
+app.use('/patient/register', patientRegisterRoutes);
+app.use('/doctor/login', doctorLoginRoutes);
+// app.use('/doctor/edit', doctorEditRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

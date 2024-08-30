@@ -3,6 +3,6 @@ const doctorLoginController = require('../controllers/doctorLogin');
 
 const router = express.Router();
 
-router.get('/:id', doctorLoginController.getDoctorById);
+router.get('', doctorLoginController.showDoctorInfo);
 
 module.exports = router;
