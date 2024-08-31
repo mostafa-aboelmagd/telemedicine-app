@@ -31,10 +31,10 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
     const days = eachDayOfInterval({ start, end });
 
     const updatedDatesWithSlots = days.map((day) => {
-      const dayNumber = format(day, "d");
-      const existingDate = availableDates.find((d) => d.date === dayNumber);
+      const dateStr = format(day, "yyyy-MM-dd");
+      const existingDate = availableDates.find((d) => d.date === dateStr);
       return {
-        date: dayNumber,
+        date: dateStr,
         slots: existingDate ? existingDate.slots : [], // Use empty slots if none exist
       };
     });
@@ -51,30 +51,30 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-start gap-2 mb-4">
-      <div className="flex flex-row gap-4 lg:gap-8 mb-4">
+    <div className="flex flex-col gap-2 mb-4">
+      <div className="flex flex-row  items-center  mb-4">
         <h3 className="text-lg font-bold">Select date:</h3>
 
-        <div className="flex items-center justify-end gap-2">
+        <div className="mx-auto">
           <button
             onClick={handlePreviousWeek}
-            className="px-3 py-1 bg-gray-200 rounded-full text-gray-700"
+            className=" px-3 py-1 bg-gray-200 rounded-full text-gray-700"
           >
             {"<"}
           </button>
-          <span className="text-xl font-semibold">
+          <span className="mx-2 text-xl font-semibold">
             {format(startOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d")} -{" "}
             {format(endOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d")}
           </span>
           <button
             onClick={handleNextWeek}
-            className="px-3 py-1 bg-gray-200 rounded-full text-gray-700"
+            className=" px-3 py-1 bg-gray-200 rounded-full text-gray-700"
           >
             {">"}
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid lg:grid-cols-7 grid-cols-4 gap-2 lg:text-[14px] text-sm">
         {datesWithSlots.map(({ date, slots }) => (
           <button
             key={date}
@@ -83,11 +83,11 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
               selectedDate?.date === date
                 ? "bg-green-500 text-white"
                 : slots.length > 0
-                ? "bg-gray-300 text-gray-800"
+                ? "bg-gray-200 text-gray-800"
                 : "bg-gray-100 text-gray-500"
             }`}
           >
-            {date} {/* Display the day number */}
+            {format(new Date(date), "EEE d")} {/* Display the day and number */}
           </button>
         ))}
       </div>
