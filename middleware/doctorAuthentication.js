@@ -9,6 +9,7 @@ const tokenAuthentication = (req, res, next) => {
         console.log(err.message);
       } else {
         console.log(decodedToken);
+        req.id = decodedToken.id;
         next();
       }
     });
