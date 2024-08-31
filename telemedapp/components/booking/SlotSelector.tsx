@@ -12,13 +12,19 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
   handleSlotSelect,
 }) => (
   <div className="flex gap-4 flex-col">
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center mb-4">
       <h3 className="text-xl font-semibold">Select time slots:</h3>
       <div className="text-blue-600 font-bold">
         {selectedDate?.slots.length} available time slots
       </div>
     </div>
-    <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-[450px]">
+    <div
+      className={`${
+        selectedDate && selectedDate.slots?.length > 0
+          ? "grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 "
+          : "mx-auto text-center"
+      }max-w-[450px]`}
+    >
       {selectedDate && selectedDate.slots?.length > 0 ? (
         selectedDate?.slots.map((slot) => (
           <button
@@ -34,7 +40,7 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
           </button>
         ))
       ) : (
-        <p className="text-red-500">
+        <p className="text-red-500 mt-6">
           No time slots available on this day, Try another day.
         </p>
       )}

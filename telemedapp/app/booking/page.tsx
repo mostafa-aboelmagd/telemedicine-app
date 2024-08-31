@@ -1,9 +1,10 @@
+// DoctorBooking.tsx
+
 "use client";
 import React, { useState } from "react";
 import DoctorInfo from "@/components/booking/DoctorInfo";
 import DurationSelector from "@/components/booking/DurationSelector";
 import BookingSummary from "@/components/booking/BookingSummary";
-import DateSelector from "@/components/booking/DateSelector";
 import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
 
@@ -17,34 +18,16 @@ const DoctorBooking: React.FC = () => {
     fees60min: 200,
     fees30min: 100,
     availableDates: [
+      { date: "1", slots: ["02:00 PM", "03:00 PM", "04:00 PM"] },
+      { date: "2", slots: ["01:00 PM", "02:00 PM", "03:00 PM"] },
+      { date: "3", slots: ["01:00 PM", "03:00 PM"] },
+      { date: "4", slots: [] },
       {
-        date: "Sun 01",
-        slots: ["02:00 PM", "03:00 PM", "04:00 PM"],
-      },
-      {
-        date: "Mon 02",
-        slots: ["01:00 PM", "02:00 PM", "03:00 PM"],
-      },
-      {
-        date: "Tue 03",
-        slots: ["01:00 PM", "03:00 PM"],
-      },
-      {
-        date: "Wed 04",
-        slots: [],
-      },
-      {
-        date: "Thu 05",
+        date: "5",
         slots: ["01:00 PM", "02:00 PM", "04:00 PM", "06:00 PM"],
       },
-      {
-        date: "Fri 06",
-        slots: ["10:00 AM", "11:00 AM", "12:00 PM"],
-      },
-      {
-        date: "Sat 07",
-        slots: ["02:00 PM", "03:00 PM"],
-      },
+      { date: "6", slots: ["10:00 AM", "11:00 AM", "12:00 PM"] },
+      { date: "7", slots: ["02:00 PM", "03:00 PM"] },
     ],
   };
 
@@ -56,9 +39,8 @@ const DoctorBooking: React.FC = () => {
     setSelectedDuration(duration);
   };
 
-  const handleDateSelect = (date: string) => {
-    const newDate = doctor.availableDates.find((d) => d.date === date);
-    setSelectedDate(newDate || doctor.availableDates[0]);
+  const handleDateSelect = (dateObj: { date: string; slots: string[] }) => {
+    setSelectedDate(dateObj);
     setSelectedSlot(null); // Reset the selected slot when the date changes
   };
 
@@ -81,8 +63,8 @@ const DoctorBooking: React.FC = () => {
           selectedDate={selectedDate}
         />
       </div>
-      <div className="flex gap-8 flex-col bg-white rounded-3xl shadow-md p-6 min-w-[350px] md:min-w-[450px]">
-        <DateSelector
+      <div className="flex gap-8 flex-col bg-white rounded-3xl shadow-md p-6 min-w-[350px] md:min-w-[500px]">
+        <WeekCalendar
           selectedDate={selectedDate}
           handleDateSelect={handleDateSelect}
           availableDates={doctor.availableDates}
