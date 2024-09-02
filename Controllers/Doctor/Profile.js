@@ -13,7 +13,7 @@ const showProfile = async (req, res) => {
     if (!doctor) {
         return res.status(402).send('Could not retrieve doctor info');
     }
-    return res.json(doctor);
+    return res.json({ doctor: doctor, token: req.cookies.jwt });
 }
 
 module.exports = { showProfile };
