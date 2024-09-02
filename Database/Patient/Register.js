@@ -26,9 +26,9 @@ const pool = new pg.Pool({
     }
 })();
 
-const retrieveUser = async (email) => {
+const retrievePatient = async (email) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        const result = await pool.query('SELECT * FROM users WHERE email = $1 AND role = $2', [email, 'Patient']);
         if (result.rows.length) {
             console.log('User already exists', result.rows);
             return result.rows;
@@ -44,8 +44,8 @@ const retrieveUser = async (email) => {
 
 
 
-const insertUser = async (user) => {
-    let databaseUser = await retrieveUser(user.email);
+const insertPatient = async (user) => {
+    let databaseUser = await retrievePatient(user.email);
     if (databaseUser) {
         return false;
     } try {
@@ -53,7 +53,7 @@ const insertUser = async (user) => {
             'INSERT INTO users(first_name, last_name, email, phone_number, gender, role, password_hash, birth_year) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
             [user.fName, user.lName, user.email, user.phone, user.gender, user.role, user.password, user.birthYear]
         );
-        databaseUser = await retrieveUser(user.email);
+        databaseUser = await retrievePatient(user.email);
         if (databaseUser) {
             console.log('User added successfully');
             return databaseUser;
@@ -66,4 +66,4 @@ const insertUser = async (user) => {
     }
 };
 
-module.exports = {insertUser};
+module.exports = {insertPatient};

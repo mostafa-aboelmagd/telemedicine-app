@@ -92,5 +92,27 @@ const updateDoctorPassword = async (doctorId, oldPassword, newPassword) => {
 };
 
 
-module.exports = { updateDoctorInfo, updateDoctorPassword };
+const updateDoctorAvailability = async (doctorId, availability, status) => {
+    try {
+        const doctorUserId = await pool.query('SELECT doctor_id FROM doctors WHERE user_id = $1', [doctorId]);
+        if (doctorUserId.rows.length) {
+            doctorId = doctorUserId.rows[0].doctor_id;
+            const result = await pool.query('UPDATE doctor_availability SET date_time = $1, status = $2 WHERE doctor_id = $3 RETURNING *', [availability, status, doctorId]);
+            if (result.rows.length) {
+                console.log('Doctor availability updated', result.rows);
+                return result.rows;
+            }
+            console.log('Could not update doctor availability');
+            return false;
+        }
+        console.log('Doctor user id not found');
+        return false;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
+
+
+module.exports = { updateDoctorInfo, updateDoctorPassword, updateDoctorAvailability };
 

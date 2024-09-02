@@ -26,28 +26,13 @@ const pool = new pg.Pool({
     }
 })();
 
-const retrieveDoctor = async (email) => {
-    try {
-        const result = await pool.query('SELECT * FROM users WHERE email = $1 AND role = $2', [email, 'Doctor']);
-        if (result.rows.length) {
-            console.log('Doctor already exists', result.rows);
-            return result.rows;
-        }
-        console.log('No doctor found');
-        return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
-
 
 const retrieveDoctorInfo = async (id) => {
     try {
         const query = 
         `SELECT *
         FROM doctors D
-        LEFT JOIN users U ON D.user_id = U.user_id
+        LEFT JOIN users U ON D.doctor_id = U.user_id
         LEFT JOIN doctor_availability DA ON D.doctor_id = DA.doctor_id
         LEFT JOIN doctor_experience DE ON D.doctor_id = DE.doctor_id
         LEFT JOIN doctor_interest DI ON D.doctor_id = DI.doctor_id
@@ -55,12 +40,12 @@ const retrieveDoctorInfo = async (id) => {
         LEFT JOIN education E ON D.doctor_id = E.doctor_id
         LEFT JOIN patients P ON D.doctor_id = P.current_doctor_id
         LEFT JOIN reviews R ON D.doctor_id = R.doctor_id
-        WHERE D.user_id = $1`;
+        WHERE D.doctor_id = $1 AND U.role = $2`;
 
-    const result = await pool.query(query, [id]);
+    const result = await pool.query(query, [id, 'Doctor']);
         if (result.rows.length) {
             console.log('Doctor info found', result.rows);
-            return result.rows;
+            return result.rows[0];
         }
 
         console.log('Doctor info not found');
@@ -72,4 +57,6 @@ const retrieveDoctorInfo = async (id) => {
     }
 };
 
-module.exports = { retrieveDoctor, retrieveDoctorInfo };
+module.exports = { retrieveDoctorInfo };
+
+

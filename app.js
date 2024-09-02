@@ -1,15 +1,15 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const patientRegisterRoutes = require('./routes/patientRegister');
-const doctorLoginRoutes = require('./routes/doctorLogin');
-const doctorEditRoutes = require('./routes/doctorEdit');
+const patientLoginRoute = require('./Routes/Patient/Login');
+const patientRegisterRoute = require('./Routes/Patient/Register');
+const patienProfileRoute = require('./Routes/Patient/Profile');
+// const patientEditRoute = require('./Routes/Patient/Edit');
+const doctorLoginRoute = require('./Routes/Doctor/Login');
+const doctorProfileRoute = require('./Routes/Doctor/Profile');
+const doctorEditRoute = require('./Routes/Doctor/Edit');
+const appointmentCreateRoute = require('./Routes/Appointment/Create');
 const port = 3000;
-
-
-const authRoutes = require('./routes/auth');
-
 const app = express();
-
 
 app.use(express.json()); 
 app.use(cookieParser());
@@ -24,10 +24,14 @@ app.use(cookieParser());
 //   next();
 // });
 
-app.use('/auth', authRoutes);
-app.use('/patient/register', patientRegisterRoutes);
-app.use('/doctor/login', doctorLoginRoutes);
-app.use('/doctor/edit', doctorEditRoutes);
+app.use('/patient/login', patientLoginRoute);
+app.use('/patient/register', patientRegisterRoute);
+app.use('/patient/profile', patienProfileRoute);
+// app.use('/patient/edit', patientEditRoute);
+app.use('/doctor/login', doctorLoginRoute);
+app.use('/doctor/edit', doctorEditRoute);
+app.use('/doctor/profile', doctorProfileRoute);
+app.use('/appointment/create', appointmentCreateRoute);
 
 // app.use((error, req, res, next) => {
 //   console.log(error);

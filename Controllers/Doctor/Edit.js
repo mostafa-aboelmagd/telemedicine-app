@@ -1,5 +1,5 @@
-const  database  = require('../Database/doctorEdit');
-const { passwordValidation } = require('../functions');
+const  database  = require('../../Database/Doctor/Edit');
+const { passwordValidation, dateValidation } = require('../../Utilities');
 
 
 const editDoctorInfo = async (req, res) => {
@@ -43,4 +43,32 @@ const editDoctorPassword = async (req, res) => {
     return res.send('Could not update doctor password');
 }
 
-module.exports = { editDoctorInfo, editDoctorPassword };
+const editDoctorAvailability = async (req, res) => {
+    const doctorId = req.id;
+    if (!doctorId) {
+        return res.send('Doctor ID not found');
+    }
+    let { availability, status } = req.body;
+    if (!availability) {
+        return res.send('Please provide availability');
+    }
+    const availabilityFlag = dateValidation(availability);
+    if (!availabilityFlag) {
+        return res.send('Invalid availability format or date and time');
+    }
+    if (status !== 'available' && status !== 'unavailable') {
+        return res.send('Please provide status as available or unavailable');
+    }
+    if (status === 'unavailable') {
+        status = false;
+    } else {
+        status = true;
+    }
+    const doctor = await database.updateDoctorAvailability(doctorId, availability, status);
+    if (doctor) {
+        return res.json(doctor);
+    }
+    return res.send('Could not update doctor availability');
+}
+
+module.exports = { editDoctorInfo, editDoctorPassword, editDoctorAvailability };
