@@ -29,7 +29,22 @@ const pool = new pg.Pool({
     }
 })();
 
-const updateInfo = async (patienId, updates) => {
+const checkUserEmail = async (email) => {
+    try {
+        const result = await pool.query('SELECT * FROM users WHERE user_email = $1 AND user_role = $2', [email, 'Patient']);
+        if (result.rows.length) {
+            console.log('User already exists', result.rows);
+            return result.rows;
+        }
+        console.log('No user found');
+        return false;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
+
+const updateInfo = async (patienId, patientEmail, updates) => {
     try {
         const fields = [];
         const values = [];
@@ -48,8 +63,8 @@ const updateInfo = async (patienId, updates) => {
             return false;
         }
 
-        values.push(patienId, 'Patient');
-        const query = `UPDATE users SET ${fields.join(', ')} WHERE user_id = $${index} AND role = $${index + 1} RETURNING *`;
+        values.push(patienId, 'Patient', patientEmail);
+        const query = `UPDATE users SET ${fields.join(', ')} WHERE user_id = $${index} AND user_role = $${index + 1} AND user_email = $${index + 2} RETURNING *`;
         const result = await pool.query(query, values);
 
         if (result.rows.length) {
@@ -64,14 +79,14 @@ const updateInfo = async (patienId, updates) => {
     }
 };
 
-const updatePassword = async (patientId, oldPassword, newPassword) => {
+const updatePassword = async (patientId, patientEmail, oldPassword, newPassword) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE user_id = $1 AND role = $2', [patientId, 'Patient']);
+        const result = await pool.query('SELECT * FROM users WHERE user_id = $1 AND user_role = $2 AND user_email = $3', [patientId, 'Patient', patientEmail]);
         if (result.rows.length) {
-            const isMatch = await bcrypt.compare(oldPassword, result.rows[0].password_hash);
+            const isMatch = await bcrypt.compare(oldPassword, result.rows[0].user_password_hash);
             if (isMatch) {
                 const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-                const result = await pool.query('UPDATE users SET password_hash = $1 WHERE user_id = $2 AND role = $3 RETURNING *', [hashedPassword, patientId, 'Patient']);
+                const result = await pool.query('UPDATE users SET user_password_hash = $1 WHERE user_id = $2 AND user_role = $3 AND user_email = $4 RETURNING *', [hashedPassword, patientId, 'Patient', patientEmail]);
                 if (result.rows.length) {
                     console.log('Patient password updated', result.rows);
                     return result.rows;
@@ -91,5 +106,5 @@ const updatePassword = async (patientId, oldPassword, newPassword) => {
     }
 };
 
-module.exports = { updateInfo, updatePassword };
+module.exports = { updateInfo, updatePassword, checkUserEmail };
 

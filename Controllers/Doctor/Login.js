@@ -7,20 +7,27 @@ const { ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS } = process.env;
 const login = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
+    let message = '';
     if (!email || !password) {
-        return res.status(400).send('Please fill all the fields');
+        message = 'Please fill all the fields';
+        return res.status(400).json(message);
     }
     const doctor = await database.retrieveDoctor(email);
     if (!doctor) {
-        return res.status(401).send('Invalid email or password');
+        message = 'Invalid email or password'
+        return res.status(401).json(message);
     }
-    const match = await bcrypt.compare(password, doctor[0].password_hash);
+    console.log('Doctor retrieved:', doctor);
+    const match = await bcrypt.compare(password, doctor[0].user_password_hash);
+    console.log('Password match result:', match); 
     if (!match) {
-        return res.status(402).send('Invalid email or password');
+        message = 'Invalid email or password'
+        return res.status(402).json(message);
     }
-    const token = createToken(doctor[0].user_id, doctor[0].email);
+    const token = createToken(doctor[0].user_id, doctor[0].user_email);
     if (!token) {
-        return res.status(403).send('Token could not be created');
+        message = 'Token could not be created';
+        return res.status(403).json(message);
     }
     res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS });
     return res.redirect('/doctor/profile');

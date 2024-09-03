@@ -1,36 +1,37 @@
 const  database  = require('../../Database/Appointment/Create');
+const { dateValidation } = require('../../Utilities');
 
 const createAppointment = async (req, res) => {
-    const patientUserId = req.id;
-    const patientEmail = req.email;
-    if (!patientUserId) {
-        return res.status(400).send('Patient ID not found');
+    const doctorUserId = req.id;
+    const doctorEmail = req.email;
+    if (!doctorUserId) {
+        return res.status(400).send('Doctor ID not found');
     }
-    if (!patientEmail) {
-        return res.status(401).send('Patient email not found');
+    if (!doctorEmail) {
+        return res.status(401).send('Doctor email not found');
     }
-    const patientFlag = await database.retrievePatient(patientUserId);
-    if (!patientFlag) {
-        return res.status(402).send('Patient not registered');
+    const { duration, slot } = req.body;
+    if (!duration) {
+        return res.status(402).send('Duration not found');
+    }  
+    if (!slot) {
+        return res.status(403).send('Slot not found');
     }
-    const { doctor_id, appointment_date_time} = req.body;
-    if (!doctor_id) {
-        return res.status(403).send('Please provide doctor ID');
+    const doctor = await database.retrieveDoctor(doctorUserId, doctorEmail);
+    if (!doctor) {
+        return res.status(404).send('Doctor not registered');
     }
-    if (!appointment_date_time) {
-        return res.status(404).send('Please provide appointment date and time');
+    const appointment = await database.insertAppointment(doctorUserId, duration, slot);
+    if (!appointment) {
+        return res.status(405).send('Appointment could not be created');
     }
-    const doctorFlag = await database.retrieveDoctor(doctor_id);
-    if (!doctorFlag) {
-        return res.status(405).send('Doctor not registrered');
-    }
-    const doctorAvailabilityFlag = await database.checkDoctorAvailability(doctor_id, appointment_date_time);
-    if (!doctorAvailabilityFlag) {
-        return res.status(406).send('Doctor not available at this time');
-    }
-    const result = await database.insertAppointment(doctorFlag[0].doctor_id, patientFlag[0].patient_id, appointment_date_time);
-    res.status(200).json({ message: 'Appointment created successfully', appointment: result });
+    res.status(200).json({ message: 'Appointment created successfully', appointment: appointment });
 }
 
 
 module.exports = { createAppointment};
+
+// const doctorAvailabilityFlag = await database.checkDoctorAvailability(doctorUserId, appointment_date_time);
+// if (!doctorAvailabilityFlag) {
+//     return res.status(405).send('Doctor not available at this time');
+// }

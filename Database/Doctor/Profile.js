@@ -27,22 +27,22 @@ const pool = new pg.Pool({
 })();
 
 
-const retrieveDoctorInfo = async (id) => {
+const retrieveDoctorInfo = async (id, email) => {
     try {
         const query = 
         `SELECT *
-        FROM doctors D
-        LEFT JOIN users U ON D.doctor_id = U.user_id
-        LEFT JOIN doctor_availability DA ON D.doctor_id = DA.doctor_id
-        LEFT JOIN doctor_experience DE ON D.doctor_id = DE.doctor_id
-        LEFT JOIN doctor_interest DI ON D.doctor_id = DI.doctor_id
-        LEFT JOIN appointment A ON D.doctor_id = A.doctor_id
-        LEFT JOIN education E ON D.doctor_id = E.doctor_id
-        LEFT JOIN patients P ON D.doctor_id = P.current_doctor_id
-        LEFT JOIN reviews R ON D.doctor_id = R.doctor_id
-        WHERE D.doctor_id = $1 AND U.role = $2`;
+        FROM doctor D
+        LEFT JOIN users U ON D.doctor_user_id_reference = U.user_id
+        LEFT JOIN doctor_availability DA ON D.doctor_user_id_reference = DA.doctor_availability_doctor_id
+        LEFT JOIN doctor_experience DEX ON D.doctor_user_id_reference = DEX.doctor_experience_doctor_id
+        LEFT JOIN doctor_interest DI ON D.doctor_user_id_reference = DI.doctor_interest_doctor_id
+        LEFT JOIN doctor_education DED ON D.doctor_user_id_reference = DED.education_doctor_id
+        LEFT JOIN appointment A ON D.doctor_user_id_reference = A.appointment_doctor_id
+        LEFT JOIN patient P ON D.doctor_user_id_reference = P.patient_current_doctor_id
+        LEFT JOIN review R ON D.doctor_user_id_reference = R.review_doctor_id
+        WHERE D.doctor_user_id_reference = $1 AND U.user_role = $2 AND U.user_email = $3`;
 
-    const result = await pool.query(query, [id, 'Doctor']);
+    const result = await pool.query(query, [id, 'Doctor', email]);
         if (result.rows.length) {
             console.log('Doctor info found', result.rows);
             return result.rows[0];

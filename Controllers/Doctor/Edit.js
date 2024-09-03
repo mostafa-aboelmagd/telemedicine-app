@@ -5,85 +5,111 @@ const { passwordValidation, dateValidation } = require('../../Utilities');
 const editInfo = async (req, res) => {
     const doctorId = req.id;
     const doctorEmail = req.email;
+    let message = '';
     if (!doctorId) {
-        return res.status(400).send('Doctor ID not found');
+        message = 'Doctor ID not found';
+        return res.status(400).json(message);
     }
     if (!doctorEmail) {
-        return res.status(401).send('Doctor email not found');
+        message = 'Doctor email not found';
+        return res.status(401).json(message);
     }
     const { fName, lName, email, gender, phone, birthYear } = req.body;
     const updatedInfo = {
-        first_name: fName,
-        last_name: lName,
-        email: email,
-        gender: gender,
-        phone_number: phone,
-        birth_year: birthYear
+        user_first_name: fName,
+        user_last_name: lName,
+        user_email: email,
+        user_gender: gender,
+        user_phone_number: phone,
+        user_birth_year: birthYear
     };
+    if (email) {
+        const emailFlag = database.checkUserEmail(email);
+        if (emailFlag) {
+            message = 'Email already exists';
+            return res.status(402).json(message);
+        }
+    }
     const doctor = await database.updateInfo(doctorId, doctorEmail, updatedInfo);
     if (doctor) {
         return res.json(doctor);
     }
-    return res.status(402).send('Could not update doctor info');
+    message = 'Could not update doctor info';
+    return res.status(403).json(message);
 }
 
 const editPassword = async (req, res) => {
     const doctorId = req.id;
     const doctorEmail = req.email;
+    let message = '';
     if (!doctorId) {
-        return res.status(400).send('Doctor ID not found');
+        message = 'Doctor ID not found';
+        return res.status(400).json(message);
     }
     if (!doctorEmail) {
-        return res.status(401).send('Doctor email not found');
+        message = 'Doctor email not found';
+        return res.status(401).json(message);
     }
     let { newPassword , oldPassword} = req.body;
     if (!oldPassword) {
-        return res.status(402).send('Please provide old password');
+        message = 'Please provide old password';
+        return res.status(402).json(message);
     }
     if (!newPassword) {
-        return res.status(403).send('Please provide new password');
+        message = 'Please provide new password';
+        return res.status(403).json(message);
     }
     const passwordFlag = passwordValidation(newPassword);
     if (!passwordFlag) {
-        return res.status(404).send('Password must contain at least 8 characters, one number, one alphabet, and one special character');
+        message = 'Password must contain at least 8 characters, one number, one alphabet, and one special character';
+        return res.status(404).json(message);
     }
     const doctor = await database.updatePassword(doctorId, doctorEmail, oldPassword, newPassword);
     if (doctor) {
         return res.json(doctor);
     }
-    return res.status(405).send('Could not update doctor password');
+    message = 'Could not update doctor password';
+    return res.status(405).json(message);
 }
 
 const editAvailability = async (req, res) => {
     const doctorId = req.id;
     const doctorEmail = req.email;
+    let message = '';
     if (!doctorId) {
-        return res.status(400).send('Doctor ID not found');
+        message = 'Doctor ID not found';
+        return res.status(400).json(message);
     }
     if (!doctorEmail) {
-        return res.status(401).send('Doctor email not found');
+        message = 'Doctor email not found';
+        return res.status(401).json(message);
     }
     let { availability, status } = req.body;
     if (!availability) {
-        return res.status(402).send('Please provide availability');
+        message = 'Please provide availability';
+        return res.status(402).json(message);
     }
+    const availabilityDateObj = new Date(availability);
     const availabilityFlag = dateValidation(availability);
     if (!availabilityFlag) {
-        return res.status(403).send('Invalid availability format or date and time');
+        message = 'Invalid availability format or date and time';
+        return res.status(403).json(message);
     }
     if (status !== 'available' && status !== 'unavailable') {
-        return res.status(404).send('Please provide status as available or unavailable');
+        message = 'Please provide status as available or unavailable';
+        return res.status(404).json(message);
     }
     if (status === 'unavailable') {
         status = false;
     } else {
         status = true;
     }
-    const doctor = await database.updateAvailability(doctorId, doctorEmail, availability, status);
+    const doctor = await database.updateAvailability(doctorId, availabilityDateObj.toLocaleDateString(), 20, status);
     if (doctor) {
         return res.json(doctor);
     }
-    return res.status(405).send('Could not update doctor availability');
+    message = 'Could not update doctor availability';
+    return res.status(405).json(message);
 }
 
 module.exports = { editInfo, editPassword, editAvailability };

@@ -4,10 +4,12 @@ const { ACCESS_TOKEN_SECRET_KEY } = process.env;
 
 const tokenAuthentication = (req, res, next) => {
   const token = req.cookies.jwt;
+  let message = '';
   if (token) {
     jwt.verify(token, ACCESS_TOKEN_SECRET_KEY, (err, decodedToken) => {
       if (err) {
-        return res.status(401).send('Invalid token');
+        message = 'Invalid token';
+        return res.status(401).json(message);
       } 
       console.log(decodedToken);
       req.id = decodedToken.id;
@@ -15,7 +17,8 @@ const tokenAuthentication = (req, res, next) => {
       next();
     });
   } else {
-    return res.status(400).send('No token found');
+    message = 'No token found';
+    return res.status(400).json(message);
   }
 };
 

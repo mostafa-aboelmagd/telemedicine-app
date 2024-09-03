@@ -28,7 +28,7 @@ const pool = new pg.Pool({
 
 const retrievePatient = async (email) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE email = $1 AND role = $2', [email, 'Patient']);
+        const result = await pool.query('SELECT * FROM users WHERE user_email = $1 AND user_role = $2', [email, 'Patient']);
         if (result.rows.length) {
             console.log('User already exists', result.rows);
             return result.rows;
@@ -45,18 +45,23 @@ const retrievePatient = async (email) => {
 
 
 const insertPatient = async (user) => {
-    let databaseUser = await retrievePatient(user.email);
+    const databaseUser = await retrievePatient(user.email);
     if (databaseUser) {
         return false;
     } try {
-        await pool.query(
-            'INSERT INTO users(first_name, last_name, email, phone_number, gender, role, password_hash, birth_year) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+        const User = await pool.query(
+            'INSERT INTO users(user_first_name, user_last_name, user_email, user_phone_number, user_gender, user_role, user_password_hash, user_birth_year) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
             [user.fName, user.lName, user.email, user.phone, user.gender, user.role, user.password, user.birthYear]
         );
-        databaseUser = await retrievePatient(user.email);
-        if (databaseUser) {
-            console.log('User added successfully');
-            return databaseUser;
+        if (User.rows.length) {
+            console.log('User added successfully', User.rows);
+            const Patient = await pool.query(`INSERT INTO patient(patient_user_id_reference, patient_wallet) VALUES($1, $2) RETURNING *`, [User.rows[0].user_id, 0]);
+            if (Patient.rows.length) {
+                console.log('Patient added successfully', Patient.rows);
+                return [User.rows, Patient.rows];
+            }
+            console.log('Patient not added');
+            return false;
         }
         console.log('User not added');
         return false;

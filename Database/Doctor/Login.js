@@ -28,7 +28,7 @@ const pool = new pg.Pool({
 
 const retrieveDoctor = async (email) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE email = $1 AND role = $2', [email, 'Doctor']);
+        const result = await pool.query('SELECT * FROM users WHERE user_email = $1 AND user_role = $2', [email, 'Doctor']);
         if (result.rows.length) {
             console.log('Doctor already exists', result.rows);
             return result.rows;

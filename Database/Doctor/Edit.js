@@ -29,6 +29,21 @@ const pool = new pg.Pool({
     }
 })();
 
+const checkUserEmail = async (email) => {
+    try {
+        const result = await pool.query('SELECT * FROM users WHERE user_email = $1 AND user_role = $2', [email, 'Doctor']);
+        if (result.rows.length) {
+            console.log('User already exists', result.rows);
+            return result.rows;
+        }
+        console.log('No user found');
+        return false;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
+
 const updateInfo = async (doctorId, doctorEmail, updates) => {
     try {
         const fields = [];
@@ -48,8 +63,8 @@ const updateInfo = async (doctorId, doctorEmail, updates) => {
             return false;
         }
 
-        values.push(doctorId, 'Doctor');
-        const query = `UPDATE users SET ${fields.join(', ')} WHERE user_id = $${index} AND role = $${index + 1} RETURNING *`;
+        values.push(doctorId, 'Doctor', doctorEmail);
+        const query = `UPDATE users SET ${fields.join(', ')} WHERE user_id = $${index} AND user_role = $${index + 1} AND user_email = $${index + 2} RETURNING *`;
         const result = await pool.query(query, values);
 
         if (result.rows.length) {
@@ -66,12 +81,12 @@ const updateInfo = async (doctorId, doctorEmail, updates) => {
 
 const updatePassword = async (doctorId, doctorEmail, oldPassword, newPassword) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE user_id = $1 AND email = $2 AND role = $3', [doctorId, doctorEmail, 'Doctor']);
+        const result = await pool.query('SELECT * FROM users WHERE user_id = $1 AND user_email = $2 AND user_role = $3', [doctorId, doctorEmail, 'Doctor']);
         if (result.rows.length) {
-            const isMatch = await bcrypt.compare(oldPassword, result.rows[0].password_hash);
+            const isMatch = await bcrypt.compare(oldPassword, result.rows[0].user_password_hash);
             if (isMatch) {
                 const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-                const result = await pool.query('UPDATE users SET password_hash = $1 WHERE user_id = $2 AND email = $3 AND role = $4 RETURNING *', [hashedPassword, doctorId, doctorEmail, 'Doctor']);
+                const result = await pool.query('UPDATE users SET user_password_hash = $1 WHERE user_id = $2 AND user_email = $3 AND user_role = $4 RETURNING *', [hashedPassword, doctorId, doctorEmail, 'Doctor']);
                 if (result.rows.length) {
                     console.log('Doctor password updated', result.rows);
                     return result.rows;
@@ -92,12 +107,11 @@ const updatePassword = async (doctorId, doctorEmail, oldPassword, newPassword) =
 };
 
 
-const updateAvailability = async (doctorId, doctorEmail, availability, status) => {
+const updateAvailability = async (doctorId, availabilityDay, availabilityHour, status) => {
     try {
-        const doctorUserId = await pool.query('SELECT doctor_id FROM doctors WHERE doctor_id = $1', [doctorId]);
-        if (doctorUserId.rows.length) {
-            doctorId = doctorUserId.rows[0].doctor_id;
-            const result = await pool.query('UPDATE doctor_availability SET date_time = $1, status = $2 WHERE doctor_id = $3 RETURNING *', [availability, status, doctorId]);
+        const doctor = await pool.query('SELECT * FROM doctor WHERE doctor_user_id_reference = $1', [doctorId]);
+        if (doctor.rows.length) {
+            const result = await pool.query('UPDATE doctor_availability SET doctor_availability_day = $1, doctor_availability_hour = $2, doctor_availability_status = $3 WHERE doctor_availability_doctor_id = $4 RETURNING *', [availabilityDay, availabilityHour, status, doctor.rows[0].doctor_user_id_reference]);
             if (result.rows.length) {
                 console.log('Doctor availability updated', result.rows);
                 return result.rows;
@@ -114,5 +128,5 @@ const updateAvailability = async (doctorId, doctorEmail, availability, status) =
 };
 
 
-module.exports = { updateInfo, updatePassword, updateAvailability };
+module.exports = { updateInfo, updatePassword, updateAvailability, checkUserEmail };
 

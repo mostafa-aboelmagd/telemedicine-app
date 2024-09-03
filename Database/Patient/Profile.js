@@ -26,27 +26,23 @@ const pool = new pg.Pool({
     }
 })();
 
-const retrievePatientInfo = async (id) => {
+const retrievePatientInfo = async (id, email) => {
     try {
         const query = 
         `SELECT 
         P.*,
-        U.email, U.phone_number, U.gender, U.birth_year, U.first_name, U.last_name,
-        U2.email, U.phone_number, U.gender, U.birth_year, U.first_name, U.last_name,
+        U.user_email AS patient_email, U.user_phone_number AS patient_phone_number, U.user_gender AS patient_gender, U.user_birth_year AS patient_birth_year, U.user_first_name AS patient_first_name, U.user_last_name AS patient_last_name,
+        U2.user_email AS doctor_email, U2.user_phone_number AS doctor_phone_number, U2.user_gender AS doctor_gender, U2.user_birth_year AS doctor_birth_year, U2.user_first_name AS doctor_first_name, U2.user_last_name AS doctor_last_name,
         A.*,
-        D.*,
-        R.*,
-        AR.*
-        FROM patients P
-        LEFT JOIN users U ON P.patient_id = U.user_id AND U.role = 'Patient'
-        LEFT JOIN appointment A ON P.patient_id = A.patient_id
-        LEFT JOIN doctors D ON P.current_doctor_id = D.doctor_id
-        LEFT JOIN reviews R ON P.patient_id = R.patient_id
-        LEFT JOIN appointment_review AR ON A.appointment_id = AR.appointment_id_review
-        LEFT JOIN users U2 ON P.current_doctor_id = U2.user_id
-        WHERE P.patient_id = $1`;
+        D.*
+        FROM patient P
+        LEFT JOIN users U ON P.patient_user_id_reference = U.user_id
+        LEFT JOIN appointment A ON P.patient_user_id_reference = A.appointment_patient_id
+        LEFT JOIN doctor D ON P.patient_current_doctor_id = D.doctor_user_id_reference
+        LEFT JOIN users U2 ON P.patient_current_doctor_id = U2.user_id
+        WHERE P.patient_user_id_reference = $1 AND U.user_email = $2 AND U.user_role = $3`;
 
-    const result = await pool.query(query, [id]);
+    const result = await pool.query(query, [id, email, 'Patient']);
         if (result.rows.length) {
             console.log('Patient info found', result.rows);
             return result.rows[0];
