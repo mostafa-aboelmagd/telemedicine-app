@@ -4,6 +4,10 @@ const { tokenAuthentication } = require('../../Middleware/User/Authentication');
 
 const router = express.Router();
 
-router.get('', tokenAuthentication, patientProfileController.showProfile);
+router.get('/info', tokenAuthentication, patientProfileController.patientInfo);
+router.get('/appointments', tokenAuthentication, patientProfileController.patientAppointments);
+router.get('/doctors', tokenAuthentication, patientProfileController.patientDoctors);
+router.get('/reviews', tokenAuthentication, patientProfileController.patientReviews);
+router.get('/languages', tokenAuthentication, patientProfileController.patientLanguages);
 
 module.exports = router;

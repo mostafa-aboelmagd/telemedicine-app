@@ -30,7 +30,7 @@ const login = async (req, res) => {
         return res.status(403).json(message);
     }
     res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS });
-    return res.redirect('/doctor/profile');
+    return res.json({ message: 'Login successful', token: token });
 }
 
 module.exports = { login };

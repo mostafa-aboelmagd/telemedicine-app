@@ -26,7 +26,7 @@ const login = async (req, res) => {
   }
   const token = createToken(patient[0].user_id, patient[0].user_email);
   res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS });
-  res.redirect('/patient/profile');
+  return res.json({ message: 'Login successful' , token: token });
 }
 
 module.exports = { login };

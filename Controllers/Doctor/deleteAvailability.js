@@ -1,11 +1,11 @@
-const database = require('../../Database/Doctor/addAvailability');
-const { createAppointment } = require('../Appointment/doctorCreate');
+const database = require('../../Database/Doctor/deleteAvailability');
 
-const addAvailability = async (req, res) => {
+const deleteAvailability = async (req, res) => {
     const doctorId = req.id;
     const doctorEmail = req.email;
     const doctorAvailabilityDay = req.body.availabilityday;
     const doctorAvailabilityHour = req.body.availabilityhour;
+    const doctorAvailabilityId = req.body.availabilityId;
     let message = '';
     if (!doctorId) {
         message = 'Doctor ID not found';
@@ -23,18 +23,20 @@ const addAvailability = async (req, res) => {
         message = 'Availability hour not found';
         return res.status(403).json(message);
     }
-    const doctorAvailabilityFlag = await database.checkDoctorAvailability(doctorId, doctorAvailabilityDay, doctorAvailabilityHour);
-    if (doctorAvailabilityFlag) {
-        message = 'Doctor already available at this time';
+    if (!doctorAvailabilityId) {
+        message = 'Availability ID not found';
         return res.status(404).json(message);
     }
-    const availability = await database.insertAvailability(doctorId, doctorAvailabilityDay, doctorAvailabilityHour);
-    if (!availability) {
-        message = 'Could not add availability';
+    const doctorAvailabilityFlag = await database.checkDoctorAvailability(doctorId, doctorAvailabilityDay, doctorAvailabilityHour, doctorAvailabilityId);
+    if (!doctorAvailabilityFlag) {
+        message = 'Doctor is already not available at this time';
         return res.status(405).json(message);
     }
-    req.slot = availability[0].doctor_availability_id;
-    createAppointment(req, res);   
+    const availability = await database.deleteAvailability(doctorId, doctorAvailabilityDay, doctorAvailabilityHour, doctorAvailabilityId);
+    if (!availability) {
+        message = 'Could not delete availability';
+        return res.status(406).json(message);
+    }
 }
 
-module.exports = { addAvailability };
+module.exports = { deleteAvailability };

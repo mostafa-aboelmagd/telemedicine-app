@@ -84,8 +84,7 @@ const editAvailability = async (req, res) => {
         message = 'Doctor email not found';
         return res.status(401).json(message);
     }
-    const { availabilityDay, availabilityHour } = req.body;
-    let { status } = req.body;
+    const { availabilityDay, availabilityHour, availabilityId } = req.body;
     if (!availabilityDay) {
         message = 'Please provide availability day';
         return res.status(402).json(message);
@@ -94,18 +93,14 @@ const editAvailability = async (req, res) => {
         message = 'Please provide availability hour';
         return res.status(403).json(message);
     }
-    if (status !== 'available' && status !== 'unavailable') {
-        message = 'Please provide status as available or unavailable';
+    if (!availabilityId) {
+        message = 'Please provide availability ID';
         return res.status(404).json(message);
     }
-    if (status === 'unavailable') {
-        status = false;
-    } else {
-        status = true;
-    }
-    const doctor = await database.updateAvailability(doctorId, availabilityDay, availabilityHour, status);
-    if (doctor) {
-        return res.json(doctor);
+    const doctorAvailability = await database.updateAvailability(doctorId, availabilityDay, availabilityHour, availabilityId);
+    if (doctorAvailability) {
+        message = 'Doctor availability is successfully updated';
+        return res.json(message, doctorAvailability);
     }
     message = 'Could not update doctor availability';
     return res.status(405).json(message);

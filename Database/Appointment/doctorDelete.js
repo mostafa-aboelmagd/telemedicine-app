@@ -42,17 +42,17 @@ const retrieveDoctor = async (id, email) => {
     }
 };
 
-const insertAppointment = async (doctorId, slot) => {
+const deleteAppointment = async (doctorId, slot) => {
     try {
         const result = await pool.query(
-            'INSERT INTO appointment(appointment_doctor_id, appointment_status, appointment_availability_slot) VALUES($1, $2, $3) RETURNING *',
-            [doctorId, "unbooked", slot]
+            'DELETE FROM appointment WHERE appointment_doctor_id = $1 AND appointment_availability_slot = $2 RETURNING *',
+            [doctorId, slot]
         );
         if (result.rows.length) {
-            console.log('Appointment added successfully', result.rows);
+            console.log('Appointment deleted successfully', result.rows);
             return result.rows;
         }
-        console.log('Could not add appointment');
+        console.log('Could not delete appointment');
         return false;
     } catch (error) {
         console.error(error.stack);
@@ -60,4 +60,4 @@ const insertAppointment = async (doctorId, slot) => {
     }
 };
 
-module.exports = { retrieveDoctor, insertAppointment };
+module.exports = { retrieveDoctor, deleteAppointment };

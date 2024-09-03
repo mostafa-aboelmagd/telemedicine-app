@@ -107,11 +107,11 @@ const updatePassword = async (doctorId, doctorEmail, oldPassword, newPassword) =
 };
 
 
-const updateAvailability = async (doctorId, availabilityDay, availabilityHour, status) => {
+const updateAvailability = async (doctorId, availabilityDay, availabilityHour, availabilityId) => {
     try {
         const doctor = await pool.query('SELECT * FROM doctor WHERE doctor_user_id_reference = $1', [doctorId]);
         if (doctor.rows.length) {
-            const result = await pool.query('UPDATE doctor_availability SET doctor_availability_day = $1, doctor_availability_hour = $2, doctor_availability_status = $3 WHERE doctor_availability_doctor_id = $4 RETURNING *', [availabilityDay, availabilityHour, status, doctor.rows[0].doctor_user_id_reference]);
+            const result = await pool.query('UPDATE doctor_availability SET doctor_availability_day = $1, doctor_availability_hour = $2 WHERE doctor_availability_doctor_id = $3 AND doctor_availability_id = $4 RETURNING *', [availabilityDay, availabilityHour, doctor.rows[0].doctor_user_id_reference, availabilityId]);
             if (result.rows.length) {
                 console.log('Doctor availability updated', result.rows);
                 return result.rows;
