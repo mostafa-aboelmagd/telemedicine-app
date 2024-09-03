@@ -1,28 +1,41 @@
 const database = require('../../Database/Doctor/addAvailability');
-const { dateValidation } = require('../../Utilities');
+const { createAppointment } = require('../Appointment/doctorCreate');
 
-const addAvailability = async (req, res) => {
-    const doctorUserId = req.id;
+const addAvailability = async (req, res, next) => {
+    const doctorId = req.id;
     const doctorEmail = req.email;
-    if (!doctorUserId) {
-        return res.status(400).send('Doctor ID not found');
+    const doctorAvailabilityDay = req.body.day;
+    const doctorAvailabilityHour = req.body.hour;
+    let message = '';
+    if (!doctorId) {
+        message = 'Doctor ID not found';
+        return res.status(400).json(message);
     }
     if (!doctorEmail) {
-        return res.status(401).send('Doctor email not found');
+        message = 'Doctor email not found';
+        return res.status(401).json(message);
     }
-    const { date, startTime, endTime } = req.body;
-    if (!date || !startTime || !endTime) {
-        return res.status(403).send('Date, start time, or end time not found');
+    if (!doctorAvailabilityDay) {
+        message = 'Availability day not found';
+        return res.status(402).json(message);
     }
-    if (!dateValidation(date)) {
-        return res.status(404).send('Invalid date format');
+    if (!doctorAvailabilityHour) {
+        message = 'Availability hour not found';
+        return res.status(403).json(message);
     }
-    if (startTime >= endTime) {
-        return res.status(405).send('Start time cannot be greater than or equal to end time');
+    const doctorAvailabilityFlag = await database.checkDoctorAvailability(doctorId, doctorAvailabilityDay, doctorAvailabilityHour);
+    if (doctorAvailabilityFlag) {
+        message = 'Doctor not available at this time';
+        return res.status(404).json(message);
     }
-    const availability = await database.addAvailability(doctorUserId, date, startTime, endTime);
+    const availability = await database.insertAvailability(doctorId, doctorAvailabilityDay, doctorAvailabilityHour);
     if (!availability) {
-        return res.status(406).send('Could not add availability');
+        message = 'Could not add availability';
+        return res.status(405).json(message);
     }
-    return res.json({ availability: availability, token: req.cookies.jwt });
+    req.slot = availability[0].doctor_availability_id;
+    createAppointment(req, res)
+    
 }
+
+module.exports = { addAvailability };

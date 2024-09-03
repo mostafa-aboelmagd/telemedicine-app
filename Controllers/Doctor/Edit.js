@@ -1,5 +1,5 @@
 const  database  = require('../../Database/Doctor/Edit');
-const { passwordValidation, dateValidation } = require('../../Utilities');
+const { passwordValidation } = require('../../Utilities');
 
 
 const editInfo = async (req, res) => {
@@ -84,15 +84,14 @@ const editAvailability = async (req, res) => {
         message = 'Doctor email not found';
         return res.status(401).json(message);
     }
-    let { availability, status } = req.body;
-    if (!availability) {
-        message = 'Please provide availability';
+    const { availabilityDay, availabilityHour } = req.body;
+    let { status } = req.body;
+    if (!availabilityDay) {
+        message = 'Please provide availability day';
         return res.status(402).json(message);
     }
-    const availabilityDateObj = new Date(availability);
-    const availabilityFlag = dateValidation(availability);
-    if (!availabilityFlag) {
-        message = 'Invalid availability format or date and time';
+    if (!availabilityHour) {
+        message = 'Please provide availability hour';
         return res.status(403).json(message);
     }
     if (status !== 'available' && status !== 'unavailable') {
@@ -104,7 +103,7 @@ const editAvailability = async (req, res) => {
     } else {
         status = true;
     }
-    const doctor = await database.updateAvailability(doctorId, availabilityDateObj.toLocaleDateString(), 20, status);
+    const doctor = await database.updateAvailability(doctorId, availabilityDay, availabilityHour, status);
     if (doctor) {
         return res.json(doctor);
     }

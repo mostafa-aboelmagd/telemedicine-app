@@ -29,7 +29,7 @@ const pool = new pg.Pool({
 
 const retrieveDoctor = async (id, email) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE user_id = $1 AND email = $2 AND role = $3', [id, email, 'Doctor']);
+        const result = await pool.query('SELECT * FROM users WHERE user_id = $1 AND user_email = $2 AND user_role = $3', [id, email, 'Doctor']);
         if (result.rows.length) {
             console.log('Doctor already exists', result.rows);
             return result.rows;
@@ -42,11 +42,11 @@ const retrieveDoctor = async (id, email) => {
     }
 };
 
-const insertAppointment = async (doctorId, duration, slot) => {
+const insertAppointment = async (doctorId, slot) => {
     try {
         const result = await pool.query(
-            'INSERT INTO appointments(doctor_id, duration, appointment_status, slot) VALUES($1, $2, $3, $4) RETURNING *',
-            [doctorId, duration, "New", slot]
+            'INSERT INTO appointment(appointment_doctor_id, appointment_status, appointment_availability_slot) VALUES($1, $2, $3) RETURNING *',
+            [doctorId, "scheduled", slot]
         );
         if (result.rows.length) {
             console.log('Appointment added successfully', result.rows);
