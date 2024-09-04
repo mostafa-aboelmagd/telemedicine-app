@@ -31,7 +31,9 @@ app.use(cookieParser());
 //   next();
 // });
 
-
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 app.use('/patient/login', patientLoginRoute);
 app.use('/patient/register', patientRegisterRoute);
 app.use('/patient/profile', patienProfileRoute);
