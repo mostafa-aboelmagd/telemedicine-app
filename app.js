@@ -15,7 +15,7 @@ const doctorCreateAppointmentRoute = require('./Routes/Doctor/Appointment/create
 const doctorDeleteAppointmentRoute = require('./Routes/Doctor/Appointment/delete');
 const doctorEditAppointmentRoute = require('./Routes/Doctor/Appointment/edit');
 require('dotenv').config();
-const port = process.env.SERVER_PORT;
+const port = process.env.PORT || 4000;
 const app = express();
 
 app.use(express.json()); 
