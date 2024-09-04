@@ -1,4 +1,4 @@
-const database = require('../../Database/Doctor/deleteAvailability');
+const database = require('../../../Database/Doctor/Availability/delete');
 
 const deleteAvailability = async (req, res) => {
     const doctorId = req.id;
@@ -37,6 +37,7 @@ const deleteAvailability = async (req, res) => {
         message = 'Could not delete availability';
         return res.status(406).json(message);
     }
+    res.json({ message: 'Availability deleted successfully', availability: availability });
 }
 
 module.exports = { deleteAvailability };

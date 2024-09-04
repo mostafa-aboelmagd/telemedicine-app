@@ -1,4 +1,4 @@
-const database = require('../../Database/Doctor/addAvailability');
+const database = require('../../../Database/Doctor/Availability/add');
 
 const addAvailability = async (req, res) => {
     const doctorId = req.id;
@@ -32,6 +32,7 @@ const addAvailability = async (req, res) => {
         message = 'Could not add availability';
         return res.status(405).json(message);
     }
+    res.json({ message: 'Availability added successfully', availability: availability });
 }
 
 module.exports = { addAvailability };

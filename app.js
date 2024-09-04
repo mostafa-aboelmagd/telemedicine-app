@@ -7,11 +7,11 @@ const patientEditRoute = require('./Routes/Patient/Edit');
 const doctorLoginRoute = require('./Routes/Doctor/Login');
 const doctorProfileRoute = require('./Routes/Doctor/Profile');
 const doctorEditRoute = require('./Routes/Doctor/Edit');
-const doctorAddAvailabilityRoute = require('./Routes/Doctor/addAvailability');
-const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/deleteAvailability');
-const doctorCreateAppointmentRoute = require('./Routes/Appointment/doctorCreate');
-const doctorDeleteAppointmentRoute = require('./Routes/Appointment/doctorDelete');
-const doctorEditAppointmentRoute = require('./Routes/Appointment/doctorEdit');
+const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/add');
+const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/delete');
+const doctorCreateAppointmentRoute = require('./Routes/Doctor/Appointment/create');
+const doctorDeleteAppointmentRoute = require('./Routes/Doctor/Appointment/delete');
+const doctorEditAppointmentRoute = require('./Routes/Doctor/Appointment/edit');
 const port = 3000;
 const app = express();
 

@@ -1,6 +1,6 @@
 const express = require('express');
-const doctorAddAvailabilityController = require('../../Controllers/Doctor/addAvailability');
-const { tokenAuthentication } = require('../../Middleware/User/Authentication');
+const doctorAddAvailabilityController = require('../../../Controllers/Doctor/Availability/add');
+const { tokenAuthentication } = require('../../../Middleware/User/Authentication');
 
 const router = express.Router();
 

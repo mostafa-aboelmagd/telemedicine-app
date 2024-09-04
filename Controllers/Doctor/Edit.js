@@ -100,7 +100,7 @@ const editAvailability = async (req, res) => {
     const doctorAvailability = await database.updateAvailability(doctorId, availabilityDay, availabilityHour, availabilityId);
     if (doctorAvailability) {
         message = 'Doctor availability is successfully updated';
-        return res.json(message, doctorAvailability);
+        return res.json({ message, doctorAvailability });
     }
     message = 'Could not update doctor availability';
     return res.status(405).json(message);

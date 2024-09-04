@@ -1,6 +1,6 @@
-const  database  = require('../../Database/Appointment/doctorCreate');
+const  database  = require('../../../Database/Doctor/Appointment/delete');
 
-const createAppointment = async (req, res) => {
+const deleteDoctorAppointment = async (req, res) => {
     const doctorId = req.id;
     const doctorEmail = req.email;
     const doctorAvailabilitySlot = req.body.slot;
@@ -21,11 +21,11 @@ const createAppointment = async (req, res) => {
     if (!doctor) {
         return res.status(403).send('Doctor not registered');
     }
-    const appointment = await database.insertAppointment(doctorId, doctorAvailabilitySlot);
+    const appointment = await database.deleteAppointment(doctorId, doctorAvailabilitySlot);
     if (!appointment) {
-        return res.status(404).send('Appointment could not be created');
+        return res.status(404).json({ message: 'Appointment could not be deleted' });   
     }
-    res.json({ message: 'Appointment created successfully', appointment: appointment });
+    return res.json({ message: 'Appointment deleted successfully', appointment: appointment });
 }
 
-module.exports = { createAppointment };
+module.exports = { deleteDoctorAppointment };
