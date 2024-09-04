@@ -41,17 +41,14 @@ const retrieveDoctor = async (id, email) => {
     }
 };
 
-const deleteAppointment = async (doctorId, slot) => {
+const checkDoctorAvailability = async (doctorId, slot) => {
     try {
-        const result = await pool.query(
-            'DELETE FROM appointment WHERE appointment_doctor_id = $1 AND appointment_availability_slot = $2 RETURNING *',
-            [doctorId, slot]
-        );
+        const result = await pool.query('SELECT * FROM appointment WHERE appointment_doctor_id = $1 AND appointment_availability_slot = $2', [doctorId, slot]);
         if (result.rows.length) {
-            console.log('Appointment deleted successfully', result.rows);
+            console.log('Doctor slot already exists', result.rows);
             return result.rows;
         }
-        console.log('Could not delete appointment');
+        console.log('No doctor slot found');
         return false;
     } catch (error) {
         console.error(error.stack);
@@ -59,4 +56,22 @@ const deleteAppointment = async (doctorId, slot) => {
     }
 };
 
-module.exports = { retrieveDoctor, deleteAppointment };
+const updateAppointment = async (doctorId, oldSlot, newSlot) => {
+    try {
+        const result = await pool.query(
+            'UPDATE appointment SET appointment_availability_slot = $3 WHERE appointment_doctor_id = $1 AND appointment_availability_slot = $2 RETURNING *',
+            [doctorId, oldSlot, newSlot]
+        );
+        if (result.rows.length) {
+            console.log('Appointment is updated successfully', result.rows);
+            return result.rows;
+        }
+        console.log('Could not update appointment');
+        return false;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
+
+module.exports = { retrieveDoctor, checkDoctorAvailability, updateAppointment };

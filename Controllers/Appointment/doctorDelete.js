@@ -4,7 +4,6 @@ const deleteDoctorAppointment = async (req, res) => {
     const doctorId = req.id;
     const doctorEmail = req.email;
     const doctorAvailabilitySlot = req.body.slot;
-    console.log(doctorId, doctorEmail, doctorAvailabilitySlot);
     message = '';
     if (!doctorId) {
         message = 'Doctor ID not found';

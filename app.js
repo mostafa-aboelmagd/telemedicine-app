@@ -9,7 +9,9 @@ const doctorProfileRoute = require('./Routes/Doctor/Profile');
 const doctorEditRoute = require('./Routes/Doctor/Edit');
 const doctorAddAvailabilityRoute = require('./Routes/Doctor/addAvailability');
 const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/deleteAvailability');
+const doctorCreateAppointmentRoute = require('./Routes/Appointment/doctorCreate');
 const doctorDeleteAppointmentRoute = require('./Routes/Appointment/doctorDelete');
+const doctorEditAppointmentRoute = require('./Routes/Appointment/doctorEdit');
 const port = 3000;
 const app = express();
 
@@ -36,7 +38,9 @@ app.use('/doctor/edit', doctorEditRoute);
 app.use('/doctor/profile', doctorProfileRoute);
 app.use('/doctor/add/availability', doctorAddAvailabilityRoute);
 app.use('/doctor/delete/availability', doctorDeleteAvailabilityRoute);
+app.use('/doctor/create/appointment', doctorCreateAppointmentRoute);
 app.use('/doctor/delete/appointment', doctorDeleteAppointmentRoute);
+app.use('/doctor/edit/appointment', doctorEditAppointmentRoute);
 
 // app.use((error, req, res, next) => {
 //   console.log(error);

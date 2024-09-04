@@ -1,5 +1,4 @@
 const pg = require('pg');
-const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const { PGHOST, PGDATABASE, PGUSER } = process.env;

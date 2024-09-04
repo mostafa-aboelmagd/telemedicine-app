@@ -3,8 +3,7 @@ const  database  = require('../../Database/Appointment/doctorCreate');
 const createAppointment = async (req, res) => {
     const doctorId = req.id;
     const doctorEmail = req.email;
-    const doctorAvailabilitySlot = req.slot;
-    console.log(doctorId, doctorEmail, doctorAvailabilitySlot);
+    const doctorAvailabilitySlot = req.body.slot;
     message = '';
     if (!doctorId) {
         message = 'Doctor ID not found';
