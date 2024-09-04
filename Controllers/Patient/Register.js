@@ -2,8 +2,6 @@ const { User } = require('../../classes');
 const database = require('../../Database/Patient/Register');
 const { passwordValidation } = require('../../Utilities');
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
-
 const saltRounds = 15;
 
 const patientRegister = async (req, res) => {

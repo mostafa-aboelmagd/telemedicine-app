@@ -26,41 +26,34 @@ const pool = new pg.Pool({
     }
 })();
 
-const retrieveDoctor = async (id, email) => {
+const retrievePatient = async (id, email) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE user_id = $1 AND user_email = $2 AND user_role = $3', [id, email, 'Doctor']);
+    const query = 
+    `SELECT 
+    U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
+    P.*
+    FROM patient P
+    LEFT JOIN users U ON P.patient_user_id_reference = U.user_id
+    WHERE P.patient_user_id_reference = $1 AND U.user_email = $2 AND U.user_role = $3`;
+
+    const result = await pool.query(query, [id, email, 'Patient']);
         if (result.rows.length) {
-            console.log('Doctor already exists', result.rows);
+            console.log('Patient info found', result.rows);
             return result.rows;
         }
-        console.log('No doctor found');
-        return false;
+    console.log('Patient info not found');
+    return false;
     } catch (error) {
         console.error(error.stack);
         return false;
     }
 };
 
-const checkDoctorAvailability = async (doctorId, slot) => {
-    try {
-        const result = await pool.query('SELECT * FROM appointment WHERE appointment_doctor_id = $1 AND appointment_availability_slot = $2', [doctorId, slot]);
-        if (result.rows.length) {
-            console.log('Doctor slot already exists', result.rows);
-            return result.rows;
-        }
-        console.log('No doctor slot found');
-        return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
-
-const updateAppointment = async (doctorId, oldSlot, newSlot) => {
+const updateAppointment = async (patientId, patientAppointmentType, patientAppointmentDuration, availabilitySlot, doctorId) => {
     try {
         const result = await pool.query(
-            'UPDATE appointment SET appointment_availability_slot = $3 WHERE appointment_doctor_id = $1 AND appointment_availability_slot = $2 RETURNING *',
-            [doctorId, oldSlot, newSlot]
+            'UPDATE appointment SET appointment_patient_id = $1, appointment_type = $2, appointment_duration = $3, appointment_status = $5 WHERE appointment_availability_slot = $4 AND appointment_doctor_id = $6 RETURNING *',
+            [patientId, patientAppointmentType, patientAppointmentDuration, availabilitySlot, 'scheduled', doctorId]
         );
         if (result.rows.length) {
             console.log('Appointment is updated successfully', result.rows);
@@ -74,4 +67,4 @@ const updateAppointment = async (doctorId, oldSlot, newSlot) => {
     }
 };
 
-module.exports = { retrieveDoctor, checkDoctorAvailability, updateAppointment };
+module.exports = { retrievePatient, updateAppointment };

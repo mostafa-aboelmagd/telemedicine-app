@@ -4,7 +4,7 @@ require('dotenv').config();
 const saltRounds = 15;
 
 
-const { PGHOST, PGDATABASE, PGUSER } = process.env;
+const { PGHOST, PGDATABASE, PGUSER, PGPORT } = process.env;
 let PGPASSWORD = process.env.PGPASSWORD;
 PGPASSWORD = decodeURIComponent(PGPASSWORD);
 
@@ -13,7 +13,7 @@ const pool = new pg.Pool({
     host: PGHOST,
     database: PGDATABASE,
     password: PGPASSWORD,
-    port: 5432,
+    port: PGPORT,
     ssl: {
         rejectUnauthorized: true,
     },
