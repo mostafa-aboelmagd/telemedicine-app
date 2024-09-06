@@ -1,5 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const patientLoginRoute = require('./Routes/Patient/Login');
 const patientRegisterRoute = require('./Routes/Patient/Register');
 const patienProfileRoute = require('./Routes/Patient/Profile');
@@ -19,6 +20,7 @@ require('dotenv').config();
 const port = process.env.PORT || 4000;
 const app = express();
 
+app.use(cors());
 app.use(express.json()); 
 app.use(cookieParser());
 app.use((req, res, next) => {
