@@ -14,16 +14,13 @@ const doctorEditRoute = require('./Routes/Doctor/Edit');
 const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/Add');
 const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Delete');
 const doctorEditAvailabilityRoute = require('./Routes/Doctor/Availability/Edit');
-const doctorCreateAppointmentRoute = require('./Routes/Doctor/Appointment/create');
-const doctorDeleteAppointmentRoute = require('./Routes/Doctor/Appointment/delete');
-const doctorEditAppointmentRoute = require('./Routes/Doctor/Appointment/edit');
 const port = process.env.PORT || 4000;
 const app = express();
 
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Authorization', 'Content-Type'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 app.use(express.json()); 
@@ -44,9 +41,6 @@ app.use('/doctor/profile', doctorProfileRoute);
 app.use('/doctor/availability/add', doctorAddAvailabilityRoute);
 app.use('/doctor/availability/delete', doctorDeleteAvailabilityRoute);
 app.use('/doctor/availability/edit', doctorEditAvailabilityRoute);
-app.use('/doctor/appointment/create', doctorCreateAppointmentRoute);
-app.use('/doctor/appointment/delete', doctorDeleteAppointmentRoute);
-app.use('/doctor/appointment/edit', doctorEditAppointmentRoute);
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
