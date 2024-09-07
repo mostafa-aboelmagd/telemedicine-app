@@ -30,15 +30,13 @@ const retrievePatient = async (id, email) => {
     try {
     const query = 
     `SELECT 
-    U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
-    P.*
-    FROM patient P
-    LEFT JOIN users U ON P.patient_user_id_reference = U.user_id
-    WHERE P.patient_user_id_reference = $1 AND U.user_email = $2 AND U.user_role = $3`;
+    U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name
+    FROM users U
+    WHERE U.user_id = $1 AND U.user_email = $2 AND U.user_role = $3`;
 
     const result = await pool.query(query, [id, email, 'Patient']);
         if (result.rows.length) {
-            console.log('Patient info found', result.rows);
+            console.log('Patient found', result.rows);
             return result.rows;
         }
     console.log('Patient info not found');
@@ -49,17 +47,20 @@ const retrievePatient = async (id, email) => {
     }
 };
 
-const updateAppointment = async (patientId, patientAppointmentType, patientAppointmentDuration, availabilitySlot, doctorId) => {
+const retrieveDoctor = async (id) => {
     try {
-        const result = await pool.query(
-            'UPDATE appointment SET appointment_patient_id = $1, appointment_type = $2, appointment_duration = $3, appointment_status = $5 WHERE appointment_availability_slot = $4 AND appointment_doctor_id = $6 RETURNING *',
-            [patientId, patientAppointmentType, patientAppointmentDuration, availabilitySlot, 'scheduled', doctorId]
-        );
+        const query = 
+        `SELECT 
+        U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name
+        FROM users U
+        WHERE U.user_id = $1 AND U.user_role = $2`;
+    
+        const result = await pool.query(query, [id, 'Doctor']);
         if (result.rows.length) {
-            console.log('Appointment is updated successfully', result.rows);
+            console.log('Doctor found', result.rows);
             return result.rows;
         }
-        console.log('Could not update appointment');
+        console.log('Doctor not found');
         return false;
     } catch (error) {
         console.error(error.stack);
@@ -67,4 +68,40 @@ const updateAppointment = async (patientId, patientAppointmentType, patientAppoi
     }
 };
 
-module.exports = { retrievePatient, updateAppointment };
+const checkAppointmentAvailability = async (doctorId, doctorAvailabilitySlot) => {
+    try {
+        const result = await pool.query(
+            'SELECT * FROM appointment WHERE appointment_doctor_id = $1 AND appointment_availability_slot = $2 AND appointment_status = $3',
+            [doctorId, doctorAvailabilitySlot, "scheduled"]
+        );
+        if (result.rows.length) {
+            console.log('Doctor already have an appointment at this time', result.rows);
+            return result.rows;
+        }
+        console.log('Doctor is available at this time');
+        return false;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
+
+const insertAppointment = async (patientId, doctorId, appointmentType, appointmentDuration, doctorAvailabilitySlot) => {
+    try {
+        const result = await pool.query(
+            'INSERT INTO appointment(appointment_patient_id, appointment_doctor_id, appointment_status, appointment_type, appointment_duration, appointment_availability_slot) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+            [patientId, doctorId, "scheduled", appointmentType, appointmentDuration, doctorAvailabilitySlot]
+        );
+        if (result.rows.length) {
+            console.log('Appointment added successfully', result.rows);
+            return result.rows;
+        }
+        console.log('Could not add appointment');
+        return false;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
+
+module.exports = { retrievePatient, retrieveDoctor, checkAppointmentAvailability, insertAppointment };

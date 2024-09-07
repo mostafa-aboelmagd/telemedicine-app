@@ -26,26 +26,29 @@ const pool = new pg.Pool({
     }
 })();
 
-const checkDoctorAvailability = async (doctorId, availabilityDay, availabilityHour) => {
+const checkDoctorAvailability = async (doctorId, availabilityDayHour) => {
     try {
-        const result = await pool.query('SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_day = $2 AND doctor_availability_hour = $3 AND doctor_availability_status = $4', [doctorId, availabilityDay, availabilityHour, true]);
+        const result = await pool.query(
+            'SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_day_hour = $2 AND doctor_availability_status = $3',
+            [doctorId, availabilityDayHour, true]
+        );
         if (result.rows.length) {
             console.log('Doctor availability already exists', result.rows);
-            return result.rows;
+            return false;
         }
-        console.log('No doctor availability found');
-        return false;
+        console.log('Doctor is available at this time');
+        return true;
     } catch (error) {
         console.error(error.stack);
         return false;
     }
 };
 
-const insertAvailability = async (doctorId, availabilityDay, availabilityHour) => {
+const insertAvailability = async (doctorId, availabilityDayHour) => {
     try {
         const result = await pool.query(
-            'INSERT INTO doctor_availability(doctor_availability_doctor_id, doctor_availability_day, doctor_availability_hour, doctor_availability_status) VALUES($1, $2, $3, $4) RETURNING *',
-            [doctorId, availabilityDay, availabilityHour, true]
+            'INSERT INTO doctor_availability(doctor_availability_doctor_id, doctor_availability_day_hour, doctor_availability_status) VALUES($1, $2, $3) RETURNING *',
+            [doctorId, availabilityDayHour, true]
         );
         if (result.rows.length) {
             console.log('Doctor availability added successfully', result.rows);
