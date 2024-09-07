@@ -25,10 +25,11 @@ const customStyles = {
     })
 };
 
-const SortDropDown = ({ options, name, id, isMulti }: { options: any[], name: string, id: string, isMulti: boolean }) => {
+const SortDropDown = ({ options, name, id, isMulti, handleChangeFilter }: { options: any[], name: string, id: string, isMulti: boolean, handleChangeFilter: any }) => {
     return (
         <Select
             options={options}
+            onChange={(e, actionMeta) => handleChangeFilter(e, actionMeta)}
             styles={customStyles}
             isMulti={isMulti}
             name={name}
