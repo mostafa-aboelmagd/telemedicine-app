@@ -2,7 +2,7 @@ const database = require('../../../Database/Doctor/Availability/Add');
 
 const addAvailability = async (req, res) => {
     const doctorId = 32;
-    const doctorAvailabilityDaysHours = req.body.timesChosen;
+    const doctorAvailabilityDaysHours = req.data.data;
     const successfullyEnteredAvailabilities = {};
     let message = '';
 
