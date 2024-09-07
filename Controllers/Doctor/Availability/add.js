@@ -31,7 +31,7 @@ const addAvailability = async (req, res) => {
                         }
                         successfullyEnteredAvailabilities[day].push(hour);
                     } else {
-                        return res.status(401).json({message: 'failed after insertion', availability});
+                        return res.status(404).json({message: 'failed after insertion', availability});
                     }
                 } else {
                     return res.status(401).json({message: 'failed after availability check', doctorAvailabilityFlag});
