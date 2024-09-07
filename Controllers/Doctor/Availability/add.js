@@ -40,7 +40,7 @@ const addAvailability = async (req, res) => {
         }
         if (Object.keys(successfullyEnteredAvailabilities).length === 0) {
             message = 'Could not add any availability';
-            return res.status(403).json({ message });
+            return res.status(409).json({ message });
         }
         res.json({ message: 'Availability added successfully', successfullyEnteredAvailabilities });
     } catch (error) {
