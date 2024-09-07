@@ -1,4 +1,4 @@
-const database = require('../../../Database/Doctor/Availability/delete');
+const database = require('../../../Database/Doctor/Availability/Delete');
 
 const deleteAvailability = async (req, res) => {
     const doctorId = req.id;

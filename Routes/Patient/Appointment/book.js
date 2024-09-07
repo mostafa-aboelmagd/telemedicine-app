@@ -1,5 +1,5 @@
 const express = require('express');
-const patientAppointmentBookController = require('../../../Controllers/Patient/Appointment/book');
+const patientAppointmentBookController = require('../../../Controllers/Patient/Appointment/Book');
 const { tokenAuthentication } = require('../../../Middleware/User/Authentication');
 const router = express.Router();
 

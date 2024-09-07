@@ -1,38 +1,51 @@
-const database = require('../../../Database/Doctor/Availability/add');
+const database = require('../../../Database/Doctor/Availability/Add');
 
 const addAvailability = async (req, res) => {
-    const doctorId = req.id;
-    const doctorEmail = req.email;
-    const doctorAvailabilityDay = req.body.availabilityday;
-    const doctorAvailabilityHour = req.body.availabilityhour;
+    const doctorId = 32;
+    const doctorAvailabilityDaysHours = req.body.timesChosen;
+    const successfullyEnteredAvailabilities = {};
     let message = '';
+
     if (!doctorId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(400).json({ message });
     }
-    if (!doctorEmail) {
-        message = 'Doctor email not found';
-        return res.status(401).json(message);
+    if (!doctorAvailabilityDaysHours) {
+        message = 'Doctor availability days and hours not found';
+        return res.status(402).json({ message });
     }
-    if (!doctorAvailabilityDay) {
-        message = 'Availability day not found';
-        return res.status(402).json(message);
+
+    try {
+        for (const [day, hours] of Object.entries(doctorAvailabilityDaysHours)) {
+            for (const hour of hours) {
+                const doctorAvailabilityDayHour = `${day} ${hour}`;
+                const doctorAvailabilityDayHourNoTZ = new Date(doctorAvailabilityDayHour).toISOString().slice(0, 19).replace('T', ' ');
+
+                const doctorAvailabilityFlag = await database.checkDoctorAvailability(doctorId, doctorAvailabilityDayHourNoTZ);
+                if (doctorAvailabilityFlag) {
+                    const availability = await database.insertAvailability(doctorId, doctorAvailabilityDayHourNoTZ);
+                    if (availability) {
+                        if (!successfullyEnteredAvailabilities[day]) {
+                            successfullyEnteredAvailabilities[day] = [];
+                        }
+                        successfullyEnteredAvailabilities[day].push(hour);
+                    } else {
+                        console.log(`Could not add availability for ${doctorAvailabilityDayHour}`);
+                    }
+                } else {
+                    console.log('Doctor already available at this time');
+                }
+            }
+        }
+        if (Object.keys(successfullyEnteredAvailabilities).length === 0) {
+            message = 'Could not add any availability';
+            return res.status(403).json({ message });
+        }
+        res.json({ message: 'Availability added successfully', successfullyEnteredAvailabilities });
+    } catch (error) {
+        console.error('Error adding availability:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
-    if (!doctorAvailabilityHour) {
-        message = 'Availability hour not found';
-        return res.status(403).json(message);
-    }
-    const doctorAvailabilityFlag = await database.checkDoctorAvailability(doctorId, doctorAvailabilityDay, doctorAvailabilityHour);
-    if (doctorAvailabilityFlag) {
-        message = 'Doctor already available at this time';
-        return res.status(404).json(message);
-    }
-    const availability = await database.insertAvailability(doctorId, doctorAvailabilityDay, doctorAvailabilityHour);
-    if (!availability) {
-        message = 'Could not add availability';
-        return res.status(405).json(message);
-    }
-    res.json({ message: 'Availability added successfully', availability: availability });
-}
+};
 
 module.exports = { addAvailability };
