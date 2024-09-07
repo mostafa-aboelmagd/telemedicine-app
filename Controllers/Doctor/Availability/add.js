@@ -2,7 +2,7 @@ const database = require('../../../Database/Doctor/Availability/Add');
 
 const addAvailability = async (req, res) => {
     const doctorId = 32;
-    const doctorAvailabilityDaysHours = req.body.timesChosen;
+    const doctorAvailabilityDaysHours = req.data.data;
     const successfullyEnteredAvailabilities = {};
     let message = '';
 
@@ -12,7 +12,7 @@ const addAvailability = async (req, res) => {
     }
     if (!doctorAvailabilityDaysHours) {
         message = 'Doctor availability days and hours not found';
-        return res.status(402).json({ message });
+        return res.status(402).json({ message, doctorAvailabilityDaysHours });
     }
 
     try {
