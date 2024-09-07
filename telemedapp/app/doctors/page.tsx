@@ -1,10 +1,10 @@
 "use client";
-import DoctorGrid from '@/components/DoctorGrid/grid'
-import FilterComponent from '@/components/FilterComponent/filter'
-import ReadyTherapist from '@/components/ReadyTherapistComp/readyTherapist'
-import SearchBar from '@/components/SearchBar/searchbar'
-import SortDropDown from '@/components/SortDropDown/sortdropdown'
-import React, { useEffect, useState } from 'react'
+import DoctorGrid from "@/components/DoctorGrid/grid";
+import FilterComponent from "@/components/FilterComponent/filter";
+import ReadyTherapist from "@/components/ReadyTherapistComp/readyTherapist";
+import SearchBar from "@/components/SearchBar/searchbar";
+import SortDropDown from "@/components/SortDropDown/sortdropdown";
+import React, { useEffect, useState } from "react";
 import { unFormatDate } from '@/utils/date';
 import { IoFilter } from "react-icons/io5";
 
@@ -179,4 +179,4 @@ const Doctors = () => {
     )
 }
 
-export default Doctors
+export default Doctors;

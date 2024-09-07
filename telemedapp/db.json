@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "id": "a417",
+      "first_name": "Mahmoud",
+      "last_name": "Mansy",
+      "email": "mahmoud2abdalfattah@gmail.com",
+      "password_hash": "qweqwe12",
+      "phone_number": "+201010352387",
+      "birth_year": 2003,
+      "gender": "Male",
+      "role": "patient"
+    },
+    {
+      "id": "2772",
+      "first_name": "asdasd",
+      "last_name": "asdasd",
+      "email": "asdasdasd@gmail.com",
+      "password_hash": "aaaaaaa1",
+      "phone_number": "+201212123123",
+      "birth_year": 2000,
+      "gender": "nan",
+      "role": "patient"
+    }
+  ]
+}

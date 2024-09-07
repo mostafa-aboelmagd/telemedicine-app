@@ -1,12 +1,14 @@
 // app/auth/signup/page.tsx
-import styles from "../../page.module.css";
-import SignupForm from "@/components/auth/SignupForm";
+import SignUpForm from "@/components/auth/SignUpForm";
 import ImageContainer from "@/components/auth/ImageContainer";
-export default function SignUpPage() {
+
+function SignUpPage() {
   return (
-    <div className={styles.main}>
-      <SignupForm />
+    <div className="flex h-full bg-neutral-100 flex-col lg:flex-row">
+      <SignUpForm />
       <ImageContainer />
     </div>
   );
 }
+
+export default SignUpPage;
