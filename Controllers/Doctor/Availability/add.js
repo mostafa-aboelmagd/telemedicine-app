@@ -34,7 +34,7 @@ const addAvailability = async (req, res) => {
                 }
             }
         }
-        if (Object.keys(successfullyEnteredAvailabilities).length === 0) {
+        if (successfullyEnteredAvailabilities.length === 0) {
             message = 'Could not add any availability';
             return res.status(403).json({ message });
         }
