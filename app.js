@@ -1,6 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+require('dotenv').config();
 const patientLoginRoute = require('./Routes/Patient/Login');
 const patientRegisterRoute = require('./Routes/Patient/Register');
 const patienProfileRoute = require('./Routes/Patient/Profile');
@@ -16,14 +17,13 @@ const doctorEditAvailabilityRoute = require('./Routes/Doctor/Availability/Edit')
 const doctorCreateAppointmentRoute = require('./Routes/Doctor/Appointment/create');
 const doctorDeleteAppointmentRoute = require('./Routes/Doctor/Appointment/delete');
 const doctorEditAppointmentRoute = require('./Routes/Doctor/Appointment/edit');
-require('dotenv').config();
 const port = process.env.PORT || 4000;
 const app = express();
 
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: '*',
   credentials: true
 }));
 app.use(express.json()); 
