@@ -3,7 +3,6 @@ const database = require('../../../Database/Doctor/Availability/Add');
 const addAvailability = async (req, res) => {
     const doctorId = 32;
     const doctorAvailabilityDaysHours = req.body;
-    console.log(doctorAvailabilityDaysHours)
     const successfullyEnteredAvailabilities = {};
     let message = '';
 
@@ -31,21 +30,21 @@ const addAvailability = async (req, res) => {
                         }
                         successfullyEnteredAvailabilities[day].push(hour);
                     } else {
-                        return res.status(404).json({message: 'failed after insertion', availability});
+                        console.log({message: 'failed after insertion', availability});
                     }
                 } else {
-                    return res.status(401).json({message: 'failed after availability check', doctorAvailabilityFlag});
+                    console.log({message: 'failed after availability check', doctorAvailabilityFlag});
                 }
             }
         }
         if (Object.keys(successfullyEnteredAvailabilities).length === 0) {
             message = 'Could not add any availability';
-            return res.status(409).json({ message });
+            return res.status(403).json({ message });
         }
-        res.json({ message: 'Availability added successfully', successfullyEnteredAvailabilities });
+        return res.json({ message: 'Availability added successfully', successfullyEnteredAvailabilities });
     } catch (error) {
         console.error('Error adding availability:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
