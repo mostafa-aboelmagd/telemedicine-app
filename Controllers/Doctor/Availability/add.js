@@ -3,7 +3,7 @@ const database = require('../../../Database/Doctor/Availability/Add');
 const addAvailability = async (req, res) => {
     const doctorId = 32;
     const doctorAvailabilityDaysHours = req.body;
-    const successfullyEnteredAvailabilities = {};
+    const successfullyEnteredAvailabilities = [];
     let message = '';
 
     if (!doctorId) {
@@ -25,10 +25,7 @@ const addAvailability = async (req, res) => {
                 if (doctorAvailabilityFlag) {
                     const availability = await database.insertAvailability(doctorId, doctorAvailabilityDayHourNoTZ);
                     if (availability) {
-                        if (!successfullyEnteredAvailabilities[day]) {
-                            successfullyEnteredAvailabilities[day] = [];
-                        }
-                        successfullyEnteredAvailabilities[day].push(hour);
+                        successfullyEnteredAvailabilities.push(availability);
                     } else {
                         console.log({message: 'failed after insertion', availability});
                     }
