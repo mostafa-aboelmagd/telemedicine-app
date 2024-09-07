@@ -1,13 +1,13 @@
-import React from "react";
-import Rating from "@mui/material/Rating";
-import Stack from "@mui/material/Stack";
+import React from 'react'
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { IoMdAlarm } from "react-icons/io";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
-import styles from "./card.module.css";
-import stylesButton from "../navbarComp/navbar.module.css";
-import Link from "next/link"; // Import Link from Next.js
+import styles from './card.module.css';
+import stylesButton from '../navbarComp/navbar.module.css';
 import { formatDate } from '@/utils/date';
+import Link from 'next/link'
 
 const DoctorCard = ({ doctor }: { doctor: any }) => {
     return (
@@ -52,27 +52,12 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
             </div>
             <div className='flex justify-center space-x-12'>
                 <button className='text-xs md:text-md text-[#60A899] hover:text-[#4b8377] py-1 px-1 md:px-0 md:py-2 rounded-xl w-full'>View Profile</button>
-                <button className={stylesButton.gradient_button + ' text-xs md:text-md text-white py-1 px-1 md:px-0 md:py-3 rounded-xl w-full '}>Book Now</button>
+                <Link className='w-full' href="/booking">
+                    <button className={stylesButton.gradient_button + ' text-xs md:text-md text-white py-1 px-1 md:px-0 md:py-3 rounded-xl w-full '}>Book Now</button>
+                </Link>
             </div>
         </div>
-      </div >
-    <div className="flex justify-center space-x-12">
-        <button className="text-[#60A899] hover:text-[#4b8377] py-2 rounded-xl w-full">
-            View Profile
-        </button>
-        <Link href="/booking">
-            <button
-                className={
-                    stylesButton.gradient_button +
-                    " text-white py-3 rounded-xl w-full "
-                }
-            >
-                Book Now
-            </button>
-        </Link>
-    </div>
-    </div >
-  );
-};
+    )
+}
 
-export default DoctorCard;
+export default DoctorCard
