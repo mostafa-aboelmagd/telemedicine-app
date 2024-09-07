@@ -3,6 +3,7 @@ const database = require('../../../Database/Doctor/Availability/Add');
 const addAvailability = async (req, res) => {
     const doctorId = 32;
     const doctorAvailabilityDaysHours = req.body;
+    console.log(doctorAvailabilityDaysHours)
     const successfullyEnteredAvailabilities = {};
     let message = '';
 
@@ -30,10 +31,10 @@ const addAvailability = async (req, res) => {
                         }
                         successfullyEnteredAvailabilities[day].push(hour);
                     } else {
-                        console.log(`Could not add availability for ${doctorAvailabilityDayHour}`);
+                        res.status(401).json({message: 'failed after insertion', availability});
                     }
                 } else {
-                    console.log('Doctor already available at this time');
+                    res.status(401).json({message: 'failed after availability check', doctorAvailabilityFlag});
                 }
             }
         }
