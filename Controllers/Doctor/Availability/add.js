@@ -12,7 +12,7 @@ const addAvailability = async (req, res) => {
     }
     if (!doctorAvailabilityDaysHours) {
         message = 'Doctor availability days and hours not found';
-        return res.status(402).json({ message });
+        return res.status(402).json({ message, doctorAvailabilityDaysHours });
     }
 
     try {
