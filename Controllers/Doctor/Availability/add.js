@@ -30,10 +30,10 @@ const addAvailability = async (req, res) => {
                         }
                         successfullyEnteredAvailabilities[day].push(hour);
                     } else {
-                        res.status(401).json({message: 'failed after insertion', availability});
+                       console.log({message: 'failed after insertion', availability});
                     }
                 } else {
-                    res.status(401).json({message: 'failed after availability check', doctorAvailabilityFlag});
+                    console.log({message: 'failed after availability check', doctorAvailabilityFlag});
                 }
             }
         }
