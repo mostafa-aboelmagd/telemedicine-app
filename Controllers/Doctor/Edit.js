@@ -50,32 +50,41 @@ const editPassword = async (req, res) => {
     let message = '';
     if (!doctorId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(400).json({message});
     }
     if (!doctorEmail) {
         message = 'Doctor email not found';
-        return res.status(401).json(message);
+        return res.status(401).json({message});
     }
-    let { newPassword , oldPassword} = req.body;
+    let { oldPassword , password, confirmPassword } = req.body;
     if (!oldPassword) {
         message = 'Please provide old password';
-        return res.status(402).json(message);
+        return res.status(402).json({message});
     }
-    if (!newPassword) {
+    if (!password) {
         message = 'Please provide new password';
-        return res.status(403).json(message);
+        return res.status(403).json({message});
     }
-    const passwordFlag = passwordValidation(newPassword);
+    if (!confirmPassword) {
+        message = 'Please confirm new password';
+        return res.status(404).json({message});
+    }
+    if (password !== confirmPassword) {
+        message = 'Passwords do not match';
+        return res.status(405).json({message});
+    }
+    const passwordFlag = passwordValidation(confirmPassword);
     if (!passwordFlag) {
         message = 'Password must contain at least 8 characters, one number, one alphabet, and one special character';
-        return res.status(404).json(message);
+        return res.status(406).json({message});
     }
-    const doctor = await database.updatePassword(doctorId, doctorEmail, oldPassword, newPassword);
+    const doctor = await database.updatePassword(doctorId, doctorEmail, oldPassword, confirmPassword);
     if (!doctor) {
         message = 'Could not update doctor password';
-        return res.status(405).json(message);
+        return res.status(407).json({message});
     }
-    return res.json(doctor);
+    message = 'Doctor password updated successfully';
+    return res.json({ message, doctor });
 }
 
 module.exports = { editInfo, editPassword };
