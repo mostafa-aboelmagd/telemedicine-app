@@ -11,9 +11,9 @@ const patientHomeRoute = require('./Routes/Patient/Home');
 const doctorLoginRoute = require('./Routes/Doctor/Login');
 const doctorProfileRoute = require('./Routes/Doctor/Profile');
 const doctorEditRoute = require('./Routes/Doctor/Edit');
-const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/Add');
+const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/add');
 const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Delete');
-const doctorEditAvailabilityRoute = require('./Routes/Doctor/Availability/Edit');
+const doctorEditAvailabilityRoute = require('./Routes/Doctor/Availability/edit');
 const port = process.env.PORT || 4000;
 const app = express();
 

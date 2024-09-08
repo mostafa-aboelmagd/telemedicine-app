@@ -7,3 +7,27 @@ Content-Type: application/json
 }
 
 ###
+
+PUT http://localhost:3000/doctor/edit/info
+Content-Type: application/json
+
+{
+"firdtName": "",
+"lastName": "",
+"email": "",
+"gender": "",
+"phone": "",
+"birthYear": 2001,
+"residenceCountry": "",
+"sixtyMinPrice": 0,
+"thirtyMinPrice": 0,
+"specialization": "",
+"languages": ["Arabic", "English"]
+}
+
+###
+
+GET http://localhost:3000/doctor/profile/info
+Content-Type: application/json
+
+{}

@@ -29,13 +29,21 @@ const pool = new pg.Pool({
 
 const retrieveDoctorInfo = async (id, email) => {
     try {
-        const query = 
-        `SELECT 
-        U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
-        D.*
-        FROM doctor D
-        LEFT JOIN users U ON D.doctor_user_id_reference = U.user_id
-        WHERE D.doctor_user_id_reference = $1 AND U.user_role = $2 AND U.user_email = $3`;
+        const query = `            
+            SELECT 
+                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year,
+                d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization,
+                array_agg(l.language) AS languages
+            FROM 
+                users u
+            JOIN 
+                doctor d ON u.user_id = d.doctor_user_id_reference
+            LEFT JOIN 
+                languages l ON u.user_id = l.lang_user_id
+            WHERE 
+                u.user_id = $1 AND u.user_role = $2 AND u.user_email = $3
+            GROUP BY 
+                u.user_id, d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization`;
 
     const result = await pool.query(query, [id, 'Doctor', email]);
         if (result.rows.length) {
