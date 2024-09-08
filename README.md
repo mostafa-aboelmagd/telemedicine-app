@@ -1,4 +1,4 @@
-![alt text](image-4.png)
+![alt text]([image-4.png](https://tele-med-pilot.vercel.app/))
 # TelemMedPilot
 ### Your Virtual Healthcare Companion
 
