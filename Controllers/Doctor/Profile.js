@@ -60,24 +60,44 @@ const doctorAppointments = async (req, res) => {
     return res.json(appointments);
 }
 
-const doctorAvailability = async (req, res) => {
-    const doctorUserId = req.id;
-    const doctorEmail = req.email;
+const doctorAvailabilities = async (req, res) => {
+    const doctorId = 32;
+    const formattedAvailabilities = {};
     let message = '';
-    if (!doctorUserId) {
+
+    if (!doctorId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(400).json({ message });
     }
-    if (!doctorEmail) {
-        message = 'Doctor email not found';
-        return res.status(401).json(message);
+
+    try {
+        const availabilities = await database.retrieveDoctorAvailabilities(doctorId);
+        if (availabilities) {
+            availabilities.forEach(availability => {
+                const date = new Date(availability.doctor_availability_day_hour);
+                const options = { 
+                    weekday: 'short', 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                };
+                const formattedDate = date.toLocaleDateString('en-US', options).replace(/, /g, ' ');
+                const formattedTime = date.toLocaleTimeString('en-US', { hour12: false });
+
+                if (!formattedAvailabilities[formattedDate]) {
+                    formattedAvailabilities[formattedDate] = [];
+                }
+                formattedAvailabilities[formattedDate].push({ time: formattedTime, id: availability.doctor_availability_id });
+            });
+            message = 'Doctor availabilities retrieved successfully';
+            return res.json({ message, availabilities: formattedAvailabilities });
+        }
+        message = 'Could not retrieve doctor availabilities';
+        return res.status(401).json({ message });
+    } catch (error) {
+        console.error('Error retrieving availabilities:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
-    const availability = await database.retrieveDoctorAvailability(doctorUserId, doctorEmail);
-    if (!availability) {
-        message = 'Could not retrieve availability';
-        return res.status(402).json(message);
-    }
-    return res.json(availability);
 }
 
 const doctorReviews = async (req, res) => {
@@ -180,4 +200,4 @@ const doctorLanguages = async (req, res) => {
     return res.json(languages);
 }   
 
-module.exports = { doctorInfo, doctorPatients, doctorAppointments, doctorAvailability, doctorReviews, doctorExperience, doctorEducation, doctorInterests, doctorLanguages };
+module.exports = { doctorInfo, doctorPatients, doctorAppointments, doctorAvailabilities, doctorReviews, doctorExperience, doctorEducation, doctorInterests, doctorLanguages };

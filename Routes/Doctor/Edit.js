@@ -3,7 +3,9 @@ const doctorEditController = require('../../Controllers/Doctor/Edit');
 const { tokenAuthentication } = require('../../Middleware/User/Authentication');
 const router = express.Router();
 
-router.put('/info', tokenAuthentication, doctorEditController.editInfo);
-router.put('/password', tokenAuthentication, doctorEditController.editPassword);
+router.put('/info', doctorEditController.editInfo);
+router.put('/password', doctorEditController.editPassword);
+// router.get('/info', doctorEditController.getDoctorInfo);
+// router.get('/password', doctorEditController.getDoctorPassword);
 
 module.exports = router;

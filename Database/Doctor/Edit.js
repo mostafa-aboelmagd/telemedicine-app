@@ -45,37 +45,78 @@ const checkUserEmail = async (email) => {
 };
 
 const updateInfo = async (doctorId, doctorEmail, updates) => {
+    const client = await pool.connect();
     try {
-        const fields = [];
-        const values = [];
-        let index = 1;
+        await client.query('BEGIN');
+
+        const userFields = [];
+        const userValues = [];
+        const doctorFields = [];
+        const doctorValues = [];
+        let userIndex = 1;
+        let doctorIndex = 1;
 
         for (const [key, value] of Object.entries(updates)) {
             if (value !== undefined && value !== null && value !== '') {
-                fields.push(`${key} = $${index}`);
-                values.push(value);
-                index++;
+                if (key.startsWith('user_')) {
+                    userFields.push(`${key} = $${userIndex}`);
+                    userValues.push(value);
+                    userIndex++;
+                } else if (key.startsWith('doctor_')) {
+                    doctorFields.push(`${key} = $${doctorIndex}`);
+                    doctorValues.push(value);
+                    doctorIndex++;
+                }
             }
         }
 
-        if (fields.length === 0) {
-            console.log('No fields to update');
-            return false;
+        if (userFields.length > 0) {
+            userValues.push(doctorId, 'Doctor', doctorEmail);
+            const userQuery = `UPDATE users SET ${userFields.join(', ')} WHERE user_id = $${userIndex} AND user_role = $${userIndex + 1} AND user_email = $${userIndex + 2} RETURNING *`;
+            const updatedUserInfo = await client.query(userQuery, userValues);
+            console.log('User info updated', updatedUserInfo.rows);
         }
 
-        values.push(doctorId, 'Doctor', doctorEmail);
-        const query = `UPDATE users SET ${fields.join(', ')} WHERE user_id = $${index} AND user_role = $${index + 1} AND user_email = $${index + 2} RETURNING *`;
-        const result = await pool.query(query, values);
-
-        if (result.rows.length) {
-            console.log('Doctor info updated', result.rows);
-            return result.rows;
+        if (doctorFields.length > 0) {
+            doctorValues.push(doctorId);
+            const doctorQuery = `UPDATE doctor SET ${doctorFields.join(', ')} WHERE doctor_user_id_reference = $${doctorIndex} RETURNING *`;
+            const updatedDoctorInfo = await client.query(doctorQuery, doctorValues);
+            console.log('Doctor info updated', updatedDoctorInfo.rows);
         }
-        console.log('Could not update doctor info');
-        return false;
+
+        if (updates.languages) {
+            await client.query('DELETE FROM languages WHERE lang_user_id = $1', [doctorId]);
+            for (const language of updates.languages) {
+                await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2)', [doctorId, language]);
+            }
+            console.log('Languages updated');
+        }
+        const combinedQuery = `
+            SELECT 
+                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year,
+                d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization,
+                array_agg(l.language) AS languages
+            FROM 
+                users u
+            JOIN 
+                doctor d ON u.user_id = d.doctor_user_id_reference
+            LEFT JOIN 
+                languages l ON u.user_id = l.lang_user_id
+            WHERE 
+                u.user_id = $1
+            GROUP BY 
+                u.user_id, d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization
+        `;
+        const combinedResult = await client.query(combinedQuery, [doctorId]);
+
+        await client.query('COMMIT');
+        return combinedResult.rows;
     } catch (error) {
-        console.error(error.stack);
+        await client.query('ROLLBACK');
+        console.error('Error updating doctor info:', error.stack);
         return false;
+    } finally {
+        client.release();
     }
 };
 
