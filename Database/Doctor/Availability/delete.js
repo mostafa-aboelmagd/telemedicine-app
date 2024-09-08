@@ -26,12 +26,12 @@ const pool = new pg.Pool({
     }
 })();
 
-const checkDoctorAvailability = async (doctorId, availabilityDay, availabilityHour, availabilityId) => {
+const checkDoctorAvailability = async (doctorId, availabilityId) => {
     try {
-        const result = await pool.query('SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_day = $2 AND doctor_availability_hour = $3 AND doctor_availability_status = $4 AND doctor_availability_id = $5', [doctorId, availabilityDay, availabilityHour, true, availabilityId]);
+        const result = await pool.query('SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_status = $2 AND doctor_availability_id = $3', [doctorId, true, availabilityId]);
         if (result.rows.length) {
             console.log('Doctor availability is available', result.rows);
-            return result.rows;
+            return true;
         }
         console.log('Doctor availability is already not available');
         return false;
@@ -41,14 +41,14 @@ const checkDoctorAvailability = async (doctorId, availabilityDay, availabilityHo
     }
 };
 
-const deleteAvailability = async (doctorId, availabilityDay, availabilityHour, availabilityId) => {
+const deleteAvailability = async (doctorId, availabilityId) => {
     try {
-        const result = await pool.query('DELETE FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_day = $2 AND doctor_availability_hour = $3 AND doctor_availability_status = $4 AND doctor_availability_id = $5 RETURNING *',
-             [doctorId, availabilityDay, availabilityHour, true, availabilityId]
+        const result = await pool.query('DELETE FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_status = $2 AND doctor_availability_id = $3 RETURNING *',
+             [doctorId, true, availabilityId]
         );
         if (result.rows.length) {
             console.log('Doctor availability deleted successfully', result.rows);
-            return result.rows;
+            return true;
         }
         console.log('Could not delete doctor availability');
         return false;
