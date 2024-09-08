@@ -31,3 +31,27 @@ GET http://localhost:3000/doctor/profile/info
 Content-Type: application/json
 
 {}
+
+###
+
+GET http://localhost:3000/patient/profile/info
+Content-Type: application/json
+
+{}
+
+###
+
+PUT http://localhost:3000/patient/edit/info
+Content-Type: application/json
+
+{
+"firdtName": "",
+"lastName": "",
+"email": "",
+"gender": "",
+"phone": "",
+"birthYear": 2001,
+"languages": ["English", "Deutsch"]
+}
+
+###

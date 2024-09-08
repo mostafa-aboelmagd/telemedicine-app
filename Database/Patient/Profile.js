@@ -31,10 +31,11 @@ const retrievePatientInfo = async (id, email) => {
     const query = 
     `SELECT 
     U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
-    P.*
-    FROM patient P
-    LEFT JOIN users U ON P.patient_user_id_reference = U.user_id
-    WHERE P.patient_user_id_reference = $1 AND U.user_email = $2 AND U.user_role = $3`;
+    array_agg(L.language) AS languages
+    FROM users U
+    LEFT JOIN languages L ON u.user_id = L.lang_user_id
+    WHERE U.user_id = $1 AND U.user_email = $2 AND U.user_role = $3
+    GROUP BY U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name`;
 
     const result = await pool.query(query, [id, email, 'Patient']);
         if (result.rows.length) {
