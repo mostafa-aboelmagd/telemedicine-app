@@ -62,22 +62,4 @@ const insertAvailability = async (doctorId, availabilityDayHour) => {
     }
 };
 
-const retrieveAllAvailabilities = async (doctorId) => {
-    try {
-        const result = await pool.query(
-            'SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_status = $2',
-            [doctorId, true]
-        );
-        if (result.rows.length) {
-            console.log('Doctor availabilities retrieved successfully', result.rows);
-            return result.rows;
-        }
-        console.log('Could not retrieve doctor availabilities');
-        return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
-
-module.exports = { checkDoctorAvailability, insertAvailability, retrieveAllAvailabilities };
+module.exports = { checkDoctorAvailability, insertAvailability};

@@ -3,8 +3,8 @@ const { passwordValidation } = require('../../Utilities');
 
 
 const editInfo = async (req, res) => {
-    const doctorId = req.id;
-    const doctorEmail = req.email;
+    const doctorId = 32;
+    const doctorEmail = 'dr.khaled@example.com';
     let message = '';
     if (!doctorId) {
         message = 'Doctor ID not found';
@@ -14,14 +14,19 @@ const editInfo = async (req, res) => {
         message = 'Doctor email not found';
         return res.status(401).json(message);
     }
-    const { fName, lName, email, gender, phone, birthYear } = req.body;
+    const { firstName, lastName, email, gender, phone, birthYear, residenceCountry, sixtyMinPrice, thirtyMinPrice, specialization, languages } = req.body;
     const updatedInfo = {
-        user_first_name: fName,
-        user_last_name: lName,
+        user_first_name: firstName,
+        user_last_name: lastName,
         user_email: email,
         user_gender: gender,
         user_phone_number: phone,
-        user_birth_year: birthYear
+        user_birth_year: birthYear,
+        doctor_country: residenceCountry,
+        doctor_sixty_min_price: sixtyMinPrice,
+        doctor_thirty_min_price: thirtyMinPrice,
+        doctor_specialization: specialization,
+        languages: languages
     };
     if (email) {
         const emailFlag = database.checkUserEmail(email);
@@ -31,16 +36,17 @@ const editInfo = async (req, res) => {
         }
     }
     const doctor = await database.updateInfo(doctorId, doctorEmail, updatedInfo);
-    if (doctor) {
+    if (!doctor) {
         message = 'Could not update doctor info';
         return res.status(403).json(message);
     }
-    return res.json(doctor);
+    message = 'Doctor info updated successfully';
+    return res.json({message, doctor});
 }
 
 const editPassword = async (req, res) => {
-    const doctorId = req.id;
-    const doctorEmail = req.email;
+    const doctorId = 32;
+    const doctorEmail = 'dr.khaled@example.com';
     let message = '';
     if (!doctorId) {
         message = 'Doctor ID not found';
