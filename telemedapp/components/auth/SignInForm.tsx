@@ -1,4 +1,3 @@
-// SignInForm.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -12,18 +11,18 @@ function SignInForm() {
   });
 
   const [formValid, setFormValid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevForm) => ({...prevForm, [name]: value,}));
+    setFormData((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
   const validateForm = () => {
     const { email, password } = formData;
-    if(email && password) {
+    if (email && password) {
       setFormValid(true);
-    }
-    else {
+    } else {
       setFormValid(false);
     }
   };
@@ -32,18 +31,46 @@ function SignInForm() {
     validateForm();
   }, [formData]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(!formValid) {
-      return;
-    }
 
-    // Perform sign-in logic here
+    if (!formValid) return;
+
+    try {
+      const response = await fetch(
+        "https://telemedicine-pilot-d2anbuaxedbfdba9.southafricanorth-01.azurewebsites.net/patient/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Invalid email or password");
+      }
+
+      const data = await response.json();
+      console.log("User signed in:", data);
+
+      // Redirect to the home page or a profile page
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+      setErrorMessage("An error occurred during sign-in");
+    }
   };
 
   return (
     <div className="p-5 rounded-xl max-w-md m-auto">
-      <h2 className="font-bold text-2xl text-center text-neutral-700 mb-6">Sign in</h2>
+      <h2 className="font-bold text-2xl text-center text-neutral-700 mb-6">
+        Sign in
+      </h2>
       <form onSubmit={handleSubmit}>
         <InputComponent
           label="Email"
@@ -63,10 +90,19 @@ function SignInForm() {
           onChange={handleChange}
           required
         />
-        <p className="mb-2">Don&apos;t Have An Account? <Link href="/auth/signup" className="text-blue-500 font-semibold cursor-pointer">Sign Up</Link></p>
+        {errorMessage && <p className="text-red-500 mb-2">{errorMessage}</p>}
+        <p className="mb-2">
+          Don&apos;t Have An Account?{" "}
+          <Link
+            href="/auth/signup"
+            className="text-blue-500 font-semibold cursor-pointer"
+          >
+            Sign Up
+          </Link>
+        </p>
         <button
           type="submit"
-          className="bg-sky-500 text-neutral-50 text-lg	p-3.5	w-full border-none rounded-lg cursor-pointer transition-[background-color] disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
+          className="bg-sky-500 text-neutral-50 text-lg p-3.5 w-full border-none rounded-lg cursor-pointer transition-[background-color] disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
           disabled={!formValid}
         >
           Sign in
