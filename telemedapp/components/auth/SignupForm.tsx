@@ -277,7 +277,6 @@ function SignUpForm() {
   useEffect(() => {
     validateForm();
   }, [formData]);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -292,25 +291,33 @@ function SignUpForm() {
 
     if (!formValid) return;
 
+    const requestBody = {
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      phone_number: formData.phone,
+      birth_year: parseInt(formData.birthYear),
+      gender: formData.gender,
+    };
+
+    console.log("Request body:", requestBody); // Log the request body
+
     try {
-      const response = await fetch("http://localhost:3001/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          password_hash: formData.password,
-          phone_number: formData.phone,
-          birth_year: parseInt(formData.birthYear),
-          gender: formData.gender,
-          role: "patient",
-        }),
-      });
+      const response = await fetch(
+        "https://telemedicine-pilot-d2anbuaxedbfdba9.southafricanorth-01.azurewebsites.net/patient/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
       if (!response.ok) {
+        const errorData = await response.json(); // Log error details if available
+        console.log("Error response data:", errorData);
         throw new Error("Failed to register");
       }
 

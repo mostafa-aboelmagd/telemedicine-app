@@ -34,38 +34,32 @@ function SignInForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formValid) {
-      return;
-    }
+    if (!formValid) return;
 
     try {
       const response = await fetch(
-        "http://localhost:3001/users?email=" +
-          encodeURIComponent(formData.email),
+        "https://telemedicine-pilot-d2anbuaxedbfdba9.southafricanorth-01.azurewebsites.net/patient/login",
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+        throw new Error("Invalid email or password");
       }
 
-      const users = await response.json();
-      const user = users.find(
-        (user: any) => user.password_hash === formData.password
-      );
+      const data = await response.json();
+      console.log("User signed in:", data);
 
-      if (user) {
-        console.log("User signed in:", user);
-        // Redirect to the home page or a profile page
-        window.location.href = "/";
-      } else {
-        setErrorMessage("Invalid email or password");
-      }
+      // Redirect to the home page or a profile page
+      window.location.href = "/";
     } catch (error) {
       console.error("Error during sign-in:", error);
       setErrorMessage("An error occurred during sign-in");
