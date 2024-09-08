@@ -18,17 +18,17 @@ const doctorInfo = async (req, res) => {
         return res.status(402).json(message);
     }
     const formattedDoctor = {
-        firstName: doctor.user_first_name,
-        lastName: doctor.user_last_name,
-        email: doctor.user_email,
-        gender: doctor.user_gender,
-        phone: doctor.user_phone_number,
-        birthYear: doctor.user_birth_year,
-        residenceCountry: doctor.doctor_country,
-        sixtyMinPrice: doctor.doctor_sixty_min_price,
-        thirtyMinPrice: doctor.doctor_thirty_min_price,
-        specialization: doctor.doctor_specialization,
-        languages: doctor.languages
+        firstName: doctor[0].user_first_name,
+        lastName: doctor[0].user_last_name,
+        email: doctor[0].user_email,
+        gender: doctor[0].user_gender,
+        phone: doctor[0].user_phone_number,
+        birthYear: doctor[0].user_birth_year,
+        residenceCountry: doctor[0].doctor_country,
+        sixtyMinPrice: doctor[0].doctor_sixty_min_price,
+        thirtyMinPrice: doctor[0].doctor_thirty_min_price,
+        specialization: doctor[0].doctor_specialization,
+        languages: doctor[0].languages
     };
     message = 'Doctor info retrieved successfully';
     return res.json({ message, formattedDoctor });
