@@ -28,13 +28,13 @@ const editInfo = async (req, res) => {
         doctor_specialization: specialization,
         languages: languages
     };
-    if (email) {
-        const emailFlag = database.checkUserEmail(email);
-        if (emailFlag) {
-            message = 'Email already exists';
-            return res.status(402).json(message);
-        }
-    }
+    // if (email) {
+    //     const emailFlag = database.checkUserEmail(email);
+    //     if (emailFlag) {
+    //         message = 'Email already exists';
+    //         return res.status(402).json(message);
+    //     }
+    // }
     const doctor = await database.updateInfo(doctorId, doctorEmail, updatedInfo);
     if (!doctor) {
         message = 'Could not update doctor info';
