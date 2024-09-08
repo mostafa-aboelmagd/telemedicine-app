@@ -15,7 +15,7 @@ const doctorInfo = async (req, res) => {
     const doctor = await database.retrieveDoctorInfo(doctorUserId, doctorEmail);
     if (!doctor) {
         message = 'Could not retrieve doctor info';
-        return res.status(402).json(message);
+        return res.status(404).json(message);
     }
     return res.json(doctor);
 }
