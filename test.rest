@@ -1,0 +1,9 @@
+GET https://telemedicine-pilot-d2anbuaxedbfdba9.eastus-01.azurewebsites.net/doctor/login
+Content-Type: application/json
+
+{
+"email": "dr.khaled@example.com", 
+"password": "hashed_password_11"  
+}
+
+###
