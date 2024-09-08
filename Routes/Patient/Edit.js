@@ -4,7 +4,7 @@ const { tokenAuthentication } = require('../../Middleware/User/Authentication');
 
 const router = express.Router();
 
-router.put('/info', tokenAuthentication, patientEditController.editInfo);
-router.put('/password', tokenAuthentication, patientEditController.editPassword);
+router.put('/info', patientEditController.editInfo);
+router.put('/password', patientEditController.editPassword);
 
 module.exports = router;

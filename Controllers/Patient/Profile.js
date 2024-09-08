@@ -1,8 +1,8 @@
 const  database  = require('../../Database/Patient/Profile');
 
 const patientInfo = async (req, res) => {
-    const patientUserId = req.id;
-    const patientEmail = req.email;
+    const patientUserId = 22;
+    const patientEmail = "john.doe@example.com";
     let message = '';
     if (!patientUserId) {
         message = 'Patient ID not found';
@@ -17,7 +17,17 @@ const patientInfo = async (req, res) => {
         message = 'Could not retrieve patient info';
         return res.status(402).json(message);
     }
-    return res.json(patient);
+    const formattedPatient = {
+        firstName: patient[0].user_first_name,
+        lastName: patient[0].user_last_name,
+        email: patient[0].user_email,
+        gender: patient[0].user_gender,
+        phone: patient[0].user_phone_number,
+        birthYear: patient[0].user_birth_year,
+        languages: patient[0].languages
+    };
+    message = 'Patient info retrieved successfully';
+    return res.json({ message, formattedPatient });
 };
 
 const patientAppointments = async (req, res) => {

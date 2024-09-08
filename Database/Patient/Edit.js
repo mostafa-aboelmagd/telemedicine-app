@@ -44,38 +44,63 @@ const checkUserEmail = async (email) => {
     }
 };
 
-const updateInfo = async (patienId, patientEmail, updates) => {
+const updateInfo = async (patientId, patientEmail, updates) => {
+    const client = await pool.connect();
     try {
-        const fields = [];
-        const values = [];
-        let index = 1;
+        await client.query('BEGIN');
+
+        const userFields = [];
+        const userValues = [];
+        let userIndex = 1;
 
         for (const [key, value] of Object.entries(updates)) {
             if (value !== undefined && value !== null && value !== '') {
-                fields.push(`${key} = $${index}`);
-                values.push(value);
-                index++;
+                if (key !== 'languages') {
+                    userFields.push(`${key} = $${userIndex}`);
+                    userValues.push(value);
+                    userIndex++;
+                }
             }
         }
 
-        if (fields.length === 0) {
-            console.log('No fields to update');
-            return false;
+        if (userFields.length > 0) {
+            userValues.push(patientId, 'Patient', patientEmail);
+            const userQuery = `UPDATE users SET ${userFields.join(', ')} WHERE user_id = $${userIndex} AND user_role = $${userIndex + 1} AND user_email = $${userIndex + 2} RETURNING *`;
+            const updatedUserInfo = await client.query(userQuery, userValues);
+            console.log('User info updated', updatedUserInfo.rows);
         }
 
-        values.push(patienId, 'Patient', patientEmail);
-        const query = `UPDATE users SET ${fields.join(', ')} WHERE user_id = $${index} AND user_role = $${index + 1} AND user_email = $${index + 2} RETURNING *`;
-        const result = await pool.query(query, values);
-
-        if (result.rows.length) {
-            console.log('Patient info updated', result.rows);
-            return result.rows;
+        if (updates.languages) {
+            await client.query('DELETE FROM languages WHERE lang_user_id = $1', [patientId]);
+            for (const language of updates.languages) {
+                await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2)', [patientId, language]);
+            }
+            console.log('Languages updated');
         }
-        console.log('Could not update patient info');
-        return false;
+
+        const combinedQuery = `
+            SELECT 
+                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year,
+                array_agg(l.language) AS languages
+            FROM 
+                users u
+            LEFT JOIN 
+                languages l ON u.user_id = l.lang_user_id
+            WHERE 
+                u.user_id = $1 AND u.user_role = $2 AND u.user_email = $3
+            GROUP BY 
+                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year
+        `;
+        const combinedResult = await client.query(combinedQuery, [patientId, 'Patient', patientEmail]);
+
+        await client.query('COMMIT');
+        return combinedResult.rows;
     } catch (error) {
-        console.error(error.stack);
+        await client.query('ROLLBACK');
+        console.error('Error updating patient info:', error.stack);
         return false;
+    } finally {
+        client.release();
     }
 };
 
