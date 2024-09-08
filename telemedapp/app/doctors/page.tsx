@@ -30,7 +30,7 @@ const Doctors = () => {
         "Content-Type": "application/json"
     }
     const fetchDoctors = async () => {
-        const response = await fetch("https://telemedicine-pilot-d2anbuaxedbfdba9.southafricanorth-01.azurewebsites.net/patient/home", { headers })
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/home`, { headers })
         if (!response.ok) {
             console.log("Error: Request sent no data")
         }
