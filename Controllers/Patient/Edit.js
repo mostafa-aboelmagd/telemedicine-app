@@ -14,10 +14,10 @@ const editInfo = async (req, res) => {
         message = 'Patient email not found';
         return res.status(401).json({ message });
     }
-    const { fName, lName, email, gender, phone, birthYear, languages } = req.body;
+    const { firstName, lastName, email, gender, phone, birthYear, languages } = req.body;
     const updatedInfo = {
-        user_first_name: fName,
-        user_last_name: lName,
+        user_first_name: firstName,
+        user_last_name: lastName,
         user_email: email,
         user_gender: gender,
         user_phone_number: phone,
