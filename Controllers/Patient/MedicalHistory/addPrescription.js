@@ -15,7 +15,7 @@ const addPrescription = async (req, res) => {
     if (!newPrescription) {
       return res.status(500).json({ message: 'Failed to add prescription' });
     }
-    return res.status(201).json(newPrescription); // 201 Created
+    return res.status(201).json(newPrescription); 
   } catch (error) {
     console.error(error.stack);
     return res.status(500).json({ message: 'Internal server error' });

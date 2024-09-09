@@ -24,21 +24,13 @@ const pool = new pg.Pool({
         console.error('Database connection error', error.stack);
     }
 })();
+
+
 // Request Body format
 // {
-//   "medicationData": [
-//     {
-//       "medicationName": "Ibuprofen",
-//       "dosage": "200mg, twice daily",
-//       "note": "For pain relief"
-//     },
-//     {
-//       "medicationName": "Paracetamol",
-//       "dosage": "500mg, every 4 hours",
-//       "note": "For fever reduction"
-//     }
-//   ]
+//   "prescriptionId": 1
 // }
+
 
 
 const deletePrescription = async (prescriptionId) => {
@@ -60,7 +52,11 @@ const deletePrescription = async (prescriptionId) => {
     return true;
   } catch (error) {
     console.error(error.stack);
-    return false;
+    if (error.code === 'ER_ROW_DOES_NOT_EXIST') {
+      return false; 
+    } else {
+      throw error;
+    }
   }
 };
 

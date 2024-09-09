@@ -25,7 +25,7 @@ const pool = new pg.Pool({
     }
 })();
 
-// Body request format
+
 // {
 //   "medicationData": [
 //     {
@@ -46,9 +46,9 @@ const addPrescription = async (patientId, medicationData) => {
   try {
     const query = `
       INSERT INTO prescriptions (
-        patient_user_id_reference,
+        prescription_patient_id,prescription_doctor_id
       ) VALUES (
-        $1
+        $1,$2
       ) RETURNING prescription_id;
     `;
 

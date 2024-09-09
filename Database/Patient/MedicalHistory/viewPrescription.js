@@ -25,39 +25,14 @@ const pool = new pg.Pool({
         console.error('Database connection error', error.stack);
     }
 })();
-// Request Body format
-// {
-//   "medicationData": [
-//     {
-//       "medicationName": "Ibuprofen",
-//       "dosage": "200mg, twice daily",
-//       "note": "For pain relief"
-//     },
-//     {
-//       "medicationName": "Paracetamol",
-//       "dosage": "500mg, every 4 hours",
-//       "note": "For fever reduction"
-//     }
-//   ]
-// }
 
-
-const retrievePrescription = async (patientId) => {
+const retrievePrescription = async (prescriptionId) => {
   try {
     const query = `
-      SELECT
-        p.prescription_id,
-        pm.medication_name,
-        pm.dosage,
-        pm.note
-      FROM
-        prescriptions p
-      JOIN prescription_medications pm ON p.prescription_id = pm.prescription_id
-      WHERE
-        p.patient_user_id_reference = $1
-    `;
-
-    const result = await pool.query(query, [patientId]);
+      SELECT * 
+      FROM prescription_medications
+      WHERE prescription_medication_id = 1`;
+    const result = await pool.query(query, [prescriptionId]);
     if (result.rows.length) {
       return result.rows;
     }
@@ -67,6 +42,5 @@ const retrievePrescription = async (patientId) => {
     return false;
   }
 };
-
 
 module.exports = { retrievePrescription};
