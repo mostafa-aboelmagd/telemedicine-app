@@ -20,7 +20,7 @@ const home = async (req, res) => {
     const databaseDoctors = await database.retrieveDoctors();
     if (!databaseDoctors) {
         message = 'Could not retrieve doctors';
-        return res.status(403).json(message);
+        return res.status(400).json(message);
     }
     const groupedData = databaseDoctors.reduce((acc, doctor) => {
         const { user_id, user_first_name, user_last_name, user_gender, doctor_specialization, doctor_country, doctor_thirty_min_price, doctor_sixty_min_price, doctor_image, doctor_interest_name, language } = doctor;

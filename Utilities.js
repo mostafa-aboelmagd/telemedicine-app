@@ -48,5 +48,24 @@ const dateValidation = (date) => {
     }
     return true;
 }
+//prescription validation by  yahya 
+const validatePrescriptionData = (medicationData) => {
+    // Check if medicationData is an array
+    if (!Array.isArray(medicationData)) {
+      return false;
+    }
+  
+    // Validate each medication object
+    for (const medication of medicationData) {
+      if (!medication.medicationName || typeof medication.medicationName !== 'string') {
+        return false;
+      }
+      if (!medication.dosage || typeof medication.dosage !== 'string') {
+        return false;
+      }
+    }
+  
+    return true;
+  };
 
-module.exports = { passwordValidation, splitAndToLower, createToken, createAppointmentToken, dateValidation };
+module.exports = { passwordValidation, splitAndToLower, createToken, createAppointmentToken, dateValidation,validatePrescriptionData};

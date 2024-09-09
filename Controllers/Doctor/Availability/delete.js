@@ -9,7 +9,7 @@ const deleteAvailability = async (req, res) => {
     let message = '';
     if (!doctorId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(404).json(message);
     }
     // if (!doctorEmail) {
     //     message = 'Doctor email not found';
@@ -33,7 +33,7 @@ const deleteAvailability = async (req, res) => {
     }
     if (deletedAvailabilities.length === 0) {
         message = 'Could not delete any availability';
-        return res.status(405).json(message);
+        return res.status(400).json(message);
     }
     return res.json(`Successfully deleted ${deletedAvailabilities.length} availabilities from ${doctorAvailabilityIds.length}`);    
 }

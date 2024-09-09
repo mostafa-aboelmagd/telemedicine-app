@@ -10,19 +10,19 @@ const login = async (req, res) => {
   let message = '';
   if (!email || !password) {
     message = 'Please fill all the fields';
-    return res.status(400).json(message);
+    return res.status(404).json(message);
   }
   const patient = await database.retrievePatient(email);
   if (!patient) {
     message = 'Invalid email or password'
-    return res.status(401).json(message);
+    return res.status(400).json(message);
   }
   const storedPasswordHash = patient[0].user_password_hash; 
   const isEqual = await bcrypt.compare(password, storedPasswordHash);
 
   if (!isEqual) {
     message = 'Invalid email or password'
-    return res.status(402).json(message);
+    return res.status(400).json(message);
   }
   const token = createToken(patient[0].user_id, patient[0].user_email);
   res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS });
