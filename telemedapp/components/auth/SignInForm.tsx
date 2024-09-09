@@ -52,7 +52,9 @@ function SignInForm() {
       );
 
       if (!response.ok) {
-        throw new Error("Invalid email or password");
+        const errorData = await response.json();
+        console.log("Error response from server:", errorData);
+        throw new Error(errorData.message || "Invalid email or password");
       }
 
       const data = await response.json();
