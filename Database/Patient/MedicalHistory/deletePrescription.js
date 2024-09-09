@@ -18,7 +18,7 @@ const pool = new pg.Pool({
 (async () => {
     try {
         const client = await pool.connect();
-        console.log('Connected to the database');
+        console.log('Connected to the database prescription2');
         client.release();
     } catch (error) {
         console.error('Database connection error', error.stack);

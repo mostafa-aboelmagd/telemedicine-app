@@ -1,9 +1,9 @@
 
 const MedicalHistory = require('../../../Database/Patient/MedicalHistory/addPrescription');
-const { validatePrescriptionData } = require('../../Utilities');
+const { validatePrescriptionData } = require('../../../Utilities');
 
 const addPrescription = async (req, res) => {
-  const patientId = req.id;  // Assuming you have a way to access the patient ID from the request
+  const patientId = req.id;
   const medicationData = req.body.medicationData;
 
   if (!validatePrescriptionData(medicationData)) {

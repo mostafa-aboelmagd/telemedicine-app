@@ -18,14 +18,14 @@ const pool = new pg.Pool({
 (async () => {
     try {
         const client = await pool.connect();
-        console.log('Connected to the database');
+        console.log('Connected to the database prescription1');
         client.release();
     } catch (error) {
         console.error('Database connection error', error.stack);
     }
 })();
 
-// Request Body format
+// Body request format
 // {
 //   "medicationData": [
 //     {
@@ -67,6 +67,7 @@ const addPrescription = async (patientId, medicationData) => {
         )
       `;
     });
+    
 
     await pool.query(medicationInsertQueries.join(';'), [prescriptionId, ...medicationData.map((medication) => [medication.medicationName, medication.dosage, medication.note])]);
 

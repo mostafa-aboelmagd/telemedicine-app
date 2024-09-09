@@ -14,6 +14,9 @@ const doctorEditRoute = require('./Routes/Doctor/Edit');
 const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/add');
 const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Delete');
 const doctorEditAvailabilityRoute = require('./Routes/Doctor/Availability/edit');
+const patientAddPrescriptionRoute = require('./Routes/Patient/MedicalHistory/addPrescription');
+const patientDeletePrescriptionRoute= require('./Routes/Patient/MedicalHistory/deletePrescription');
+const patientViewPrescriptionRoute= require('./Routes/Patient/MedicalHistory/viewPrescription');
 const port = process.env.PORT || 4000;
 const app = express();
 
@@ -41,6 +44,11 @@ app.use('/doctor/profile', doctorProfileRoute);
 app.use('/doctor/availability/add', doctorAddAvailabilityRoute);
 app.use('/doctor/availability/delete', doctorDeleteAvailabilityRoute);
 app.use('/doctor/availability/edit', doctorEditAvailabilityRoute);
+app.use('/patient/prescription/add',patientAddPrescriptionRoute);
+app.use('/patient/prescription/view',patientViewPrescriptionRoute);
+app.use('/patient/prescription/delete',patientDeletePrescriptionRoute)
+
+
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;

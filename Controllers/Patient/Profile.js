@@ -17,6 +17,7 @@ const patientInfo = async (req, res) => {
         message = 'Could not retrieve patient info';
         return res.status(402).json(message);
     }
+    
     const formattedPatient = {
         firstName: patient[0].user_first_name,
         lastName: patient[0].user_last_name,

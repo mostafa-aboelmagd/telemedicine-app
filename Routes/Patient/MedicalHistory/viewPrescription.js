@@ -1,11 +1,11 @@
 
 
 const express = require('express');
-const patientHistoryViewPrescriptionController = require('../../Controllers/Patirnt/MedicalHistory/viewPrescription');
-const { tokenAuthentication } = require('../../Middleware/User/Authentication');
+const patientHistoryViewPrescriptionController = require('../../../Controllers/Patient/MedicalHistory/viewPrescription');
+// const { tokenAuthentication } = require('../../Middleware/User/Authentication');
 
 const router = express.Router();
 
-router.get('/prescription', tokenAuthentication, patientHistoryDeletePrescriptionController.getPrescription);
+router.get('', patientHistoryViewPrescriptionController.getPrescription);
 
 module.exports = router;
