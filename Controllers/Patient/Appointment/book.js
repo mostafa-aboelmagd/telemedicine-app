@@ -36,21 +36,21 @@ const bookAppointment = async (req, res) => {
     const patient = await database.retrievePatient(patientId, patientEmail);
     if (!patient) {
         message = 'Patient not registered';
-        return res.status(404).json(message);
+        return res.status(400).json(message);
     }
     const doctor = await database.retrieveDoctor(doctorId);
     if (!doctor) {
         message = 'Doctor not registered';
-        return res.status(404).json(message);
+        return res.status(400).json(message);
     }
     const appointmentFlag = await database.checkAppointmentAvailability(doctorId, availabilitySlot);
     if (appointmentFlag) {
         message = 'Doctor is not available at this time';
-        return res.status(404).json(message);
+        return res.status(400).json(message);
     }
     const appointment = await database.insertAppointment(patientId, doctorId, appointmentType, appointmentDuration, availabilitySlot);
     if (!appointment) {
-        return res.status(404).json('Appointment could not be booked');
+        return res.status(400).json('Appointment could not be booked');
     }
     res.json({ message: 'Appointment booked successfully', appointment: appointment });
 }

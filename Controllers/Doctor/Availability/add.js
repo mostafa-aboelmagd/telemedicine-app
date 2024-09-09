@@ -8,11 +8,11 @@ const addAvailability = async (req, res) => {
 
     if (!doctorId) {
         message = 'Doctor ID not found';
-        return res.status(400).json({ message });
+        return res.status(404).json({ message });
     }
     if (!doctorAvailabilityDaysHours) {
         message = 'Doctor availability days and hours not found';
-        return res.status(402).json({ message, doctorAvailabilityDaysHours });
+        return res.status(404).json({ message });
     }
 
     try {
@@ -36,7 +36,7 @@ const addAvailability = async (req, res) => {
         }
         if (successfullyEnteredAvailabilities.length === 0) {
             message = 'Could not add any availability';
-            return res.status(403).json({ message });
+            return res.status(400).json({ message });
         }
         return res.json({ message: 'Availability added successfully', successfullyEnteredAvailabilities });
     } catch (error) {

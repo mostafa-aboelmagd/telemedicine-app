@@ -6,16 +6,16 @@ const doctorInfo = async (req, res) => {
     let message = '';
     if (!doctorUserId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(404).json(message);
     }
     if (!doctorEmail) {
         message = 'Doctor email not found';
-        return res.status(401).json(message);
+        return res.status(404).json(message);
     }
     const doctor = await database.retrieveDoctorInfo(doctorUserId, doctorEmail);
     if (!doctor) {
         message = 'Could not retrieve doctor info';
-        return res.status(402).json(message);
+        return res.status(400).json(message);
     }
     const formattedDoctor = {
         firstName: doctor[0].user_first_name,
@@ -40,16 +40,16 @@ const doctorPatients = async (req, res) => {
     let message = '';
     if (!doctorUserId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(404).json(message);
     }
     if (!doctorEmail) {
         message = 'Doctor email not found';
-        return res.status(401).json(message);
+        return res.status(404).json(message);
     }
     const patients = await database.retrieveDoctorPatients(doctorUserId, doctorEmail);
     if (!patients) {
         message = 'Could not retrieve patients';
-        return res.status(402).json(message);
+        return res.status(400).json(message);
     }
     return res.json(patients);
 }
@@ -60,16 +60,16 @@ const doctorAppointments = async (req, res) => {
     let message = '';
     if (!doctorUserId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(404).json(message);
     }
     if (!doctorEmail) {
         message = 'Doctor email not found';
-        return res.status(401).json(message);
+        return res.status(404).json(message);
     }
     const appointments = await database.retrieveDoctorAppointments(doctorUserId, doctorEmail);
     if (!appointments) {
         message = 'Could not retrieve appointments';
-        return res.status(402).json(message);
+        return res.status(400).json(message);
     }
     return res.json(appointments);
 }
@@ -81,7 +81,7 @@ const doctorAvailabilities = async (req, res) => {
 
     if (!doctorId) {
         message = 'Doctor ID not found';
-        return res.status(400).json({ message });
+        return res.status(404).json({ message });
     }
 
     try {
@@ -107,7 +107,7 @@ const doctorAvailabilities = async (req, res) => {
             return res.json({ message, availabilities: formattedAvailabilities });
         }
         message = 'Could not retrieve doctor availabilities';
-        return res.status(401).json({ message });
+        return res.status(400).json({ message });
     } catch (error) {
         console.error('Error retrieving availabilities:', error);
         return res.status(500).json({ message: 'Internal server error' });
@@ -120,16 +120,16 @@ const doctorReviews = async (req, res) => {
     let message = '';
     if (!doctorUserId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(404).json(message);
     }
     if (!doctorEmail) {
         message = 'Doctor email not found';
-        return res.status(401).json(message);
+        return res.status(404).json(message);
     }
     const reviews = await database.retrieveDoctorReviews(doctorUserId, doctorEmail);
     if (!reviews) {
         message = 'Could not retrieve reviews';
-        return res.status(402).json(message);
+        return res.status(400).json(message);
     }
     return res.json(reviews);
 }
@@ -140,16 +140,16 @@ const doctorExperience = async (req, res) => {
     let message = '';
     if (!doctorUserId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(404).json(message);
     }
     if (!doctorEmail) {
         message = 'Doctor email not found';
-        return res.status(401).json(message);
+        return res.status(404).json(message);
     }
     const experience = await database.retrieveDoctorExperience(doctorUserId, doctorEmail);
     if (!experience) {
         message = 'Could not retrieve experience';
-        return res.status(402).json(message);
+        return res.status(400).json(message);
     }
     return res.json(experience);
 }
@@ -160,16 +160,16 @@ const doctorEducation = async (req, res) => {
     let message = '';
     if (!doctorUserId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(404).json(message);
     }
     if (!doctorEmail) {
         message = 'Doctor email not found';
-        return res.status(401).json(message);
+        return res.status(404).json(message);
     }
     const education = await database.retrieveDoctorEducation(doctorUserId, doctorEmail);
     if (!education) {
         message = 'Could not retrieve education';
-        return res.status(402).json(message);
+        return res.status(400).json(message);
     }
     return res.json(education);
 }
@@ -180,16 +180,16 @@ const doctorInterests = async (req, res) => {
     let message = '';
     if (!doctorUserId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(404).json(message);
     }
     if (!doctorEmail) {
         message = 'Doctor email not found';
-        return res.status(401).json(message);
+        return res.status(404).json(message);
     }
     const interests = await database.retrieveDoctorInterests(doctorUserId, doctorEmail);
     if (!interests) {
         message = 'Could not retrieve interests';
-        return res.status(402).json(message);
+        return res.status(400).json(message);
     }
     return res.json(interests);
 }
@@ -200,16 +200,16 @@ const doctorLanguages = async (req, res) => {
     let message = '';
     if (!doctorUserId) {
         message = 'Doctor ID not found';
-        return res.status(400).json(message);
+        return res.status(404).json(message);
     }
     if (!doctorEmail) {
         message = 'Doctor email not found';
-        return res.status(401).json(message);
+        return res.status(404).json(message);
     }
     const languages = await database.retrieveDoctorLanguages(doctorUserId, doctorEmail);
     if (!languages) {
         message = 'Could not retrieve languages';
-        return res.status(402).json(message);
+        return res.status(400).json(message);
     }
     return res.json(languages);
 }   
