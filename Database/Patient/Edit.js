@@ -73,7 +73,9 @@ const updateInfo = async (patientId, patientEmail, updates) => {
         if (updates.languages) {
             await client.query('DELETE FROM languages WHERE lang_user_id = $1', [patientId]);
             for (const language of updates.languages) {
-                await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2)', [patientId, language]);
+                if(language !== '' && language !== null && language !== undefined){
+                    await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2)', [doctorId, language]);
+                }
             }
             console.log('Languages updated');
         }
