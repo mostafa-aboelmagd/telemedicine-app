@@ -8,11 +8,11 @@ const editInfo = async (req, res) => {
     let message = '';
     if (!patientId) {
         message = 'Patient ID not found';
-        return res.status(400).json({ message });
+        return res.status(404).json({ message });
     }
     if (!patientEmail) {
         message = 'Patient email not found';
-        return res.status(401).json({ message });
+        return res.status(404).json({ message });
     }
     const { firstName, lastName, email, gender, phone, birthYear, languages } = req.body;
     const updatedInfo = {
@@ -37,7 +37,7 @@ const editInfo = async (req, res) => {
         return res.json({ message, patient });
     }
     message = 'Could not update patient info';
-    return res.status(403).json({ message });
+    return res.status(400).json({ message });
 }
 
 const editPassword = async (req, res) => {
@@ -45,20 +45,20 @@ const editPassword = async (req, res) => {
     const patientEmail = "john.doe@example.com";
     let message = '';
     if (!patientId) {
-        return res.status(400).json(message);
+        return res.status(404).json(message);
     }
     if (!patientEmail) {
         message = 'Patient email not found';
-        return res.status(401).json(message);
+        return res.status(404).json(message);
     }
     let { oldPassword , password, confirmPassword } = req.body;
     if (!oldPassword) {
         message = 'Please provide old password';
-        return res.status(402).json({message});
+        return res.status(404).json({message});
     }
     if (!password) {
         message = 'Please provide new password';
-        return res.status(403).json({message});
+        return res.status(404).json({message});
     }
     if (!confirmPassword) {
         message = 'Please confirm new password';
@@ -66,12 +66,12 @@ const editPassword = async (req, res) => {
     }
     if (password !== confirmPassword) {
         message = 'Passwords do not match';
-        return res.status(405).json({message});
+        return res.status(400).json({message});
     }
     const passwordFlag = passwordValidation(confirmPassword);
     if (!passwordFlag) {
         message = 'Password must contain at least 8 characters, one number, one alphabet, and one special character';
-        return res.status(406).json({message});
+        return res.status(400).json({message});
     }
     const patient = await database.updatePassword(patientId, patientEmail, oldPassword, confirmPassword);
     if (patient) {
@@ -79,7 +79,7 @@ const editPassword = async (req, res) => {
         return res.json({ message, patient });
     }
     message = 'Could not update patient password';
-    return res.status(407).json(message);
+    return res.status(400).json(message);
 }
 
 module.exports = { editInfo, editPassword };

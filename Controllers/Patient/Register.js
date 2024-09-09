@@ -21,13 +21,13 @@ const patientRegister = async (req, res) => {
                     return res.json({ user: userFlag, patient: patientFlag });
                 }
                 message = 'Could not create patient';
-                return res.status(403).json(message);
+                return res.status(400).json(message);
             }
             message = 'User already exists';
-            return res.status(402).json(message);
+            return res.status(400).json(message);
         }
         message = 'Password must contain at least 8 characters, one number, one alphabet, and one special character';
-        return res.status(401).json(message);
+        return res.status(400).json(message);
     }
     message = 'Please fill all the fields';
     return res.status(400).json(message);
