@@ -70,14 +70,16 @@ const updateInfo = async (patientId, patientEmail, updates) => {
             console.log('User info updated', updatedUserInfo.rows);
         }
 
-        if (updates.languages) {
-            await client.query('DELETE FROM languages WHERE lang_user_id = $1', [patientId]);
-            for (const language of updates.languages) {
-                if(language !== '' && language !== null && language !== undefined){
-                    await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2)', [doctorId, language]);
+        if (updates.languages.length > 0) {
+            if(updates.languages[0] !== null && updates.languages[0] !== undefined && updates.languages[0] !== '') {
+                await client.query('DELETE FROM languages WHERE lang_user_id = $1', [patientId]);
+                for (const language of updates.languages) {
+                    if(language !== '' && language !== null && language !== undefined){
+                        await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2)', [patientId, language]);
+                        console.log('Languages updated', language);
+                    }
                 }
             }
-            console.log('Languages updated');
         }
 
         const combinedQuery = `

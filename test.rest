@@ -45,13 +45,13 @@ PUT http://localhost:3000/patient/edit/info
 Content-Type: application/json
 
 {
-"firdtName": "",
+"firstName": "",
 "lastName": "",
 "email": "",
-"gender": "",
+"gender": "Male",
 "phone": "",
 "birthYear": 2001,
-"languages": ["English", "Deutsch"]
+"languages": ["Arabic", "English"]
 }
 
 ###
