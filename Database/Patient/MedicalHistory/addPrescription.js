@@ -40,8 +40,6 @@ const pool = new pg.Pool({
 //     }
 //   ]
 // }
-
-
 const addPrescription = async (patientId, medicationData) => {
   try {
     const query = `
@@ -58,8 +56,9 @@ const addPrescription = async (patientId, medicationData) => {
     {
       return false;
     }
-    const medicationInsertQueries =
-       `
+
+    for (const medication of medicationData) {
+      const medicationInsertQueries = `
         INSERT INTO prescription_medications (
           prescription_medication_reference_id,
           prescription_medication_name,
@@ -69,13 +68,15 @@ const addPrescription = async (patientId, medicationData) => {
           $1, $2, $3, $4
         )
       `;
-    
 
-    await pool.query(medicationInsertQueries, [prescriptionId, medicationData.medicationName, medicationData.dosage, medicationData.note]);
+      await pool.query(medicationInsertQueries, [prescriptionId, medication.medicationName, medication.dosage, medication.note]);
+    }
+
     return { prescriptionId, medications: medicationData };
   } catch (error) {
-    console.error(error.stack);
-    return false;
+    // Handle errors appropriately
+    console.error(error);
+    throw error;
   }
 };
 
