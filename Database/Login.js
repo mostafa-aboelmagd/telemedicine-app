@@ -15,7 +15,6 @@ const pool = new pg.Pool({
         rejectUnauthorized: true,
     },
 });
-
 (async () => {
     try {
         const client = await pool.connect();
@@ -26,14 +25,14 @@ const pool = new pg.Pool({
     }
 })();
 
-const retrievePatient = async (email) => {
+const retrieveUser = async (email) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE user_email = $1 AND user_role = $2', [email, 'Patient']);
+        const result = await pool.query('SELECT * FROM users WHERE user_email = $1', [email]);
         if (result.rows.length) {
             console.log('User already exists', result.rows);
             return result.rows;
         }
-        console.log('No user found');
+        console.log('User not found');
         return false;
     } catch (error) {
         console.error(error.stack);
@@ -41,4 +40,4 @@ const retrievePatient = async (email) => {
     }
 };
 
-module.exports = { retrievePatient };
+module.exports = { retrieveUser };

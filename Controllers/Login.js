@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const database = require('../../Database/Doctor/Login');
-const { createToken } = require('../../Utilities');
+const database = require('../Database/Login');
+const { createToken } = require('../Utilities');
 require('dotenv').config();
 const { ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS } = process.env;
 
@@ -12,19 +12,19 @@ const login = async (req, res) => {
         message = 'Please fill all the fields';
         return res.status(404).json(message);
     }
-    const doctor = await database.retrieveDoctor(email);
-    if (!doctor) {
+    const user = await database.retrieveUser(email);
+    if (!user) {
         message = 'Invalid email or password'
         return res.status(400).json(message);
     }
-    console.log('Doctor retrieved:', doctor);
-    const match = await bcrypt.compare(password, doctor[0].user_password_hash);
+    console.log('User retrieved:', user);
+    const match = await bcrypt.compare(password, user[0].user_password_hash);
     console.log('Password match result:', match); 
     if (!match) {
         message = 'Invalid email or password'
         return res.status(400).json(message);
     }
-    const token = createToken(doctor[0].user_id, doctor[0].user_email);
+    const token = createToken(user[0].user_id, user[0].user_email, user[0].user_role);
     if (!token) {
         message = 'Token could not be created';
         return res.status(400).json(message);

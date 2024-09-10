@@ -1,7 +1,7 @@
 const pg = require('pg');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
-const saltRounds = 15;
+const saltRounds = 10;
 
 
 const { PGHOST, PGDATABASE, PGUSER, PGPORT } = process.env;

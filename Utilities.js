@@ -18,12 +18,12 @@ const splitAndToLower = (str) => {
     return [str_1 ? str_1.toLowerCase() : '', str_2 ? str_2.toLowerCase() : ''];
 }
 
-const createToken = (id, email) => {
-    if (!id || !email) {
-        console.log('Please provide an id and an email.');
+const createToken = (id, email, role) => {
+    if (!id || !email || !role) {
+        console.log('Please provide an id and an email and a role.');
         return false;
     }
-    return jwt.sign({ id, email }, ACCESS_TOKEN_SECRET_KEY, {
+    return jwt.sign({ id, email, role }, ACCESS_TOKEN_SECRET_KEY, {
         expiresIn: ACCESS_TOKEN_EXPIRATION_IN_DAYS
     });
 }

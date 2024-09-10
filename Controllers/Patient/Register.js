@@ -1,7 +1,7 @@
 const database = require('../../Database/Patient/Register');
 const { passwordValidation } = require('../../Utilities');
 const bcrypt = require('bcryptjs');
-const saltRounds = 15;
+const saltRounds = 10;
 
 const patientRegister = async (req, res) => {
     let message = '';
