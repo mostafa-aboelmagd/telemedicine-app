@@ -14,7 +14,7 @@ function EditProfile() {
     email: "Example@gmail.com",
     gender: "Male",
     birthYear: "2000",
-    });
+  });
 
   const [errorMessage, setErrorMessage] = useState({
     firstName: "",
@@ -22,7 +22,7 @@ function EditProfile() {
     phone: "",
     email: "",
     birthYear: "",
-    });
+  });
 
   const [changedField, setChangedField] = useState("");
 
@@ -30,13 +30,13 @@ function EditProfile() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prevForm) => ({...prevForm, [name]: type === "checkbox" ? checked : value,}));
+    setFormData((prevForm) => ({ ...prevForm, [name]: type === "checkbox" ? checked : value, }));
     setChangedField(() => (name));
   };
 
   const validateFieldsChosen = () => {
-    for(let key in formData) {
-      if(!(formData[key as keyof typeof formData])) {
+    for (let key in formData) {
+      if (!(formData[key as keyof typeof formData])) {
         return false;
       }
     }
@@ -47,115 +47,115 @@ function EditProfile() {
     let regex = /^[a-zA-Z]+$/;
     let changedValidation = false;
 
-    if(formData.firstName && (!regex.test(formData.firstName))) {
-      if(errorMessage.firstName === "") {
+    if (formData.firstName && (!regex.test(formData.firstName))) {
+      if (errorMessage.firstName === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, firstName: "First Name Can't Contain Numbers",}));
+      setErrorMessage((prevError) => ({ ...prevError, firstName: "First Name Can't Contain Numbers", }));
     }
 
     else {
-      if(errorMessage.firstName !== "") {
-        changedValidation = true; 
+      if (errorMessage.firstName !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, firstName: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, firstName: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm}));  // Extra rerender needed to correct the current input error status
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));  // Extra rerender needed to correct the current input error status
     }
   };
 
   const validateLastName = () => {
     let regex = /^[a-zA-Z]+$/;
     let changedValidation = false;
-    if(formData.lastName && (!regex.test(formData.lastName))) {
-      if(errorMessage.lastName === "") {
+    if (formData.lastName && (!regex.test(formData.lastName))) {
+      if (errorMessage.lastName === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, lastName: "Last Name Can't Contain Numbers",}));
+      setErrorMessage((prevError) => ({ ...prevError, lastName: "Last Name Can't Contain Numbers", }));
     }
 
     else {
-      if(errorMessage.lastName !== "") {
+      if (errorMessage.lastName !== "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, lastName: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, lastName: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateEmail = () => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let changedValidation = false;
-    if(formData.email && (!emailPattern.test(formData.email))) {
-      if(errorMessage.email === "") {
+    if (formData.email && (!emailPattern.test(formData.email))) {
+      if (errorMessage.email === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, email: "Email Is Invalid",}));
+      setErrorMessage((prevError) => ({ ...prevError, email: "Email Is Invalid", }));
     }
 
     else {
-      if(errorMessage.email !== "") {
-          changedValidation = true;
+      if (errorMessage.email !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, email: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, email: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validatePhone = () => {
     const phonePattern = /^\+201(0|1|2|5)(\d{8})$/;
     let changedValidation = false;
-    if(formData.phone && ((!phonePattern.test(formData.phone)) || formData.phone.length != 13)) {
-      if(errorMessage.phone === "") {
+    if (formData.phone && ((!phonePattern.test(formData.phone)) || formData.phone.length != 13)) {
+      if (errorMessage.phone === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, phone: "Current Phone Number Isn't valid !",}));
+      setErrorMessage((prevError) => ({ ...prevError, phone: "Current Phone Number Isn't valid !", }));
     }
 
     else {
-      if(errorMessage.phone !== "") {
-          changedValidation = true;
+      if (errorMessage.phone !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, phone: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, phone: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateBirthYear = () => {
     let changedValidation = false;
 
-    if(formData.birthYear && (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011)) {
-      if(errorMessage.birthYear === "") {
+    if (formData.birthYear && (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011)) {
+      if (errorMessage.birthYear === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, birthYear: "Age Isn't Valid",}));
-    } 
-
-    else {
-      if(errorMessage.birthYear !== "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({...prevError, birthYear: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, birthYear: "Age Isn't Valid", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    else {
+      if (errorMessage.birthYear !== "") {
+        changedValidation = true;
+      }
+      setErrorMessage((prevError) => ({ ...prevError, birthYear: "", }));
+    }
+
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateForm = () => {
-    switch(changedField) {
+    switch (changedField) {
       case "firstName":
         validateFirstName();
         break;
@@ -182,9 +182,9 @@ function EditProfile() {
 
     setChangedField(() => "");
 
-    if(validateFieldsChosen()) {
-      for(let key in errorMessage) {
-        if(errorMessage[key as keyof typeof errorMessage] !== "") {
+    if (validateFieldsChosen()) {
+      for (let key in errorMessage) {
+        if (errorMessage[key as keyof typeof errorMessage] !== "") {
           setFormValid(() => (false));
           return;
         }
@@ -206,120 +206,125 @@ function EditProfile() {
         <Image src={userImage} height={120} width={120} alt="User Icon" className="mb-1"></Image>
         <p className="text-blue-500 mb-1 font-semibold">FirstName LastName</p>
         <div className="flex gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 fill-black">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
-            </svg>
-            <p>Wallet</p>
-            <p className="text-green-500">(0)</p>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 fill-black">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
+          </svg>
+          <p>Wallet</p>
+          <p className="text-green-500">(0)</p>
         </div>
       </div>
       <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
         <form>
           <div className="flex pt-4 mb-3">
-              <Link href="/patientProfile/view" className="text-blue-500 font-bold ml-7 w-1/2">Personal Information</Link>
-              <Link href="/patientProfile/paymentInfo" className="font-bold ml-7 mr-7 md:mr-0 w-1/2">Payment Information</Link>
+            <Link href="/patientProfile/view" className="text-blue-500 font-bold ml-7 w-1/4">Personal Information</Link>
+            <Link href="/patientProfile/paymentInfo" className="font-bold ml-7 mr-7 md:mr-0 w-1/4">Payment Information</Link>
+            <Link href="/patientProfile/prescriptions" className="font-bold ml-7 w-1/4">Prescriptions</Link>
+            <Link href="/patientProfile/patientDocuments" className="font-bold ml-7 mr-7 md:mr-0 w-1/4">Documents</Link>
           </div>
           <div className="flex">
-              <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
-              <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
+            <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
+            <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
+            <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
+            <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
+
           </div>
           <div className="p-7">
-              <div className="mb-3 max-w-80">
-                  <p className="font-semibold">First Name</p>
-                  <InputComponent
-                    label=""
-                    type="text"
-                    name="firstName"
-                    placeholder="Enter New First Name"
-                    value={formData.firstName}
+            <div className="mb-3 max-w-80">
+              <p className="font-semibold">First Name</p>
+              <InputComponent
+                label=""
+                type="text"
+                name="firstName"
+                placeholder="Enter New First Name"
+                value={formData.firstName}
+                onChange={handleChange}
+                errorText={errorMessage.firstName}
+              />
+            </div>
+            <div className="mb-3 max-w-80">
+              <p className="font-semibold">Last Name</p>
+              <InputComponent
+                label=""
+                type="text"
+                name="lastName"
+                placeholder="Enter New Last Name"
+                value={formData.lastName}
+                onChange={handleChange}
+                errorText={errorMessage.lastName}
+              />
+            </div>
+            <div className="mb-3 max-w-80">
+              <p className="font-semibold">Phone Number</p>
+              <InputComponent
+                label=""
+                type="tel"
+                name="phone"
+                placeholder={formData.phone ? formData.phone : "+20 XXXX XXX XXX"}
+                value={formData.phone}
+                onChange={handleChange}
+                errorText={errorMessage.phone}
+              />
+            </div>
+            <div className="mb-3 max-w-80">
+              <p className="font-semibold">Email</p>
+              <InputComponent
+                label=""
+                type="email"
+                name="email"
+                placeholder="Enter Email"
+                value={formData.email}
+                onChange={handleChange}
+                errorText={errorMessage.email}
+              />
+            </div>
+            <div className="mb-3">
+              <p className="font-semibold">Gender</p>
+              <div className="flex gap-8">
+                <label>
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="Male"
                     onChange={handleChange}
-                    errorText={errorMessage.firstName}
+                    className="radio align-middle mb-[3px] mr-1"
+                    checked={formData.gender === "Male"}
                   />
-              </div>
-              <div className="mb-3 max-w-80">
-                  <p className="font-semibold">Last Name</p>
-                  <InputComponent
-                    label=""
-                    type="text"
-                    name="lastName"
-                    placeholder="Enter New Last Name"
-                    value={formData.lastName}
+                  Male
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="Female"
                     onChange={handleChange}
-                    errorText={errorMessage.lastName}
+                    className="radio align-middle mb-[3px] mr-1"
+                    checked={formData.gender === "Female"}
                   />
+                  Female
+                </label>
               </div>
-              <div className="mb-3 max-w-80">
-                  <p className="font-semibold">Phone Number</p>
-                  <InputComponent
-                    label=""
-                    type="tel"
-                    name="phone"
-                    placeholder={formData.phone ? formData.phone : "+20 XXXX XXX XXX"}
-                    value={formData.phone}
-                    onChange={handleChange}
-                    errorText={errorMessage.phone}
-                  />
-              </div>
-              <div className="mb-3 max-w-80">
-                  <p className="font-semibold">Email</p>
-                  <InputComponent
-                    label=""
-                    type="email"
-                    name="email"
-                    placeholder="Enter Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    errorText={errorMessage.email}
-                  />
-              </div>
-              <div className="mb-3">
-                  <p className="font-semibold">Gender</p>
-                  <div className="flex gap-8">
-                    <label>
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="Male"
-                        onChange={handleChange}
-                        className="radio align-middle mb-[3px] mr-1"
-                        checked={formData.gender === "Male"}
-                      />
-                      Male
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="Female"
-                        onChange={handleChange}
-                        className="radio align-middle mb-[3px] mr-1"
-                        checked={formData.gender === "Female"}
-                      />
-                      Female
-                    </label>
-                  </div>
-              </div>
-              <div className="mb-4 max-w-80">
-                  <p className="font-semibold">Year Of Birth</p>
-                  <InputComponent
-                    label=""
-                    type="number"
-                    name="birthYear"
-                    placeholder="Enter Birth Year"
-                    value={formData.birthYear}
-                    onChange={handleChange}
-                    errorText={errorMessage.birthYear}
-                  />
-              </div>
-              <div className="mb-4">
-                <button
-                  type="submit"
-                  className="bg-sky-500 text-neutral-50 font-medium	p-3.5 border border-solid rounded-full cursor-pointer transition-[background-color] disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
-                  disabled={!formValid}
-                >
-                  Save Changes
-                </button>
-              </div>
+            </div>
+            <div className="mb-4 max-w-80">
+              <p className="font-semibold">Year Of Birth</p>
+              <InputComponent
+                label=""
+                type="number"
+                name="birthYear"
+                placeholder="Enter Birth Year"
+                value={formData.birthYear}
+                onChange={handleChange}
+                errorText={errorMessage.birthYear}
+              />
+            </div>
+            <div className="mb-4">
+              <button
+                type="submit"
+                className="bg-sky-500 text-neutral-50 font-medium	p-3.5 border border-solid rounded-full cursor-pointer transition-[background-color] disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
+                disabled={!formValid}
+              >
+                Save Changes
+              </button>
+            </div>
           </div>
         </form>
       </div>
