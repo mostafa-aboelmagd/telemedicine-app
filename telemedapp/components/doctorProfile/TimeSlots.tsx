@@ -66,7 +66,8 @@ function TimeSlots() {
   useEffect (() => {
     const token = sessionStorage.getItem("jwt");
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-          mode: "cors", headers: {
+          mode: "cors",
+          headers: {
             "Authorization": "Bearer " + token 
           }})
           .then(response => response.json())
