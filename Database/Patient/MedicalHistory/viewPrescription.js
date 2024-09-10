@@ -15,7 +15,7 @@ const pool = new pg.Pool({
   },
 });
 
-
+// teste
 (async () => {
     try {
         const client = await pool.connect();
