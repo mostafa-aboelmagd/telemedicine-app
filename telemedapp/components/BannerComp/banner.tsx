@@ -1,5 +1,4 @@
 import React from 'react'
-import styles from './banner.module.css'
 import buttonStyles from '../navbarComp/navbar.module.css'
 import Link from 'next/link'
 const Banner = () => {
