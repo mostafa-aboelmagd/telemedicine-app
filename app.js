@@ -1,5 +1,4 @@
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
 const userLoginRoute = require('./Routes/Login');
@@ -27,7 +26,6 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json()); 
-app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
