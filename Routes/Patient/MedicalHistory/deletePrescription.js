@@ -5,6 +5,6 @@ const patientHistoryDeletePrescriptionController = require('../../../Controllers
 // const { tokenAuthentication } = require('../../Middleware/User/Authentication');
 
 const router = express.Router();
-router.delete(':id', patientHistoryDeletePrescriptionController.deletePrescription);
+router.delete('', patientHistoryDeletePrescriptionController.deletePrescription);
 
 module.exports = router;

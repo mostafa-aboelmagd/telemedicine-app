@@ -46,16 +46,19 @@ const addPrescription = async (patientId, medicationData) => {
   try {
     const query = `
       INSERT INTO prescriptions (
-        prescription_patient_id,prescription_doctor_id
+        prescription_patient_id
       ) VALUES (
-        $1,$2
+        $1
       ) RETURNING prescription_id;
     `;
 
     const result = await pool.query(query, [patientId]);
     const prescriptionId = result.rows[0].prescription_id;
-
-    const medicationInsertQueries = medicationData.map((medication) => {
+    if(!result.rows[0])
+    {
+      return false;
+    }
+    const medicationInsertQueries = medicationData((medication) => {
       return `
         INSERT INTO prescription_medications (
           prescription_id,

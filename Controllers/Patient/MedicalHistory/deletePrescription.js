@@ -1,12 +1,7 @@
-
 const MedicalHistory = require('../../../Database/Patient/MedicalHistory/deletePrescription');
 const { validatePrescriptionData } = require('../../../Utilities');
-
-
-
 const deletePrescription = async (req, res) => {
   const prescriptionId = req.body.prescriptionId;
-
   try {
     const success = await MedicalHistory.deletePrescription(prescriptionId);
     if (!success) {
@@ -22,5 +17,4 @@ const deletePrescription = async (req, res) => {
     }
   }
 };
-
 module.exports = {deletePrescription};

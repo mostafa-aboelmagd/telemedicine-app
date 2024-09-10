@@ -1,4 +1,3 @@
-
 const MedicalHistory = require('../../../Database/Patient/MedicalHistory/viewPrescription');
 const { validatePrescriptionData } = require('../../../Utilities');
 
