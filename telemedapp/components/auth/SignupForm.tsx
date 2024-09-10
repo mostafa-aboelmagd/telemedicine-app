@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import InputComponent from "./InputComponent"; // Import the InputComponent
 import Link from "next/link";
+import InputComponent from "./InputComponent";
 
 function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -14,7 +14,6 @@ function SignUpForm() {
     phone: "",
     birthYear: "",
     gender: "",
-    agreeToPrivacyPolicy: false,
   });
 
   const [errorMessage, setErrorMessage] = useState({
@@ -31,14 +30,26 @@ function SignUpForm() {
 
   const [formValid, setFormValid] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prevForm) => ({
-      ...prevForm,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-    setChangedField(() => name);
-  };
+  const [error, setError] = useState(false);
+  
+  useEffect(() => {
+    validateForm();
+  }, [formData]);
+
+  const formFields = [
+    {name : "firstName", title: "First Name", type: "text"},
+    {name : "lastName", title: "Last Name", type: "text"},
+    {name: "email", title: "Email", type: "email"},
+    {name : "phone", title: "Phone Number", type: "tel"},
+    {name: "password", title: "Password", type:"password"},
+    {name: "confirmPassword", title: "Confirm Password", type:"password"},
+    {name: "birthYear", title: "Birth Year", type: "number"},
+  ];
+
+  const submitButtonClass = [
+    "bg-sky-500 text-neutral-50 text-lg	p-3.5	w-full border-none rounded-lg cursor-pointer transition-[background-color]",
+    "disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
+  ].join(" ");
 
   const validateFieldsChosen = () => {
     for (let key in formData) {
@@ -53,22 +64,23 @@ function SignUpForm() {
     let regex = /^[a-zA-Z]+$/;
     let changedValidation = false;
 
-    if (formData.firstName && !regex.test(formData.firstName)) {
-      if (errorMessage.firstName === "") {
+    if(formData.firstName && !regex.test(formData.firstName)) {
+      if(errorMessage.firstName === "") {
         changedValidation = true;
       }
       setErrorMessage((prevError) => ({
         ...prevError,
-        firstName: "First Name Can't Contain Numbers",
+        firstName: "First Name Must Consist Of Only Characters",
       }));
-    } else {
-      if (errorMessage.firstName !== "") {
+    }
+    else {
+      if(errorMessage.firstName !== "") {
         changedValidation = true;
       }
       setErrorMessage((prevError) => ({ ...prevError, firstName: "" }));
     }
 
-    if (changedValidation && validateFieldsChosen()) {
+    if(changedValidation && validateFieldsChosen()) {
       setFormData((prevForm) => ({ ...prevForm })); // Extra rerender needed to correct the current input error status
     }
   };
@@ -82,7 +94,7 @@ function SignUpForm() {
       }
       setErrorMessage((prevError) => ({
         ...prevError,
-        lastName: "Last Name Can't Contain Numbers",
+        lastName: "Last Name Must Consist Of Only Characters",
       }));
     } else {
       if (errorMessage.lastName !== "") {
@@ -120,7 +132,7 @@ function SignUpForm() {
   };
 
   const validatePassword = () => {
-    let passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    let passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     let changedValidation = false;
     if (
       !formData.password ||
@@ -137,7 +149,7 @@ function SignUpForm() {
       setErrorMessage((prevError) => ({
         ...prevError,
         password:
-          "Password Must Contain 8+ Characters Including Atleast One Number",
+          "Password Must Contain 8+ Characters Including Atleast 1 Number, 1 Character, 1 Symbol",
       }));
     }
 
@@ -184,7 +196,7 @@ function SignUpForm() {
       }
       setErrorMessage((prevError) => ({
         ...prevError,
-        phone: "Current Phone Number Isn't valid !",
+        phone: "Current Phone Number Is Not valid!",
       }));
     } else {
       if (errorMessage.phone !== "") {
@@ -210,7 +222,7 @@ function SignUpForm() {
       }
       setErrorMessage((prevError) => ({
         ...prevError,
-        birthYear: "Age Isn't Valid",
+        birthYear: "Age Is Not Valid",
       }));
     } else {
       if (errorMessage.birthYear !== "") {
@@ -274,53 +286,45 @@ function SignUpForm() {
     }
   };
 
-  useEffect(() => {
-    validateForm();
-  }, [formData]);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+    setChangedField(() => name);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Final validation check before submission
-    validateFirstName();
-    validateLastName();
-    validateEmail();
-    validatePassword();
-    validateConfirmPassword();
-    validatePhone();
-    validateBirthYear();
-
     if (!formValid) return;
-
     try {
-      const response = await fetch("http://localhost:3001/users", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          first_name: formData.firstName,
-          last_name: formData.lastName,
+          fName: formData.firstName,
+          lName: formData.lastName,
           email: formData.email,
-          password_hash: formData.password,
-          phone_number: formData.phone,
-          birth_year: parseInt(formData.birthYear),
+          password: formData.password,
           gender: formData.gender,
-          role: "patient",
+          phone: formData.phone,
+          birthYear: formData.birthYear,
         }),
+        mode: "cors",
       });
 
-      if (!response.ok) {
+      if (!response.ok) {    
+        setError(true);
         throw new Error("Failed to register");
       }
 
-      const data = await response.json();
-      console.log("User registered:", data);
+      window.location.href = "/auth/signin";
 
-      // Redirect to the home page or a profile page
-      window.location.href = "/";
     } catch (error) {
-      console.error("Error during signup:", error);
+      console.error("Error During Signup:", error);
     }
   };
 
@@ -330,79 +334,22 @@ function SignUpForm() {
         Sign Up
       </h2>
       <form onSubmit={handleSubmit}>
-        <InputComponent
-          label="First Name"
-          type="text"
-          name="firstName"
-          placeholder="Enter First Name"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-          errorText={errorMessage.firstName}
-        />
-        <InputComponent
-          label="Last Name"
-          type="text"
-          name="lastName"
-          placeholder="Enter Last Name"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-          errorText={errorMessage.lastName}
-        />
-        <InputComponent
-          label="Email"
-          type="email"
-          name="email"
-          placeholder="Enter Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          errorText={errorMessage.email}
-        />
-        <InputComponent
-          label="Password"
-          type="password"
-          name="password"
-          placeholder="Enter Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          errorText={errorMessage.password}
-        />
-        <InputComponent
-          label="Confirm Password"
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-          errorText={errorMessage.confirmPassword}
-        />
-        <InputComponent
-          label="Phone Number"
-          type="tel"
-          name="phone"
-          placeholder={formData.phone ? formData.phone : "+20 XXXX XXX XXX"}
-          value={formData.phone}
-          onChange={handleChange}
-          required
-          additionalText={
-            errorMessage.phone ? "" : "Please Enter A Valid Phone Number"
-          }
-          errorText={errorMessage.phone}
-        />
-        <InputComponent
-          label="Birth Year"
-          type="number"
-          name="birthYear"
-          placeholder="Enter Birth Year"
-          value={formData.birthYear}
-          onChange={handleChange}
-          required
-          errorText={errorMessage.birthYear}
-        />
+        {formFields.map((field) => {
+          return (
+            <InputComponent
+              key={field.name}
+              label={field.title}
+              type={field.type}
+              name={field.name}
+              placeholder={(field.name === "phone" && !formData.phone) ? "+20 XXXX XXX XXX" :`Enter ${field.title}`}
+              value={formData[field.name as keyof typeof formData]}
+              onChange={handleChange}
+              errorText={errorMessage[field.name as keyof typeof errorMessage]}
+              required
+              additionalText={(field.name === "phone" && !errorMessage.phone) ? "Please Enter A Valid Phone Number"  : ""}
+            />
+          );
+        })}
         <div className="mb-4">
           <label className="block text-base mb-1.5 font-semibold text-neutral-700">
             Gender *
@@ -431,48 +378,14 @@ function SignUpForm() {
               />
               Female
             </label>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="nan"
-                onChange={handleChange}
-                className="radio align-middle mb-[3px] mr-1"
-                checked={formData.gender === "nan"}
-              />
-              Prefer Not To Say
-            </label>
           </div>
-        </div>
-        <div className="form-control mb-2">
-          <label className="cursor-pointer label">
-            <input
-              type="checkbox"
-              name="agreeToPrivacyPolicy"
-              onChange={handleChange}
-              checked={formData.agreeToPrivacyPolicy}
-              required
-              className="checkbox align-baseline mt-[7px] mr-1"
-            />
-            <span className="align-top">I agree with the Privacy Policy</span>
-          </label>
         </div>
         <p className="mb-2">
           Already have an account?{" "}
-          <Link
-            href="/auth/signin"
-            className="text-blue-500 font-semibold cursor-pointer"
-          >
-            Sign in
-          </Link>
+          <Link href="/auth/signin" className="text-blue-500 font-semibold cursor-pointer">Sign in</Link>
         </p>
-        <button
-          type="submit"
-          className="bg-sky-500 text-neutral-50 text-lg	p-3.5	w-full border-none rounded-lg cursor-pointer transition-[background-color] disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
-          disabled={!formValid}
-        >
-          Register
-        </button>
+        {error && <p className="font-semibold text-red-700 mt-4 mb-2">This Email Is Already Registered!</p>}
+        <button type="submit" className={submitButtonClass} disabled={!formValid}>Register</button>
       </form>
     </div>
   );
