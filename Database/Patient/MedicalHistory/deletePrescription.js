@@ -1,6 +1,5 @@
 const pg = require('pg');
 require('dotenv').config();
-
 const { PGHOST, PGDATABASE, PGUSER, PGPORT } = process.env;
 let PGPASSWORD = process.env.PGPASSWORD;
 PGPASSWORD = decodeURIComponent(PGPASSWORD);
@@ -25,13 +24,10 @@ const pool = new pg.Pool({
     }
 })();
 
-
 // Request Body format
 // {
 //   "prescriptionId": 1
 // }
-
-
 
 const deletePrescription = async (prescriptionId) => {
   try {

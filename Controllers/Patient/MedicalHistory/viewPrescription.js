@@ -4,8 +4,7 @@ const MedicalHistory = require('../../../Database/Patient/MedicalHistory/viewPre
 const { validatePrescriptionData } = require('../../../Utilities');
 
 const getPrescription = async (req, res) => {
-  // const patientId = req.body.patientId;
-  const patientId = 22;
+  const patientId = req.body.patientId;
 
   try {
     const prescription = await MedicalHistory.retrievePrescription(patientId);
