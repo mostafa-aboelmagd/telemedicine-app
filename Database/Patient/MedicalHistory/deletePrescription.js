@@ -35,20 +35,19 @@ const pool = new pg.Pool({
 
 const deletePrescription = async (prescriptionId) => {
   try {
+    const deleteMedicationQuery = `
+      DELETE FROM prescription_medications
+      WHERE
+        prescription_medication_reference_id = $1
+    `;
+    await pool.query(deleteMedicationQuery, [prescriptionId]);
     const deletePrescriptionQuery = `
       DELETE FROM prescriptions
       WHERE
         prescription_id = $1
+        RETURNING prescription_id;
     `;
     await pool.query(deletePrescriptionQuery, [prescriptionId]);
-
-    const deleteMedicationQuery = `
-      DELETE FROM prescription_medications
-      WHERE
-        prescription_id = $1
-    `;
-    await pool.query(deleteMedicationQuery, [prescriptionId]);
-
     return true;
   } catch (error) {
     console.error(error.stack);
@@ -59,5 +58,4 @@ const deletePrescription = async (prescriptionId) => {
     }
   }
 };
-
 module.exports = {  deletePrescription };
