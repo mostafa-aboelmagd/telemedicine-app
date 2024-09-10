@@ -3,7 +3,7 @@ const MedicalHistory = require('../../../Database/Patient/MedicalHistory/addPres
 const { validatePrescriptionData } = require('../../../Utilities');
 
 const addPrescription = async (req, res) => {
-  const patientId = req.id;
+  const patientId = 22;
   const medicationData = req.body.medicationData;
 
   if (!validatePrescriptionData(medicationData)) {

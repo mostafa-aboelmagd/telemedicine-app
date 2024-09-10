@@ -58,22 +58,20 @@ const addPrescription = async (patientId, medicationData) => {
     {
       return false;
     }
-    const medicationInsertQueries = medicationData((medication) => {
-      return `
+    const medicationInsertQueries =
+       `
         INSERT INTO prescription_medications (
-          prescription_id,
-          medication_name,
-          dosage,
-          note
+          prescription_medication_reference_id,
+          prescription_medication_name,
+          prescription_medications_dosage,
+          prescription_medications_note
         ) VALUES (
           $1, $2, $3, $4
         )
       `;
-    });
     
 
-    await pool.query(medicationInsertQueries.join(';'), [prescriptionId, ...medicationData.map((medication) => [medication.medicationName, medication.dosage, medication.note])]);
-
+    await pool.query(medicationInsertQueries, [prescriptionId, medicationData.medicationName, medicationData.dosage, medicationData.note]);
     return { prescriptionId, medications: medicationData };
   } catch (error) {
     console.error(error.stack);
