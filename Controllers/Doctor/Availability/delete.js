@@ -1,8 +1,8 @@
 const database = require('../../../Database/Doctor/Availability/Delete');
 
 const deleteAvailability = async (req, res) => {
-    const doctorId = 32;
-    // const doctorEmail = req.email;
+    const doctorId = req.id;
+    const doctorEmail = req.email;
     const doctorAvailabilityIds = req.body.slots_id;
     const deletedAvailabilities = [];
 
@@ -11,10 +11,10 @@ const deleteAvailability = async (req, res) => {
         message = 'Doctor ID not found';
         return res.status(404).json(message);
     }
-    // if (!doctorEmail) {
-    //     message = 'Doctor email not found';
-    //     return res.status(401).json(message);
-    // }
+    if (!doctorEmail) {
+        message = 'Doctor email not found';
+        return res.status(401).json(message);
+    }
     if (!doctorAvailabilityIds) {
         message = 'Availability IDs not found';
         return res.status(404).json(message);

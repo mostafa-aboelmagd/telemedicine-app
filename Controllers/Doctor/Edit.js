@@ -3,8 +3,8 @@ const { passwordValidation } = require('../../Utilities');
 
 
 const editInfo = async (req, res) => {
-    const doctorId = 32;
-    const doctorEmail = 'dr.khaled@example.com';
+    const doctorId = req.id;
+    const doctorEmail = req.email;
     let message = '';
     if (!doctorId) {
         message = 'Doctor ID not found';
@@ -28,13 +28,13 @@ const editInfo = async (req, res) => {
         doctor_specialization: specialization,
         languages: languages
     };
-    // if (email) {
-    //     const emailFlag = database.checkUserEmail(email);
-    //     if (emailFlag) {
-    //         message = 'Email already exists';
-    //         return res.status(402).json(message);
-    //     }
-    // }
+    if (email) {
+        const emailFlag = database.checkUserEmail(email);
+        if (emailFlag) {
+            message = 'Email already exists';
+            return res.status(400).json(message);
+        }
+    }
     const doctor = await database.updateInfo(doctorId, doctorEmail, updatedInfo);
     if (!doctor) {
         message = 'Could not update doctor info';
@@ -45,8 +45,8 @@ const editInfo = async (req, res) => {
 }
 
 const editPassword = async (req, res) => {
-    const doctorId = 32;
-    const doctorEmail = 'dr.khaled@example.com';
+    const doctorId = req.id;
+    const doctorEmail = req.email;
     let message = '';
     if (!doctorId) {
         message = 'Doctor ID not found';

@@ -4,15 +4,15 @@ const { tokenAuthentication } = require('../../Middleware/User/Authentication');
 
 const router = express.Router();
 
-router.get('/info', doctorProfileController.doctorInfo);
-router.get('/patients', doctorProfileController.doctorPatients);
-router.get('/appointments', doctorProfileController.doctorAppointments);
-router.get('/availabilities', doctorProfileController.doctorAvailabilities);
-router.get('/experience', doctorProfileController.doctorExperience);
-router.get('/education', doctorProfileController.doctorEducation);
-router.get('/reviews', doctorProfileController.doctorReviews);
-router.get('/interests', doctorProfileController.doctorInterests);
-router.get('/languages', doctorProfileController.doctorLanguages);
+router.get('/info', tokenAuthentication, doctorProfileController.doctorInfo);
+router.get('/patients', tokenAuthentication, doctorProfileController.doctorPatients);
+router.get('/appointments', tokenAuthentication, doctorProfileController.doctorAppointments);
+router.get('/availabilities', tokenAuthentication, doctorProfileController.doctorAvailabilities);
+router.get('/experience', tokenAuthentication, doctorProfileController.doctorExperience);
+router.get('/education', tokenAuthentication, doctorProfileController.doctorEducation);
+router.get('/reviews', tokenAuthentication, doctorProfileController.doctorReviews);
+router.get('/interests', tokenAuthentication, doctorProfileController.doctorInterests);
+router.get('/languages', tokenAuthentication, doctorProfileController.doctorLanguages);
 
 
 module.exports = router;

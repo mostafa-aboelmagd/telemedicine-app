@@ -4,6 +4,6 @@ const { tokenAuthentication } = require('../../../Middleware/User/Authentication
 
 const router = express.Router();
 
-router.delete('', doctorDeleteAvailabilityController.deleteAvailability);
+router.delete('', tokenAuthentication, doctorDeleteAvailabilityController.deleteAvailability);
 
 module.exports = router;

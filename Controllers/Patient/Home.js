@@ -1,22 +1,22 @@
 const database = require('../../Database/Patient/Home');
 
 const home = async (req, res) => {
-    // const patientUserId = req.id;
-    // const patientEmail = req.email;
-    // let message = '';
-    // if (!patientUserId) {
-    //     message = 'Patient ID not found';
-    //     return res.status(400).json(message);
-    // }
-    // if (!patientEmail) {
-    //     message = 'Patient email not found';
-    //     return res.status(401).json(message);
-    // }
-    // const home = await database.retrievePatient(patientUserId, patientEmail);
-    // if (!home) {
-    //     message = 'Patient is not registered';
-    //     return res.status(402).json(message);
-    // }
+    const patientUserId = req.id;
+    const patientEmail = req.email;
+    let message = '';
+    if (!patientUserId) {
+        message = 'Patient ID not found';
+        return res.status(404).json(message);
+    }
+    if (!patientEmail) {
+        message = 'Patient email not found';
+        return res.status(404).json(message);
+    }
+    const patient = await database.retrievePatient(patientUserId, patientEmail);
+    if (!patient) {
+        message = 'Patient is not registered';
+        return res.status(400).json(message);
+    }
     const databaseDoctors = await database.retrieveDoctors();
     if (!databaseDoctors) {
         message = 'Could not retrieve doctors';

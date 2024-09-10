@@ -4,6 +4,6 @@ const { tokenAuthentication } = require('../../../Middleware/User/Authentication
 
 const router = express.Router();
 
-router.post('', doctorAddAvailabilityController.addAvailability);
+router.post('', tokenAuthentication, doctorAddAvailabilityController.addAvailability);
 
 module.exports = router;

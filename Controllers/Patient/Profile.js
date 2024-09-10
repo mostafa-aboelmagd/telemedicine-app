@@ -1,8 +1,8 @@
 const  database  = require('../../Database/Patient/Profile');
 
 const patientInfo = async (req, res) => {
-    const patientUserId = 22;
-    const patientEmail = "john.doe@example.com";
+    const patientUserId = req.id;
+    const patientEmail = req.email;
     let message = '';
     if (!patientUserId) {
         message = 'Patient ID not found';
