@@ -1,4 +1,3 @@
-const { User } = require('../../classes');
 const database = require('../../Database/Patient/Register');
 const { passwordValidation } = require('../../Utilities');
 const bcrypt = require('bcryptjs');
@@ -7,30 +6,39 @@ const saltRounds = 15;
 const patientRegister = async (req, res) => {
     let message = '';
     const { fName, lName, email, password, gender, phone, birthYear } = req.body;
-    if (fName && lName && email && password && gender && phone && birthYear) {
-        const passwordFlag = passwordValidation(password);
-        if (passwordFlag) {
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
-            const role = 'Patient';
-            const user = new User(fName, lName, email, hashedPassword, gender, phone, role, birthYear);
-            const [userFlag, patientFlag] = await database.insertPatient(user);
-            if (userFlag) {
-                console.log('User created');
-                if (patientFlag) {
-                    console.log('Patient created');
-                    return res.json({ user: userFlag, patient: patientFlag });
-                }
-                message = 'Could not create patient';
-                return res.status(400).json(message);
-            }
-            message = 'User already exists';
-            return res.status(400).json(message);
-        }
-        message = 'Password must contain at least 8 characters, one number, one alphabet, and one special character';
-        return res.status(400).json(message);
+    if (!fName || !lName || !email || !password || !gender || !phone || !birthYear) {
+        message = 'Please fill all the fields';
+        return res.status(404).json({ message });
     }
-    message = 'Please fill all the fields';
-    return res.status(400).json(message);
+    const emailFlag = await database.checkUserEmail(email);
+    if (emailFlag) {
+        message = 'Email already exists';
+        return res.status(400).json({ message });
+    }
+    const passwordFlag = passwordValidation(password);
+    if (!passwordFlag) {
+        message = 'Password must contain at least 8 characters, one number, one alphabet, and one special character';
+        return res.status(400).json({ message });
+    }
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const user = {
+        fName: req.body.fName,
+        lName: req.body.lName,
+        email: req.body.email,
+        phone: req.body.phone,
+        gender: req.body.gender,
+        role: 'Patient',
+        password: hashedPassword,
+        birthYear: req.body.birthYear
+    };
+    const patient = await database.insertPatient(user);
+    if (patient) {
+        message = 'Patient created successfully';
+        console.log(message, patient);
+        return res.json({ message: message, patient: patient });
+        }
+    message = 'Could not create patient';
+    return res.status(400).json({ message });
 }
 
 module.exports = { patientRegister };
