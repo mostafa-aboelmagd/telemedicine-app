@@ -1,5 +1,5 @@
 // app/auth/signup/page.tsx
-import SignUpForm from "@/components/auth/SignUpForm";
+import SignUpForm from "@/components/auth/SignupForm";
 import ImageContainer from "@/components/auth/ImageContainer";
 
 function SignUpPage() {

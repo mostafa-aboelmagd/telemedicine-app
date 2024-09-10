@@ -274,50 +274,55 @@ function SignUpForm() {
     }
   };
 
-  useEffect(() => {
-    validateForm();
-  }, [formData]);
+  // useEffect(() => {
+  //   validateForm();
+  // }, [formData]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Final validation check before submission
-    validateFirstName();
-    validateLastName();
-    validateEmail();
-    validatePassword();
-    validateConfirmPassword();
-    validatePhone();
-    validateBirthYear();
-
-    if (!formValid) return;
+    const requestBody = {
+      fName: formData.firstName,
+      lName: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      phone: formData.phone,
+      birthYear: parseInt(formData.birthYear),
+      gender: formData.gender,
+      role: "Patient",
+    };
 
     try {
-      const response = await fetch("http://localhost:3001/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          password_hash: formData.password,
-          phone_number: formData.phone,
-          birth_year: parseInt(formData.birthYear),
-          gender: formData.gender,
-          role: "patient",
-        }),
-      });
+      const response = await fetch(
+        "https://telemedicine-pilot-d2anbuaxedbfdba9.southafricanorth-01.azurewebsites.net/patient/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: "Bearer " + process.env.NEXT_PUBLIC_API_KEY,
+          },
+          body: JSON.stringify({
+            fName: "John",
+            lName: "Doe",
+            email: "john.doe@example.com",
+            password: "Password123!",
+            phone: "+201001234567",
+            birthYear: 1990,
+            gender: "Male",
+            role: "Patient",
+          }),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error("Failed to register");
+        const errorData = await response.json();
+        console.log("Error response from server:", errorData);
+        throw new Error(errorData.message || "Failed to register");
       }
 
       const data = await response.json();
       console.log("User registered:", data);
 
-      // Redirect to the home page or a profile page
       window.location.href = "/";
     } catch (error) {
       console.error("Error during signup:", error);
@@ -469,7 +474,7 @@ function SignUpForm() {
         <button
           type="submit"
           className="bg-sky-500 text-neutral-50 text-lg	p-3.5	w-full border-none rounded-lg cursor-pointer transition-[background-color] disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
-          disabled={!formValid}
+          // disabled={!formValid}
         >
           Register
         </button>

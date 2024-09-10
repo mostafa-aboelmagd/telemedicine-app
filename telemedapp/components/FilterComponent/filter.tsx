@@ -21,7 +21,7 @@ import Stack from '@mui/material/Stack';
 import { formatDate, getWeekStartAndEnd } from '@/utils/date';
 
 const EmptyIcon = () => null;
-const FilterComponent = ({ handleChangeFilterDrop, handleResetFilters, handleChangeOptions, handleOpenModal, openModal, minFees, maxFees }: { handleChangeFilterDrop: any, handleResetFilters: any, handleChangeOptions: any, handleOpenModal: any, openModal: any, minFees: number, maxFees: number }) => {
+const FilterComponent = ({ handleChangeFilterDrop, handleResetFilters, handleChangeOptions, handleOpenModal, openModal, minFees, maxFees, specializationOptions, countryOptions, languageOptions }: { handleChangeFilterDrop: any, handleResetFilters: any, handleChangeOptions: any, handleOpenModal: any, openModal: any, minFees: number, maxFees: number, specializationOptions: string[], countryOptions: string[], languageOptions: string[] }) => {
     const [value, setValue] = useState<number[]>([0, 1000]);
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
@@ -50,86 +50,7 @@ const FilterComponent = ({ handleChangeFilterDrop, handleResetFilters, handleCha
         handleOpen2();
     }
     const today = new Date();
-    const specializationOptions = [
-        { value: 'Psychiatrist', label: 'Psychiatrist' },
-        { value: 'Gynecologist', label: 'Gynecologist' },
-        { value: 'Ophthalmologist', label: 'Ophthalmologist' },
-        { value: 'Plastic Surgeon', label: 'Plastic Surgeon' },
-        { value: 'Cardiologist', label: 'Cardiologist' },
-        { value: 'Dermatologist', label: 'Dermatologist' },
-        { value: 'Neurologist', label: 'Neurologist' },
-        { value: 'Orthopedic Surgeon', label: 'Orthopedic Surgeon' },
-        { value: 'Pediatrician', label: 'Pediatrician' },
-        { value: 'Endocrinologist', label: 'Endocrinologist' },
-    ];
-    const countryOptions = [
-        { value: 'Egypt', label: 'Egypt' },
-        { value: 'Saudi Arabia', label: 'Saudi Arabia' },
-        { value: 'United Arab Emirates', label: 'United Arab Emirates' },
-        { value: 'Kuwait', label: 'Kuwait' },
-        { value: 'Qatar', label: 'Qatar' },
-        { value: 'Yemen', label: 'Yemen' },
-        { value: 'Syria', label: 'Syria' },
-        { value: 'Jordan', label: 'Jordan' },
-        { value: 'Iraq', label: 'Iraq' },
-        { value: 'Lebanon', label: 'Lebanon' },
-        { value: 'Morocco', label: 'Morocco' },
-        { value: 'Tunisia', label: 'Tunisia' },
-        { value: 'Algeria', label: 'Algeria' },
-        { value: 'Libya', label: 'Libya' },
-        { value: 'Oman', label: 'Oman' },
-        { value: 'United States', label: 'United States' },
-        { value: 'Canada', label: 'Canada' },
-        { value: 'United Kingdom', label: 'United Kingdom' },
-        { value: 'Australia', label: 'Australia' },
-        { value: 'Germany', label: 'Germany' },
-        { value: 'France', label: 'France' },
-        { value: 'Italy', label: 'Italy' },
-        { value: 'Spain', label: 'Spain' },
-        { value: 'Mexico', label: 'Mexico' },
-        { value: 'India', label: 'India' },
-        { value: 'China', label: 'China' },
-        { value: 'Japan', label: 'Japan' },
-        { value: 'Brazil', label: 'Brazil' },
-        { value: 'Russia', label: 'Russia' },
-        { value: 'South Africa', label: 'South Africa' },
-        { value: 'Nigeria', label: 'Nigeria' },
-        { value: 'Argentina', label: 'Argentina' },
-        { value: 'Chile', label: 'Chile' },
-        { value: 'Colombia', label: 'Colombia' },
-        { value: 'Turkey', label: 'Turkey' },
-        { value: 'Sweden', label: 'Sweden' },
-        { value: 'Norway', label: 'Norway' },
-        { value: 'Denmark', label: 'Denmark' },
-        { value: 'Switzerland', label: 'Switzerland' }
-    ];
-    const languageOptions = [
-        { value: 'English', label: 'English' },
-        { value: 'Arabic', label: 'Arabic' },
-        { value: 'Spanish', label: 'Spanish' },
-        { value: 'Mandarin', label: 'Mandarin' },
-        { value: 'French', label: 'French' },
-        { value: 'German', label: 'German' },
-        { value: 'Japanese', label: 'Japanese' },
-        { value: 'Russian', label: 'Russian' },
-        { value: 'Portuguese', label: 'Portuguese' },
-        { value: 'Hindi', label: 'Hindi' },
-        { value: 'Arabic', label: 'Arabic' },
-        { value: 'Bengali', label: 'Bengali' },
-        { value: 'Urdu', label: 'Urdu' },
-        { value: 'Indonesian', label: 'Indonesian' },
-        { value: 'Korean', label: 'Korean' },
-        { value: 'Italian', label: 'Italian' },
-        { value: 'Dutch', label: 'Dutch' },
-        { value: 'Swedish', label: 'Swedish' },
-        { value: 'Norwegian', label: 'Norwegian' },
-        { value: 'Polish', label: 'Polish' },
-        { value: 'Turkish', label: 'Turkish' },
-        { value: 'Vietnamese', label: 'Vietnamese' },
-        { value: 'Thai', label: 'Thai' },
-        { value: 'Greek', label: 'Greek' },
-        { value: 'Czech', label: 'Czech' },
-    ];
+
     return (
         <>{!openModal ? <aside className='flex flex-col space-y-6 p-4 border border-[#919395] rounded-[10px] max-h-fit hidden md:inline-block'>
             <h2 className='text-[#035fe9] text-lg font-bold text-center'>Filters</h2>

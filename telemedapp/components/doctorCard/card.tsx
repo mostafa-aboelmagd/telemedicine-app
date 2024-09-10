@@ -10,10 +10,22 @@ import { formatDate } from '@/utils/date';
 import Link from 'next/link'
 
 const DoctorCard = ({ doctor }: { doctor: any }) => {
+    const bufferToBase64 = (buffer: number[]) => {
+        const binary = String.fromCharCode.apply(null, buffer);
+        return window.btoa(binary);
+    };
+
+    const base64Image = doctor.image
+        ? `data:image/jpeg;base64,${bufferToBase64(doctor.image.data)}`
+        : '';  // Handle the case if no image is available
     return (
         <div className='bg-white rounded-3xl p-4 flex flex-col space-y-8'>
             <div className='flex flex-col space-y-4 md:space-y-0 items-center md:items-start md:flex-row space-x-2'>
-                <div><img className='w-20 h-20 rounded-full object-cover' src={doctor.image} alt="doc" /></div>
+                <div>{base64Image ? (
+                    <img className='w-20 h-20 rounded-full object-cover' src={base64Image} alt="doc" />
+                ) : (
+                    <div className='w-20 h-20 rounded-full bg-gray-200' /> // Placeholder for missing image
+                )}</div>
                 <div className='flex flex-col space-y-2 grow'>
                     <h2 className='text-xs md:text-sm'>{doctor.name}</h2>
                     <div className='flex justify-between items-center'>

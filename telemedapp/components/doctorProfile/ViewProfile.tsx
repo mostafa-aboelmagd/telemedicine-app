@@ -13,13 +13,12 @@ function ViewDoctorProfile() {
       </div>
       <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[880px]:basis-7/12 min-[880px]:max-w-full">
         <div className="flex pt-4 mb-3">
-            <Link href="/" className="text-blue-500 font-bold ml-7">Personal Information</Link>
-            <Link href="/doctorProfile/timeSlots" className="font-bold ml-7 mr-7 min-[880px]:mr-0">Time Slots</Link>
+            <Link href="/" className="text-blue-500 font-bold ml-7 w-1/2">Personal Information</Link>
+            <Link href="/doctorProfile/timeSlots" className="font-bold ml-7 mr-7 min-[880px]:mr-0 w-1/2">Time Slots</Link>
         </div>
         <div className="flex">
-            <hr className="bg-blue-500 border-none h-0.5 w-1/2 min-[880px]:min-w-52"></hr>
-            <hr className="bg-neutral-800 border-none h-0.5 w-1/2 min-[880px]:min-w-52"></hr>
-            <hr className="bg-neutral-800 border-none h-0.5 w-0 min-[880px]:w-full"></hr>
+            <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
+            <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
         </div>
         <div className="p-7">
           <div className="flex flex-col min-[450px]:flex-row min-[450px]:gap-10 lg:gap-24 xl:gap-56">

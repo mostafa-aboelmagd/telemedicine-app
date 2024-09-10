@@ -116,6 +116,10 @@ function ChangePassword() {
     validateForm();
   }, [formData]);
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
       <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
@@ -123,11 +127,15 @@ function ChangePassword() {
         <p className="text-blue-500 mb-1 font-semibold">Dr. Name</p>
       </div>
       <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="flex pt-4 mb-3">
-              <Link href="/doctorProfile/view" className="text-blue-500 font-bold ml-7">Personal Information</Link>
+              <Link href="/doctorProfile/view" className="text-blue-500 font-bold ml-7 w-1/2">Personal Information</Link>
+              <Link href="/doctorProfile/timeSlots" className="font-bold ml-7 mr-7 w-1/2 min-[880px]:mr-0">Time Slots</Link>
           </div>
-          <hr className="bg-blue-500 border-none h-0.5 w-full"></hr>
+          <div className="flex">
+            <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
+            <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
+          </div>
           <div className="p-7">
               <div className="mb-3 max-w-80">
                   <p className="font-semibold">Old Password</p>
