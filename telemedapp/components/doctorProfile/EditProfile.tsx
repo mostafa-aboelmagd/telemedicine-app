@@ -1,24 +1,40 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import userImage from "@/images/user.png";
 import InputComponent from "@/components/auth/InputComponent";
-import Link from "next/link";
+import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 
-function EditDoctorProfile() {
+function EditProfile() {
   const [formData, setFormData] = useState({
-    firstName: "Example",
-    lastName: "Example",
-    phone: "+201111111111",
-    email: "Example@gmail.com",
-    gender: "Male",
-    birthYear: "2000",
-    residenceCountry: "Egypt",
-    specialization: "Dermatology",
-    thirtyMinPrice: "600",
-    sixtyMinPrice: "1050",
-    });
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    gender: "",
+    birthYear: "",
+    residenceCountry: "",
+    specialization: "",
+    languages: "",
+    thirtyMinPrice: "",
+    sixtyMinPrice: "",
+  });
+  
+  const [tempForm, setTempForm] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    gender: "",
+    birthYear: "",
+    residenceCountry: "",
+    specialization: "",
+    languages: [],
+    thirtyMinPrice: "",
+    sixtyMinPrice: "",
+  });
 
   const [errorMessage, setErrorMessage] = useState({
     firstName: "",
@@ -28,19 +44,56 @@ function EditDoctorProfile() {
     birthYear: "",
     residenceCountry: "",
     specialization: "",
+    languages: "",
     thirtyMinPrice: "",
     sixtyMinPrice: "",
-    });
+  });
 
   const [changedField, setChangedField] = useState("");
 
   const [formValid, setFormValid] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prevForm) => ({...prevForm, [name]: type === "checkbox" ? checked : value,}));
-    setChangedField(() => (name));
-  };
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("jwt");
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
+            mode: "cors", headers: {
+              "Authorization": "Bearer " + token 
+            }})
+           .then(response => response.json())
+           .then(response => (setTempForm(() => (response.formattedDoctor))))
+           .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    let languagesString = tempForm.languages.join(" ");
+    const tempObj = {...tempForm, languages: languagesString};
+    setFormData(() => tempObj);
+  }, [tempForm]);
+
+  useEffect(() => {
+    validateForm();
+  }, [formData]);
+
+  const formFields = [
+    {name : "firstName", title: "First Name", type:"text"},
+    {name : "lastName", title : "Last Name", type:"text"},
+    {name: "email", title: "Email", type: "email"},
+    {name : "phone", title : "Phone Number", type:"tel"},
+    {name: "birthYear", title:"Birth Year", type:"number"},
+    {name: "residenceCountry", title:"Residence Country", type:"text"},
+    {name: "specialization", title:"Specialization", type:"text"},
+    {name: "languages", title:"Languages (Space Between Each Language)", type:"text"},
+    {name: "thirtyMinPrice", title:"30 Minutes Price", type:"number"},
+    {name: "sixtyMinPrice", title:"60 Minutes Price", type:"number"}
+  ];
+
+  const submitButtonClass = [
+    "bg-sky-500 text-neutral-50 font-medium	p-3.5 border border-solid rounded-full cursor-pointer",
+    "transition-[background-color] disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed",
+    "enabled:bg-sky-500"
+  ].join(" ");
 
   const validateFieldsChosen = () => {
     for(let key in formData) {
@@ -59,7 +112,7 @@ function EditDoctorProfile() {
       if(errorMessage.firstName === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, firstName: "First Name Can't Contain Numbers",}));
+      setErrorMessage((prevError) => ({...prevError, firstName: "First Name Must Consist Of Only Characters",}));
     }
 
     else {
@@ -81,7 +134,7 @@ function EditDoctorProfile() {
       if(errorMessage.lastName === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, lastName: "Last Name Can't Contain Numbers",}));
+      setErrorMessage((prevError) => ({...prevError, lastName: "Last Name Must Consist Of Only Characters",}));
     }
 
     else {
@@ -125,7 +178,7 @@ function EditDoctorProfile() {
       if(errorMessage.phone === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, phone: "Current Phone Number Isn't valid !",}));
+      setErrorMessage((prevError) => ({...prevError, phone: "Current Phone Number Is Not valid!",}));
     }
 
     else {
@@ -170,7 +223,7 @@ function EditDoctorProfile() {
       if(errorMessage.residenceCountry === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, residenceCountry: "Country Can't Contain Spaces Or Numbers",}));
+      setErrorMessage((prevError) => ({...prevError, residenceCountry: "Country Must Consist Of Only Characters",}));
     }
 
     else {
@@ -193,7 +246,7 @@ function EditDoctorProfile() {
       if(errorMessage.specialization === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, specialization: "Specialization Can't Contain Spaces Or Numbers",}));
+      setErrorMessage((prevError) => ({...prevError, specialization: "Specialization Must Consist Of Only Characters",}));
     }
 
     else {
@@ -201,6 +254,29 @@ function EditDoctorProfile() {
         changedValidation = true; 
       }
       setErrorMessage((prevError) => ({...prevError, specialization: "",}));
+    }
+
+    if(changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({...prevForm}));  // Extra rerender needed to correct the current input error status
+    }
+  };
+
+  const validateLanguages = () => {
+    let regex = /^[a-zA-Z\s]*$/;
+    let changedValidation = false;
+
+    if(formData.languages && (!regex.test(formData.languages))) {
+      if(errorMessage.languages === "") {
+        changedValidation = true;
+      }
+      setErrorMessage((prevError) => ({...prevError, languages: "Languages Must Consist Of Only Characters",}));
+    }
+
+    else {
+      if(errorMessage.languages !== "") {
+        changedValidation = true; 
+      }
+      setErrorMessage((prevError) => ({...prevError, languages: "",}));
     }
 
     if(changedValidation && validateFieldsChosen()) {
@@ -284,6 +360,10 @@ function EditDoctorProfile() {
         validateSpecialization();
         break;
 
+      case "languages":
+        validateLanguages();
+        break;
+
       case "thirtyMinPrice":
         validateThirtyMinPrice();
         break;
@@ -312,80 +392,73 @@ function EditDoctorProfile() {
     }
   };
 
-  useEffect(() => {
-    validateForm();
-  }, [formData]);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevForm) => ({...prevForm, [name]: value,}));
+    setChangedField(() => (name));
+  };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const languagesArr = formData.languages.split(" ");
+    const sentObj = {...formData, "languages" : languagesArr};
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/edit/info`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sentObj),
+        mode: "cors",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed To Edit Profile Info");
+      }
+
+      window.location.href = "/doctorProfile/view";
+
+    } catch (error) {
+      console.error("Error While Editing Profile Info:", error);
+    }
   };
 
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
-      <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
-        <Image src={userImage} height={120} width={120} alt="User Icon" className="mb-1"></Image>
-        <p className="text-blue-500 mb-1 font-semibold">Dr. Name</p>
-      </div>
-      <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
-        <form onSubmit={handleSubmit}>
-          <div className="flex pt-4 mb-3">
-            <Link href="/doctorProfile/view" className="text-blue-500 font-bold ml-7 w-1/2">Personal Information</Link>
-            <Link href="/doctorProfile/timeSlots" className="font-bold ml-7 mr-7 w-1/2 min-[880px]:mr-0">Time Slots</Link>
+      {loading ? <CircularProgress className="absolute top-1/2" /> :
+        <>
+          <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
+            <Image src={userImage} height={120} width={120} alt="User Icon" className="mb-1"></Image>
+            <p className="text-blue-500 mb-1 font-semibold">Dr. {tempForm.firstName} {tempForm.lastName}</p>
           </div>
-          <div className="flex">
-            <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
-            <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
-          </div>
-          <div className="p-7">
-              <div className="mb-3 max-w-80">
-                  <p className="font-semibold">First Name</p>
-                  <InputComponent
-                    label=""
-                    type="text"
-                    name="firstName"
-                    placeholder="Enter New First Name"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    errorText={errorMessage.firstName}
-                  />
+          <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
+            <form onSubmit={handleSubmit}>
+              <div className="flex pt-4 mb-3">
+                <Link href="/doctorProfile/view" className="text-blue-500 font-bold ml-7 w-1/2">Personal Info</Link>
+                <Link href="/doctorProfile/timeSlots" className="font-bold ml-7 mr-7 w-1/2 min-[880px]:mr-0">Time Slots</Link>
               </div>
-              <div className="mb-3 max-w-80">
-                  <p className="font-semibold">Last Name</p>
-                  <InputComponent
-                    label=""
-                    type="text"
-                    name="lastName"
-                    placeholder="Enter New Last Name"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    errorText={errorMessage.lastName}
-                  />
+              <div className="flex">
+                <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
+                <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
               </div>
-              <div className="mb-3 max-w-80">
-                  <p className="font-semibold">Phone Number</p>
-                  <InputComponent
-                    label=""
-                    type="tel"
-                    name="phone"
-                    placeholder={formData.phone ? formData.phone : "+20 XXXX XXX XXX"}
-                    value={formData.phone}
-                    onChange={handleChange}
-                    errorText={errorMessage.phone}
-                  />
-              </div>
-              <div className="mb-3 max-w-80">
-                  <p className="font-semibold">Email</p>
-                  <InputComponent
-                    label=""
-                    type="email"
-                    name="email"
-                    placeholder="Enter Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    errorText={errorMessage.email}
-                  />
-              </div>
-              <div className="mb-3">
+              <div className="p-7">
+                {formFields.map((field) => {
+                  return (
+                    <div key={field.title} className="mb-3 max-w-80">
+                      <p className="font-semibold">{field.title}</p>
+                      <InputComponent
+                        label=""
+                        type={field.type}
+                        name={field.name}
+                        placeholder={`Enter ${field.title}`}
+                        value={formData[field.name as keyof typeof formData] ?? ""}
+                        onChange={handleChange}
+                        errorText={errorMessage[field.name as keyof typeof errorMessage]}
+                      />
+                    </div>
+                  );
+                })}
+                <div className="mb-3">
                   <p className="font-semibold">Gender</p>
                   <div className="flex gap-8">
                     <label>
@@ -411,81 +484,17 @@ function EditDoctorProfile() {
                       Female
                     </label>
                   </div>
+                </div>
+                <div className="mb-4">
+                  <button type="submit" className={submitButtonClass} disabled={!formValid}>Save Changes</button>
+                </div>
               </div>
-              <div className="mb-4 max-w-80">
-                  <p className="font-semibold">Year Of Birth</p>
-                  <InputComponent
-                    label=""
-                    type="number"
-                    name="birthYear"
-                    placeholder="Enter Birth Year"
-                    value={formData.birthYear}
-                    onChange={handleChange}
-                    errorText={errorMessage.birthYear}
-                  />
-              </div>
-              <div className="mb-4 max-w-80">
-                  <p className="font-semibold">Residence Country</p>
-                  <InputComponent
-                    label=""
-                    type="text"
-                    name="residenceCountry"
-                    placeholder="Enter Residence Country"
-                    value={formData.residenceCountry}
-                    onChange={handleChange}
-                    errorText={errorMessage.residenceCountry}
-                  />
-              </div>
-              <div className="mb-4 max-w-80">
-                  <p className="font-semibold">Specialization</p>
-                  <InputComponent
-                    label=""
-                    type="text"
-                    name="specialization"
-                    placeholder="Enter Specialization"
-                    value={formData.specialization}
-                    onChange={handleChange}
-                    errorText={errorMessage.specialization}
-                  />
-              </div>
-              <div className="mb-4 max-w-80">
-                  <p className="font-semibold">30 Minute Price</p>
-                  <InputComponent
-                    label=""
-                    type="number"
-                    name="thirtyMinPrice"
-                    placeholder="Enter 30 Minute Price"
-                    value={formData.thirtyMinPrice}
-                    onChange={handleChange}
-                    errorText={errorMessage.thirtyMinPrice}
-                  />
-              </div>
-              <div className="mb-4 max-w-80">
-                  <p className="font-semibold">60 Minute Price</p>
-                  <InputComponent
-                    label=""
-                    type="number"
-                    name="sixtyMinPrice"
-                    placeholder="Enter 60 Minute Price"
-                    value={formData.sixtyMinPrice}
-                    onChange={handleChange}
-                    errorText={errorMessage.sixtyMinPrice}
-                  />
-              </div>
-              <div className="mb-4">
-                <button
-                  type="submit"
-                  className="bg-sky-500 text-neutral-50 font-medium	p-3.5 border border-solid rounded-full cursor-pointer transition-[background-color] disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
-                  disabled={!formValid}
-                >
-                  Save Changes
-                </button>
-              </div>
+            </form>
           </div>
-        </form>
-      </div>
+        </>
+      }
     </div>
   );
 }
 
-export default EditDoctorProfile;
+export default EditProfile;
