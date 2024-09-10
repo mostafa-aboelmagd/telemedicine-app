@@ -1,11 +1,14 @@
+
+
 const MedicalHistory = require('../../../Database/Patient/MedicalHistory/viewPrescription');
 const { validatePrescriptionData } = require('../../../Utilities');
 
 const getPrescription = async (req, res) => {
-  const prescriptionId = req.body.prescriptionId;
+  // const patientId = req.body.patientId;
+  const patientId = 22;
 
   try {
-    const prescription = await MedicalHistory.retrievePrescription(prescriptionId);
+    const prescription = await MedicalHistory.retrievePrescription(patientId);
     if (!prescription) {
       return res.status(404).json({ message: 'No prescription found for this patient' });
     }
@@ -18,3 +21,9 @@ const getPrescription = async (req, res) => {
 
 
 module.exports = {getPrescription};
+
+
+
+
+
+

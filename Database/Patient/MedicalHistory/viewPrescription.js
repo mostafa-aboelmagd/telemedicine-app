@@ -15,7 +15,7 @@ const pool = new pg.Pool({
   },
 });
 
-// teste
+
 (async () => {
     try {
         const client = await pool.connect();
@@ -26,15 +26,33 @@ const pool = new pg.Pool({
     }
 })();
 
-const retrievePrescription = async (prescriptionId) => {
+const retrievePrescription = async (patientId) => {
   try {
-    const query = `
-      SELECT * 
-      FROM prescription_medications
-      WHERE prescription_medication_id = 1`;
-    const result = await pool.query(query, [prescriptionId]);
+    const query = `SELECT 
+    p.prescription_id,
+    p.prescription_patient_id,
+    p.prescriptions_doctor_id,
+    p.prescriptions_appointment_id,
+    p.prescriptions_notes,
+    p.created_at,
+    p.updated_at,
+    pm.prescription_medication_reference_id,
+    pm.prescription_medication_name,
+    pm.prescription_medications_dosage,
+    pm.prescription_medications_note,
+    pm.prescription_medications_start_date,
+    pm.prescription_medications_end_date
+FROM 
+    prescriptions p
+JOIN 
+    prescription_medications pm ON p.prescription_id = pm.prescription_medication_reference_id
+WHERE 
+    p.prescription_patient_id = $1`;
+    
+    const result = await pool.query(query, [patientId]);
     if (result.rows.length) {
       return result.rows;
+     
     }
     return false;
   } catch (error) {
@@ -43,4 +61,6 @@ const retrievePrescription = async (prescriptionId) => {
   }
 };
 
-module.exports = { retrievePrescription};
+module.exports = {retrievePrescription};
+
+
