@@ -32,6 +32,7 @@
       "specialty": "Dentist",
       "medicationList": [
         {
+          "id": 1,
           "name": "Panadol",
           "dose": "1 pill",
           "frequency": "3 times a day",
@@ -40,6 +41,7 @@
           "notes": "After meal"
         },
         {
+          "id": 2,
           "name": "Nurofen",
           "dose": "1 pill",
           "frequency": "2 times a day",
@@ -57,6 +59,7 @@
       "specialty": "Cardiologist",
       "medicationList": [
         {
+          "id": 1,
           "name": "Aspirin",
           "dose": "1 pill",
           "frequency": "1 time a day",
@@ -65,6 +68,7 @@
           "notes": "Take in the morning"
         },
         {
+          "id": 2,
           "name": "Lipitor",
           "dose": "10 mg",
           "frequency": "1 time a day",
@@ -82,6 +86,7 @@
       "specialty": "Dermatologist",
       "medicationList": [
         {
+          "id": 1,
           "name": "Hydrocortisone Cream",
           "dose": "Apply thin layer",
           "frequency": "2 times a day",
@@ -90,6 +95,7 @@
           "notes": "For affected areas"
         },
         {
+          "id": 2,
           "name": "Cetirizine",
           "dose": "1 pill",
           "frequency": "1 time a day",
@@ -107,6 +113,7 @@
       "specialty": "Neurologist",
       "medicationList": [
         {
+          "id": 1,
           "name": "Gabapentin",
           "dose": "300 mg",
           "frequency": "3 times a day",
@@ -115,6 +122,7 @@
           "notes": "Take with food"
         },
         {
+          "id": 2,
           "name": "Amitriptyline",
           "dose": "10 mg",
           "frequency": "1 time a day",
@@ -132,6 +140,7 @@
       "specialty": "Orthopedic",
       "medicationList": [
         {
+          "id": 1,
           "name": "Ibuprofen",
           "dose": "200 mg",
           "frequency": "3 times a day",
@@ -140,6 +149,7 @@
           "notes": "Take with water"
         },
         {
+          "id": 2,
           "name": "Calcium",
           "dose": "500 mg",
           "frequency": "1 time a day",
@@ -157,6 +167,7 @@
       "specialty": "Pediatrician",
       "medicationList": [
         {
+          "id": 1,
           "name": "Amoxicillin",
           "dose": "250 mg",
           "frequency": "2 times a day",
@@ -165,6 +176,7 @@
           "notes": "Before meals"
         },
         {
+          "id": 2,
           "name": "Vitamin D",
           "dose": "400 IU",
           "frequency": "1 time a day",
@@ -182,6 +194,7 @@
       "specialty": "Ophthalmologist",
       "medicationList": [
         {
+          "id": 1,
           "name": "Eye Drops",
           "dose": "2 drops",
           "frequency": "3 times a day",
@@ -190,6 +203,7 @@
           "notes": "Use after waking up"
         },
         {
+          "id": 2,
           "name": "Artificial Tears",
           "dose": "As needed",
           "frequency": "4 times a day",
@@ -207,6 +221,7 @@
       "specialty": "Endocrinologist",
       "medicationList": [
         {
+          "id": 1,
           "name": "Metformin",
           "dose": "500 mg",
           "frequency": "2 times a day",
@@ -215,6 +230,7 @@
           "notes": "With meals"
         },
         {
+          "id": 2,
           "name": "Insulin",
           "dose": "10 units",
           "frequency": "1 time a day",
@@ -232,6 +248,7 @@
       "specialty": "Pulmonologist",
       "medicationList": [
         {
+          "id": 1,
           "name": "Salbutamol",
           "dose": "2 puffs",
           "frequency": "As needed",
@@ -240,6 +257,7 @@
           "notes": "Use during asthma attacks"
         },
         {
+          "id": 2,
           "name": "Prednisone",
           "dose": "5 mg",
           "frequency": "1 time a day",

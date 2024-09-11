@@ -1,9 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
-const PrescriptionCard = ({ prescription }: { prescription: any }) => {
+const PrescriptionCard = ({ prescription, handlePrescriptionModal }: { prescription: any, handlePrescriptionModal: any }) => {
     return (
-        <div className='bg-gray-100 rounded-3xl p-4 cursor-pointer flex flex-col space-y-4 overflow-y-auto'>
-            <div className='flex justify-between items-center'>
+        <div onClick={() => handlePrescriptionModal(prescription.id)} className='bg-gray-100 rounded-3xl p-4 cursor-pointer flex flex-col space-y-4 overflow-y-auto'>
+            <div className='flex flex-col justify-between items-center'>
                 <Image width={1080} height={1080} className='w-16 h-16 rounded-full object-cover' src={prescription.doctorImage} alt='doc' />
                 <p className=''>{prescription.doctorName}</p>
                 <p className='text-[#035fe9]'>{prescription.specialty}</p>
