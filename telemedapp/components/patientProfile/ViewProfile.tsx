@@ -31,16 +31,16 @@ function ViewProfile() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    console.log(token);
+    let token = localStorage.getItem("jwt");
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
       method: "GET",
-      mode: "cors", headers: {
+      mode: "cors",
+      headers: {
         'Content-type': 'application/json',
         'Authorization': `Bearer ${token}`,
-      },})
+      }})
       .then(response => response.json())
-      .then(response => (setTempData(() => (response.formattedPatient))))
+      .then(response => (setTempData(() => response.formattedPatient)))
       .finally(() => setLoading(false));
   }, []);
 

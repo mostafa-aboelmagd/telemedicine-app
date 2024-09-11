@@ -39,7 +39,7 @@ function ViewProfile() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("jwt");
+    const token = localStorage.getItem("jwt");
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
       mode: "cors", headers: {
         "Authorization": "Bearer " + token 

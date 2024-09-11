@@ -55,8 +55,11 @@ function EditProfile() {
 
   const [loading, setLoading] = useState(true);
 
+  const [error, setError] = useState(false);
+
+  const token = localStorage.getItem("jwt");
+
   useEffect(() => {
-    const token = sessionStorage.getItem("jwt");
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
             mode: "cors", headers: {
               "Authorization": "Bearer " + token 
@@ -400,19 +403,28 @@ function EditProfile() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const languagesArr = formData.languages.split(" ");
+    const languagesArr = formData?.languages.split(" ");
     const sentObj = {...formData, "languages" : languagesArr};
+
+    for (const [key, value] of Object.entries(tempForm)) {
+      if(value === sentObj[key as keyof typeof sentObj]) {
+        delete sentObj[key as keyof typeof sentObj];
+      }
+    }
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/edit/info`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + token 
         },
         body: JSON.stringify(sentObj),
         mode: "cors",
       });
 
       if (!response.ok) {
+        setError(true);
         throw new Error("Failed To Edit Profile Info");
       }
 
@@ -487,6 +499,7 @@ function EditProfile() {
                 </div>
                 <div className="mb-4">
                   <button type="submit" className={submitButtonClass} disabled={!formValid}>Save Changes</button>
+                  {error && <p className="font-semibold text-red-700 mt-4">Email Already Registered With Another Account!</p>}
                 </div>
               </div>
             </form>

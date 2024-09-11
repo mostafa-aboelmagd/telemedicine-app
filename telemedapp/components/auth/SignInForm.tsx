@@ -28,18 +28,21 @@ function SignInForm() {
         if (err) {
           message = "Invalid token";
           console.log(message);
-          return;
+          return false;
         } 
         console.log(decodedToken);
         req.id = decodedToken.id;
         req.email = decodedToken.email;
         req.userRole = decodedToken.role;
+        return true;
       });
-    } else {
+    }
+    else {
       message = "No token found";
       console.log(message);
-      return;
+      return false;
     }
+    return true;
   };
 
   const submitButtonClass = [
@@ -69,10 +72,12 @@ function SignInForm() {
     }
 
     try {
+      const token = localStorage.getItem("jwt");
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + token 
         },
         mode: "cors",
         body: JSON.stringify(formData),
@@ -88,10 +93,14 @@ function SignInForm() {
       }
 
       const users = await response.json();
-      tokenAuthentication(users);
-      localStorage.setItem("jwt", users.token);
-      const redirect = users.userRole === "Patient" ? "/patientProfile/view" : "/doctorProfile/view";
-      window.location.href = redirect;
+      if(tokenAuthentication(users)) {
+        localStorage.setItem("jwt", users.token);
+        const redirect = users.userRole === "Patient" ? "/patientProfile/view" : "/doctorProfile/view";
+        window.location.href = redirect;
+      }
+      else {
+        console.log("Error During Token Authentication");
+      }
 
     } catch(error) {
       console.error("Error During Sign In:", error);

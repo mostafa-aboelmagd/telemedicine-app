@@ -63,8 +63,9 @@ function TimeSlots() {
 
   const [loading, setLoading] = useState(true);
 
+  const token = localStorage.getItem("jwt");
+
   useEffect (() => {
-    const token = sessionStorage.getItem("jwt");
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
           mode: "cors",
           headers: {
@@ -214,6 +215,7 @@ function TimeSlots() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
           },
           body: JSON.stringify(sentObj),
           mode: "cors",
@@ -247,6 +249,7 @@ function TimeSlots() {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
           },
           body: JSON.stringify({
             slots_id: sentTimesId

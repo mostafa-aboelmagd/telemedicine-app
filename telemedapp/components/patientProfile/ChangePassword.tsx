@@ -33,8 +33,9 @@ function ChangePassword() {
 
   const [oldPasswordError, setOldPasswordError] = useState(false);
 
+  const token = localStorage.getItem("jwt");
+
   useEffect(() => {
-    const token = sessionStorage.getItem("jwt");
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
       mode: "cors", headers: {
         "Authorization": "Bearer " + token 
@@ -157,6 +158,7 @@ function ChangePassword() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + token 
         },
         body: JSON.stringify(formData),
         mode: "cors",
