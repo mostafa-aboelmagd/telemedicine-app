@@ -214,6 +214,8 @@ function TimeSlots() {
 
     if (!toggleChecked) {
       try {
+        token = localStorage.getItem("jwt");
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/add`, {
           method: "POST",
           headers: {
@@ -248,6 +250,7 @@ function TimeSlots() {
       }
 
       try {
+        token = localStorage.getItem("jwt");
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/delete`, {
           method: "DELETE",
           headers: {

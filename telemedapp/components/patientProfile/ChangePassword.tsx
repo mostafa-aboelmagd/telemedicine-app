@@ -157,6 +157,7 @@ function ChangePassword() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      token = localStorage.getItem("jwt");
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/edit/password`, {
         method: "PUT",
         headers: {

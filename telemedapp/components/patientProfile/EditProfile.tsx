@@ -295,6 +295,7 @@ function EditProfile() {
     console.log(sentObj);
 
     try {
+      token = localStorage.getItem("jwt");
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/edit/info`, {
         method: "PUT",
         headers: {
