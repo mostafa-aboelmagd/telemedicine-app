@@ -5,15 +5,22 @@ import { PiSignInBold } from "react-icons/pi";
 import { BsPersonFillAdd } from "react-icons/bs";
 import MenuList from "../MenuList/menuList";
 import { IoMenu } from "react-icons/io5";
-
-const menuIcon = <div><IoMenu /></div>;
+const menuIcon = (
+  <div>
+    <IoMenu />
+  </div>
+);
 const Navbar = () => {
   return (
     <nav className="h-14 bg-white border border-b-[1px] sticky top-0 z-10 mb-8">
       <div className="max-w-full md:max-w-[90%] lg:max-w-[75%] flex justify-between items-center mx-auto">
         <Link href="/">
           <div className="flex justify-center items-center">
-            <img className="w-14 h-14" src="assets/logo.png" alt="logo" />
+            <img
+              className="w-14 h-14"
+              src="../../public/assets/logo.png"
+              alt="logo"
+            />
             <span className="text-xl">TeleMedPilot</span>
           </div>
         </Link>
@@ -48,7 +55,11 @@ const Navbar = () => {
               <BsPersonFillAdd />
             </button>
           </Link>
-          <MenuList linkTo={["/doctors", "", "", ""]} linkName={["Doctor List", "Tests", "Find a Doctor", "Blog"]} text={menuIcon} />
+          <MenuList
+            linkTo={["/doctors", "", "", ""]}
+            linkName={["Doctor List", "Tests", "Find a Doctor", "Blog"]}
+            text={menuIcon}
+          />
         </div>
       </div>
     </nav>
