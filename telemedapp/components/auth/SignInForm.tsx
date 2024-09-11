@@ -34,7 +34,10 @@ function SignInForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formValid) return;
+    const requestBody = {
+      email: formData.email,
+      password: formData.password,
+    };
 
     try {
       const response = await fetch(
@@ -44,27 +47,21 @@ function SignInForm() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
 
+      const textResponse = await response.text();
+      console.log("Response body:", textResponse);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        console.log("Error response from server:", errorData);
-        throw new Error(errorData.message || "Invalid email or password");
+        throw new Error(`Error: ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const data = JSON.parse(textResponse); // Ensure it is valid JSON
       console.log("User signed in:", data);
-
-      // Redirect to the home page or a profile page
-      window.location.href = "/";
     } catch (error) {
       console.error("Error during sign-in:", error);
-      setErrorMessage("An error occurred during sign-in");
     }
   };
 

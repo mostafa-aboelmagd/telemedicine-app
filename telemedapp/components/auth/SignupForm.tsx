@@ -274,9 +274,9 @@ function SignUpForm() {
     }
   };
 
-  // useEffect(() => {
-  //   validateForm();
-  // }, [formData]);
+  useEffect(() => {
+    validateForm();
+  }, [formData]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -299,33 +299,30 @@ function SignUpForm() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // Authorization: "Bearer " + process.env.NEXT_PUBLIC_API_KEY,
           },
-          body: JSON.stringify({
-            fName: "John",
-            lName: "Doe",
-            email: "john.doe@example.com",
-            password: "Password123!",
-            phone: "+201001234567",
-            birthYear: 1990,
-            gender: "Male",
-            role: "Patient",
-          }),
+          body: JSON.stringify(requestBody),
+          mode: "cors",
         }
       );
 
+      // Log the full response for debugging purposes
+      console.log("Full response:", response);
+
+      // If the response is not OK, log the error details
       if (!response.ok) {
-        const errorData = await response.json();
-        console.log("Error response from server:", errorData);
+        const errorData = await response.json(); // Expecting the server to return JSON error details
+        console.error("Error response from server:", errorData);
         throw new Error(errorData.message || "Failed to register");
       }
 
+      // If the response is OK, handle the successful registration
       const data = await response.json();
-      console.log("User registered:", data);
+      console.log("User registered successfully:", data);
 
+      // Redirect to home or login after successful registration
       window.location.href = "/";
     } catch (error) {
-      console.error("Error during signup:", error);
+      console.error("Error during signup:  ", error);
     }
   };
 
