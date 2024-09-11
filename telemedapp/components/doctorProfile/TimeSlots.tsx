@@ -9,50 +9,50 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 function TimeSlots() {
   const today = new Date();
   let datesList = [];
-  for(let i = 0; i < 7; i++) {
+  for (let i = 0; i < 7; i++) {
     let newDate = new Date();
     newDate.setDate(today.getDate() + i + 1);
     datesList.push(newDate);
   }
-  
+
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
   const timesList = {
-    "9:00 AM : 10:00 AM" : "9:00:00",
-    "10:00 AM : 11:00 AM" : "10:00:00",
-    "11:00 AM : 12:00 PM" : "11:00:00",
-    "12:00 PM : 1:00 PM" : "12:00:00",
+    "9:00 AM : 10:00 AM": "9:00:00",
+    "10:00 AM : 11:00 AM": "10:00:00",
+    "11:00 AM : 12:00 PM": "11:00:00",
+    "12:00 PM : 1:00 PM": "12:00:00",
     "1:00 PM : 2:00 PM": "13:00:00",
-    "2:00 PM : 3:00 PM" : "14:00:00",
-    "3:00 PM : 4:00 PM" : "15:00:00",
-    "4:00 PM : 5:00 PM" : "16:00:00",
-    "5:00 PM : 6:00 PM" : "17:00:00",
-    "6:00 PM : 7:00 PM" : "18:00:00",
-    "7:00 PM : 8:00 PM" : "19:00:00",
-    "8:00 PM : 9:00 PM" : "20:00:00",
+    "2:00 PM : 3:00 PM": "14:00:00",
+    "3:00 PM : 4:00 PM": "15:00:00",
+    "4:00 PM : 5:00 PM": "16:00:00",
+    "5:00 PM : 6:00 PM": "17:00:00",
+    "6:00 PM : 7:00 PM": "18:00:00",
+    "7:00 PM : 8:00 PM": "19:00:00",
+    "8:00 PM : 9:00 PM": "20:00:00",
   }
 
   const [dayDate, setDayDate] = useState(datesList[0].toDateString());
 
   const [timesChosen, setTimesChosen] = useState(
     Object.fromEntries(datesList.map(date => [
-    date.toDateString(), new Set<String>()
-  ])));
+      date.toDateString(), new Set<String>()
+    ])));
 
   const [oldTimes, setOldTimes] = useState(
     Object.fromEntries(datesList.map(date => [
-    date.toDateString(), new Set<String>()
-  ])));
+      date.toDateString(), new Set<String>()
+    ])));
 
   const [oldTimesTemp, setOldTimesTemp] = useState(
     Object.fromEntries(datesList.map(date => [
-    date.toDateString(), new Array()
-  ])));
+      date.toDateString(), new Array()
+    ])));
 
   const [oldTimesId, setOldTimesId] = useState(
     Object.fromEntries(datesList.map(date => [
-    date.toDateString(), {"" : ""}
-  ])));
+      date.toDateString(), { "": "" }
+    ])));
 
   const [toggleChecked, setToggleChecked] = useState(false);
 
@@ -63,55 +63,58 @@ function TimeSlots() {
 
   const [loading, setLoading] = useState(true);
 
-  const token = localStorage.getItem("jwt");
+  let token: string | null = "";
 
-  useEffect (() => {
+  useEffect(() => {
+    token = localStorage.getItem("jwt");
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-          mode: "cors",
-          headers: {
-            "Authorization": "Bearer " + token 
-          }})
-          .then(response => response.json())
-          .then(response => (setProfileData(() => (response.formattedDoctor))));
+      mode: "cors",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    })
+      .then(response => response.json())
+      .then(response => (setProfileData(() => (response.formattedDoctor))));
 
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/availabilities`,{
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/availabilities`, {
       mode: "cors", headers: {
-        "Authorization": "Bearer " + token 
-        }})
-        .then(response => response.json())
-        .then(response => (setOldTimesTemp(() => response.availabilities)))
-        .finally(() => setLoading(false));
+        "Authorization": "Bearer " + token
+      }
+    })
+      .then(response => response.json())
+      .then(response => (setOldTimesTemp(() => response.availabilities)))
+      .finally(() => setLoading(false));
   }, []);
 
-  useEffect (() => {
+  useEffect(() => {
     setTimesChosen(() => (
       Object.fromEntries(datesList.map(date => [
         date.toDateString(), new Set<String>()
-    ]))));
+      ]))));
 
     setOldTimes(() => (
       Object.fromEntries(datesList.map(date => [
         date.toDateString(), new Set<String>()
-    ]))));
+      ]))));
 
     setOldTimesId(() => (
       Object.fromEntries(datesList.map(date => [
-        date.toDateString(), {"" : ""}
-    ]))));
-    if(oldTimesTemp) {
-      for(const [key, value] of Object.entries(oldTimesTemp)) {
+        date.toDateString(), { "": "" }
+      ]))));
+    if (oldTimesTemp) {
+      for (const [key, value] of Object.entries(oldTimesTemp)) {
         value.map((entry) => {
-            let currSet = oldTimes[key];
-            currSet?.add(entry.time);
-            setOldTimes((prevTimes: any) => ({...prevTimes, [key] : currSet}));
+          let currSet = oldTimes[key];
+          currSet?.add(entry.time);
+          setOldTimes((prevTimes: any) => ({ ...prevTimes, [key]: currSet }));
 
-            let currObj = oldTimesId[key as keyof typeof oldTimesId];
-            if(currObj) {
-              currObj[entry.time as keyof typeof currObj] = entry.id;
-              setOldTimesId((prevTimes: any) => ({...prevTimes, [key]: currObj}));
-            }
-        })   
-      } 
+          let currObj = oldTimesId[key as keyof typeof oldTimesId];
+          if (currObj) {
+            currObj[entry.time as keyof typeof currObj] = entry.id;
+            setOldTimesId((prevTimes: any) => ({ ...prevTimes, [key]: currObj }));
+          }
+        })
+      }
     }
   }, [oldTimesTemp]);
 
@@ -141,9 +144,9 @@ function TimeSlots() {
   ].join(" ");
 
   function getTimeClass(time: string) {
-    if(oldTimes[dayDate].has(time)) {
-      if(toggleChecked) {
-        if(timesChosen[dayDate].has(time)) {
+    if (oldTimes[dayDate].has(time)) {
+      if (toggleChecked) {
+        if (timesChosen[dayDate].has(time)) {
           return clickedTimeClass;
         }
         return timeButtonClass; // in the case of deletion we want the already selected times to be available for deletion
@@ -151,11 +154,11 @@ function TimeSlots() {
       return disabledTimeClass;
     }
 
-    if(timesChosen[dayDate].has(time)) {
+    if (timesChosen[dayDate].has(time)) {
       return clickedTimeClass;
     }
 
-    if(toggleChecked) {
+    if (toggleChecked) {
       return disabledTimeClass; // in the case of deletion we want the non selected items and the not clicked on items to be disabled
     }
 
@@ -166,7 +169,7 @@ function TimeSlots() {
     e.preventDefault();
     const name = e.currentTarget.name;
 
-    if(dayDate === name) {
+    if (dayDate === name) {
       return;
     }
 
@@ -177,22 +180,22 @@ function TimeSlots() {
     e.preventDefault();
     let currSet = timesChosen[dayDate];
 
-    if(e.currentTarget.className === clickedTimeClass) {
+    if (e.currentTarget.className === clickedTimeClass) {
       e.currentTarget.className = timeButtonClass;
       currSet.delete(e.currentTarget.name);
     }
-    else if(e.currentTarget.className === timeButtonClass) {
+    else if (e.currentTarget.className === timeButtonClass) {
       e.currentTarget.className = clickedTimeClass;
       currSet.add(e.currentTarget.name);
     }
-    setTimesChosen((prevTimes: any) => ({...prevTimes, dayDate: currSet,}));
+    setTimesChosen((prevTimes: any) => ({ ...prevTimes, dayDate: currSet, }));
   };
 
   const handleChangeToggle = () => {
     setTimesChosen(() => (
       Object.fromEntries(datesList.map(date => [
         date.toDateString(), new Set<String>()
-    ]))));
+      ]))));
 
     setToggleChecked(() => (!toggleChecked));
   };
@@ -204,12 +207,12 @@ function TimeSlots() {
       date.toDateString(), new Array()
     ]));
 
-    for(const [key, value] of Object.entries(timesChosen)) {
+    for (const [key, value] of Object.entries(timesChosen)) {
       sentObj[key] = Array.from(value);
     }
     delete sentObj["dayDate"];
 
-    if(!toggleChecked) {
+    if (!toggleChecked) {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/add`, {
           method: "POST",
@@ -234,11 +237,11 @@ function TimeSlots() {
     else {
       let sentTimesId = new Array();
 
-      for(const [key, value] of Object.entries(sentObj)) {
+      for (const [key, value] of Object.entries(sentObj)) {
         value.map(timeEntry => {
           let currObj = oldTimesId[key as keyof typeof oldTimesId]
           let currEntry = currObj[timeEntry as keyof typeof currObj]
-          if(currEntry) {
+          if (currEntry) {
             sentTimesId.push(currEntry);
           }
         })
@@ -291,19 +294,19 @@ function TimeSlots() {
                 <div className="flex flex-col gap-40 min-[430px]:gap-24 min-[470px]:gap-12 min-[550px]:gap-5">
                   {datesList.map((date) => {
                     return <button
-                            key={days[date.getDay()]}
-                            name={date.toDateString()}
-                            onClick={handleDayClick}
-                            className={date.toDateString() === dayDate ? clickedDayClass : dayButtonClass}>
-                              {days[date.getDay()].toUpperCase()}<br></br>({date.getDate()} / {today.getMonth() + 1} / {today.getFullYear()})
-                            </button>;
+                      key={days[date.getDay()]}
+                      name={date.toDateString()}
+                      onClick={handleDayClick}
+                      className={date.toDateString() === dayDate ? clickedDayClass : dayButtonClass}>
+                      {days[date.getDay()].toUpperCase()}<br></br>({date.getDate()} / {today.getMonth() + 1} / {today.getFullYear()})
+                    </button>;
                   })}
                 </div>
                 <div className="grid grid-cols-1 gap-5 min-[470px]:grid-cols-2 min-[550px]:grid-cols-3">
                   {Object.entries(timesList).map((timeEntry) => {
                     return <button key={timeEntry[0]} name={timeEntry[1]} onClick={handleTimeClick} className={getTimeClass(timeEntry[1])}>
-                            {timeEntry[0]}
-                          </button>;
+                      {timeEntry[0]}
+                    </button>;
                   })}
                 </div>
               </div>

@@ -23,7 +23,7 @@ function ChangePassword() {
   const [changedField, setChangedField] = useState("");
 
   const [formValid, setFormValid] = useState(false);
-  
+
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
@@ -38,11 +38,12 @@ function ChangePassword() {
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
       mode: "cors", headers: {
-        "Authorization": "Bearer " + token 
-      }})
-           .then(response => response.json())
-           .then(response => (setProfileData(() => (response.formattedPatient))))
-           .finally(() => setLoading(false));
+        "Authorization": "Bearer " + token
+      }
+    })
+      .then(response => response.json())
+      .then(response => (setProfileData(() => (response.formattedPatient))))
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -50,9 +51,9 @@ function ChangePassword() {
   }, [formData]);
 
   const formFields = [
-    {name : "oldPassword", type: "Old Password"},
-    {name : "password", type : "New Password"},
-    {name : "confirmPassword", type : "Confirm New Password"}
+    { name: "oldPassword", type: "Old Password" },
+    { name: "password", type: "New Password" },
+    { name: "confirmPassword", type: "Confirm New Password" }
   ];
 
   const submitButtonClass = [
@@ -84,7 +85,7 @@ function ChangePassword() {
       if (errorMessage.password === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, password:"Password Must Contain 8+ Characters Including Atleast 1 Number, 1 Character, 1 Symbol",}));
+      setErrorMessage((prevError) => ({ ...prevError, password: "Password Must Contain 8+ Characters Including Atleast 1 Number, 1 Character, 1 Symbol", }));
     }
 
     if (changedValidation && validateFieldsChosen()) {
@@ -147,7 +148,7 @@ function ChangePassword() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevForm) => ({...prevForm, [name]: value,}));
+    setFormData((prevForm) => ({ ...prevForm, [name]: value, }));
     setChangedField(() => (name));
   };
 
@@ -158,14 +159,14 @@ function ChangePassword() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + token 
+          "Authorization": "Bearer " + token
         },
         body: JSON.stringify(formData),
         mode: "cors",
       });
 
       if (!response.ok) {
-        if(response.status === 400) {
+        if (response.status === 400) {
           setOldPasswordError(true);
         }
         throw new Error("Failed To Edit Password");
@@ -180,7 +181,7 @@ function ChangePassword() {
 
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
-      {loading ? <CircularProgress className="absolute top-1/2" /> : 
+      {loading ? <CircularProgress className="absolute top-1/2" /> :
         <>
           <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
             <Image src={userImage} height={120} width={120} alt="User Icon" className="mb-1"></Image>
