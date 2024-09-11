@@ -43,12 +43,16 @@ function ViewPaymentInfo() {
           </div>
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
             <div className="flex pt-4 mb-3">
-                <Link href="/patientProfile/view" className="font-bold ml-7 w-1/2">Personal Info</Link>
-                <Link href="/patientProfile/paymentInfo" className="text-blue-500 font-bold ml-7 mr-7 md:mr-0 w-1/2">Payment Info</Link>
+              <Link href="/patientProfile/view" className="font-bold ml-7 w-1/4">Personal Information</Link>
+              <Link href="/patientProfile/paymentInfo" className="text-blue-500 font-bold ml-7 mr-7 md:mr-0 w-1/4">Payment Information</Link>
+              <Link href="/patientProfile/prescriptions" className="font-bold ml-7 w-1/4">Prescriptions</Link>
+              <Link href="/patientProfile/patientDocuments" className="font-bold ml-7 mr-7 md:mr-0 w-1/4">Documents</Link>
             </div>
             <div className="flex">
-                <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
-                <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
+              <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
             </div>
             <div className="p-7">
                 <p className="font-semibold">You don't have any saved payment information</p>

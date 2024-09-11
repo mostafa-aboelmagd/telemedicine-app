@@ -85,8 +85,8 @@ function EditProfile() {
   ].join(" ");
 
   const validateFieldsChosen = () => {
-    for(let key in formData) {
-      if(!(formData[key as keyof typeof formData])) {
+    for (let key in formData) {
+      if (!(formData[key as keyof typeof formData])) {
         return false;
       }
     }
@@ -97,88 +97,88 @@ function EditProfile() {
     let regex = /^[a-zA-Z]+$/;
     let changedValidation = false;
 
-    if(formData.firstName && (!regex.test(formData.firstName))) {
-      if(errorMessage.firstName === "") {
+    if (formData.firstName && (!regex.test(formData.firstName))) {
+      if (errorMessage.firstName === "") {
         changedValidation = true;
       }
       setErrorMessage((prevError) => ({...prevError, firstName: "First Name Must Consist Of Only Characters",}));
     }
 
     else {
-      if(errorMessage.firstName !== "") {
-        changedValidation = true; 
+      if (errorMessage.firstName !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, firstName: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, firstName: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm}));  // Extra rerender needed to correct the current input error status
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));  // Extra rerender needed to correct the current input error status
     }
   };
 
   const validateLastName = () => {
     let regex = /^[a-zA-Z]+$/;
     let changedValidation = false;
-    if(formData.lastName && (!regex.test(formData.lastName))) {
-      if(errorMessage.lastName === "") {
+    if (formData.lastName && (!regex.test(formData.lastName))) {
+      if (errorMessage.lastName === "") {
         changedValidation = true;
       }
       setErrorMessage((prevError) => ({...prevError, lastName: "Last Name Must Consist Of Only Characters",}));
     }
 
     else {
-      if(errorMessage.lastName !== "") {
+      if (errorMessage.lastName !== "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, lastName: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, lastName: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateEmail = () => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let changedValidation = false;
-    if(formData.email && (!emailPattern.test(formData.email))) {
-      if(errorMessage.email === "") {
+    if (formData.email && (!emailPattern.test(formData.email))) {
+      if (errorMessage.email === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, email: "Email Is Invalid",}));
+      setErrorMessage((prevError) => ({ ...prevError, email: "Email Is Invalid", }));
     }
 
     else {
-      if(errorMessage.email !== "") {
-          changedValidation = true;
+      if (errorMessage.email !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, email: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, email: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validatePhone = () => {
     const phonePattern = /^\+201(0|1|2|5)(\d{8})$/;
     let changedValidation = false;
-    if(formData.phone && ((!phonePattern.test(formData.phone)) || formData.phone.length != 13)) {
-      if(errorMessage.phone === "") {
+    if (formData.phone && ((!phonePattern.test(formData.phone)) || formData.phone.length != 13)) {
+      if (errorMessage.phone === "") {
         changedValidation = true;
       }
       setErrorMessage((prevError) => ({...prevError, phone: "Current Phone Number Is Not valid!",}));
     }
 
     else {
-      if(errorMessage.phone !== "") {
-          changedValidation = true;
+      if (errorMessage.phone !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, phone: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, phone: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
   
@@ -208,27 +208,27 @@ function EditProfile() {
   const validateBirthYear = () => {
     let changedValidation = false;
 
-    if(formData.birthYear && (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011)) {
-      if(errorMessage.birthYear === "") {
+    if (formData.birthYear && (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011)) {
+      if (errorMessage.birthYear === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, birthYear: "Age Isn't Valid",}));
-    } 
-
-    else {
-      if(errorMessage.birthYear !== "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({...prevError, birthYear: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, birthYear: "Age Isn't Valid", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    else {
+      if (errorMessage.birthYear !== "") {
+        changedValidation = true;
+      }
+      setErrorMessage((prevError) => ({ ...prevError, birthYear: "", }));
+    }
+
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateForm = () => {
-    switch(changedField) {
+    switch (changedField) {
       case "firstName":
         validateFirstName();
         break;
@@ -259,9 +259,9 @@ function EditProfile() {
 
     setChangedField(() => "");
 
-    if(validateFieldsChosen()) {
-      for(let key in errorMessage) {
-        if(errorMessage[key as keyof typeof errorMessage] !== "") {
+    if (validateFieldsChosen()) {
+      for (let key in errorMessage) {
+        if (errorMessage[key as keyof typeof errorMessage] !== "") {
           setFormValid(() => (false));
           return;
         }
@@ -332,12 +332,16 @@ function EditProfile() {
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
             <form onSubmit={handleSubmit}>
               <div className="flex pt-4 mb-3">
-                <Link href="/patientProfile/view" className="text-blue-500 font-bold ml-7 w-1/2">Personal Info</Link>
-                <Link href="/patientProfile/paymentInfo" className="font-bold ml-7 mr-7 md:mr-0 w-1/2">Payment Info</Link>
+                <Link href="/patientProfile/view" className="text-blue-500 font-bold ml-7 w-1/4">Personal Information</Link>
+                <Link href="/patientProfile/paymentInfo" className="font-bold ml-7 mr-7 md:mr-0 w-1/4">Payment Information</Link>
+                <Link href="/patientProfile/prescriptions" className="font-bold ml-7 w-1/4">Prescriptions</Link>
+                <Link href="/patientProfile/patientDocuments" className="font-bold ml-7 mr-7 md:mr-0 w-1/4">Documents</Link>
               </div>
               <div className="flex">
-                  <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
-                  <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
+                <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
+                <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
+                <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
+                <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
               </div>
               <div className="p-7">
                 {formFields.map((field) => {

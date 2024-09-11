@@ -12,13 +12,13 @@ function ChangePassword() {
     oldPassword: "",
     password: "",
     confirmPassword: "",
-    });
+  });
 
   const [errorMessage, setErrorMessage] = useState({
     oldPassword: "",
     password: "",
     confirmPassword: "",
-    });
+  });
 
   const [changedField, setChangedField] = useState("");
 
@@ -62,8 +62,8 @@ function ChangePassword() {
   ].join(" ");
 
   const validateFieldsChosen = () => {
-    for(let key in formData) {
-      if(!(formData[key as keyof typeof formData])) {
+    for (let key in formData) {
+      if (!(formData[key as keyof typeof formData])) {
         return false;
       }
     }
@@ -73,49 +73,49 @@ function ChangePassword() {
   const validatePassword = () => {
     let passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     let changedValidation = false;
-    if(!formData.password || (formData.password && passwordPattern.test(formData.password))) {
-      if(errorMessage.password !== "") {
+    if (!formData.password || (formData.password && passwordPattern.test(formData.password))) {
+      if (errorMessage.password !== "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, password: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, password: "", }));
     }
-    
+
     else {
-      if(errorMessage.password === "") {
+      if (errorMessage.password === "") {
         changedValidation = true;
       }
       setErrorMessage((prevError) => ({...prevError, password:"Password Must Contain 8+ Characters Including Atleast 1 Number, 1 Character, 1 Symbol",}));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateConfirmPassword = () => {
     let changedValidation = false;
 
-    if(formData.confirmPassword && formData.confirmPassword !== formData.password) {
-      if(errorMessage.confirmPassword === "") {
+    if (formData.confirmPassword && formData.confirmPassword !== formData.password) {
+      if (errorMessage.confirmPassword === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, confirmPassword: "Passwords Don't Match",}));
-    } 
-
-    else {
-      if(errorMessage.confirmPassword !== "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({...prevError, confirmPassword: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, confirmPassword: "Passwords Don't Match", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    else {
+      if (errorMessage.confirmPassword !== "") {
+        changedValidation = true;
+      }
+      setErrorMessage((prevError) => ({ ...prevError, confirmPassword: "", }));
+    }
+
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateForm = () => {
-    switch(changedField) {
+    switch (changedField) {
       case "password":
         validatePassword();
         validateConfirmPassword();
@@ -131,9 +131,9 @@ function ChangePassword() {
 
     setChangedField(() => "");
 
-    if(validateFieldsChosen()) {
-      for(let key in errorMessage) {
-        if(errorMessage[key as keyof typeof errorMessage] !== "") {
+    if (validateFieldsChosen()) {
+      for (let key in errorMessage) {
+        if (errorMessage[key as keyof typeof errorMessage] !== "") {
           setFormValid(() => (false));
           return;
         }
@@ -196,12 +196,16 @@ function ChangePassword() {
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
             <form onSubmit={handleSubmit}>
               <div className="flex pt-4 mb-3">
-                <Link href="/patientProfile/view" className="text-blue-500 font-bold ml-7 w-1/2">Personal Info</Link>
-                <Link href="/patientProfile/paymentInfo" className="font-bold ml-7 mr-7 md:mr-0 w-1/2">Payment Info</Link>
+                <Link href="/patientProfile/view" className="text-blue-500 font-bold ml-7 w-1/4">Personal Information</Link>
+                <Link href="/patientProfile/paymentInfo" className="font-bold ml-7 mr-7 md:mr-0 w-1/4">Payment Information</Link>
+                <Link href="/patientProfile/prescriptions" className="font-bold ml-7 w-1/4">Prescriptions</Link>
+                <Link href="/patientProfile/patientDocuments" className="font-bold ml-7 mr-7 md:mr-0 w-1/4">Documents</Link>
               </div>
               <div className="flex">
-                <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
-                <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
+                <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
+                <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
+                <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
+                <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
               </div>
               <div className="p-7">
                 {formFields.map((field) => {

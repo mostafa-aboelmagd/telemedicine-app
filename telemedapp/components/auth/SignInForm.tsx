@@ -67,9 +67,10 @@ function SignInForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formValid) {
-      return;
-    }
+    const requestBody = {
+      email: formData.email,
+      password: formData.password,
+    };
 
     try {
       const token = localStorage.getItem("jwt");
@@ -83,6 +84,9 @@ function SignInForm() {
         body: JSON.stringify(formData),
       }
       );
+
+      const textResponse = await response.text();
+      console.log("Response body:", textResponse);
 
       if (!response.ok) {
         console.log("error in response");
