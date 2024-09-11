@@ -20,16 +20,16 @@ function SignInForm() {
 
   const ACCESS_TOKEN_SECRET_KEY = `${process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET_KEY}`;
 
-  const tokenAuthentication = (req : any) => {
+  const tokenAuthentication = (req: any) => {
     const token = req.token;
     let message = "";
     if (token) {
-      jwt.verify(token, ACCESS_TOKEN_SECRET_KEY, (err : any, decodedToken : any) => {
+      jwt.verify(token, ACCESS_TOKEN_SECRET_KEY, (err: any, decodedToken: any) => {
         if (err) {
           message = "Invalid token";
           console.log(message);
           return false;
-        } 
+        }
         console.log(decodedToken);
         req.id = decodedToken.id;
         req.email = decodedToken.email;
@@ -73,12 +73,10 @@ function SignInForm() {
     };
 
     try {
-      const token = localStorage.getItem("jwt");
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + token 
         },
         mode: "cors",
         body: JSON.stringify(formData),
@@ -90,14 +88,14 @@ function SignInForm() {
 
       if (!response.ok) {
         console.log("error in response");
-        if(response.status === 400) {
+        if (response.status === 400) {
           setError(true);
         }
         throw new Error("Failed To Sign In");
       }
 
       const users = await response.json();
-      if(tokenAuthentication(users)) {
+      if (tokenAuthentication(users)) {
         localStorage.setItem("jwt", users.token);
         const redirect = users.userRole === "Patient" ? "/patientProfile/view" : "/doctorProfile/view";
         window.location.href = redirect;
@@ -106,7 +104,7 @@ function SignInForm() {
         console.log("Error During Token Authentication");
       }
 
-    } catch(error) {
+    } catch (error) {
       console.error("Error During Sign In:", error);
     }
   };
