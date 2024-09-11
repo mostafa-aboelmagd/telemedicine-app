@@ -67,11 +67,17 @@ function SignInForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!formValid) {
+      return;
+    }
+
     try {
+      const token = localStorage.getItem("jwt");
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
         },
         mode: "cors",
         body: JSON.stringify(formData),
