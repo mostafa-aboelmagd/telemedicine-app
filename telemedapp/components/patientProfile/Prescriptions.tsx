@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import userImage from "@/images/user.png";
 import Link from "next/link";
@@ -64,6 +64,19 @@ const Prescriptions = () => {
             status: "pending"
         }
     ];
+    const [prescriptionList, setPrescriptionList] = useState([]);
+    const fetchPrescriptions = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/prescriptionList");
+            const data = await response.json();
+            setPrescriptionList(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        fetchPrescriptions()
+    }, []);
     return (
         <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
             <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
@@ -91,7 +104,7 @@ const Prescriptions = () => {
                     <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-2">
-                    {prescriptions.length > 0 ? prescriptions.map((prescription) => <PrescriptionCard />) : <p className="font-semibold">You don't have any saved prescriptions</p>}
+                    {prescriptionList.length > 0 ? prescriptionList.map((prescription) => <PrescriptionCard prescription={prescription} />) : <p className="font-semibold">You don't have any saved prescriptions</p>}
                 </div>
             </div>
         </div>

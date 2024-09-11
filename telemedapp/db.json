@@ -22,5 +22,232 @@
       "gender": "nan",
       "role": "patient"
     }
+  ],
+  "prescriptionList": [
+    {
+      "id": 1,
+      "doctorName": "Dr. Ahmed",
+      "doctorImage": "/assets/doctorM.jpg",
+      "visitDate": "2021-05-01",
+      "specialty": "Dentist",
+      "medicationList": [
+        {
+          "name": "Panadol",
+          "dose": "1 pill",
+          "frequency": "3 times a day",
+          "start": "2021-05-01",
+          "end": "2021-05-07",
+          "notes": "After meal"
+        },
+        {
+          "name": "Nurofen",
+          "dose": "1 pill",
+          "frequency": "2 times a day",
+          "start": "2021-05-01",
+          "end": "2021-05-07",
+          "notes": "After meal"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "doctorName": "Dr. Sara",
+      "doctorImage": "/assets/doctorF.jpg",
+      "visitDate": "2022-06-15",
+      "specialty": "Cardiologist",
+      "medicationList": [
+        {
+          "name": "Aspirin",
+          "dose": "1 pill",
+          "frequency": "1 time a day",
+          "start": "2022-06-15",
+          "end": "2022-06-30",
+          "notes": "Take in the morning"
+        },
+        {
+          "name": "Lipitor",
+          "dose": "10 mg",
+          "frequency": "1 time a day",
+          "start": "2022-06-15",
+          "end": "2022-06-30",
+          "notes": "Before bed"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "doctorName": "Dr. John",
+      "doctorImage": "/assets/doctorM.jpg",
+      "visitDate": "2023-02-10",
+      "specialty": "Dermatologist",
+      "medicationList": [
+        {
+          "name": "Hydrocortisone Cream",
+          "dose": "Apply thin layer",
+          "frequency": "2 times a day",
+          "start": "2023-02-10",
+          "end": "2023-02-20",
+          "notes": "For affected areas"
+        },
+        {
+          "name": "Cetirizine",
+          "dose": "1 pill",
+          "frequency": "1 time a day",
+          "start": "2023-02-10",
+          "end": "2023-02-17",
+          "notes": "Take before sleep"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "doctorName": "Dr. Emily",
+      "doctorImage": "/assets/doctorF.jpg",
+      "visitDate": "2023-09-05",
+      "specialty": "Neurologist",
+      "medicationList": [
+        {
+          "name": "Gabapentin",
+          "dose": "300 mg",
+          "frequency": "3 times a day",
+          "start": "2023-09-05",
+          "end": "2023-09-19",
+          "notes": "Take with food"
+        },
+        {
+          "name": "Amitriptyline",
+          "dose": "10 mg",
+          "frequency": "1 time a day",
+          "start": "2023-09-05",
+          "end": "2023-09-19",
+          "notes": "Before bedtime"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "doctorName": "Dr. Khalid",
+      "doctorImage": "/assets/doctorM.jpg",
+      "visitDate": "2023-03-22",
+      "specialty": "Orthopedic",
+      "medicationList": [
+        {
+          "name": "Ibuprofen",
+          "dose": "200 mg",
+          "frequency": "3 times a day",
+          "start": "2023-03-22",
+          "end": "2023-03-29",
+          "notes": "Take with water"
+        },
+        {
+          "name": "Calcium",
+          "dose": "500 mg",
+          "frequency": "1 time a day",
+          "start": "2023-03-22",
+          "end": "2023-04-05",
+          "notes": "After breakfast"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "doctorName": "Dr. Fatima",
+      "doctorImage": "/assets/doctorF.jpg",
+      "visitDate": "2023-07-11",
+      "specialty": "Pediatrician",
+      "medicationList": [
+        {
+          "name": "Amoxicillin",
+          "dose": "250 mg",
+          "frequency": "2 times a day",
+          "start": "2023-07-11",
+          "end": "2023-07-18",
+          "notes": "Before meals"
+        },
+        {
+          "name": "Vitamin D",
+          "dose": "400 IU",
+          "frequency": "1 time a day",
+          "start": "2023-07-11",
+          "end": "2023-08-11",
+          "notes": "Take with food"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "doctorName": "Dr. Omar",
+      "doctorImage": "/assets/doctorM.jpg",
+      "visitDate": "2022-11-28",
+      "specialty": "Ophthalmologist",
+      "medicationList": [
+        {
+          "name": "Eye Drops",
+          "dose": "2 drops",
+          "frequency": "3 times a day",
+          "start": "2022-11-28",
+          "end": "2022-12-05",
+          "notes": "Use after waking up"
+        },
+        {
+          "name": "Artificial Tears",
+          "dose": "As needed",
+          "frequency": "4 times a day",
+          "start": "2022-11-28",
+          "end": "2022-12-05",
+          "notes": "Use whenever eyes are dry"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "doctorName": "Dr. Noura",
+      "doctorImage": "/assets/doctorF.jpg",
+      "visitDate": "2023-08-02",
+      "specialty": "Endocrinologist",
+      "medicationList": [
+        {
+          "name": "Metformin",
+          "dose": "500 mg",
+          "frequency": "2 times a day",
+          "start": "2023-08-02",
+          "end": "2023-08-30",
+          "notes": "With meals"
+        },
+        {
+          "name": "Insulin",
+          "dose": "10 units",
+          "frequency": "1 time a day",
+          "start": "2023-08-02",
+          "end": "2023-08-30",
+          "notes": "Inject before bed"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "doctorName": "Dr. Ali",
+      "doctorImage": "/assets/doctorM.jpg",
+      "visitDate": "2023-01-14",
+      "specialty": "Pulmonologist",
+      "medicationList": [
+        {
+          "name": "Salbutamol",
+          "dose": "2 puffs",
+          "frequency": "As needed",
+          "start": "2023-01-14",
+          "end": "2023-01-28",
+          "notes": "Use during asthma attacks"
+        },
+        {
+          "name": "Prednisone",
+          "dose": "5 mg",
+          "frequency": "1 time a day",
+          "start": "2023-01-14",
+          "end": "2023-01-21",
+          "notes": "Take in the morning"
+        }
+      ]
+    }
   ]
 }
