@@ -33,9 +33,11 @@ function ChangePassword() {
 
   const [oldPasswordError, setOldPasswordError] = useState(false);
 
-  const token = localStorage.getItem("jwt");
+  let token: string | null = "";
 
   useEffect(() => {
+    token = localStorage.getItem("jwt");
+
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
       mode: "cors", headers: {
         "Authorization": "Bearer " + token
