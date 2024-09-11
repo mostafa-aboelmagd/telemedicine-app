@@ -47,4 +47,6 @@ class AppConstants {
       '$baseURL/doctor/profile-picture/upload';
   static String doctorAvailability(int doctorId) =>
       '$baseURL/patient/appointment/Availabilities/$doctorId';
+  // static String get submitAppointmentResultEndpoint(int appointmentId) =>
+  //     '$baseURL/doctor/AppointmentResult/$appointmentId/submitresults';
 }

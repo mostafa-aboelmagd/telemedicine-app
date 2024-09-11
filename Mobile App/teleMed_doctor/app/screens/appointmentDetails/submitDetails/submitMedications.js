@@ -13,7 +13,7 @@ const SubmitMedications = ({ navigation }) => {
     const route = useRoute()
     const { report, diagnosis, appointment_id } = route.params
     const [inputs, setInputs] = useState([]);
-    const [updatedInputs , setUpdatedInputs] = useState([])
+    const [medications , setmedications] = useState([])
     const [showPicker, setShowPicker] = useState(false);
     const [currentPicker, setCurrentPicker] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(null);
@@ -28,7 +28,7 @@ const SubmitMedications = ({ navigation }) => {
     };
 
     const furtherDetails = () => {
-        const updatedInputs = inputs.map(inputset => {
+        const medications = inputs.map(inputset => {
             return {
                 ...inputset, // Spread the current object
                 // Check if endDate and startDate are Date objects, if not convert them
@@ -40,14 +40,14 @@ const SubmitMedications = ({ navigation }) => {
                     : new Date(inputset.startDate).toISOString().split('T')[0],
             };
         });
-        setUpdatedInputs(updatedInputs);
-        console.log(updatedInputs);
-        navigation.navigate('furtherDetails', { report, diagnosis, updatedInputs , appointment_id });
+        setmedications(medications);
+        console.log(medications);
+        navigation.navigate('furtherDetails', { report, diagnosis, medications , appointment_id });
     };
 
     const onDateChange = (event, selectedDate) => {
         if (event.type === 'set' && selectedDate) {
-            const updatedInputs = inputs.map((inputSet, index) => {
+            const medications = inputs.map((inputSet, index) => {
                 if (index === currentIndex) {
                     if (currentPicker === 'start') {
                         return { ...inputSet, startDate: selectedDate };
@@ -57,7 +57,7 @@ const SubmitMedications = ({ navigation }) => {
                 }
                 return inputSet;
             });
-            setInputs(updatedInputs);
+            setInputs(medications);
         }
 
         if (Platform.OS === 'android') {
@@ -95,8 +95,8 @@ const SubmitMedications = ({ navigation }) => {
                                 placeholder="Drug name"
                                 value={inputSet.drugName}
                                 onChangeText={(text) => {
-                                    const updatedInputs = inputs.map(item => item.id === inputSet.id ? { ...item, drugName: text } : item);
-                                    setInputs(updatedInputs);
+                                    const medications = inputs.map(item => item.id === inputSet.id ? { ...item, drugName: text } : item);
+                                    setInputs(medications);
                                 }}
                             />
 
@@ -106,8 +106,8 @@ const SubmitMedications = ({ navigation }) => {
                                     placeholder="Dose"
                                     value={inputSet.dose}
                                     onChangeText={(text) => {
-                                        const updatedInputs = inputs.map(item => item.id === inputSet.id ? { ...item, dose: text } : item);
-                                        setInputs(updatedInputs);
+                                        const medications = inputs.map(item => item.id === inputSet.id ? { ...item, dose: text } : item);
+                                        setInputs(medications);
                                     }}
                                 />
                                 <TextInput
@@ -115,8 +115,8 @@ const SubmitMedications = ({ navigation }) => {
                                     placeholder="Note"
                                     value={inputSet.note}
                                     onChangeText={(text) => {
-                                        const updatedInputs = inputs.map(item => item.id === inputSet.id ? { ...item, note: text } : item);
-                                        setInputs(updatedInputs);
+                                        const medications = inputs.map(item => item.id === inputSet.id ? { ...item, note: text } : item);
+                                        setInputs(medications);
                                     }}
                                 />
                             </View>

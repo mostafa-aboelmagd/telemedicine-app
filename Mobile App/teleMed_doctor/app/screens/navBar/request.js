@@ -25,31 +25,31 @@ export default function Request ({ navigation }) {
   const [resquest, setRequest] = useState('')
 
   const response = async (appointmentId, action) => {
-    state.push([appointmentId, action])
-    console.log(state)
     try {
-        const response = fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/AppointmentResponse/${appointmentId}/${action}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${await getToken()}`,
-            }
-        });
-        // Modification
-        console.log(response.status);
-        if (!response.ok) {
-          if(response.status !== 200){
-            throw new Error('Failed to send request');}
-        }
-        //==============================
-        const result = response.json();
-        setRequest(result); // Save the fetched data to state
-        console.log(result)
-    } catch (err) {
-        console.log(err.message)
-    }
+      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/AppointmentResponse/${appointmentId}/${action}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+        },
+      });
+      console.log(response);
 
-  }
+
+      if (!response.ok) {
+        if (response.status !== 200) {
+          throw new Error('Failed to send request');
+        }
+      }
+
+      const result = await response.json();
+      console.log(result); // Handle the response data here (e.g., show a success message)
+    } catch (err) {
+      console.error('Error sending request:', err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -66,7 +66,7 @@ export default function Request ({ navigation }) {
                     'Content-Type': 'application/json',
                   }
               });
-              
+              console.log(result);
               if (!response.ok) {
                   throw new Error('Failed to fetch data');
               }
@@ -85,8 +85,8 @@ export default function Request ({ navigation }) {
 return (
     <SafeArea>
       <CustomScroll>
-      <View style={{alignItems: 'center'}}>      
-        <CustomTitle titleStyle={{marginTop: '10%'}}>Requests</CustomTitle>
+        <View style={{alignItems: 'center'}}>      
+          <CustomTitle titleStyle={{marginTop: '10%'}}>Requests</CustomTitle>
 
         {!loading ? (data ? data.map((item, id) => 
         <View key={id}>
@@ -112,16 +112,16 @@ return (
           </View>
 
           <View style={{flexDirection: 'row'}}>
-            <Custombutton 
-            buttonStyle={[styles.button, {backgroundColor: 'green'}]}
-            textStyle={{fontSize: 15}}
-            onPress={() => response(item.appointment_availability_slot, 'accept')}>
+          <Custombutton
+                      buttonStyle={[styles.button, { backgroundColor: 'green' }]}
+                      textStyle={{ fontSize: 15 }}
+                      onPress={() => response(item.appointment_id, 'accept')}>
               Accept
             </Custombutton>
-            <Custombutton 
-            buttonStyle={[styles.button, {backgroundColor: 'red'}]}
-            textStyle={{fontSize: 15}}
-            onPress={() => response(item.appointment_availability_slot, 'decline')}>
+            <Custombutton
+                      buttonStyle={[styles.button, { backgroundColor: 'red' }]}
+                      textStyle={{ fontSize: 15 }}
+                      onPress={() => response(item.appointment_id, 'decline')}>
               Decline
             </Custombutton>
             <Custombutton
