@@ -67,11 +67,6 @@ function SignInForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const requestBody = {
-      email: formData.email,
-      password: formData.password,
-    };
-
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/login`, {
         method: "POST",
@@ -82,9 +77,6 @@ function SignInForm() {
         body: JSON.stringify(formData),
       }
       );
-
-      const textResponse = await response.text();
-      console.log("Response body:", textResponse);
 
       if (!response.ok) {
         console.log("error in response");
