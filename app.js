@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const userLoginRoute = require('./Routes/Login');
 const patientRegisterRoute = require('./Routes/Patient/Register');
 const patienProfileRoute = require('./Routes/Patient/Profile');
@@ -18,6 +20,24 @@ const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Dele
 const doctorEditAvailabilityRoute = require('./Routes/Doctor/Availability/edit');
 const port = process.env.PORT || 4000;
 const app = express();
+
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API',
+      version: '1.0.0',
+      description: 'API documentation for my Express server.'
+    }
+  },
+  apis: ['./routes/**/*.js', './controllers/**/*.js', './swagger.json'], 
+};
+
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(cors({
   origin: '*',
