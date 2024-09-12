@@ -8,12 +8,12 @@ const getPrescription = async (req, res) => {
 
   try {
     
-    const row_prescription = await MedicalHistory.retrievePrescription(patientId);
-    const prescription = mapPrescriptionData(row_prescription);
+    const raw_prescription = await MedicalHistory.retrievePrescription(patientId);
+    const prescription = mapPrescriptionData(raw_prescription);
     if (!prescription) {
       return res.status(404).json({ message: 'No prescription found for this patient' });
     }
-    return res.json(prescription);
+    return res.json(prescription );
   } catch (error) {
     console.error(error.stack);
     return res.status(500).json({ message: 'Internal server error' });

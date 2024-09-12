@@ -73,17 +73,17 @@ const validatePrescriptionData = (medicationData) => {
   function mapPrescriptionData(prescriptionData) {
     return prescriptionData.map(prescription => ({
       mid: prescription.prescription_id,
-      doctorName: `${prescription.user_first_name} ${prescription.user_last_name}`,
+      doctorName: prescription.doctor_name, // Use empty strings if names are missing
       doctorImage: "/assets/doctorM.jpg", // Replace with actual image URL
-      visitDate: new Date(prescription.prescriptions_appointment_id).toISOString().slice(0, 10),
-      specialty: prescription.doctor_specialization,
+      visitDate: prescription.doctor_availability_day_hour , // Set null for missing appointment ID
+      specialty: prescription.doctor_specialization || null, // Set null for missing specialization
       medicationList: prescription.medications.map(medication => ({
         id: medication.prescription_medication_reference_id,
         name: medication.prescription_medication_name,
         dose: medication.prescription_medications_dosage,
-        frequency: medication.prescription_medications_dosage.split(' ')[1],
-        start: new Date(prescription.created_at).toISOString().slice(0, 10),
-        end: medication.prescription_medications_end_date || null
+        frequency: medication.prescription_medications_dosage,
+        start: medication.prescription_medications_end_date,
+        end: medication.prescription_medications_end_date
       }))
     }));
   }
