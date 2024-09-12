@@ -29,7 +29,7 @@ const login = async (req, res) => {
         message = 'Token could not be created';
         return res.status(400).json(message);
     }
-    res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS });
+    res.setHeader('Authorization', `Bearer ${token}`);
     return res.json({ message: 'Login successful', token: token });
 }
 

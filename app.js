@@ -11,6 +11,8 @@ const patientAddPrescriptionRoute = require('./Routes/Patient/MedicalHistory/add
 const patientDeletePrescriptionRoute= require('./Routes/Patient/MedicalHistory/deletePrescription');
 const patientViewPrescriptionRoute= require('./Routes/Patient/MedicalHistory/viewPrescription');
 const patientUploadMedicalDocumentRoute = require('./Routes/Patient/Medical Document/Upload');
+const patientViewMedicalDocumentRoute = require('./Routes/Patient/Medical Document/View');
+const patientDeleteMedicalDocumentRoute = require('./Routes/Patient/Medical Document/Delete');
 const doctorProfileRoute = require('./Routes/Doctor/Profile');
 const doctorEditRoute = require('./Routes/Doctor/Edit');
 const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/add');
@@ -22,7 +24,7 @@ const app = express();
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'multipart/form-data'],
   credentials: true
 }));
 app.use(express.json()); 
@@ -40,6 +42,8 @@ app.use('/patient/prescription/add',patientAddPrescriptionRoute);
 app.use('/patient/prescription/view',patientViewPrescriptionRoute);
 app.use('/patient/prescription/delete',patientDeletePrescriptionRoute);
 app.use('/patient/medical-document/upload', patientUploadMedicalDocumentRoute);
+app.use('/patient/medical-document/view', patientViewMedicalDocumentRoute);
+app.use('/patient/medical-document/delete', patientDeleteMedicalDocumentRoute);
 app.use('/doctor/edit', doctorEditRoute);
 app.use('/doctor/profile', doctorProfileRoute);
 app.use('/doctor/availability/add', doctorAddAvailabilityRoute);
