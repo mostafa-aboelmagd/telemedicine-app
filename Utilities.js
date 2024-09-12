@@ -68,4 +68,25 @@ const validatePrescriptionData = (medicationData) => {
     return true;
   };
 
-module.exports = { passwordValidation, splitAndToLower, createToken, createAppointmentToken, dateValidation,validatePrescriptionData};
+
+
+  function mapPrescriptionData(prescriptionData) {
+    return prescriptionData.map(prescription => ({
+      mid: prescription.prescription_id,
+      doctorName: prescription.doctor_name, // Use empty strings if names are missing
+      doctorImage: "/assets/doctorM.jpg", // Replace with actual image URL
+      visitDate: prescription.doctor_availability_day_hour , // Set null for missing appointment ID
+      specialty: prescription.doctor_specialization || null, // Set null for missing specialization
+      medicationList: prescription.medications.map(medication => ({
+        id: medication.prescription_medication_reference_id,
+        name: medication.prescription_medication_name,
+        dose: medication.prescription_medications_dosage,
+        frequency: medication.prescription_medications_dosage,
+        start: medication.prescription_medications_end_date,
+        end: medication.prescription_medications_end_date
+      }))
+    }));
+  }
+
+
+module.exports = { passwordValidation, splitAndToLower, createToken, createAppointmentToken, dateValidation,validatePrescriptionData,mapPrescriptionData};

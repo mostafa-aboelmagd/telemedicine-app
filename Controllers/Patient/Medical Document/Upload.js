@@ -1,31 +1,36 @@
 const database = require('../../../Database/Patient/Medical Document/Upload');
 const multer = require('multer');
-const storage = multer.memoryStorage();
-const uploadMiddleware = multer({ storage: storage }).array('files');
+const uploadMiddleware = multer({ storage: multer.memoryStorage() }).array('files');
 
 const upload = async (req, res) => {
+    const patientId = req.id;
+    if (!patientId) {
+        return res.status(401).json();
+    }
     uploadMiddleware(req, res, async (err) => {
         if (err) {
-            return res.status(500).json({ message: 'File upload failed', error: err.message });
+            return res.status(400).json({ message: 'File upload failed', error: err.message });
         }
 
         if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ message: 'No files uploaded' });
+            return res.status(404).json({ message: 'No files uploaded' });
         }
-
+        const uploadedFiles = req.files;
+        const insertedFiles = [];
         try {
-            for (const file of req.files) {
-                const fileName = file.originalname;
-                const fileType = file.mimetype;
-                const fileData = file.buffer;
-
-                await database.saveFile(fileName, fileType, fileData);
+            for (const file of uploadedFiles) {
+                const fileFlag = await database.insertFile(patientId, file.originalname, file.mimetype, file.buffer);
+                if (fileFlag) {
+                    insertedFiles.push(fileFlag);
+                }
             }
-
-            return res.status(200).json({ message: 'Files uploaded and stored successfully' });
+            if (!insertedFiles.length) {
+                return res.status(400).json({ message: 'No files are inserted in the database' });
+            }
+            return res.status(200).json({ message: `Successfully uploaded ${insertedFiles.length} files from ${uploadedFiles.length}`, files: insertedFiles });
         } catch (error) {
             console.error('Error processing files:', error);
-            return res.status(500).json({ message: 'Internal server error' });
+            return res.status(400).json({ message: 'Failed to insert files into the database' });
         }
     });
 };
