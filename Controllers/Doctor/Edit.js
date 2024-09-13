@@ -14,11 +14,10 @@ const editInfo = async (req, res) => {
         message = 'Doctor email not found';
         return res.status(404).json(message);
     }
-    const { firstName, lastName, email, gender, phone, birthYear, residenceCountry, sixtyMinPrice, thirtyMinPrice, specialization, languages } = req.body;
+    const { firstName, lastName, gender, phone, birthYear, residenceCountry, sixtyMinPrice, thirtyMinPrice, specialization, languages } = req.body;
     const updatedInfo = {
         user_first_name: firstName,
         user_last_name: lastName,
-        user_email: email,
         user_gender: gender,
         user_phone_number: phone,
         user_birth_year: birthYear,
@@ -28,13 +27,6 @@ const editInfo = async (req, res) => {
         doctor_specialization: specialization,
         languages: languages
     };
-    if (email) {
-        const emailFlag = database.checkUserEmail(email);
-        if (emailFlag) {
-            message = 'Email already exists';
-            return res.status(400).json(message);
-        }
-    }
     const doctor = await database.updateInfo(doctorId, doctorEmail, updatedInfo);
     if (!doctor) {
         message = 'Could not update doctor info';

@@ -8,6 +8,5 @@ router.get('/info', tokenAuthentication, patientProfileController.patientInfo);
 router.get('/appointments', tokenAuthentication, patientProfileController.patientAppointments);
 router.get('/doctors', tokenAuthentication, patientProfileController.patientDoctors);
 router.get('/reviews', tokenAuthentication, patientProfileController.patientReviews);
-router.get('/languages', tokenAuthentication, patientProfileController.patientLanguages);
 
 module.exports = router;

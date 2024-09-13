@@ -24,6 +24,7 @@ const doctorInfo = async (req, res) => {
         gender: doctor[0].user_gender,
         phone: doctor[0].user_phone_number,
         birthYear: doctor[0].user_birth_year,
+        image: doctor[0].doctor_image,
         residenceCountry: doctor[0].doctor_country,
         sixtyMinPrice: doctor[0].doctor_sixty_min_price,
         thirtyMinPrice: doctor[0].doctor_thirty_min_price,

@@ -29,21 +29,6 @@ const pool = new pg.Pool({
     }
 })();
 
-const checkUserEmail = async (email) => {
-    try {
-        const result = await pool.query('SELECT * FROM users WHERE user_email = $1 AND user_role = $2', [email, 'Doctor']);
-        if (result.rows.length) {
-            console.log('User already exists', result.rows);
-            return result.rows;
-        }
-        console.log('No user found');
-        return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
-
 const updateInfo = async (doctorId, doctorEmail, updates) => {
     const client = await pool.connect();
     try {
@@ -151,27 +136,5 @@ const updatePassword = async (doctorId, doctorEmail, oldPassword, newPassword) =
     }
 };
 
-
-const updateAvailability = async (doctorId, availabilityDay, availabilityHour, availabilityId) => {
-    try {
-        const doctor = await pool.query('SELECT * FROM doctor WHERE doctor_user_id_reference = $1', [doctorId]);
-        if (doctor.rows.length) {
-            const result = await pool.query('UPDATE doctor_availability SET doctor_availability_day = $1, doctor_availability_hour = $2 WHERE doctor_availability_doctor_id = $3 AND doctor_availability_id = $4 RETURNING *', [availabilityDay, availabilityHour, doctor.rows[0].doctor_user_id_reference, availabilityId]);
-            if (result.rows.length) {
-                console.log('Doctor availability updated', result.rows);
-                return result.rows;
-            }
-            console.log('Doctor availability does not exist');
-            return false;
-        }
-        console.log('Doctor user id not found');
-        return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
-
-
-module.exports = { updateInfo, updatePassword, updateAvailability, checkUserEmail };
+module.exports = { updateInfo, updatePassword };
 

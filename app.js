@@ -8,7 +8,7 @@ const userLogoutRoute = require('./Routes/Logout');
 const patientRegisterRoute = require('./Routes/Patient/Register');
 const patienProfileRoute = require('./Routes/Patient/Profile');
 const patientEditRoute = require('./Routes/Patient/Edit');
-const patientAppointmentBookRoute = require('./Routes/Patient/Appointment/Book');
+const patientAppointmentBookRoute = require('./Routes/Patient/Appointment/book');
 const patientHomeRoute = require('./Routes/Patient/Home');
 const patientAddPrescriptionRoute = require('./Routes/Patient/MedicalHistory/addPrescription');
 const patientDeletePrescriptionRoute= require('./Routes/Patient/MedicalHistory/deletePrescription');
@@ -20,7 +20,6 @@ const doctorProfileRoute = require('./Routes/Doctor/Profile');
 const doctorEditRoute = require('./Routes/Doctor/Edit');
 const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/add');
 const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Delete');
-const doctorEditAvailabilityRoute = require('./Routes/Doctor/Availability/edit');
 const port = process.env.PORT || 4000;
 const app = express();
 
@@ -70,7 +69,6 @@ app.use('/doctor/edit', doctorEditRoute);
 app.use('/doctor/profile', doctorProfileRoute);
 app.use('/doctor/availability/add', doctorAddAvailabilityRoute);
 app.use('/doctor/availability/delete', doctorDeleteAvailabilityRoute);
-app.use('/doctor/availability/edit', doctorEditAvailabilityRoute);
 
 
 

@@ -60,30 +60,30 @@ const updateInfo = async (patientId, patientEmail, updates) => {
         }
         console.log('User info updated', updatedUserInfo.rows);
 
-        if (!updates.languages.length) {
-            console.log('No languages provided');
-            return false;
-        }
-        if(updates.languages[0] !== null && updates.languages[0] !== undefined && updates.languages[0] !== '') {
-            const deletedLanguages = await pool.query('DELETE FROM languages WHERE lang_user_id = $1 RETURNING *', [patientId]);
-            if (!deletedLanguages.rows.length) {
-                await client.query('ROLLBACK');
-                console.log('Could not delete languages', deletedLanguages.rows);
-                return false;
-            }
-            for (const language of updates.languages) {
-                if(language !== '' && language !== null && language !== undefined){
-                    const updatedLanguage = await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2) RETURNING *', [patientId, language]);
-                    if (!updatedLanguage.rows.length) {
-                        await client.query('ROLLBACK');
-                        console.log('Could not update languages', updatedLanguage.rows);
-                        return false;
-                    }
-                    console.log('Languages updated', updatedLanguage);
+        if (updates.languages.length) {
+            if(updates.languages[0] !== null && updates.languages[0] !== undefined && updates.languages[0] !== '') {
+                const deletedLanguages = await pool.query('DELETE FROM languages WHERE lang_user_id = $1 RETURNING *', [patientId]);
+                if (!deletedLanguages.rows.length) {
+                    await client.query('ROLLBACK');
+                    console.log('Could not delete languages', deletedLanguages.rows);
+                    return false;
                 }
+                for (const language of updates.languages) {
+                    if(language !== '' && language !== null && language !== undefined){
+                        const updatedLanguage = await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2) RETURNING *', [patientId, language]);
+                        if (!updatedLanguage.rows.length) {
+                            await client.query('ROLLBACK');
+                            console.log('Could not update languages', updatedLanguage.rows);
+                            return false;
+                        }
+                        console.log('Languages updated', updatedLanguage);
+                    }
+                }
+                console.log('Invalid languages provided');
             }
+            console.log('No languages provided');
         }
-
+    
         const combinedQuery = `
             SELECT 
                 u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year,
