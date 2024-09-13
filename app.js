@@ -4,6 +4,7 @@ require('dotenv').config();
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const userLoginRoute = require('./Routes/Login');
+const userLogoutRoute = require('./Routes/Logout');
 const patientRegisterRoute = require('./Routes/Patient/Register');
 const patienProfileRoute = require('./Routes/Patient/Profile');
 const patientEditRoute = require('./Routes/Patient/Edit');
@@ -53,6 +54,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 app.use('/login', userLoginRoute);
+app.use('/logout', userLogoutRoute);
 app.use('/patient/register', patientRegisterRoute);
 app.use('/patient/profile', patienProfileRoute);
 app.use('/patient/edit', patientEditRoute);
