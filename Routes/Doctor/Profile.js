@@ -12,7 +12,5 @@ router.get('/experience', tokenAuthentication, doctorProfileController.doctorExp
 router.get('/education', tokenAuthentication, doctorProfileController.doctorEducation);
 router.get('/reviews', tokenAuthentication, doctorProfileController.doctorReviews);
 router.get('/interests', tokenAuthentication, doctorProfileController.doctorInterests);
-router.get('/languages', tokenAuthentication, doctorProfileController.doctorLanguages);
-
 
 module.exports = router;

@@ -126,29 +126,4 @@ const retrievePatientReviews = async (id, email) => {
     }
 };
 
-const retrievePatientLanguages = async (id, email) => {
-    try {
-    const query = 
-    `SELECT 
-    U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
-    P.*,
-    L.*
-    FROM patient P
-    LEFT JOIN users U ON P.patient_user_id_reference = U.user_id
-    LEFT JOIN languages L ON P.patient_user_id_reference = L.lang_user_id
-    WHERE P.patient_user_id_reference = $1 AND U.user_email = $2 AND U.user_role = $3`;
-
-    const result = await pool.query(query, [id, email, 'Patient']);
-    if (result.rows.length) {
-        console.log('Patient languages found', result.rows);
-        return result.rows;
-    }
-    console.log('Patient languages not found');
-    return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
-
-module.exports = { retrievePatientInfo, retrievePatientAppointments, retrievePatientDoctors, retrievePatientReviews, retrievePatientLanguages };
+module.exports = { retrievePatientInfo, retrievePatientAppointments, retrievePatientDoctors, retrievePatientReviews };

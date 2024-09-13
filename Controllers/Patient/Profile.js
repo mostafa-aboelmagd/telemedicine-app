@@ -91,24 +91,4 @@ const patientReviews = async (req, res) => {
     return res.json(reviews);
 };
 
-const patientLanguages = async (req, res) => {
-    const patientUserId = req.id;
-    const patientEmail = req.email;
-    let message = '';
-    if (!patientUserId) {
-        message = 'Patient ID not found';
-        return res.status(404).json(message);
-    }
-    if (!patientEmail) {
-        message = 'Patient email not found';
-        return res.status(404).json(message);
-    }
-    const languages = await database.retrievePatientLanguages(patientUserId, patientEmail);
-    if (!languages) {
-        message = 'Could not retrieve patient languages';
-        return res.status(400).json(message);
-    }
-    return res.json(languages);
-}
-
-module.exports = { patientInfo, patientAppointments, patientDoctors, patientReviews, patientLanguages };
+module.exports = { patientInfo, patientAppointments, patientDoctors, patientReviews };

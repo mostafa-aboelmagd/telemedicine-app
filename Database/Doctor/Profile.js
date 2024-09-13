@@ -32,7 +32,7 @@ const retrieveDoctorInfo = async (id, email) => {
         const query = `            
             SELECT 
                 u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year,
-                d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization,
+                d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization, doctor_image,
                 array_agg(l.language) AS languages
             FROM 
                 users u
@@ -43,7 +43,7 @@ const retrieveDoctorInfo = async (id, email) => {
             WHERE 
                 u.user_id = $1 AND u.user_role = $2 AND u.user_email = $3
             GROUP BY 
-                u.user_id, d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization`;
+                u.user_id, d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization, doctor_image`;
 
     const result = await pool.query(query, [id, 'Doctor', email]);
         if (result.rows.length) {

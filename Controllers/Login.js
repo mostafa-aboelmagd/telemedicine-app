@@ -86,7 +86,7 @@ const login = async (req, res) => {
         return res.status(400).json(message);
     }
     res.setHeader('Authorization', `Bearer ${token}`);
-    return res.json({ message: 'Login successful', token: token });
+    return res.json({ message: 'Login successful' });
 }
 
 module.exports = { login };
