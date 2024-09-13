@@ -45,7 +45,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'multipart/form-data'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'multipart/form-data',"Access-Control-Allow-Origin","Access-Control-Allow-Headers","Access-Control-Allow-Methods","Access-Control-Allow-Credentials"],
   credentials: true
 }));
 app.use(express.json()); 
