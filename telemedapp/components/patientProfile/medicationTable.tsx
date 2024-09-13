@@ -1,4 +1,3 @@
-import { table } from 'console'
 import React from 'react'
 
 const MedicationTable = ({ medicationList }: { medicationList: any[] }) => {
@@ -16,7 +15,7 @@ const MedicationTable = ({ medicationList }: { medicationList: any[] }) => {
             </thead>
             <tbody className='border'>
                 {medicationList.map((medication) => (
-                    <tr className='border text-center' key={medication.id}>
+                    <tr className='border text-center' key={medication.mid}>
                         <td className='border p-2'>{medication.name}</td>
                         <td className='border p-2'>{medication.dose}</td>
                         <td className='border p-2'>{medication.frequency}</td>

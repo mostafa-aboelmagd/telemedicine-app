@@ -32,7 +32,7 @@
       "specialty": "Dentist",
       "medicationList": [
         {
-          "id": 1,
+          "mid": 1,
           "name": "Panadol",
           "dose": "1 pill",
           "frequency": "3 times a day",
@@ -41,7 +41,7 @@
           "notes": "After meal"
         },
         {
-          "id": 2,
+          "mid": 2,
           "name": "Nurofen",
           "dose": "1 pill",
           "frequency": "2 times a day",
@@ -59,7 +59,7 @@
       "specialty": "Cardiologist",
       "medicationList": [
         {
-          "id": 1,
+          "mid": 1,
           "name": "Aspirin",
           "dose": "1 pill",
           "frequency": "1 time a day",
@@ -68,7 +68,79 @@
           "notes": "Take in the morning"
         },
         {
-          "id": 2,
+          "mid": 2,
+          "name": "Lipitor",
+          "dose": "10 mg",
+          "frequency": "1 time a day",
+          "start": "2022-06-15",
+          "end": "2022-06-30",
+          "notes": "Before bed"
+        },
+        {
+          "mid": 1,
+          "name": "Aspirin",
+          "dose": "1 pill",
+          "frequency": "1 time a day",
+          "start": "2022-06-15",
+          "end": "2022-06-30",
+          "notes": "Take in the morning"
+        },
+        {
+          "mid": 2,
+          "name": "Lipitor",
+          "dose": "10 mg",
+          "frequency": "1 time a day",
+          "start": "2022-06-15",
+          "end": "2022-06-30",
+          "notes": "Before bed"
+        },
+        {
+          "mid": 1,
+          "name": "Aspirin",
+          "dose": "1 pill",
+          "frequency": "1 time a day",
+          "start": "2022-06-15",
+          "end": "2022-06-30",
+          "notes": "Take in the morning"
+        },
+        {
+          "mid": 2,
+          "name": "Lipitor",
+          "dose": "10 mg",
+          "frequency": "1 time a day",
+          "start": "2022-06-15",
+          "end": "2022-06-30",
+          "notes": "Before bed"
+        },
+        {
+          "mid": 1,
+          "name": "Aspirin",
+          "dose": "1 pill",
+          "frequency": "1 time a day",
+          "start": "2022-06-15",
+          "end": "2022-06-30",
+          "notes": "Take in the morning"
+        },
+        {
+          "mid": 2,
+          "name": "Lipitor",
+          "dose": "10 mg",
+          "frequency": "1 time a day",
+          "start": "2022-06-15",
+          "end": "2022-06-30",
+          "notes": "Before bed"
+        },
+        {
+          "mid": 1,
+          "name": "Aspirin",
+          "dose": "1 pill",
+          "frequency": "1 time a day",
+          "start": "2022-06-15",
+          "end": "2022-06-30",
+          "notes": "Take in the morning"
+        },
+        {
+          "mid": 2,
           "name": "Lipitor",
           "dose": "10 mg",
           "frequency": "1 time a day",
@@ -86,7 +158,7 @@
       "specialty": "Dermatologist",
       "medicationList": [
         {
-          "id": 1,
+          "mid": 1,
           "name": "Hydrocortisone Cream",
           "dose": "Apply thin layer",
           "frequency": "2 times a day",
@@ -95,7 +167,7 @@
           "notes": "For affected areas"
         },
         {
-          "id": 2,
+          "mid": 2,
           "name": "Cetirizine",
           "dose": "1 pill",
           "frequency": "1 time a day",
@@ -113,7 +185,7 @@
       "specialty": "Neurologist",
       "medicationList": [
         {
-          "id": 1,
+          "mid": 1,
           "name": "Gabapentin",
           "dose": "300 mg",
           "frequency": "3 times a day",
@@ -122,7 +194,7 @@
           "notes": "Take with food"
         },
         {
-          "id": 2,
+          "mid": 2,
           "name": "Amitriptyline",
           "dose": "10 mg",
           "frequency": "1 time a day",
@@ -140,7 +212,7 @@
       "specialty": "Orthopedic",
       "medicationList": [
         {
-          "id": 1,
+          "mid": 1,
           "name": "Ibuprofen",
           "dose": "200 mg",
           "frequency": "3 times a day",
@@ -149,7 +221,7 @@
           "notes": "Take with water"
         },
         {
-          "id": 2,
+          "mid": 2,
           "name": "Calcium",
           "dose": "500 mg",
           "frequency": "1 time a day",
@@ -167,7 +239,7 @@
       "specialty": "Pediatrician",
       "medicationList": [
         {
-          "id": 1,
+          "mid": 1,
           "name": "Amoxicillin",
           "dose": "250 mg",
           "frequency": "2 times a day",
@@ -176,7 +248,7 @@
           "notes": "Before meals"
         },
         {
-          "id": 2,
+          "mid": 2,
           "name": "Vitamin D",
           "dose": "400 IU",
           "frequency": "1 time a day",
@@ -194,7 +266,7 @@
       "specialty": "Ophthalmologist",
       "medicationList": [
         {
-          "id": 1,
+          "mid": 1,
           "name": "Eye Drops",
           "dose": "2 drops",
           "frequency": "3 times a day",
@@ -203,7 +275,7 @@
           "notes": "Use after waking up"
         },
         {
-          "id": 2,
+          "mid": 2,
           "name": "Artificial Tears",
           "dose": "As needed",
           "frequency": "4 times a day",
@@ -221,7 +293,7 @@
       "specialty": "Endocrinologist",
       "medicationList": [
         {
-          "id": 1,
+          "mid": 1,
           "name": "Metformin",
           "dose": "500 mg",
           "frequency": "2 times a day",
@@ -230,7 +302,7 @@
           "notes": "With meals"
         },
         {
-          "id": 2,
+          "mid": 2,
           "name": "Insulin",
           "dose": "10 units",
           "frequency": "1 time a day",
@@ -248,7 +320,7 @@
       "specialty": "Pulmonologist",
       "medicationList": [
         {
-          "id": 1,
+          "mid": 1,
           "name": "Salbutamol",
           "dose": "2 puffs",
           "frequency": "As needed",
@@ -257,7 +329,7 @@
           "notes": "Use during asthma attacks"
         },
         {
-          "id": 2,
+          "mid": 2,
           "name": "Prednisone",
           "dose": "5 mg",
           "frequency": "1 time a day",
@@ -266,6 +338,98 @@
           "notes": "Take in the morning"
         }
       ]
+    }
+  ],
+  "documents": [
+    {
+      "id": 1,
+      "pid": "a417",
+      "type": "pdf",
+      "name": "Blood Test Report",
+      "data": "bytea data here",
+      "url": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+      "created_at": "2024-09-13T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "pid": "a417",
+      "type": "image",
+      "name": "MRI Scan",
+      "data": "bytea data here",
+      "url": "https://i.imgur.com/q50xZiS.jpeg",
+      "created_at": "2024-09-13T11:00:00Z"
+    },
+    {
+      "id": 3,
+      "pid": "a417",
+      "type": "pdf",
+      "name": "Prescription",
+      "data": "bytea data here",
+      "url": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+      "created_at": "2024-09-12T15:30:00Z"
+    },
+    {
+      "id": 4,
+      "pid": "a417",
+      "type": "link",
+      "name": "Health Link",
+      "data": "bytea data here",
+      "url": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+      "created_at": "2024-09-12T09:00:00Z"
+    },
+    {
+      "id": 5,
+      "pid": "2772",
+      "type": "image",
+      "name": "X-Ray",
+      "data": "bytea data here",
+      "url": "https://i.imgur.com/q50xZiS.jpeg",
+      "created_at": "2024-09-11T14:00:00Z"
+    },
+    {
+      "id": 6,
+      "pid": "2772",
+      "type": "pdf",
+      "name": "Health Report",
+      "data": "bytea data here",
+      "url": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+      "created_at": "2024-09-11T10:45:00Z"
+    },
+    {
+      "id": 7,
+      "pid": "2772",
+      "type": "pdf",
+      "name": "Prescription 2",
+      "data": "bytea data here",
+      "url": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+      "created_at": "2024-09-10T12:00:00Z"
+    },
+    {
+      "id": 8,
+      "pid": "a417",
+      "type": "pdf",
+      "name": "General Checkup",
+      "data": "bytea data here",
+      "url": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+      "created_at": "2024-09-09T08:00:00Z"
+    },
+    {
+      "id": 9,
+      "pid": "2772",
+      "type": "image",
+      "name": "Ultrasound",
+      "data": "bytea data here",
+      "url": "https://i.imgur.com/q50xZiS.jpeg",
+      "created_at": "2024-09-08T13:30:00Z"
+    },
+    {
+      "id": 10,
+      "pid": "a417",
+      "type": "pdf",
+      "name": "Surgery Report",
+      "data": "bytea data here",
+      "url": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+      "created_at": "2024-09-07T16:15:00Z"
     }
   ]
 }

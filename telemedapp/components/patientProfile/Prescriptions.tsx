@@ -7,6 +7,7 @@ import PrescriptionCard from "./prescriptionCard";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
 import MedicationTable from './medicationTable';
+import { MdDownload } from "react-icons/md";
 const Prescriptions = () => {
     const [openModal, setOpenModal] = useState(false);
     const [openPrescription, setOpenPrescription] = useState<any>({});
@@ -14,7 +15,9 @@ const Prescriptions = () => {
         setOpenModal(!openModal);
         setOpenPrescription(prescriptionList.find((prescription) => prescription.id === id));
     }
+    const handleDownloadPrescription = () => {
 
+    }
     const handlePrevPrescription = () => {
         const currentIndex = prescriptionList.findIndex((prescription) => prescription.id === openPrescription.id);
         if (currentIndex > 0) {
@@ -37,7 +40,8 @@ const Prescriptions = () => {
         try {
             const response = await fetch("http://localhost:3000/prescriptionList");
             const data = await response.json();
-            setPrescriptionList(data);
+            const orderedData = data.sort((a: any, b: any) => new Date(b.visitDate).getTime() - new Date(a.visitDate).getTime());
+            setPrescriptionList(orderedData);
         } catch (error) {
             console.log(error);
         }
@@ -84,7 +88,10 @@ const Prescriptions = () => {
                             <div className='text-[#035fe9] font-bold text-xl'>Prescription List</div>
                             <div><MdOutlineNavigateNext onClick={() => handleNextPrescription()} className='text-[#035fe9] w-10 h-10 cursor-pointer p-2 rounded-full bg-white hover:bg-gray-100' /></div>
                         </div>
-                        <div className='space-y-4 px-4'><MedicationTable medicationList={openPrescription.medicationList} /></div>
+                        <div className='grow space-y-4 px-4 overflow-x-auto'><MedicationTable medicationList={openPrescription.medicationList} /></div>
+                        <div className='flex justify-end'>
+                            <button onClick={handleDownloadPrescription} className='text-white rounded-full px-4 py-2 bg-[#035fe9] flex items-center space-x-4 m-4'><span>Download pdf</span> <MdDownload /></button>
+                        </div>
                     </div>
                 </aside>
             ) : null}
