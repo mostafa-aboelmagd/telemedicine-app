@@ -3,4 +3,6 @@ const { tokenAuthentication } = require('../../../Middleware/User/Authentication
 const express = require('express');
 const router = express.Router();
 
-router.put('/', tokenAuthentication, doctorProfilePictureUploadController.upload);
+router.put('', tokenAuthentication, doctorProfilePictureUploadController.upload);
+
+module.exports = router;

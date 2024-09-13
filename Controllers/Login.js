@@ -86,6 +86,7 @@ const login = async (req, res) => {
         return res.status(400).json(message);
     }
     res.setHeader('Authorization', `Bearer ${token}`);
+    console.log('Token created:', token);
     return res.json({ message: 'Login successful' });
 }
 

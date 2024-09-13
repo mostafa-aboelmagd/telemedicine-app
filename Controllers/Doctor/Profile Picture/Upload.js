@@ -15,7 +15,8 @@ const upload = async (req, res) => {
         if (!req.file) {
             return res.status(404).json({ message: 'No file uploaded' });
         }
-        if (req.file.mimetype !== 'image/jpeg' || req.file.mimetype !== 'image/png') {
+        console.log('Uploaded file type:', req.file.mimetype);
+        if (req.file.mimetype !== 'image/jpeg' && req.file.mimetype !== 'image/png') {
             return res.status(400).json({ message: 'Invalid file type. Please upload an image file' });
         }
         try {

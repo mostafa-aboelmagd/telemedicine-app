@@ -27,7 +27,7 @@ const pool = new pg.Pool({
 })();
 
 const updateFile = async (doctorId, fileData) => {
-    const query = 'UPDATE doctor SET doctor_image = $1 WHERE doctor_user_id_reference  = $2 RETURNING *';
+    const query = 'UPDATE doctor SET doctor_image = $2 WHERE doctor_user_id_reference  = $1 RETURNING *';
     const values = [doctorId, fileData];
     try {
         const result = await pool.query(query, values);
