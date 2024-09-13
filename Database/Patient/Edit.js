@@ -29,26 +29,9 @@ const pool = new pg.Pool({
     }
 })();
 
-const checkUserEmail = async (email) => {
-    try {
-        const result = await pool.query('SELECT * FROM users WHERE user_email = $1 AND user_role = $2', [email, 'Patient']);
-        if (result.rows.length) {
-            console.log('User already exists', result.rows);
-            return result.rows;
-        }
-        console.log('No user found');
-        return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
-
 const updateInfo = async (patientId, patientEmail, updates) => {
     const client = await pool.connect();
     try {
-        await client.query('BEGIN');
-
         const userFields = [];
         const userValues = [];
         let userIndex = 1;
@@ -63,21 +46,40 @@ const updateInfo = async (patientId, patientEmail, updates) => {
             }
         }
 
-        if (userFields.length > 0) {
-            userValues.push(patientId, 'Patient', patientEmail);
-            const userQuery = `UPDATE users SET ${userFields.join(', ')} WHERE user_id = $${userIndex} AND user_role = $${userIndex + 1} AND user_email = $${userIndex + 2} RETURNING *`;
-            const updatedUserInfo = await client.query(userQuery, userValues);
-            console.log('User info updated', updatedUserInfo.rows);
+        if (!userFields.length) {
+            console.log('No updates provided');
+            return false;
         }
+        userValues.push(patientId, 'Patient', patientEmail);
+        const userQuery = `UPDATE users SET ${userFields.join(', ')} WHERE user_id = $${userIndex} AND user_role = $${userIndex + 1} AND user_email = $${userIndex + 2} RETURNING *`;
+        const updatedUserInfo = await pool.query(userQuery, userValues);
+        if (!updatedUserInfo.rows.length) {
+            await pool.query('ROLLBACK');
+            console.log('Could not update user info');
+            return false;
+        }
+        console.log('User info updated', updatedUserInfo.rows);
 
-        if (updates.languages.length > 0) {
-            if(updates.languages[0] !== null && updates.languages[0] !== undefined && updates.languages[0] !== '') {
-                await client.query('DELETE FROM languages WHERE lang_user_id = $1', [patientId]);
-                for (const language of updates.languages) {
-                    if(language !== '' && language !== null && language !== undefined){
-                        await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2)', [patientId, language]);
-                        console.log('Languages updated', language);
+        if (!updates.languages.length) {
+            console.log('No languages provided');
+            return false;
+        }
+        if(updates.languages[0] !== null && updates.languages[0] !== undefined && updates.languages[0] !== '') {
+            const deletedLanguages = await pool.query('DELETE FROM languages WHERE lang_user_id = $1 RETURNING *', [patientId]);
+            if (!deletedLanguages.rows.length) {
+                await client.query('ROLLBACK');
+                console.log('Could not delete languages', deletedLanguages.rows);
+                return false;
+            }
+            for (const language of updates.languages) {
+                if(language !== '' && language !== null && language !== undefined){
+                    const updatedLanguage = await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2) RETURNING *', [patientId, language]);
+                    if (!updatedLanguage.rows.length) {
+                        await client.query('ROLLBACK');
+                        console.log('Could not update languages', updatedLanguage.rows);
+                        return false;
                     }
+                    console.log('Languages updated', updatedLanguage);
                 }
             }
         }
@@ -96,15 +98,17 @@ const updateInfo = async (patientId, patientEmail, updates) => {
                 u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year
         `;
         const combinedResult = await client.query(combinedQuery, [patientId, 'Patient', patientEmail]);
-
-        await client.query('COMMIT');
+        if (!combinedResult.rows.length) {
+            await client.query('ROLLBACK');
+            console.log('Could not update patient info');
+            return false;
+        }
+        console.log('Patient info updated', combinedResult.rows);
         return combinedResult.rows;
     } catch (error) {
         await client.query('ROLLBACK');
         console.error('Error updating patient info:', error.stack);
         return false;
-    } finally {
-        client.release();
     }
 };
 
@@ -135,5 +139,5 @@ const updatePassword = async (patientId, patientEmail, oldPassword, newPassword)
     }
 };
 
-module.exports = { updateInfo, updatePassword, checkUserEmail };
+module.exports = { updateInfo, updatePassword };
 

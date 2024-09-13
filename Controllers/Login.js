@@ -1,8 +1,6 @@
 const bcrypt = require('bcryptjs');
 const database = require('../Database/Login');
 const { createToken } = require('../Utilities');
-require('dotenv').config();
-const { ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS } = process.env;
 
 const login = async (req, res) => {
     const email = req.body.email;
