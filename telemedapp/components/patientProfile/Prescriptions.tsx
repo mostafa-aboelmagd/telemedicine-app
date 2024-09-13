@@ -1,69 +1,54 @@
 "use client";
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import userImage from "@/images/user.png";
 import Link from "next/link";
 import PrescriptionCard from "./prescriptionCard";
-
+import { MdOutlineNavigateNext } from "react-icons/md";
+import { GrFormPrevious } from "react-icons/gr";
+import MedicationTable from './medicationTable';
+import { MdDownload } from "react-icons/md";
 const Prescriptions = () => {
-    const prescriptions = [
-        {
-            id: 1,
-            doctorName: "Dr. John Doe",
-            date: "12/12/2021",
-            prescription: "Take 2 tablets daily",
-            status: "pending"
-        },
-        {
-            id: 2,
-            doctorName: "Dr. Jane Doe",
-            date: "12/12/2021",
-            prescription: "Take 2 tablets daily",
-            status: "pending"
-        },
-        {
-            id: 3,
-            doctorName: "Dr. John Doe",
-            date: "12/12/2021",
-            prescription: "Take 2 tablets daily",
-            status: "pending"
-        },
-        {
-            id: 4,
-            doctorName: "Dr. Jane Doe",
-            date: "12/12/2021",
-            prescription: "Take 2 tablets daily",
-            status: "pending"
-        },
-        {
-            id: 5,
-            doctorName: "Dr. John Doe",
-            date: "12/12/2021",
-            prescription: "Take 2 tablets daily",
-            status: "pending"
-        },
-        {
-            id: 6,
-            doctorName: "Dr. Jane Doe",
-            date: "12/12/2021",
-            prescription: "Take 2 tablets daily",
-            status: "pending"
-        },
-        {
-            id: 7,
-            doctorName: "Dr. John Doe",
-            date: "12/12/2021",
-            prescription: "Take 2 tablets daily",
-            status: "pending"
-        },
-        {
-            id: 8,
-            doctorName: "Dr. Jane Doe",
-            date: "12/12/2021",
-            prescription: "Take 2 tablets daily",
-            status: "pending"
+    const [openModal, setOpenModal] = useState(false);
+    const [openPrescription, setOpenPrescription] = useState<any>({});
+    const handlePrescriptionModal = (id: number | string) => {
+        setOpenModal(!openModal);
+        setOpenPrescription(prescriptionList.find((prescription) => prescription.id === id));
+    }
+    const handleDownloadPrescription = () => {
+
+    }
+    const handlePrevPrescription = () => {
+        const currentIndex = prescriptionList.findIndex((prescription) => prescription.id === openPrescription.id);
+        if (currentIndex > 0) {
+            setOpenPrescription(prescriptionList[currentIndex - 1]);
+        } else {
+            console.log("No previous prescription");
         }
-    ];
+    }
+
+    const handleNextPrescription = () => {
+        const currentIndex = prescriptionList.findIndex((prescription) => prescription.id === openPrescription.id);
+        if (currentIndex < prescriptionList.length - 1) {
+            setOpenPrescription(prescriptionList[currentIndex + 1]);
+        } else {
+            console.log("No next prescription");
+        }
+    }
+    const [prescriptionList, setPrescriptionList] = useState<any[]>([]);
+    const fetchPrescriptions = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/prescriptionList");
+            const data = await response.json();
+            const orderedData = data.sort((a: any, b: any) => new Date(b.visitDate).getTime() - new Date(a.visitDate).getTime());
+            setPrescriptionList(orderedData);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        fetchPrescriptions()
+    }, []);
     return (
         <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
             <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
@@ -91,9 +76,25 @@ const Prescriptions = () => {
                     <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-2">
-                    {prescriptions.length > 0 ? prescriptions.map((prescription) => <PrescriptionCard />) : <p className="font-semibold">You don't have any saved prescriptions</p>}
+                    {prescriptionList.length > 0 ? prescriptionList.map((prescription) => <PrescriptionCard handlePrescriptionModal={handlePrescriptionModal} prescription={prescription} />) : <p className="font-semibold">You don't have any saved prescriptions</p>}
                 </div>
             </div>
+            {openModal ? (
+                <aside className='fixed inset-0 flex justify-center items-center z-10'>
+                    <div onClick={() => setOpenModal(false)} className='fixed inset-0 bg-black opacity-50'></div>
+                    <div className='bg-white flex flex-col space-y-6 w-[80%] h-[60%] md:w-[60%] lg:w-[50%] overflow-y-auto rounded-2xl z-20'>
+                        <div className='flex justify-between items-center sticky top-0 bg-white z-2 p-2 border-b-[1px] border-[#035fe9]'>
+                            <div><GrFormPrevious onClick={() => handlePrevPrescription()} className='text-[#035fe9] w-10 h-10 cursor-pointer p-2 rounded-full bg-white hover:bg-gray-100' /></div>
+                            <div className='text-[#035fe9] font-bold text-xl'>Prescription List</div>
+                            <div><MdOutlineNavigateNext onClick={() => handleNextPrescription()} className='text-[#035fe9] w-10 h-10 cursor-pointer p-2 rounded-full bg-white hover:bg-gray-100' /></div>
+                        </div>
+                        <div className='grow space-y-4 px-4 overflow-x-auto'><MedicationTable medicationList={openPrescription.medicationList} /></div>
+                        <div className='flex justify-end'>
+                            <button onClick={handleDownloadPrescription} className='text-white rounded-full px-4 py-2 bg-[#035fe9] flex items-center space-x-4 m-4'><span>Download pdf</span> <MdDownload /></button>
+                        </div>
+                    </div>
+                </aside>
+            ) : null}
         </div>
     )
 }

@@ -197,7 +197,7 @@ const Doctors = () => {
             <ReadyTherapist />
             <h1 className='text-[#035fe9] font-bold text-[40px] text-center'>Our Doctors</h1>
             <section className='max-w-full md:max-w-[90%] lg:max-w-[75%] mx-auto grid grid-cols-2 md:grid-cols-3 gap-4 h-lvh'>
-                <SearchBar />
+                <SearchBar placeholder="Doctor name or title" />
                 <SortDropDown handleChangeFilter={handleChangeFilterDrop} options={sortOptions} name='sort' id='sort' isMulti={false} />
                 <div className='md:hidden ml-4 text-[#035fe9]'>
                     <button onClick={handleOpenModal} className='flex items-center'>Filters <IoFilter className='w-4 h-4 ml-2' /></button>
