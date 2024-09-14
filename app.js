@@ -43,10 +43,11 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(cors({
-  origin: '*',
+  origin: 'https://tele-med-pilot.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'multipart/form-data', "Accept", "Origin", "X-Requested-With"],
-  credentials: true
+  credentials: true,
+  preflightContinue: false,
 }));
 app.use(express.json()); 
 
