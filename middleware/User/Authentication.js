@@ -14,6 +14,7 @@ const tokenAuthentication = (req, res, next) => {
         console.log(decodedToken);
         req.id = decodedToken.id;
         req.email = decodedToken.email;
+        req.role = decodedToken.role
         next();
     });
     } else {
