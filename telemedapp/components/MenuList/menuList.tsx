@@ -24,7 +24,7 @@ const MenuList = ({ linkTo, linkName, text }: { linkTo: string[], linkName: stri
         )
     });
     return (
-        <div className='lg:hidden'>
+        <div>
             <Button
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}

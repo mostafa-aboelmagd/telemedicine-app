@@ -36,9 +36,14 @@ const Prescriptions = () => {
         }
     }
     const [prescriptionList, setPrescriptionList] = useState<any[]>([]);
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+    }
     const fetchPrescriptions = async () => {
         try {
-            const response = await fetch("http://localhost:3000/prescriptionList");
+            // const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/prescription/view`, { mode: 'cors', headers });
+            const response = await fetch(`http://localhost:3000/prescriptionList`);
             const data = await response.json();
             const orderedData = data.sort((a: any, b: any) => new Date(b.visitDate).getTime() - new Date(a.visitDate).getTime());
             setPrescriptionList(orderedData);
@@ -76,7 +81,7 @@ const Prescriptions = () => {
                     <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-2">
-                    {prescriptionList.length > 0 ? prescriptionList.map((prescription) => <PrescriptionCard handlePrescriptionModal={handlePrescriptionModal} prescription={prescription} />) : <p className="font-semibold">You don't have any saved prescriptions</p>}
+                    {prescriptionList.length > 0 ? prescriptionList.map((prescription, index) => <PrescriptionCard key={index} handlePrescriptionModal={handlePrescriptionModal} prescription={prescription} />) : <p className="font-semibold">You don't have any saved prescriptions</p>}
                 </div>
             </div>
             {openModal ? (
