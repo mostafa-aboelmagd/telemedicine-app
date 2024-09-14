@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import InputComponent from "./InputComponent"; // Import the reusable InputComponent
 import Link from "next/link";
+import InputComponent from "./InputComponent";
+import jwt from "jsonwebtoken";
 
 function SignInForm() {
   const [formData, setFormData] = useState({
@@ -11,12 +12,43 @@ function SignInForm() {
   });
 
   const [formValid, setFormValid] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevForm) => ({ ...prevForm, [name]: value }));
+  useEffect(() => {
+    validateForm();
+  }, [formData]);
+
+  const ACCESS_TOKEN_SECRET_KEY = `${process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET_KEY}`;
+
+  const tokenAuthentication = (req: any) => {
+    const token = req.token;
+    let message = "";
+    if (token) {
+      jwt.verify(token, ACCESS_TOKEN_SECRET_KEY, (err: any, decodedToken: any) => {
+        if (err) {
+          message = "Invalid token";
+          console.log(message);
+          return false;
+        }
+        console.log(decodedToken);
+        req.id = decodedToken.id;
+        req.email = decodedToken.email;
+        req.userRole = decodedToken.role;
+        return true;
+      });
+    }
+    else {
+      message = "No token found";
+      console.log(message);
+      return false;
+    }
+    return true;
   };
+
+  const submitButtonClass = [
+    "bg-sky-500 text-neutral-50 text-lg	p-3.5	w-full border-none rounded-lg cursor-pointer transition-[background-color]",
+    "disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
+  ].join(" ");
 
   const validateForm = () => {
     const { email, password } = formData;
@@ -27,44 +59,51 @@ function SignInForm() {
     }
   };
 
-  useEffect(() => {
-    validateForm();
-  }, [formData]);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevForm) => ({ ...prevForm, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formValid) return;
+    if (!formValid) {
+      return;
+    }
 
     try {
-      const response = await fetch(
-        "https://telemedicine-pilot-d2anbuaxedbfdba9.southafricanorth-01.azurewebsites.net/patient/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
-        }
+      const token = localStorage.getItem("jwt");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        mode: "cors",
+        body: JSON.stringify(formData),
+      }
       );
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.log("Error response from server:", errorData);
-        throw new Error(errorData.message || "Invalid email or password");
+        console.log("error in response");
+        if (response.status === 400) {
+          setError(true);
+        }
+        throw new Error("Failed To Sign In");
       }
 
-      const data = await response.json();
-      console.log("User signed in:", data);
+      const users = await response.json();
+      if (tokenAuthentication(users)) {
+        localStorage.setItem("jwt", users.token);
+        const redirect = users.userRole === "Patient" ? "/patientProfile/view" : "/doctorProfile/view";
+        window.location.href = redirect;
+      }
+      else {
+        console.log("Error During Token Authentication");
+      }
 
-      // Redirect to the home page or a profile page
-      window.location.href = "/";
     } catch (error) {
-      console.error("Error during sign-in:", error);
-      setErrorMessage("An error occurred during sign-in");
+      console.error("Error During Sign In:", error);
     }
   };
 
@@ -92,23 +131,12 @@ function SignInForm() {
           onChange={handleChange}
           required
         />
-        {errorMessage && <p className="text-red-500 mb-2">{errorMessage}</p>}
         <p className="mb-2">
           Don&apos;t Have An Account?{" "}
-          <Link
-            href="/auth/signup"
-            className="text-blue-500 font-semibold cursor-pointer"
-          >
-            Sign Up
-          </Link>
+          <Link href="/auth/signup" className="text-blue-500 font-semibold cursor-pointer">Sign Up</Link>
         </p>
-        <button
-          type="submit"
-          className="bg-sky-500 text-neutral-50 text-lg p-3.5 w-full border-none rounded-lg cursor-pointer transition-[background-color] disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
-          disabled={!formValid}
-        >
-          Sign in
-        </button>
+        <button type="submit" className={submitButtonClass} disabled={!formValid}>Sign in</button>
+        {error && <p className="font-semibold text-red-700 mt-4">Incorrect Email And/Or Password!</p>}
       </form>
     </div>
   );
