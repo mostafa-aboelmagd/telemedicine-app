@@ -86,12 +86,8 @@ const login = async (req, res) => {
         message = 'Token could not be created';
         return res.status(400).json(message);
     }
-    res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS, sameSite: 'None', secure: true });
-    return res.json({ message: 'Login successful', userInfo: {
-        firstName: user[0].user_first_name,
-        lastName: user[0].user_last_name,
-        role: user[0].user_role,
-    }});
+    res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS });
+    return res.json({ message: 'Login successful', token: token });
 }
 
 module.exports = { login };

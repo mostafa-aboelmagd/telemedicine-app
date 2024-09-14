@@ -3,24 +3,25 @@ require('dotenv').config();
 const { ACCESS_TOKEN_SECRET_KEY } = process.env;
 
 const tokenAuthentication = (req, res, next) => {
-    const token = req.cookies.jwt;
-    let message = '';
-    if (token) {
-    jwt.verify(token, ACCESS_TOKEN_SECRET_KEY, (err, decodedToken) => {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Authorization header missing' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Token missing' });
+    }
+
+    jwt.verify(token, ACCESS_TOKEN_SECRET_KEY, (err, user) => {
         if (err) {
-        message = 'Invalid token';
-        return res.status(401).json(message);
-        } 
-        console.log(decodedToken);
-        req.id = decodedToken.id;
-        req.email = decodedToken.email;
-        req.role = decodedToken.role
+            return res.status(403).json({ message: 'Token is not valid' });
+        }
+
+        req.id = user.id;
+        req.email = user.email;
+        req.role = user.role;
         next();
     });
-    } else {
-    message = 'No token found';
-    return res.status(400).json(message);
-    }
 };
-
 module.exports = { tokenAuthentication };
