@@ -1,6 +1,6 @@
 const logout = async (req, res) => {
     try {
-        req.setHeader('Authorization', ''); 
+        res.setHeader('Authorization', ''); 
         return res.json({ message: 'Logout successful' });
     } catch (error) {
         console.error('Logout error:', error);
