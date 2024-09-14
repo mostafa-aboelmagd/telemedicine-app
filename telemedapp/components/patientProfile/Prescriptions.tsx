@@ -36,10 +36,10 @@ const Prescriptions = () => {
         }
     }
     const [prescriptionList, setPrescriptionList] = useState<any[]>([]);
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-    }
+    // const headers = {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+    // }
     const fetchPrescriptions = async () => {
         try {
             // const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/prescription/view`, { mode: 'cors', headers });
