@@ -9,7 +9,7 @@ import { formatDate } from "@/utils/date";
 import BookingButton from "./BookingButton";
 
 const DoctorCard = ({ doctor }: { doctor: any }) => {
-  console.log("Doctor: ", doctor);
+  // console.log("Doctor: ", doctor);
 
   const bufferToBase64 = (buffer: number[]) => {
     const binary = String.fromCharCode.apply(null, buffer);

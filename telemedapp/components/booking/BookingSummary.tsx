@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 interface BookingSummaryProps {
   selectedSlot: string | null;
@@ -19,19 +19,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [patientId, setPatientId] = useState<string | null>(null);
-
-  // Load patientId from localStorage on mount
-  useEffect(() => {
-    const storedPatientId = localStorage.getItem("userId");
-    if (storedPatientId) {
-      setPatientId(storedPatientId);
-    }
-  }, []);
+  const patientId = localStorage.getItem("userId");
 
   // Handle booking API call
   const handleBooking = async () => {
-    if (!selectedSlot || !selectedDate || !patientId) return;
+    if (!selectedSlot || !selectedDate) return;
 
     setLoading(true);
     setErrorMessage(null);
@@ -67,7 +59,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       alert(
         `Appointment booked successfully with ID: ${data.appointment.appointment_id}`
       );
-    } catch (error: any) {
+    } catch (error) {
       setErrorMessage(error.message || "An error occurred");
     } finally {
       setLoading(false);
@@ -77,7 +69,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   return (
     <div className="flex flex-col gap-4 bg-white rounded-3xl shadow-md p-6 w-full">
       <div className="flex items-center justify-center">
-        <div className="my-4 text-blue-600 font-bold">
+        <div className="my-4 text-blue-600 font-bold ">
           {selectedSlot ? (
             <>
               <span className="px-4 py-2 rounded-lg bg-green-600 text-white">
