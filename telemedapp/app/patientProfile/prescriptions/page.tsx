@@ -1,9 +1,7 @@
-import React from 'react'
-import Prescriptions from '@/components/patientProfile/Prescriptions'
+import React from "react";
+import Prescriptions from "@/components/patientProfile/Prescriptions";
 const PrescriptionsPage = () => {
-    return (
-        <Prescriptions />
-    )
-}
+  return <Prescriptions />;
+};
 
-export default PrescriptionsPage
+export default PrescriptionsPage;

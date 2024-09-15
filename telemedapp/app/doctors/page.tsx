@@ -9,9 +9,8 @@ import { unFormatDate } from '@/utils/date';
 import { IoFilter } from "react-icons/io5";
 
 const Doctors = () => {
-    const [minMaxFees, setMinMaxFees] = useState({ min: 0, max: 1000 });
     // const doctors: any = [
-    //     { id: "1", name: "Dr. Ahmed Ali", nearestApp: new Date("2024-08-31"), title: "Psychiatrist", rating: 4.2, numSessions: 825, numReviews: 860, fees60min: 200, fees30min: 100, image: "/assets/doctorM.jpg", interests: ["Separation Anxiety Disorder, Generalized Anxiety Disorder, and Social Phobia", "Relations"], country: "Egypt", language: ["Arabic", "Mandarin"], gender: "Male", isOnline: "true" },
+        //     { id: "1", name: "Dr. Ahmed Ali", nearestApp: new Date("2024-08-31"), title: "Psychiatrist", rating: 4.2, numSessions: 825, numReviews: 860, fees60min: 200, fees30min: 100, image: "/assets/doctorM.jpg", interests: ["Separation Anxiety Disorder, Generalized Anxiety Disorder, and Social Phobia", "Relations"], country: "Egypt", language: ["Arabic", "Mandarin"], gender: "Male", isOnline: "true" },
     //     { id: "2", name: "Dr. Mona Aldahan", nearestApp: new Date("2024-09-01"), title: "Gynecologist", rating: 3.9, numSessions: 900, numReviews: 950, fees60min: 250, fees30min: 125, image: "/assets/doctorF.jpg", interests: ["Prenatal Care", "Reproductive Health", "Menopause"], country: "Saudi Arabia", language: ["Arabic", "Mandarin"], gender: "Female", isOnline: "false" },
     //     { id: "3", name: "Dr. Amina Sameeh", nearestApp: new Date("2024-09-02"), title: "Ophthalmologist", rating: 3.4, numSessions: 780, numReviews: 800, fees60min: 220, fees30min: 110, image: "/assets/doctorF.jpg", interests: ["Cataract Surgery", "Glaucoma", "Vision Correction"], country: "Kuwait", language: ["English", "Mandarin"], gender: "Female", isOnline: "false" },
     //     { id: "4", name: "Dr. Mohammed Mamdouh", nearestApp: new Date("2024-09-03"), title: "Plastic Surgeon", rating: 4.8, numSessions: 650, numReviews: 700, fees60min: 300, fees30min: 150, image: "/assets/doctorM.jpg", interests: ["Cosmetic Surgery", "Reconstructive Surgery", "Burn Treatment"], country: "Qatar", language: ["English", "Mandarin"], gender: "Male", isOnline: "true" },
@@ -22,7 +21,8 @@ const Doctors = () => {
     //     { id: "9", name: "Dr. Mohsen Hassan", nearestApp: new Date("2024-09-08"), title: "Pediatrician", rating: 1.4, numSessions: 950, numReviews: 1000, fees60min: 210, fees30min: 105, image: "/assets/doctorM.jpg", interests: ["Child Development", "Vaccinations", "Pediatric Nutrition"], country: "Egypt", language: ["English", "Mandarin"], gender: "Male", isOnline: "true" },
     //     { id: "10", name: "Dr. Sama Yehya", nearestApp: new Date("2024-09-09"), title: "Endocrinologist", rating: 0.9, numSessions: 800, numReviews: 850, fees60min: 240, fees30min: 120, image: "/assets/doctorF.jpg", interests: ["Diabetes", "Thyroid Disorders", "Hormonal Imbalances"], country: "Kuwait", language: ["Arabic", "Mandarin"], gender: "Female", isOnline: "false" }
     // ];
-
+    
+    const [minMaxFees, setMinMaxFees] = useState({ min: 0, max: 1000 });
     const [doctors, setDoctors] = useState<any>([]);
 
     const [specializationOptions, setSpecializationOptions] = useState<any>([]);
