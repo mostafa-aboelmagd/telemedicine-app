@@ -1,3 +1,4 @@
+"use client"
 import DoctorBooking from "@/components/booking/DoctorBooking";
 import { Suspense } from "react";
 
