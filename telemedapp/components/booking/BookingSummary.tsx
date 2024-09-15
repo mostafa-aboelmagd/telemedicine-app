@@ -60,7 +60,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         `Appointment booked successfully with ID: ${data.appointment.appointment_id}`
       );
     } catch (error) {
-      setErrorMessage(error.message || "An error occurred");
+      setErrorMessage("Failed to book appointment");
     } finally {
       setLoading(false);
     }
