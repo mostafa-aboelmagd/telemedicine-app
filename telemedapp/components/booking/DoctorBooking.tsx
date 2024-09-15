@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import DoctorInfo from "@/components/booking/DoctorInfo";
 import DurationSelector from "@/components/booking/DurationSelector";
@@ -78,47 +78,49 @@ const DoctorBooking = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row items-center md:justify-center p-6 bg-gray-50 gap-4 mx-auto max-w-[1200px]">
-      <div className="flex flex-col p-6 bg-gray-50 gap-10 min-w-[350px] md:min-w-[450px]">
-        <DoctorInfo doctor={doctor} />
-        <DurationSelector
-          selectedDuration={selectedDuration}
-          handleDurationChange={handleDurationChange}
-        />
-        <BookingSummary
-          selectedSlot={selectedSlot}
-          selectedDuration={selectedDuration}
-          doctor={doctor}
-          selectedDate={selectedDate}
-        />
-      </div>
-      <div className="flex gap-8 flex-col bg-white rounded-3xl shadow-md p-6 min-w-[350px] lg:min-w-[650px]">
-        <WeekCalendar
-          selectedDate={selectedDate}
-          handleDateSelect={handleDateSelect}
-          availableDates={doctor.availableDates || initialDoctor.availableDates}
-        />
-        <SlotSelector
-          selectedDate={selectedDate}
-          selectedSlot={selectedSlot}
-          handleSlotSelect={handleSlotSelect}
-        />
-        <div className="flex items-center justify-center mt-2 space-x-4 text-sm">
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-gray-300 mr-2"></div>
-            <span>Available</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
-            <span>Selected</span>
-          </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="flex flex-col md:flex-row items-center md:justify-center p-6 bg-gray-50 gap-4 mx-auto max-w-[1200px]">
+        <div className="flex flex-col p-6 bg-gray-50 gap-10 min-w-[350px] md:min-w-[450px]">
+          <DoctorInfo doctor={doctor} />
+          <DurationSelector
+            selectedDuration={selectedDuration}
+            handleDurationChange={handleDurationChange}
+          />
+          <BookingSummary
+            selectedSlot={selectedSlot}
+            selectedDuration={selectedDuration}
+            doctor={doctor}
+            selectedDate={selectedDate}
+          />
         </div>
-        <hr className="my-2 border-gray-200" />
-        <p className="flex items-center justify-center text-sm text-gray-500">
-          *Note: The available slots are based on your local timezone.
-        </p>
+        <div className="flex gap-8 flex-col bg-white rounded-3xl shadow-md p-6 min-w-[350px] lg:min-w-[650px]">
+          <WeekCalendar
+            selectedDate={selectedDate}
+            handleDateSelect={handleDateSelect}
+            availableDates={doctor.availableDates || initialDoctor.availableDates}
+          />
+          <SlotSelector
+            selectedDate={selectedDate}
+            selectedSlot={selectedSlot}
+            handleSlotSelect={handleSlotSelect}
+          />
+          <div className="flex items-center justify-center mt-2 space-x-4 text-sm">
+            <div className="flex items-center">
+              <div className="w-3 h-3 rounded-full bg-gray-300 mr-2"></div>
+              <span>Available</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
+              <span>Selected</span>
+            </div>
+          </div>
+          <hr className="my-2 border-gray-200" />
+          <p className="flex items-center justify-center text-sm text-gray-500">
+            *Note: The available slots are based on your local timezone.
+          </p>
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 
