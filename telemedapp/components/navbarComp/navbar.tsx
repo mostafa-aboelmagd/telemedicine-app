@@ -25,7 +25,7 @@ const Navbar = () => {
   useEffect(() => {
     setToken(localStorage.getItem("jwt"));
     setUserRole(localStorage.getItem("userRole"));
-  }, [token]);
+  }, [token, userRole]);
   return (
     <nav className="h-14 bg-white border border-b-[1px] sticky top-0 z-10 mb-8">
       <div className="max-w-full md:max-w-[90%] lg:max-w-[75%] flex justify-between items-center mx-auto">
