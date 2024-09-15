@@ -22,7 +22,8 @@ function SignInForm() {
 
   const tokenAuthentication = (req: any) => {
     const token = req.token;
-    console.log(token);
+    console.log("token:", token);
+
     let message = "";
     if (token) {
       jwt.verify(
@@ -38,6 +39,7 @@ function SignInForm() {
           req.id = decodedToken.id;
           req.email = decodedToken.email;
           req.userRole = decodedToken.role;
+
           return true;
         }
       );
@@ -101,6 +103,7 @@ function SignInForm() {
       const users = await response.json();
       if (tokenAuthentication(users)) {
         localStorage.setItem("jwt", users.token);
+        localStorage.setItem("userRole", users.userRole);
         const redirect =
           users.userRole === "Patient"
             ? "/patientProfile/view"

@@ -19,10 +19,12 @@ const signedInIcon = (
   </div>
 );
 const Navbar = () => {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<any>();
+  const [userRole, setUserRole] = useState<any>();
 
   useEffect(() => {
     setToken(localStorage.getItem("jwt"));
+    setUserRole(localStorage.getItem("userRole"));
   }, [token]);
   return (
     <nav className="h-14 bg-white border border-b-[1px] sticky top-0 z-10 mb-8">
@@ -70,18 +72,31 @@ const Navbar = () => {
           ) : (
             <div>
               <MenuList
-                linkTo={[
-                  "/patientProfile/view",
-                  "/patientProfile/prescriptions",
-                  "/patientProfile/patientDocuments",
-                  "/patientProfile/paymentInfo",
-                ]}
-                linkName={["View Profile", "My Prescriptions"]}
-                text={signedInIcon}
-              />
-              <MenuList
-                linkTo={["/doctorProfile/view", "/doctorProfile/timeSlots"]}
-                linkName={["View Profile", "Set Time Slots", "", "Wallet"]}
+                linkTo={
+                  userRole === "Patient" || token.userRole === "Patient"
+                    ? [
+                        "/patientProfile/view",
+                        "/patientProfile/prescriptions",
+                        "/patientProfile/patientDocuments",
+                        "/patientProfile/paymentInfo",
+                        // add signout link
+                      ]
+                    : [
+                        "/doctorProfile/view",
+                        "/doctorProfile/timeSlots",
+                        // add signout link
+                      ]
+                }
+                linkName={
+                  userRole === "Patient" || token.userRole === "Patient"
+                    ? [
+                        "View Profile",
+                        "My Prescriptions",
+                        "My Documents",
+                        "Wallet",
+                      ]
+                    : ["View Profile", "Set Time Slots"]
+                }
                 text={signedInIcon}
               />
             </div>
