@@ -20,15 +20,13 @@ class SignInService {
       },
     );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)["data"];
-      final user = UserModel.fromJson(data);
-      return user;
-    } else if (response.statusCode == 422) {
-      throw ('The given data was invalid.');
-    } else {
-      throw ('Error happened. Try again later.');
-    }
+    if (response.statusCode == 401) {
+        throw Exception('Invalid email or password');
+      } else if (response.statusCode == 422) {
+        throw Exception('Invalid data provided');
+      } else {
+        throw Exception('Error: ${response.statusCode}'); // More informative error message - yahya
+      }
   }
 }
 
