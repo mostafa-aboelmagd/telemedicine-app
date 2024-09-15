@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const database = require('../Database/Login');
 const { createToken } = require('../Utilities');
+const { ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS } = process.env;
 
 /**
  * @swagger
@@ -85,8 +86,8 @@ const login = async (req, res) => {
         message = 'Token could not be created';
         return res.status(400).json(message);
     }
-    res.setHeader('Authorization', `Bearer ${token}`);
-    return res.json({ message: 'Login successful' });
+    res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS });
+    return res.json({ message: 'Login successful', token: token });
 }
 
 module.exports = { login };

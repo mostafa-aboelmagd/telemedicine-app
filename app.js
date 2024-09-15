@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -20,6 +21,7 @@ const doctorProfileRoute = require('./Routes/Doctor/Profile');
 const doctorEditRoute = require('./Routes/Doctor/Edit');
 const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/add');
 const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Delete');
+const doctorProfilePictureUploadRoute = require('./Routes/Doctor/Profile Picture/Upload');
 const port = process.env.PORT || 4000;
 const app = express();
 
@@ -41,13 +43,20 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+const allowedOrigins = ['http://localhost:3000', 'https://tele-med-pilot.vercel.app','https://tele-med-pilot-fe.vercel.app'];
 app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'multipart/form-data'],
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
 }));
 app.use(express.json()); 
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
@@ -69,6 +78,7 @@ app.use('/doctor/edit', doctorEditRoute);
 app.use('/doctor/profile', doctorProfileRoute);
 app.use('/doctor/availability/add', doctorAddAvailabilityRoute);
 app.use('/doctor/availability/delete', doctorDeleteAvailabilityRoute);
+app.use('/doctor/profile-picture/upload', doctorProfilePictureUploadRoute);
 
 
 
