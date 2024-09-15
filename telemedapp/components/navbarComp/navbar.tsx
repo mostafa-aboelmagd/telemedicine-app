@@ -16,11 +16,7 @@ const Navbar = () => {
       <div className="max-w-full md:max-w-[90%] lg:max-w-[75%] flex justify-between items-center mx-auto">
         <Link href="/">
           <div className="flex justify-center items-center">
-            <img
-              className="w-14 h-14"
-              src="../../public/assets/logo.png"
-              alt="logo"
-            />
+            <img className="w-14 h-14" src="/assets/logo.png" alt="logo" />
             <span className="text-xl">TeleMedPilot</span>
           </div>
         </Link>
