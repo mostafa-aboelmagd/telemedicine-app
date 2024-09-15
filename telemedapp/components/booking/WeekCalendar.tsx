@@ -32,7 +32,7 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
 
     const updatedDatesWithSlots = days.map((day) => {
       const dateStr = format(day, "yyyy-MM-dd");
-      const existingDate = availableDates.find((d) => d.date === dateStr);
+      const existingDate = availableDates?.find((d) => d.date === dateStr);
       return {
         date: dateStr,
         slots: existingDate ? existingDate.slots : [], // Use empty slots if none exist

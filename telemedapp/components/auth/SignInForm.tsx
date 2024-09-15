@@ -104,6 +104,7 @@ function SignInForm() {
       if (tokenAuthentication(users)) {
         localStorage.setItem("jwt", users.token);
         localStorage.setItem("userRole", users.userRole);
+        localStorage.setItem("userId", users.id);
         const redirect =
           users.userRole === "Patient"
             ? "/patientProfile/view"
