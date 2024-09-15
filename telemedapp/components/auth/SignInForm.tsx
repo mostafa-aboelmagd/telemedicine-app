@@ -22,22 +22,26 @@ function SignInForm() {
 
   const tokenAuthentication = (req: any) => {
     const token = req.token;
+    console.log(token);
     let message = "";
     if (token) {
-      jwt.verify(token, ACCESS_TOKEN_SECRET_KEY, (err: any, decodedToken: any) => {
-        if (err) {
-          message = "Invalid token";
-          console.log(message);
-          return false;
+      jwt.verify(
+        token,
+        ACCESS_TOKEN_SECRET_KEY,
+        (err: any, decodedToken: any) => {
+          if (err) {
+            message = "Invalid token";
+            console.log(message);
+            return false;
+          }
+          console.log(decodedToken);
+          req.id = decodedToken.id;
+          req.email = decodedToken.email;
+          req.userRole = decodedToken.role;
+          return true;
         }
-        console.log(decodedToken);
-        req.id = decodedToken.id;
-        req.email = decodedToken.email;
-        req.userRole = decodedToken.role;
-        return true;
-      });
-    }
-    else {
+      );
+    } else {
       message = "No token found";
       console.log(message);
       return false;
@@ -47,7 +51,7 @@ function SignInForm() {
 
   const submitButtonClass = [
     "bg-sky-500 text-neutral-50 text-lg	p-3.5	w-full border-none rounded-lg cursor-pointer transition-[background-color]",
-    "disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
+    "disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500",
   ].join(" ");
 
   const validateForm = () => {
@@ -73,15 +77,17 @@ function SignInForm() {
 
     try {
       const token = localStorage.getItem("jwt");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token
-        },
-        mode: "cors",
-        body: JSON.stringify(formData),
-      }
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          mode: "cors",
+          body: JSON.stringify(formData),
+        }
       );
 
       if (!response.ok) {
@@ -95,13 +101,14 @@ function SignInForm() {
       const users = await response.json();
       if (tokenAuthentication(users)) {
         localStorage.setItem("jwt", users.token);
-        const redirect = users.userRole === "Patient" ? "/patientProfile/view" : "/doctorProfile/view";
+        const redirect =
+          users.userRole === "Patient"
+            ? "/patientProfile/view"
+            : "/doctorProfile/view";
         window.location.href = redirect;
-      }
-      else {
+      } else {
         console.log("Error During Token Authentication");
       }
-
     } catch (error) {
       console.error("Error During Sign In:", error);
     }
@@ -133,10 +140,25 @@ function SignInForm() {
         />
         <p className="mb-2">
           Don&apos;t Have An Account?{" "}
-          <Link href="/auth/signup" className="text-blue-500 font-semibold cursor-pointer">Sign Up</Link>
+          <Link
+            href="/auth/signup"
+            className="text-blue-500 font-semibold cursor-pointer"
+          >
+            Sign Up
+          </Link>
         </p>
-        <button type="submit" className={submitButtonClass} disabled={!formValid}>Sign in</button>
-        {error && <p className="font-semibold text-red-700 mt-4">Incorrect Email And/Or Password!</p>}
+        <button
+          type="submit"
+          className={submitButtonClass}
+          disabled={!formValid}
+        >
+          Sign in
+        </button>
+        {error && (
+          <p className="font-semibold text-red-700 mt-4">
+            Incorrect Email And/Or Password!
+          </p>
+        )}
       </form>
     </div>
   );
