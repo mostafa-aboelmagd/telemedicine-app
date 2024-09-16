@@ -5,9 +5,13 @@ class AppConstants {
 
   //Base server URL
   static const String baseURL = 'https://telemedicine-pilot-d2anbuaxedbfdba9.southafricanorth-01.azurewebsites.net';
+  static const String accessTokenSecretKey  = '982e66fdfad635a7085ea51852fba72f826836dc75bf240ca940c3ad7ff148062db1716d510c4f3b97faf82eb63360025bdc1a14ff68f47f5024c6437af3fdd3';
+
+
+  
   // Endpoints URLs
   static const String  loginEndpoint = '/login';
-  static const String  LogoutEndpoint='/logout';
+  static const String  logoutEndpoint='/logout';
   static const String  patientRegisterEndpoint='/patient/register';
   static const String  patientProfileEndpoint='/patient/profile';
   static const String  patientEditEndpoint='/patient/edit';
