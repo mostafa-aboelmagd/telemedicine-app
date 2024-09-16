@@ -40,6 +40,9 @@ dependencies:
   http: ^1.2.2
   device_info_plus: ^10.1.2
   flutter_svg: ^2.0.10+1
+  flutter_dotenv:
+  dio:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +70,7 @@ flutter:
   assets:
     - assets/logo.png
     - assets/pp.png
+    - assets/.env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

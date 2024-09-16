@@ -1,13 +1,17 @@
+import 'dart:convert'; // For jsonEncode, jsonDecode
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http; // For HTTP requests
+import 'package:shared_preferences/shared_preferences.dart'; // For storing token
 import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
 import 'package:tele_med_pilot/features/sign_in/view_models/sign_in_view_model.dart';
 import 'package:tele_med_pilot/ui/components/app_bar.dart';
 import 'package:tele_med_pilot/ui/components/button.dart';
 import 'package:tele_med_pilot/ui/components/text_field.dart';
+import 'package:tele_med_pilot/core/constant.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
@@ -28,6 +32,63 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     super.dispose();
   }
 
+  // The login function to authenticate the user
+  Future<void> login() async {
+    String email = _emailController.text.toString();
+    String password = _passwordController.text.toString();
+    final url = Uri.parse(AppConstants.loginEndpoint);
+
+    final headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+    final body = jsonEncode({
+      'email': email,
+      'password': password,
+    });
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        // Successful login
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final token = data['token'];
+
+        if (token != null) {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('token', token);
+
+          _emailController.clear();
+          _passwordController.clear();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to retrieve token.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Invalid email or password. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      print('Exception occurred during login: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('An error occurred. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final viewModelNotifier = ref.watch(signInViewModelProvider.notifier);
@@ -46,8 +107,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   IconButton(
-                    icon:
-                        Icon(Icons.arrow_circle_left_outlined, size: 35.spMin),
+                    icon: Icon(Icons.arrow_circle_left_outlined, size: 35.spMin),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -130,16 +190,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       label: "Sign In",
                       labelColor: AppColors.white,
                       isValid: viewModelNotifier.validateForm(),
-                      onTap: () {
-                        if (viewModelNotifier.validateFormData()) {
-                          Navigator.pushReplacementNamed(
-                              context, RouteClass.mainLayoutRoute);
-                        }
-                        // if (await viewModelNotifier.signIn()) {
-                        //       Navigator.pushReplacementNamed(
-                        //           mounted ? context : context,
-                        //           RouteClass.companiesRoute);
-                        //     }
+                      onTap: () async{
+                        await login(); 
                       },
                     ),
                     SizedBox(height: 16.h),
