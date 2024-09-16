@@ -43,7 +43,7 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-const allowedOrigins = ['http://localhost:3000', 'https://tele-med-pilot.vercel.app','https://tele-med-pilot-fe.vercel.app'];
+const allowedOrigins = ['*', 'https://tele-med-pilot.vercel.app','https://tele-med-pilot-fe.vercel.app'];
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
