@@ -9,7 +9,6 @@ import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
 import 'package:tele_med_pilot/features/sign_in/view_models/sign_in_view_model.dart';
 import 'package:tele_med_pilot/ui/components/app_bar.dart';
-import 'package:tele_med_pilot/ui/components/button.dart';
 import 'package:tele_med_pilot/ui/components/text_field.dart';
 import 'package:tele_med_pilot/core/constant.dart';
 
@@ -24,6 +23,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   bool _passwordVisible = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -47,6 +47,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       'password': password,
     });
 
+    setState(() {
+      _isLoading = true; // Set loading to true when starting login
+    });
+
     try {
       final response = await http.post(url, headers: headers, body: body);
       print(response.statusCode);
@@ -59,8 +63,12 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('token', token);
 
+          // Clear the text controllers
           _emailController.clear();
           _passwordController.clear();
+
+          // Navigate to HomeScreen
+          Navigator.pushReplacementNamed(context, RouteClass.homeRoute);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -85,9 +93,12 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           backgroundColor: Colors.red,
         ),
       );
+    } finally {
+      setState(() {
+        _isLoading = false; // Set loading to false when login process ends
+      });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -186,13 +197,34 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           viewModelNotifier.setPassword(value),
                     ),
                     SizedBox(height: 16.h),
-                    Button(
-                      label: "Sign In",
-                      labelColor: AppColors.white,
-                      isValid: viewModelNotifier.validateForm(),
-                      onTap: () async{
-                        await login(); 
-                      },
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: AppColors.white, backgroundColor: AppColors.blue100, // Text color
+                        minimumSize: Size(double.infinity, 48.h), // Full width and height
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                      ),
+                      onPressed: viewModelNotifier.validateForm() && !_isLoading
+                          ? () async {
+                              await login();
+                            }
+                          : null,
+                      child: _isLoading
+                          ? SizedBox(
+                              width: 24.sp,
+                              height: 24.sp,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                              ),
+                            )
+                          : Text(
+                              'Sign In',
+                              style: AppTextStyles.bodyTextLargeBold.copyWith(
+                                color: AppColors.white,
+                              ),
+                            ),
                     ),
                     SizedBox(height: 16.h),
                     TextButton(
