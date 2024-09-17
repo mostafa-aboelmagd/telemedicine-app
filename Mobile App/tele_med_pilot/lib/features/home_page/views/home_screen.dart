@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
-import 'package:tele_med_pilot/features/Booking/Bookingg.dart';
 import 'package:tele_med_pilot/ui/components/app_bar.dart';
 import 'package:tele_med_pilot/ui/components/button.dart';
 import 'package:tele_med_pilot/ui/components/option_item.dart';
@@ -67,24 +67,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     optionImage: const Icon(Icons.calendar_month),
                     optionLabel: "Book a Scheduled Session",
                     onTap: () {
-
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) => BookingSession(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          var begin = Offset(1.0, 0.0); // Slide from left
-                          var end = Offset.zero;
-                          var tween = Tween(begin: begin, end: end);
-                          var offsetAnimation = animation.drive(tween);
-
-                          return SlideTransition(
-                            position: offsetAnimation,
-                            child: child,
-                          );
-                        },
-                      ),
-                    );
+                      Navigator.pushNamed(
+                        context,
+                        RouteClass.bookSession,
+                        arguments: {'transition': 'slideLeft',},
+                      );
                     },
                   ),
                   OptionItem(
