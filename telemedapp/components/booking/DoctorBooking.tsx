@@ -45,7 +45,7 @@ const DoctorBooking = () => {
       if (doctor && doctor.id) {
         try {
           const response = await fetch(
-            `/doctor/profile/availability/${doctor.id}`,
+            `/patient/appointment/Availabilities/${doctor.id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
