@@ -81,12 +81,12 @@ const login = async (req, res) => {
         message = 'Invalid email or password'
         return res.status(400).json(message);
     }
-    const token = createToken(user[0].user_id, user[0].user_email, user[0].user_role);
+    const token = createToken(user[0].user_id, user[0].user_email, user[0].user_role, user[0].user_first_name, user[0].user_last_name);
     if (!token) {
         message = 'Token could not be created';
         return res.status(400).json(message);
     }
-    res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS });
+    res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS, sameSite: 'none', secure: true });
     return res.json({ message: 'Login successful', token: token });
 }
 
