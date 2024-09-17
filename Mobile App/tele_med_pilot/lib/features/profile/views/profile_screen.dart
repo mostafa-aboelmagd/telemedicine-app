@@ -227,7 +227,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 onTap: () async {
                   final SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                      await prefs.remove('accessToken');
+                      await prefs.remove('token');
                   Navigator.pushNamed(
                         context,
                         RouteClass.initRoute,
