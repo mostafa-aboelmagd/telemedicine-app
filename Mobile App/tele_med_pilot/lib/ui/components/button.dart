@@ -26,7 +26,7 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 40.h,
+      height: 30.h,
       child: Container(
         decoration: BoxDecoration(
           gradient: isValid
