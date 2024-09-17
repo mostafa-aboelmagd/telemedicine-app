@@ -54,6 +54,11 @@ class AppTextStyles {
     fontWeight: FontWeight.normal,
     color: AppColors.gray60,
   );
+  static TextStyle bodyTextSmallBold = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.bold,
+    color: AppColors.black,
+  );
   static TextStyle bodyTextExtraSmallNormal = TextStyle(
     fontSize: 10.sp,
     fontWeight: FontWeight.normal,
