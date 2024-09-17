@@ -15,13 +15,6 @@ import 'package:tele_med_pilot/features/sign_up/signup_step3_screen.dart';
 import 'package:tele_med_pilot/features/support/views/support_screen.dart';
 import 'package:tele_med_pilot/ui/main_screen.dart';
 import 'package:tele_med_pilot/ui/main_screen_layout.dart';
-//Doctor routes
-import 'package:tele_med_pilot/features/doctorFeatures/profile/doctor_profile_screen.dart';
-import 'package:tele_med_pilot/features/doctorFeatures/edit_exp/edit_exp.dart';
-import 'package:tele_med_pilot/features/doctorFeatures/edit_availability/edit_availability.dart';
-import 'package:tele_med_pilot/features/doctorFeatures/edit_info/edit_info.dart';
-import 'package:tele_med_pilot/features/doctorFeatures/edit_pricing/edit_pricing.dart';
-import 'package:tele_med_pilot/features/doctorFeatures/manage_app/manage_appointments.dart';
 
 class RouteClass {
   static const String initRoute = "/";
@@ -32,22 +25,12 @@ class RouteClass {
   static const String doctorsRoute = "/doctors_screen";
   static const String supportRoute = "/support";
   static const String moreRoute = "//more_screen";
-  static const String myTherapistsScreen = "/main_layout_screen/my_therapists_screen";
+  static const String myTherapistsScreen =
+      "/main_layout_screen/my_therapists_screen";
 
   // Application internal screen routes
   static const String profileRoute = "/profile_screen";
   static const String notificationsRoute = "/notification_screen";
-
-
-  // Registration and authentication routes
-
-  //Doctor routes
-  static const String doctorProfileRoute = "/doctor_profile_screen";
-  static const String doctorExpRoute = "/doctor_experience";
-  static const String doctorInfoRoute = "/doctor_info";
-  static const String doctorAvailabilityRoute = "/doctor_availability";
-  static const String doctorPricingRoute = "/doctor_pricing";
-  static const String doctorAppointmentsRoute = "/doctor_appointments";
 
   //Registration and athentication routes
 
@@ -104,22 +87,6 @@ class RouteClass {
         page = const NotificationsScreen();
         break;
 
-
-
-      //Doctor routes
-      case doctorProfileRoute:
-        page = const DoctorProfileScreen();
-      case doctorExpRoute:
-        page = const EditExperience();
-      case doctorInfoRoute:
-        page = const EditInfo();
-      case doctorAvailabilityRoute:
-        page = const EditAvailability();
-      case doctorPricingRoute:
-        page = const EditPricing();
-      case doctorAppointmentsRoute:
-        page = const ManageAppointments();
-
       //Registration and athentication routes
       case signInRoute:
         page = const SignInScreen();
@@ -145,15 +112,18 @@ class RouteClass {
     if (args != null) {
       final String transition = args['transition'];
       final Duration? duration = args['duration'] as Duration?;
-      return _buildPageRouteWithTransition(page, transition, duration: duration);
+      return _buildPageRouteWithTransition(page, transition,
+          duration: duration);
     } else {
       return MaterialPageRoute(builder: (_) => page);
     }
   }
 
   // Method to handle different types of transitions and their speeds
-  static PageRoute _buildPageRouteWithTransition(Widget page, String transition, {Duration? duration}) {
-    final animationDuration = duration ?? const Duration(milliseconds: 300); // Default duration is 300ms
+  static PageRoute _buildPageRouteWithTransition(Widget page, String transition,
+      {Duration? duration}) {
+    final animationDuration = duration ??
+        const Duration(milliseconds: 300); // Default duration is 300ms
 
     switch (transition) {
       case 'fade':
