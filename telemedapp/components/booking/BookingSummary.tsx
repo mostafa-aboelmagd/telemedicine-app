@@ -12,6 +12,7 @@ interface BookingSummaryProps {
     date: string;
     slots: { id: number; time: string }[];
   };
+  appointmentType: string;
 }
 
 const BookingSummary: React.FC<BookingSummaryProps> = ({
@@ -19,6 +20,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   selectedDuration,
   doctor,
   selectedDate,
+  appointmentType,
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -46,7 +48,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             patient_id: patientId,
             appointment_date_time: `${selectedDate.date} ${selectedSlot}`,
             appointment_duration: selectedDuration,
-            appointment_type: "Remote",
+            appointment_type: appointmentType,
             availability_id: selectedDate.slots.find(
               (slot) => slot.time === selectedSlot
             )?.id,

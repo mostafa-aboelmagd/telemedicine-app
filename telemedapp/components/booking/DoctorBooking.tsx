@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import DoctorInfo from "@/components/booking/DoctorInfo";
-import DurationSelector from "@/components/booking/DurationSelector";
+import DetailsSelector from "@/components/booking/DetailsSelector";
 import BookingSummary from "@/components/booking/BookingSummary";
 import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
@@ -18,6 +18,7 @@ const DoctorBooking = () => {
   const [selectedDate, setSelectedDate] = useState<any>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [availableDates, setAvailableDates] = useState<any[]>([]);
+  const [appointmentType, setAppointmentType] = useState("Remote");
 
   // Retrieve the doctor data from the query parameters
   useEffect(() => {
@@ -96,15 +97,19 @@ const DoctorBooking = () => {
     <div className="flex flex-col md:flex-row items-center md:justify-center p-6 bg-gray-50 gap-4 mx-auto max-w-[1200px]">
       <div className="flex flex-col p-6 bg-gray-50 gap-10 min-w-[350px] md:min-w-[450px]">
         <DoctorInfo doctor={doctor} />
-        <DurationSelector
+        <DetailsSelector
           selectedDuration={selectedDuration}
           handleDurationChange={handleDurationChange}
+          appointmentType={appointmentType}
+          setAppointmentType={setAppointmentType}
         />
+
         <BookingSummary
           selectedSlot={selectedSlot}
           selectedDuration={selectedDuration}
           doctor={doctor}
           selectedDate={selectedDate}
+          appointmentType={appointmentType}
         />
       </div>
       <div className="flex gap-8 flex-col bg-white rounded-3xl shadow-md p-6 min-w-[350px] lg:min-w-[650px]">
