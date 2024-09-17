@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-// import userImage from "@/images/user.png";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
 

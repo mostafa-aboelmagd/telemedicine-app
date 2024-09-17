@@ -235,6 +235,15 @@ function ChangePassword() {
               Dr. {profileData.firstName} {profileData.lastName}
             </p>
           </div>
+          <button
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+            onClick={() =>
+              (window.location.href = "/doctorProfile/appointments")
+            }
+          >
+            My Appointments
+          </button>
+
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
             <form onSubmit={handleSubmit}>
               <div className="flex pt-4 mb-3">
