@@ -41,7 +41,7 @@ class _AppState extends State<App> {
           },
           child: MaterialApp(
             navigatorKey: navigatorKey,
-            initialRoute: RouteClass.initRoute,
+            initialRoute: RouteClass.doctorProfileRoute,
             onGenerateRoute: RouteClass.generateRoute,
             debugShowCheckedModeBanner: false,
             theme: buildAppTheme(),

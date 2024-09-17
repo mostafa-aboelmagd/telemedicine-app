@@ -86,7 +86,10 @@ class _DoctorProfileScreenState extends ConsumerState<DoctorProfileScreen> {
                                     label: "Edit Profile",
                                     labelColor: AppColors.blue100,
                                     isValid: true,
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, RouteClass.doctorInfoRoute);
+                                    },
                                     outlineColor: AppColors.blue100,
                                     outlinedButton: true,
                                   ),
@@ -165,7 +168,9 @@ class _DoctorProfileScreenState extends ConsumerState<DoctorProfileScreen> {
                       label: "Edit Experience",
                       labelColor: AppColors.white,
                       isValid: true,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, RouteClass.doctorExpRoute);
+                      },
                     ),
                   ],
                 ),
@@ -197,7 +202,10 @@ class _DoctorProfileScreenState extends ConsumerState<DoctorProfileScreen> {
                       label: "Edit Availability",
                       labelColor: AppColors.white,
                       isValid: true,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouteClass.doctorAvailabilityRoute);
+                      },
                     ),
                   ],
                 ),
@@ -234,7 +242,10 @@ class _DoctorProfileScreenState extends ConsumerState<DoctorProfileScreen> {
                       label: "Edit Pricing",
                       labelColor: AppColors.white,
                       isValid: true,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouteClass.doctorPricingRoute);
+                      },
                     ),
                   ],
                 ),
@@ -266,7 +277,10 @@ class _DoctorProfileScreenState extends ConsumerState<DoctorProfileScreen> {
                       label: "Manage Appointments",
                       labelColor: AppColors.white,
                       isValid: true,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouteClass.doctorAppointmentsRoute);
+                      },
                     ),
                   ],
                 ),
