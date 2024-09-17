@@ -104,4 +104,6 @@ const insertAppointment = async (patientId, doctorId, appointmentType, appointme
     }
 };
 
+
+
 module.exports = { retrievePatient, retrieveDoctor, checkAppointmentAvailability, insertAppointment };
