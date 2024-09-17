@@ -1,5 +1,3 @@
-// WeekCalendar.tsx
-
 import React, { useState, useEffect } from "react";
 import {
   format,
@@ -10,9 +8,12 @@ import {
 } from "date-fns";
 
 interface WeekCalendarProps {
-  availableDates: { date: string; slots: string[] }[];
-  handleDateSelect: (date: { date: string; slots: string[] }) => void;
-  selectedDate: { date: string; slots: string[] } | null;
+  availableDates: { date: string; slots: { time: string; id: number }[] }[];
+  handleDateSelect: (date: {
+    date: string;
+    slots: { time: string; id: number }[];
+  }) => void;
+  selectedDate: { date: string; slots: { time: string; id: number }[] } | null;
 }
 
 const WeekCalendar: React.FC<WeekCalendarProps> = ({
@@ -21,8 +22,10 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
   selectedDate,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  // Fix the type to handle slots with time and id
   const [datesWithSlots, setDatesWithSlots] = useState<
-    { date: string; slots: string[] }[]
+    { date: string; slots: { time: string; id: number }[] }[]
   >([]);
 
   useEffect(() => {
@@ -33,6 +36,8 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
     const updatedDatesWithSlots = days.map((day) => {
       const dateStr = format(day, "yyyy-MM-dd");
       const existingDate = availableDates?.find((d) => d.date === dateStr);
+
+      // Ensure that slots include both time and id
       return {
         date: dateStr,
         slots: existingDate ? existingDate.slots : [], // Use empty slots if none exist

@@ -8,7 +8,7 @@ import BookingSummary from "@/components/booking/BookingSummary";
 import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
 import { FaUserCircle } from "react-icons/fa";
-
+import { formatDoctorAvailabilities } from "@/utils/formatDoctorAvailabilities";
 const userImage = <FaUserCircle className="h-10 w-10 text-[#035fe9]" />;
 
 const DoctorBooking = () => {
@@ -55,7 +55,12 @@ const DoctorBooking = () => {
 
           const data = await response.json();
           console.log(data);
-          setAvailableDates(data.availableDates);
+
+          // Format the data using the external function
+          const formattedDates = formatDoctorAvailabilities(data);
+
+          console.log("Formatted Dates: ", formattedDates);
+          setAvailableDates(formattedDates);
         } catch (error) {
           console.error("Error fetching doctor availability", error);
         }
@@ -71,7 +76,10 @@ const DoctorBooking = () => {
     setSelectedDuration(duration);
   };
 
-  const handleDateSelect = (dateObj: { date: string; slots: string[] }) => {
+  const handleDateSelect = (dateObj: {
+    date: string;
+    slots: { time: string; id: number }[];
+  }) => {
     setSelectedDate(dateObj);
     setSelectedSlot(null); // Reset the selected slot when the date changes
   };

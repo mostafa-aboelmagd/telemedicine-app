@@ -1,7 +1,7 @@
 import React from "react";
 
 interface SlotSelectorProps {
-  selectedDate: { date: string; slots: string[] } | null;
+  selectedDate: { date: string; slots: { time: string; id: number }[] } | null;
   selectedSlot: string | null;
   handleSlotSelect: (slot: string) => void;
 }
@@ -28,15 +28,15 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
       {selectedDate && selectedDate.slots?.length > 0 ? (
         selectedDate?.slots.map((slot) => (
           <button
-            key={slot}
-            onClick={() => handleSlotSelect(slot)}
+            key={slot.id}
+            onClick={() => handleSlotSelect(slot.time)}
             className={`p-3 rounded-lg border ${
-              slot === selectedSlot
+              selectedSlot === slot.time
                 ? "bg-green-600 text-white"
                 : "bg-gray-100 text-gray-800"
             }`}
           >
-            {slot}
+            {slot.time}
           </button>
         ))
       ) : (
