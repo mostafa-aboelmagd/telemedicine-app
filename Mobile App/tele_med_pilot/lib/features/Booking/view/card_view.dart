@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart'; // Add this import for date formatting
+import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
 import 'package:tele_med_pilot/features/Booking/view_models/doctor_card_view_model.dart';
 import 'package:tele_med_pilot/ui/components/button.dart';
@@ -105,9 +106,13 @@ class _CardViewState extends State<CardView> {
                           radius: 8,
                           backgroundColor: Colors.transparent,
                           child: Image.asset('assets/icons/team.png')),
-                          SizedBox(width: 8),
-                          Text(card.numSessions.toString()?? "0", style: TextStyle(color: AppColors.blue100),),
-                          Text(' sessions', style: TextStyle(color: AppColors.blue100)),
+                      SizedBox(width: 8),
+                      Text(
+                        card.numSessions.toString() ?? "0",
+                        style: TextStyle(color: AppColors.blue100),
+                      ),
+                      Text(' sessions',
+                          style: TextStyle(color: AppColors.blue100)),
                     ],
                   ),
                   Row(
@@ -116,9 +121,15 @@ class _CardViewState extends State<CardView> {
                           radius: 8,
                           backgroundColor: Colors.transparent,
                           child: Image.asset('assets/icons/star.png')),
-                          SizedBox(width: 8),
-                          Text(card.rating != null ? "${card.rating.toString()} (" :"0", style: TextStyle(color: AppColors.blue100),),
-                          const Text('Reviews)', style: TextStyle(color: AppColors.blue100)),
+                      SizedBox(width: 8),
+                      Text(
+                        card.rating != null
+                            ? "${card.rating.toString()} ("
+                            : "0",
+                        style: TextStyle(color: AppColors.blue100),
+                      ),
+                      const Text('Reviews)',
+                          style: TextStyle(color: AppColors.blue100)),
                     ],
                   )
                 ],
@@ -208,11 +219,20 @@ class _CardViewState extends State<CardView> {
               ),
               SizedBox(width: 10),
               Expanded(
-                child: Button(
-                  label: 'Book Now',
-                  labelColor: Colors.white,
-                  isValid: true,
-                  onTap: () {},
+                child: Padding(
+                  padding: EdgeInsets.all(10.0), // add some padding
+                  child: Button(
+                    label: 'Book Now',
+                    labelColor: Colors.white,
+                    isValid: true,
+                    onTap: () async {
+                      Navigator.pushNamed(
+                        context,
+                        RouteClass.addAppointment,
+                        arguments: {'transition': 'slideLeft', 'card': card},
+                      );
+                    },
+                  ),
                 ),
               ),
             ],

@@ -64,6 +64,16 @@ class AppTextStyles {
     fontWeight: FontWeight.normal,
     color: AppColors.gray60,
   );
+  static TextStyle bodyTextExtraSmallBold = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.bold,
+    color: AppColors.gray60,
+  );
+  static TextStyle textMidBlue = TextStyle(
+    fontSize: 13.sp,
+    fontWeight: FontWeight.normal,
+    color: AppColors.blue100,
+  );
 }
 
 ThemeData buildAppTheme() {

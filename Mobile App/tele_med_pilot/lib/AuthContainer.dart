@@ -19,6 +19,7 @@ class AuthContainer extends StatefulWidget {
 
 /// The state for the AuthContainer widget.
 class _AuthContainerState extends State<AuthContainer> {
+  // ignore: non_constant_identifier_names
   late String? access_token; // Variable to store the access token
 
 
@@ -41,7 +42,7 @@ class _AuthContainerState extends State<AuthContainer> {
     if (access_token == null) {
       return const MainScreen();
     } else {
-      return HomeScreen();
+      return const HomeScreen();
       }
     }
 }

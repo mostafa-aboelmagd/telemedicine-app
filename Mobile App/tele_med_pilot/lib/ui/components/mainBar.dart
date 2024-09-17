@@ -15,7 +15,7 @@ class Mainbar extends StatefulWidget {
     super.key,
     required this.isLeading,
     required this.title,
-    required this.page,
+    this.page,
     this.pop = false,
     this.transition,
     this.duration,

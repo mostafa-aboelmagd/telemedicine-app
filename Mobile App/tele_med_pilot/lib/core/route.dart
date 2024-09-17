@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tele_med_pilot/AuthContainer.dart';
 import 'package:tele_med_pilot/features/Booking/view/Bookingg_view.dart';
+import 'package:tele_med_pilot/features/book%20appointment/view/add_appointment_vie/add_appointment_view.dart';
 import 'package:tele_med_pilot/features/doctors/views/doctors_screen.dart';
 import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
 import 'package:tele_med_pilot/features/more/views/more_screen.dart';
@@ -54,7 +55,11 @@ class RouteClass {
   static const String signUpStep1Route = "/sign_up_step1_screen";
   static const String signUpStep2Route = "/sign_up_step2_screen";
   static const String signUpStep3Route = "/sign_up_step3_screen";
-  static const String bookSession = "/Booking";
+
+  
+  
+  static const String doctorCards = "/Booking";
+  static const String addAppointment = "/add_appointment_view";
 
   // Method to generate route with optional transitions and speed
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -63,8 +68,12 @@ class RouteClass {
 
     Widget page;
     switch (settings.name) {
-      case bookSession:
+      case doctorCards:
         page = const BookingSession();
+        break;
+
+      case addAppointment:
+        page =  AddAppointmentView(card: args!['card']);
         break;
 
       case homeRoute:
@@ -133,7 +142,7 @@ class RouteClass {
     }
 
     // Extract the transition and duration from arguments
-    if (args != null && args.containsKey('transition')) {
+    if (args != null) {
       final String transition = args['transition'];
       final Duration? duration = args['duration'] as Duration?;
       return _buildPageRouteWithTransition(page, transition, duration: duration);
@@ -164,6 +173,23 @@ class RouteClass {
           pageBuilder: (context, animation, secondaryAnimation) => page,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             var begin = const Offset(1.0, 0.0); // Slide from right
+            var end = Offset.zero;
+            var tween = Tween(begin: begin, end: end);
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+          transitionDuration: animationDuration,
+        );
+
+        case 'slideRight':
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = const Offset(-1.0, 0.0); // Slide from right
             var end = Offset.zero;
             var tween = Tween(begin: begin, end: end);
             var offsetAnimation = animation.drive(tween);
