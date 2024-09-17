@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tele_med_pilot/core/constant.dart';
 import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
@@ -223,9 +224,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ],
                 ),
-                onTap: () {
-                  Navigator.pushNamedAndRemoveUntil(context,
-                      RouteClass.initRoute, (Route<dynamic> route) => false);
+                onTap: () async {
+                  final SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                      await prefs.remove('accessToken');
+                  Navigator.pushNamed(
+                        context,
+                        RouteClass.initRoute,
+                      );
                 },
               )
             ],

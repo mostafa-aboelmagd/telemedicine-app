@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tele_med_pilot/AuthContainer.dart';
 import 'package:tele_med_pilot/features/Booking/view/Bookingg_view.dart';
 import 'package:tele_med_pilot/features/doctors/views/doctors_screen.dart';
 import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
@@ -128,7 +129,7 @@ class RouteClass {
         break;
 
       default:
-        page = const MainScreen();
+        page = const AuthContainer();
     }
 
     // Extract the transition and duration from arguments
