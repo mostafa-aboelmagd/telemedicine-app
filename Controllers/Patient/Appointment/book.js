@@ -3,52 +3,37 @@ const  database  = require('../../../Database/Patient/Appointment/Book');
 const bookAppointment = async (req, res) => {
     const patientId = req.id;
     const patientEmail = req.email;
-    const { appointmentType, appointmentDuration, availabilitySlot, doctorId } = req.body;
+    const { appointment_duration, availability_id } = req.body;
     message = '';
     if (!patientId) {
         message = 'Patient ID not found';
         return res.status(404).json(message);
     }
-    if (!patientEmail) {
-        message = 'Patient email not found';
-        return res.status(404).json(message);
-    }
-    if (!appointmentType) {
-        message = 'Patient appointment type not found';
-        return res.status(404).json(message);
-    }
-    if (!appointmentDuration) {
+    
+    if (!appointment_duration) {
         message = 'Patient appointment duration not found';
         return res.status(404).json(message);
     }
-    if (!availabilitySlot) {
+    if (!availability_id) {
         message = 'Availability slot not found';
         return res.status(404).json(message);
     }
-    if (!availabilitySlot) {
-        message = 'Doctor availability slot not found';
-        return res.status(404).json(message);
-    }
-    if (!doctorId) {
-        message = 'Doctor ID not found';
-        return res.status(404).json(message);
-    }
-    const patient = await database.retrievePatient(patientId, patientEmail);
-    if (!patient) {
-        message = 'Patient not registered';
-        return res.status(400).json(message);
-    }
-    const doctor = await database.retrieveDoctor(doctorId);
+    const avaibilitydata = await database.retrieveavailbility(availability_id);
     if (!doctor) {
         message = 'Doctor not registered';
         return res.status(400).json(message);
     }
-    const appointmentFlag = await database.checkAppointmentAvailability(doctorId, availabilitySlot);
-    if (appointmentFlag) {
-        message = 'Doctor is not available at this time';
-        return res.status(400).json(message);
-    }
-    const appointment = await database.insertAppointment(patientId, doctorId, appointmentType, appointmentDuration, availabilitySlot);
+    
+    // const appointmentType= avaibilitydata.availability_type;
+    const appointmentType= "remote";
+    const doctorId = avaibilitydata.doctor_availability_doctor_id;
+    // const appointmentFlag = await database.checkAppointmentAvailability(doctorId, availabilitySlot);
+    // if (appointmentFlag) {
+    //     message = 'Doctor is not available at this time';
+    //     return res.status(400).json(message);
+    // }
+    
+    const appointment = await database.insertAppointment(patientId, doctorId, appointmentType, appointment_duration, availability_id);
     if (!appointment) {
         return res.status(400).json('Appointment could not be booked');
     }
@@ -56,3 +41,67 @@ const bookAppointment = async (req, res) => {
 }
 
 module.exports = { bookAppointment };
+
+
+
+
+
+
+// const  database  = require('../../../Database/Patient/Appointment/Book');
+
+// const bookAppointment = async (req, res) => {
+//     const patientId = req.id;
+//     const patientEmail = req.email;
+//     const { appointmentType, appointmentDuration, availabilitySlot, doctorId } = req.body;
+//     message = '';
+//     if (!patientId) {
+//         message = 'Patient ID not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!patientEmail) {
+//         message = 'Patient email not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!appointmentType) {
+//         message = 'Patient appointment type not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!appointmentDuration) {
+//         message = 'Patient appointment duration not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!availabilitySlot) {
+//         message = 'Availability slot not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!availabilitySlot) {
+//         message = 'Doctor availability slot not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!doctorId) {
+//         message = 'Doctor ID not found';
+//         return res.status(404).json(message);
+//     }
+//     const patient = await database.retrievePatient(patientId, patientEmail);
+//     if (!patient) {
+//         message = 'Patient not registered';
+//         return res.status(400).json(message);
+//     }
+//     const doctor = await database.retrieveDoctor(doctorId);
+//     if (!doctor) {
+//         message = 'Doctor not registered';
+//         return res.status(400).json(message);
+//     }
+//     const appointmentFlag = await database.checkAppointmentAvailability(doctorId, availabilitySlot);
+//     if (appointmentFlag) {
+//         message = 'Doctor is not available at this time';
+//         return res.status(400).json(message);
+//     }
+//     const appointment = await database.insertAppointment(patientId, doctorId, appointmentType, appointmentDuration, availabilitySlot);
+//     if (!appointment) {
+//         return res.status(400).json('Appointment could not be booked');
+//     }
+//     res.json({ message: 'Appointment booked successfully', appointment: appointment });
+// }
+
+// module.exports = { bookAppointment };

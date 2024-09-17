@@ -26,36 +26,35 @@ const pool = new pg.Pool({
     }
 })();
 
-const retrievePatient = async (id, email) => {
-    try {
-    const query = 
-    `SELECT 
-    U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name
-    FROM users U
-    WHERE U.user_id = $1 AND U.user_email = $2 AND U.user_role = $3`;
+// const retrievePatient = async (id, email) => {
+//     try {
+//     const query = 
+//     `SELECT 
+//     U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name
+//     FROM users U
+//     WHERE U.user_id = $1 AND U.user_email = $2 AND U.user_role = $3`;
 
-    const result = await pool.query(query, [id, email, 'Patient']);
-        if (result.rows.length) {
-            console.log('Patient found', result.rows);
-            return result.rows;
-        }
-    console.log('Patient info not found');
-    return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
+//     const result = await pool.query(query, [id, email, 'Patient']);
+//         if (result.rows.length) {
+//             console.log('Patient found', result.rows);
+//             return result.rows;
+//         }
+//     console.log('Patient info not found');
+//     return false;
+//     } catch (error) {
+//         console.error(error.stack);
+//         return false;
+//     }
+// };
 
-const retrieveDoctor = async (id) => {
+const retrieveavailbility = async (id) => {
     try {
         const query = 
         `SELECT 
-        U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name
-        FROM users U
-        WHERE U.user_id = $1 AND U.user_role = $2`;
-    
-        const result = await pool.query(query, [id, 'Doctor']);
+        A.doctor_availability_doctor_id
+        FROM doctor_availability A
+        WHERE A.doctor_availability_id = $1`;    
+        const result = await pool.query(query, [id]);
         if (result.rows.length) {
             console.log('Doctor found', result.rows);
             return result.rows;
@@ -105,5 +104,4 @@ const insertAppointment = async (patientId, doctorId, appointmentType, appointme
 };
 
 
-
-module.exports = { retrievePatient, retrieveDoctor, checkAppointmentAvailability, insertAppointment };
+module.exports = {  retrieveavailbility, checkAppointmentAvailability, insertAppointment };
