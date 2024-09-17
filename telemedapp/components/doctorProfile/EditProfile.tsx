@@ -14,7 +14,6 @@ function EditProfile() {
     firstName: "",
     lastName: "",
     phone: "",
-    email: "",
     gender: "",
     birthYear: "",
     residenceCountry: "",
@@ -28,7 +27,6 @@ function EditProfile() {
     firstName: "",
     lastName: "",
     phone: "",
-    email: "",
     gender: "",
     birthYear: "",
     residenceCountry: "",
@@ -42,7 +40,6 @@ function EditProfile() {
     firstName: "",
     lastName: "",
     phone: "",
-    email: "",
     birthYear: "",
     residenceCountry: "",
     specialization: "",
@@ -92,8 +89,7 @@ function EditProfile() {
   const formFields = [
     { name: "firstName", title: "First Name", type: "text" },
     { name: "lastName", title: "Last Name", type: "text" },
-    { name: "email", title: "Email", type: "email" },
-    { name: "phone", title: "Phone Number", type: "tel" },
+    { name: "phone", title: "Phone Number", type: "number" },
     { name: "birthYear", title: "Birth Year", type: "number" },
     { name: "residenceCountry", title: "Residence Country", type: "text" },
     { name: "specialization", title: "Specialization", type: "text" },
@@ -168,35 +164,10 @@ function EditProfile() {
     }
   };
 
-  const validateEmail = () => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    let changedValidation = false;
-    if (formData.email && !emailPattern.test(formData.email)) {
-      if (errorMessage.email === "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({
-        ...prevError,
-        email: "Email Is Invalid",
-      }));
-    } else {
-      if (errorMessage.email !== "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({ ...prevError, email: "" }));
-    }
-
-    if (changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({ ...prevForm }));
-    }
-  };
-
   const validatePhone = () => {
-    const phonePattern = /^\+201(0|1|2|5)(\d{8})$/;
+    const phonePattern = /^-?\d+$/;
     let changedValidation = false;
-    if (
-      formData.phone &&
-      (!phonePattern.test(formData.phone) || formData.phone.length != 13)
+    if (formData.phone && (!phonePattern.test(formData.phone))
     ) {
       if (errorMessage.phone === "") {
         changedValidation = true;
@@ -218,11 +189,12 @@ function EditProfile() {
   };
 
   const validateBirthYear = () => {
+    const birthYearPattern = /^-?\d+$/;
     let changedValidation = false;
 
     if (
       formData.birthYear &&
-      (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011)
+      (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011 || !birthYearPattern.test(formData.birthYear))
     ) {
       if (errorMessage.birthYear === "") {
         changedValidation = true;
@@ -371,10 +343,6 @@ function EditProfile() {
 
       case "lastName":
         validateLastName();
-        break;
-
-      case "email":
-        validateEmail();
         break;
 
       case "phone":
@@ -558,7 +526,7 @@ function EditProfile() {
                   </button>
                   {error && (
                     <p className="font-semibold text-red-700 mt-4">
-                      Email Already Registered With Another Account!
+                      Couldn't Edit Profile Info!
                     </p>
                   )}
                 </div>

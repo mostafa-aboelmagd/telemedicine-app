@@ -208,8 +208,8 @@ function SignUpForm() {
   };
 
   const validateBirthYear = () => {
-    let changedValidation = false;
     const birthYearPattern = /^-?\d+$/;
+    let changedValidation = false;
 
     if (
       formData.birthYear &&
