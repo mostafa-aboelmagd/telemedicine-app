@@ -4,7 +4,7 @@ const MedicalHistory = require('../../../Database/Patient/MedicalHistory/viewPre
 const { validatePrescriptionData } = require('../../../Utilities');
 const { mapPrescriptionData } = require('../../../Utilities');
 const getPrescription = async (req, res) => {
-  const patientId = req.body.patientId;
+  const patientId = req.params.patientId;
 
   try {
     

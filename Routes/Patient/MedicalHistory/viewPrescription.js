@@ -6,6 +6,6 @@ const patientHistoryViewPrescriptionController = require('../../../Controllers/P
 
 const router = express.Router();
 
-router.get('', patientHistoryViewPrescriptionController.getPrescription);
+router.get('/:patientId', patientHistoryViewPrescriptionController.getPrescription);
 
 module.exports = router;
