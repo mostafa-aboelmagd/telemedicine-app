@@ -81,27 +81,32 @@ function TimeSlots() {
 
   useEffect(() => {
     token = localStorage.getItem("jwt");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setProfileData(() => response.formattedDoctor));
-
-    fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/availabilities`,
-      {
+    if(!token) {
+      window.location.href = "/auth/signin";
+    }
+    else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
         mode: "cors",
         headers: {
           Authorization: "Bearer " + token,
         },
-      }
-    )
-      .then((response) => response.json())
-      .then((response) => setOldTimesTemp(() => response.availabilities))
-      .finally(() => setLoading(false));
+      })
+        .then((response) => response.json())
+        .then((response) => setProfileData(() => response.formattedDoctor));
+
+      fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/availabilities`,
+        {
+          mode: "cors",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((response) => setOldTimesTemp(() => response.availabilities))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   useEffect(() => {

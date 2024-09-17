@@ -39,16 +39,20 @@ function ChangePassword() {
 
   useEffect(() => {
     token = localStorage.getItem("jwt");
-
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setProfileData(() => response.formattedPatient))
-      .finally(() => setLoading(false));
+    if(!token) {
+      window.location.href = "/auth/signin";
+    }
+    else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
+        mode: "cors",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => setProfileData(() => response.formattedPatient))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   useEffect(() => {

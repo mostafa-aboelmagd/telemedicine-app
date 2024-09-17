@@ -33,17 +33,22 @@ function ViewProfile() {
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setTempData(() => response.formattedPatient))
-      .finally(() => setLoading(false));
+    if(!token) {
+      window.location.href = "/auth/signin";
+    }
+    else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => setTempData(() => response.formattedPatient))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   useEffect(() => {
@@ -61,6 +66,12 @@ function ViewProfile() {
     { name: "birthYear", title: "Year Of Birth" },
     { name: "gender", title: "Gender" },
   ];
+
+  const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    localStorage.clear();
+    window.location.href = "/auth/signin";
+  };
 
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
@@ -155,7 +166,7 @@ function ViewProfile() {
                   </Link>
                 </div>
                 <div className="mt-5 mb-3">
-                  <button className="font-medium p-3 border border-solid text-red-600 border-red-600 rounded-full">
+                  <button onClick={handleSignOut} className="font-medium p-3 border border-solid text-red-600 border-red-600 rounded-full">
                     Sign Out
                   </button>
                 </div>
