@@ -45,7 +45,7 @@ class _BookingSessionState extends State<BookingSession> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Mainbar(
-              title: "Our Therapist",
+              title: "Our Doctors",
               isLeading: true,
               pop: true,
               page: RouteClass.homeRoute,

@@ -66,7 +66,7 @@ class _CardViewState extends State<CardView> {
           Row(
             children: [
               CircleAvatar(
-                radius: 35,
+                radius: 30,
                 backgroundColor: Colors.transparent,
                 backgroundImage: imageProvider,
               ),
