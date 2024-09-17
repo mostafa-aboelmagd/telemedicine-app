@@ -12,13 +12,6 @@ import 'package:tele_med_pilot/features/sign_up/signup_step3_screen.dart';
 import 'package:tele_med_pilot/features/support/views/support_screen.dart';
 import 'package:tele_med_pilot/ui/main_screen.dart';
 import 'package:tele_med_pilot/ui/main_screen_layout.dart';
-//Doctor routes
-import 'package:tele_med_pilot/features/doctorFeatures/profile/doctor_profile_screen.dart';
-import 'package:tele_med_pilot/features/doctorFeatures/edit_exp/edit_exp.dart';
-import 'package:tele_med_pilot/features/doctorFeatures/edit_availability/edit_availability.dart';
-import 'package:tele_med_pilot/features/doctorFeatures/edit_info/edit_info.dart';
-import 'package:tele_med_pilot/features/doctorFeatures/edit_pricing/edit_pricing.dart';
-import 'package:tele_med_pilot/features/doctorFeatures/manage_app/manage_appointments.dart';
 
 class RouteClass {
   static const String initRoute = "/";
@@ -35,14 +28,6 @@ class RouteClass {
   //Application internal screen routes
   static const String profileRoute = "/profile_screen";
   static const String notificationsRoute = "/notification_screen";
-
-  //Doctor routes
-  static const String doctorProfileRoute = "/doctor_profile_screen";
-  static const String doctorExpRoute = "/doctor_experience";
-  static const String doctorInfoRoute = "/doctor_info";
-  static const String doctorAvailabilityRoute = "/doctor_availability";
-  static const String doctorPricingRoute = "/doctor_pricing";
-  static const String doctorAppointmentsRoute = "/doctor_appointments";
 
   //Registration and athentication routes
   static const String signInRoute = "/sign_in_screen";
@@ -74,20 +59,6 @@ class RouteClass {
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case notificationsRoute:
         return MaterialPageRoute(builder: (_) => const NotificationsScreen());
-
-      //Doctor routes
-      case doctorProfileRoute:
-        return MaterialPageRoute(builder: (_) => const DoctorProfileScreen());
-      case doctorExpRoute:
-        return MaterialPageRoute(builder: (_) => const EditExperience());
-      case doctorInfoRoute:
-        return MaterialPageRoute(builder: (_) => const EditInfo());
-      case doctorAvailabilityRoute:
-        return MaterialPageRoute(builder: (_) => const EditAvailability());
-      case doctorPricingRoute:
-        return MaterialPageRoute(builder: (_) => const EditPricing());
-      case doctorAppointmentsRoute:
-        return MaterialPageRoute(builder: (_) => const ManageAppointments());
 
       //Registration and athentication routes
       case signInRoute:
