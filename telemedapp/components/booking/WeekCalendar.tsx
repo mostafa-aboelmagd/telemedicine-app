@@ -53,22 +53,22 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
   return (
     <div className="flex flex-col gap-2 mb-4">
       <div className="flex flex-row  items-center  mb-4">
-        <h3 className="text-lg font-bold">Select date:</h3>
+        <h3 className="text-sm md:text-lg font-bold">Select date:</h3>
 
-        <div className="mx-auto">
+        <div className="mx-auto items-center flex justify-evenly">
           <button
             onClick={handlePreviousWeek}
             className=" px-3 py-1 bg-gray-200 rounded-full text-gray-700"
           >
             {"<"}
           </button>
-          <span className="mx-2 text-xl font-semibold">
+          <span className="md:mx-2  mx-1 md:text-xl text-sm text-center font-semibold md:max-w-44 max-w-28 md:w-44 w-28">
             {format(startOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d")} -{" "}
             {format(endOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d")}
           </span>
           <button
             onClick={handleNextWeek}
-            className=" px-3 py-1 bg-gray-200 rounded-full text-gray-700"
+            className=" px-3 py-1 bg-gray-200 rounded-full text-gray-700 "
           >
             {">"}
           </button>

@@ -83,6 +83,14 @@ function ViewProfile() {
               Dr. {profileData.firstName} {profileData.lastName}
             </p>
           </div>
+          <button
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+            onClick={() =>
+              (window.location.href = "/doctorProfile/appointments")
+            }
+          >
+            My Appointments
+          </button>
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[880px]:basis-7/12 min-[880px]:max-w-full">
             <div className="flex pt-4 mb-3">
               <Link href="/" className="text-blue-500 font-bold ml-7 w-1/2">
