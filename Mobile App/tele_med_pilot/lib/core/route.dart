@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tele_med_pilot/features/doctorFeatures/doctor_profile_screen.dart';
 import 'package:tele_med_pilot/features/doctors/views/doctors_screen.dart';
 import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
 import 'package:tele_med_pilot/features/more/views/more_screen.dart';
@@ -12,6 +13,7 @@ import 'package:tele_med_pilot/features/sign_up/signup_step3_screen.dart';
 import 'package:tele_med_pilot/features/support/views/support_screen.dart';
 import 'package:tele_med_pilot/ui/main_screen.dart';
 import 'package:tele_med_pilot/ui/main_screen_layout.dart';
+import 'package:tele_med_pilot/features/doctorFeatures/doctor_profile_screen.dart';
 
 class RouteClass {
   static const String initRoute = "/";
@@ -28,6 +30,9 @@ class RouteClass {
   //Application internal screen routes
   static const String profileRoute = "/profile_screen";
   static const String notificationsRoute = "/notification_screen";
+
+  //Doctor profile screen route
+  static const String doctorProfileRoute = "/doctor_profile_screen";
 
   //Registration and athentication routes
   static const String signInRoute = "/sign_in_screen";
@@ -59,6 +64,9 @@ class RouteClass {
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case notificationsRoute:
         return MaterialPageRoute(builder: (_) => const NotificationsScreen());
+
+      case doctorProfileRoute:
+        return MaterialPageRoute(builder: (_) => const DoctorProfileScreen());
 
       //Registration and athentication routes
       case signInRoute:
