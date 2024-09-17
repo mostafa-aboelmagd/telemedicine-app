@@ -22,13 +22,10 @@ const DoctorBooking = () => {
   // Retrieve the doctor data from the query parameters
   useEffect(() => {
     const doctorParam = searchParams.get("doctor");
-    console.log("Doctor Param: ", doctorParam);
-    console.log("DoctorID: ");
 
     if (doctorParam) {
       try {
-        // const parsedDoctor = JSON.parse(decodeURIComponent(doctorParam)); // Decode and parse doctor object
-        const parsedDoctor = doctorParam;
+        const parsedDoctor = JSON.parse(decodeURIComponent(doctorParam)); // Decode and parse doctor object
         console.log("Parsed Doctor: ", parsedDoctor);
 
         setDoctor(parsedDoctor);
@@ -45,7 +42,7 @@ const DoctorBooking = () => {
       if (doctor && doctor.id) {
         try {
           const response = await fetch(
-            `/patient/appointment/Availabilities/${doctor.id}`,
+            `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/${doctor.id}
             {
               headers: {
                 Authorization: `Bearer ${token}`,
