@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import userImage from "@/images/user.png";
 import Link from "next/link";
-
+import { FaPlus } from "react-icons/fa";
 import { FaRegFilePdf } from "react-icons/fa6";
 import { FaRegImage } from "react-icons/fa";
 import { FaLink } from "react-icons/fa";
@@ -93,6 +93,7 @@ const PatientDocuments = () => {
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
       <div>
+        <FaPlus className="z-10 fixed bottom-[3%] right-[3%] rounded-full w-14 h-14 bg-[#035fe9] p-4 cursor-pointer text-white shadow-md shadow-gray-600" />
         <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
           {userImage}
           <p className="text-blue-500 mb-1 font-semibold">
