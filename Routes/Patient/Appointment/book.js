@@ -5,7 +5,7 @@ const patientGetAvailabilitiesController = require('../../../Controllers/Patient
 const { tokenAuthentication } = require('../../../Middleware/User/Authentication');
 const router = express.Router();
 
-router.put('/book', tokenAuthentication, patientAppointmentBookController.bookAppointment);
+router.post('/book', tokenAuthentication, patientAppointmentBookController.bookAppointment);
 router.get('/Availabilities/:doctorId',tokenAuthentication, patientGetAvailabilitiesController.patientGetAvailabilities);
 
 module.exports = router;
