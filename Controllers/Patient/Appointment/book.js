@@ -2,52 +2,43 @@ const  database  = require('../../../Database/Patient/Appointment/Book');
 
 const bookAppointment = async (req, res) => {
     const patientId = req.id;
-    const patientEmail = req.email;
-    const { appointment_duration, availability_id } = req.body;
-    message = '';
+    const { availabilityId, appointmentDuration } = req.body;
+    console.log(availabilityId, appointmentDuration);
     if (!patientId) {
-        message = 'Patient ID not found';
-        return res.status(404).json(message);
+      return res.status(404).json({ message: 'Patient ID not found' });
     }
-    
-    if (!appointment_duration) {
-        message = 'Patient appointment duration not found';
-        return res.status(404).json(message);
+  
+    if (!availabilityId || !appointmentDuration) {
+      return res.status(400).json({ message: 'Missing availability ID or appointment duration' });
     }
-    if (!availability_id) {
-        message = 'Availability slot not found';
-        return res.status(404).json(message);
+  
+    try {
+      // Get doctor ID from availability
+      const doctorId = await database.getDoctorFromAvailability(availabilityId);
+      if (!doctorId) {
+        return res.status(404).json({ message: 'Invalid availability ID' });
+      }
+  
+      // Book appointment
+      const appointment = await database.createAppointment(patientId, doctorId, appointmentDuration, availabilityId);
+      if (!appointment) {
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+  
+      return res.json({ message: 'Appointment booked successfully', appointment });
+    } catch (error) {
+      console.error('Error booking appointment:', error);
+      return res.status(500).json({ message: 'Internal server error' });
     }
-    const avaibilitydata = await database.retrieveavailbility(availability_id);
-    if (!doctor) {
-        message = 'Doctor not registered';
-        return res.status(400).json(message);
-    }
-    
-    // const appointmentType= avaibilitydata.availability_type;
-    const appointmentType= "remote";
-    const doctorId = avaibilitydata.doctor_availability_doctor_id;
-    // const appointmentFlag = await database.checkAppointmentAvailability(doctorId, availabilitySlot);
-    // if (appointmentFlag) {
-    //     message = 'Doctor is not available at this time';
-    //     return res.status(400).json(message);
-    // }
-    
-    const appointment = await database.insertAppointment(patientId, doctorId, appointmentType, appointment_duration, availability_id);
-    if (!appointment) {
-        return res.status(400).json('Appointment could not be booked');
-    }
-    res.json({ message: 'Appointment booked successfully', appointment: appointment });
-}
-
-module.exports = { bookAppointment };
+  };
+  
+  module.exports = { bookAppointment };
+  
 
 
 
 
 
-
-// const  database  = require('../../../Database/Patient/Appointment/Book');
 
 // const bookAppointment = async (req, res) => {
 //     const patientId = req.id;

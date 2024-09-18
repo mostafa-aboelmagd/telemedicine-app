@@ -26,82 +26,40 @@ const pool = new pg.Pool({
     }
 })();
 
-// const retrievePatient = async (id, email) => {
-//     try {
-//     const query = 
-//     `SELECT 
-//     U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name
-//     FROM users U
-//     WHERE U.user_id = $1 AND U.user_email = $2 AND U.user_role = $3`;
-
-//     const result = await pool.query(query, [id, email, 'Patient']);
-//         if (result.rows.length) {
-//             console.log('Patient found', result.rows);
-//             return result.rows;
-//         }
-//     console.log('Patient info not found');
-//     return false;
-//     } catch (error) {
-//         console.error(error.stack);
-//         return false;
-//     }
-// };
-
-const retrieveavailbility = async (id) => {
+const getDoctorFromAvailability = async (availabilityId) => {
     try {
-        const query = 
-        `SELECT 
-        A.doctor_availability_doctor_id
-        FROM doctor_availability A
-        WHERE A.doctor_availability_id = $1`;    
-        const result = await pool.query(query, [id]);
-        if (result.rows.length) {
-            console.log('Doctor found', result.rows);
-            return result.rows;
-        }
-        console.log('Doctor not found');
-        return false;
+      const result = await pool.query(
+        'SELECT doctor_availability_doctor_id FROM doctor_availability WHERE doctor_availability_id = $1',
+        [availabilityId]
+      );
+  
+      if (result.rows.length) {
+        return result.rows[0].doctor_availability_doctor_id;
+      }
+  
+      return null;
     } catch (error) {
-        console.error(error.stack);
-        return false;
+      console.error(error.stack);
+      return null;
     }
-};
-
-const checkAppointmentAvailability = async (doctorId, doctorAvailabilitySlot) => {
+  };
+  
+  const createAppointment = async (patientId, doctorId, appointmentDuration, availabilityId) => {
     try {
-        const result = await pool.query(
-            'SELECT * FROM appointment WHERE appointment_doctor_id = $1 AND appointment_availability_slot = $2 AND appointment_status = $3',
-            [doctorId, doctorAvailabilitySlot, "scheduled"]
-        );
-        if (result.rows.length) {
-            console.log('Doctor already have an appointment at this time', result.rows);
-            return result.rows;
-        }
-        console.log('Doctor is available at this time');
-        return false;
+      const result = await pool.query(
+        'INSERT INTO appointment (appointment_patient_id, appointment_doctor_id, appointment_duration, appointment_availability_slot) VALUES ($1, $2, $3, $4) RETURNING *',
+        [patientId, doctorId, appointmentDuration, availabilityId]
+      );
+  
+      if (result.rows.length) {
+        return result.rows[0];
+      }
+  
+      return null;
     } catch (error) {
-        console.error(error.stack);
-        return false;
+      console.error(error.stack);
+      return null;
     }
-};
-
-const insertAppointment = async (patientId, doctorId, appointmentType, appointmentDuration, doctorAvailabilitySlot) => {
-    try {
-        const result = await pool.query(
-            'INSERT INTO appointment(appointment_patient_id, appointment_doctor_id, appointment_status, appointment_type, appointment_duration, appointment_availability_slot) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
-            [patientId, doctorId, "scheduled", appointmentType, appointmentDuration, doctorAvailabilitySlot]
-        );
-        if (result.rows.length) {
-            console.log('Appointment added successfully', result.rows);
-            return result.rows;
-        }
-        console.log('Could not add appointment');
-        return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
-
-
-module.exports = {  retrieveavailbility, checkAppointmentAvailability, insertAppointment };
+  };
+  
+  module.exports = { getDoctorFromAvailability, createAppointment };
