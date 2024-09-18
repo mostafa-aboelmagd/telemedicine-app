@@ -31,8 +31,6 @@ const pool = new pg.Pool({
 const updateInfo = async (patientId, patientEmail, updates) => {
     const client = await pool.connect();
     try {
-        await client.query('BEGIN');
-
         const userFields = [];
         const userValues = [];
         let userIndex = 1;
@@ -49,36 +47,32 @@ const updateInfo = async (patientId, patientEmail, updates) => {
 
         if (!userFields.length) {
             console.log('No updates provided');
-            await client.query('ROLLBACK');
             return false;
         }
 
         userValues.push(patientId, 'Patient', patientEmail);
         const userQuery = `UPDATE users SET ${userFields.join(', ')} WHERE user_id = $${userIndex} AND user_role = $${userIndex + 1} AND user_email = $${userIndex + 2} RETURNING *`;
-        const updatedUserInfo = await client.query(userQuery, userValues);
+        const updatedUserInfo = await pool.query(userQuery, userValues);
 
         if (!updatedUserInfo.rows.length) {
             console.log('Could not update user info');
-            await client.query('ROLLBACK');
             return false;
         }
         console.log('User info updated', updatedUserInfo.rows);
 
         if (updates.languages && updates.languages.length) {
             if (updates.languages[0] !== null && updates.languages[0] !== undefined && updates.languages[0] !== '') {
-                const deletedLanguages = await client.query('DELETE FROM languages WHERE lang_user_id = $1 RETURNING *', [patientId]);
+                const deletedLanguages = await pool.query('DELETE FROM languages WHERE lang_user_id = $1 RETURNING *', [patientId]);
                 if (!deletedLanguages.rows.length) {
                     console.log('Could not delete languages');
-                    await client.query('ROLLBACK');
                     return false;
                 }
 
                 for (const language of updates.languages) {
                     if (language !== '' && language !== null && language !== undefined) {
-                        const updatedLanguage = await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2) RETURNING *', [patientId, language]);
+                        const updatedLanguage = await pool.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2) RETURNING *', [patientId, language]);
                         if (!updatedLanguage.rows.length) {
                             console.log('Could not update languages');
-                            await client.query('ROLLBACK');
                             return false;
                         }
                         console.log('Languages updated', updatedLanguage.rows);
@@ -104,23 +98,17 @@ const updateInfo = async (patientId, patientEmail, updates) => {
             GROUP BY 
                 u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year
         `;
-        const combinedResult = await client.query(combinedQuery, [patientId, 'Patient', patientEmail]);
+        const combinedResult = await pool.query(combinedQuery, [patientId, 'Patient', patientEmail]);
 
         if (!combinedResult.rows.length) {
             console.log('Could not update patient info');
-            await client.query('ROLLBACK');
             return false;
         }
-
-        await client.query('COMMIT');
         console.log('Patient info updated', combinedResult.rows);
         return combinedResult.rows;
     } catch (error) {
-        await client.query('ROLLBACK');
         console.error('Error updating patient info:', error.stack);
         return false;
-    } finally {
-        client.release();
     }
 };
 
