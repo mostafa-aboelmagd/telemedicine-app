@@ -75,7 +75,7 @@ const Prescriptions = () => {
       prescriptionList.find((prescription) => prescription.id === id)
     );
   };
-  const handleDownloadPrescription = () => {};
+  const handleDownloadPrescription = () => { };
   const handlePrevPrescription = () => {
     const currentIndex = prescriptionList.findIndex(
       (prescription) => prescription.id === openPrescription.id
@@ -98,14 +98,10 @@ const Prescriptions = () => {
     }
   };
   const [prescriptionList, setPrescriptionList] = useState<any[]>([]);
-  // const headers = {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-  // }
-  const fetchPrescriptions = async () => {
+  const fetchPrescriptions = async (id: any, headers: any) => {
     try {
-      // const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/prescription/view`, { mode: 'cors', headers });
-      const response = await fetch(`http://localhost:3000/prescriptionList`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/prescription/view/${id}`, { mode: 'cors', headers });
+      // const response = await fetch(`http://localhost:3000/prescriptionList`);
       const data = await response.json();
       const orderedData = data.sort(
         (a: any, b: any) =>
@@ -117,7 +113,12 @@ const Prescriptions = () => {
     }
   };
   useEffect(() => {
-    fetchPrescriptions();
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+    }
+    const id = localStorage.getItem("userId");
+    fetchPrescriptions(id, headers);
   }, []);
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">

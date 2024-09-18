@@ -1,13 +1,17 @@
 import React from "react";
 
-interface DurationSelectorProps {
+interface DetailsSelectorProps {
   selectedDuration: number;
   handleDurationChange: (duration: number) => void;
+  appointmentType: string;
+  setAppointmentType: (type: string) => void;
 }
 
-const DurationSelector: React.FC<DurationSelectorProps> = ({
+const DetailsSelector: React.FC<DetailsSelectorProps> = ({
   selectedDuration,
   handleDurationChange,
+  appointmentType,
+  setAppointmentType,
 }) => (
   <div className="bg-white rounded-3xl shadow-md p-6 w-full">
     <h3 className="text-xl font-semibold mb-4">Select session duration:</h3>
@@ -35,7 +39,31 @@ const DurationSelector: React.FC<DurationSelectorProps> = ({
         30 Min
       </label>
     </div>
+    <div className="flex items-center space-x-4">
+      <label className="flex items-center">
+        <input
+          type="radio"
+          name="type"
+          value="Remote"
+          checked={appointmentType === "Remote"}
+          onChange={() => setAppointmentType("Remote")}
+          className="mr-2"
+        />
+        Onsite
+      </label>
+      <label className="flex items-center">
+        <input
+          type="radio"
+          name="type"
+          value="Onsite"
+          checked={appointmentType === "Onsite"}
+          onChange={() => setAppointmentType("Onsite")}
+          className="mr-2"
+        />
+        Remote
+      </label>
+    </div>
   </div>
 );
 
-export default DurationSelector;
+export default DetailsSelector;

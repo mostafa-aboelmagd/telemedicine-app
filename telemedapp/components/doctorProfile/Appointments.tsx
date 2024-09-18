@@ -31,22 +31,17 @@ const Appointments = () => {
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
-    if(!token) {
-      window.location.href = "/auth/signin";
-    }
-    else {
-      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => setTempData(() => response.formattedPatient))
-        .finally(() => setLoading(false));
-    }
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => setTempData(() => response.formattedPatient))
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -258,7 +253,7 @@ const Appointments = () => {
   }, [doctors, filters]);
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
-      <div>
+      <div className="flex flex-col gap-4">
         <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
           {userImage}
           <p className="text-blue-500 mb-1 font-semibold">{`${profileData.firstName} ${profileData.lastName}`}</p>
@@ -283,9 +278,7 @@ const Appointments = () => {
         </div>
         <button
           className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
-          onClick={() =>
-            (window.location.href = "/patientProfile/appointments")
-          }
+          onClick={() => (window.location.href = "/doctorProfile/appointments")}
         >
           My Appointments
         </button>

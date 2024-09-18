@@ -1,5 +1,3 @@
-// WeekCalendar.tsx
-
 import React, { useState, useEffect } from "react";
 import {
   format,
@@ -10,9 +8,12 @@ import {
 } from "date-fns";
 
 interface WeekCalendarProps {
-  availableDates: { date: string; slots: string[] }[];
-  handleDateSelect: (date: { date: string; slots: string[] }) => void;
-  selectedDate: { date: string; slots: string[] } | null;
+  availableDates: { date: string; slots: { time: string; id: number }[] }[];
+  handleDateSelect: (date: {
+    date: string;
+    slots: { time: string; id: number }[];
+  }) => void;
+  selectedDate: { date: string; slots: { time: string; id: number }[] } | null;
 }
 
 const WeekCalendar: React.FC<WeekCalendarProps> = ({
@@ -21,8 +22,10 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
   selectedDate,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  // Fix the type to handle slots with time and id
   const [datesWithSlots, setDatesWithSlots] = useState<
-    { date: string; slots: string[] }[]
+    { date: string; slots: { time: string; id: number }[] }[]
   >([]);
 
   useEffect(() => {
@@ -33,6 +36,8 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
     const updatedDatesWithSlots = days.map((day) => {
       const dateStr = format(day, "yyyy-MM-dd");
       const existingDate = availableDates?.find((d) => d.date === dateStr);
+
+      // Ensure that slots include both time and id
       return {
         date: dateStr,
         slots: existingDate ? existingDate.slots : [], // Use empty slots if none exist
@@ -53,22 +58,22 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
   return (
     <div className="flex flex-col gap-2 mb-4">
       <div className="flex flex-row  items-center  mb-4">
-        <h3 className="text-lg font-bold">Select date:</h3>
+        <h3 className="text-sm md:text-lg font-bold">Select date:</h3>
 
-        <div className="mx-auto">
+        <div className="mx-auto items-center flex justify-evenly">
           <button
             onClick={handlePreviousWeek}
             className=" px-3 py-1 bg-gray-200 rounded-full text-gray-700"
           >
             {"<"}
           </button>
-          <span className="mx-2 text-xl font-semibold">
+          <span className="md:mx-2  mx-1 md:text-xl text-sm text-center font-semibold md:max-w-44 max-w-28 md:w-44 w-28">
             {format(startOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d")} -{" "}
             {format(endOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d")}
           </span>
           <button
             onClick={handleNextWeek}
-            className=" px-3 py-1 bg-gray-200 rounded-full text-gray-700"
+            className=" px-3 py-1 bg-gray-200 rounded-full text-gray-700 "
           >
             {">"}
           </button>

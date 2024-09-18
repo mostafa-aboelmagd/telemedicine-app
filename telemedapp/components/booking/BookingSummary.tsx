@@ -8,7 +8,11 @@ interface BookingSummaryProps {
     fees60min: number;
     fees30min: number;
   };
-  selectedDate: { date: string; slots: string[] } | null;
+  selectedDate: {
+    date: string;
+    slots: { id: number; time: string }[];
+  };
+  appointmentType: string;
 }
 
 const BookingSummary: React.FC<BookingSummaryProps> = ({
@@ -16,12 +20,12 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   selectedDuration,
   doctor,
   selectedDate,
+  appointmentType,
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const patientId = localStorage.getItem("userId");
 
-  // Handle booking API call
   const handleBooking = async () => {
     if (!selectedSlot || !selectedDate) return;
 
@@ -32,7 +36,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       const token = localStorage.getItem("jwt");
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_NAME}/appointment/create`,
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/book`,
         {
           method: "POST",
           headers: {
@@ -44,9 +48,10 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             patient_id: patientId,
             appointment_date_time: `${selectedDate.date} ${selectedSlot}`,
             appointment_duration: selectedDuration,
-            appointment_type: selectedDuration === 60 ? "60min" : "30min",
-            appointment_status: "pending", // You can change based on requirements
-            appointment_location: "Online", // Assuming it's online, modify if needed
+            appointment_type: appointmentType,
+            availability_id: selectedDate.slots.find(
+              (slot) => slot.time === selectedSlot
+            )?.id,
           }),
         }
       );
@@ -97,7 +102,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                       : `${doctor.fees30min} EGP`
                   }`
                 : ""
-            } EGP`}
+            } `}
       </button>
       {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
     </div>

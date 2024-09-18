@@ -7,12 +7,11 @@ const BookingButton = ({ doctor }: { doctor: any }) => {
   // Navigate to booking page with doctor info
   const handleBookNow = () => {
     // console.log("Doctor: ", doctor);
-    // const encodedDoctor = encodeURIComponent(JSON.stringify(doctor)); // Encode the doctor object
     if(!localStorage.getItem("jwt")) {
       window.location.href = "/auth/signin";
     }
     else {
-      const encodedDoctor = JSON.stringify(doctor); // Encode the doctor object
+      const encodedDoctor = encodeURIComponent(JSON.stringify(doctor)); // Encode the doctor object
       router.push(`/booking?doctor=${encodedDoctor}`); // Construct URL manually
     }
   };
