@@ -62,12 +62,7 @@ const updateInfo = async (patientId, patientEmail, updates) => {
         if (Array.isArray(updates.languages) && updates.languages.length > 0) {
             const validLanguages = updates.languages.filter(language => language !== '' && language !== null && language !== undefined);
             if (validLanguages.length > 0) {
-                const deletedLanguages = await pool.query('DELETE FROM languages WHERE lang_user_id = $1 RETURNING *', [patientId]);
-                if (!deletedLanguages.rows.length) {
-                    console.log('Could not delete languages');
-                    return false;
-                }
-
+                await pool.query('DELETE FROM languages WHERE lang_user_id = $1 RETURNING *', [patientId]);
                 for (const language of validLanguages) {
                     const updatedLanguage = await pool.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2) RETURNING *', [patientId, language]);
                     if (!updatedLanguage.rows.length) {
