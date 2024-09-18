@@ -69,7 +69,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     onTap: () {
                       Navigator.pushNamed(
                         context,
-                        RouteClass.bookSession,
+                        RouteClass.doctorCards,
                         arguments: {'transition': 'slideLeft',},
                       );
                     },
