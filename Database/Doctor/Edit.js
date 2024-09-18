@@ -30,10 +30,7 @@ const pool = new pg.Pool({
 })();
 
 const updateInfo = async (doctorId, doctorEmail, updates) => {
-    const client = await pool.connect();
     try {
-        await client.query('BEGIN');
-
         const userFields = [];
         const userValues = [];
         const doctorFields = [];
@@ -58,23 +55,23 @@ const updateInfo = async (doctorId, doctorEmail, updates) => {
         if (userFields.length > 0) {
             userValues.push(doctorId, 'Doctor', doctorEmail);
             const userQuery = `UPDATE users SET ${userFields.join(', ')} WHERE user_id = $${userIndex} AND user_role = $${userIndex + 1} AND user_email = $${userIndex + 2} RETURNING *`;
-            const updatedUserInfo = await client.query(userQuery, userValues);
+            const updatedUserInfo = await pool.query(userQuery, userValues);
             console.log('User info updated', updatedUserInfo.rows);
         }
 
         if (doctorFields.length > 0) {
             doctorValues.push(doctorId);
             const doctorQuery = `UPDATE doctor SET ${doctorFields.join(', ')} WHERE doctor_user_id_reference = $${doctorIndex} RETURNING *`;
-            const updatedDoctorInfo = await client.query(doctorQuery, doctorValues);
+            const updatedDoctorInfo = await pool.query(doctorQuery, doctorValues);
             console.log('Doctor info updated', updatedDoctorInfo.rows);
         }
 
         if (updates.languages.length > 0) {
             if(updates.languages[0] !== null && updates.languages[0] !== undefined && updates.languages[0] !== '') {
-                await client.query('DELETE FROM languages WHERE lang_user_id = $1', [doctorId]);
+                await pool.query('DELETE FROM languages WHERE lang_user_id = $1', [doctorId]);
                 for (const language of updates.languages) {
                     if(language !== '' && language !== null && language !== undefined){
-                        await client.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2)', [doctorId, language]);
+                        await pool.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2)', [doctorId, language]);
                         console.log('Languages updated', language);
                     }
                 }
@@ -96,16 +93,12 @@ const updateInfo = async (doctorId, doctorEmail, updates) => {
             GROUP BY 
                 u.user_id, d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization
         `;
-        const combinedResult = await client.query(combinedQuery, [doctorId]);
-
-        await client.query('COMMIT');
+        const combinedResult = await pool.query(combinedQuery, [doctorId]);
+        console.log('Doctor info updated', combinedResult.rows);
         return combinedResult.rows;
     } catch (error) {
-        await client.query('ROLLBACK');
         console.error('Error updating doctor info:', error.stack);
         return false;
-    } finally {
-        client.release();
     }
 };
 
