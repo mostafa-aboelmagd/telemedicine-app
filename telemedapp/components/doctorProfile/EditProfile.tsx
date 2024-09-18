@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import userImage from "@/images/user.png";
 import InputComponent from "@/components/auth/InputComponent";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
+
 function EditProfile() {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
 

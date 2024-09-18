@@ -27,9 +27,7 @@ function SignUpForm() {
   });
 
   const [changedField, setChangedField] = useState("");
-
   const [formValid, setFormValid] = useState(false);
-
   const [error, setError] = useState(false);
 
   useEffect(() => {

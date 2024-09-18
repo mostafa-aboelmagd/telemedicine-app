@@ -105,11 +105,7 @@ function SignInForm() {
         localStorage.setItem("jwt", users.token);
         localStorage.setItem("userRole", users.userRole);
         localStorage.setItem("userId", users.id);
-        const redirect =
-          users.userRole === "Patient"
-            ? "/patientProfile/view"
-            : "/doctorProfile/view";
-        window.location.href = redirect;
+        window.location.href = "/";
       } else {
         console.log("Error During Token Authentication");
       }

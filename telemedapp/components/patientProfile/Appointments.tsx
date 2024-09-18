@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import userImage from "@/images/user.png";
 import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
 import DoctorGrid from "@/components/DoctorGrid/grid";

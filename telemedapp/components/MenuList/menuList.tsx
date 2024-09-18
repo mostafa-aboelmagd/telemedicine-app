@@ -18,7 +18,7 @@ const MenuList = ({ linkTo, linkName, text }: { linkTo: string[], linkName: stri
 
     let menuItems = linkName.map((name, index) => {
         return (
-            <Link href={linkTo[index]}>
+            <Link href={linkTo[index]} key={name}>
                 <MenuItem onClick={handleClose}>{linkName[index]}</MenuItem>
             </Link>
         )
