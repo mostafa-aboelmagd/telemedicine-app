@@ -29,7 +29,6 @@ const pool = new pg.Pool({
 })();
 
 const updateInfo = async (patientId, patientEmail, updates) => {
-    const client = await pool.connect();
     try {
         const userFields = [];
         const userValues = [];
@@ -60,23 +59,22 @@ const updateInfo = async (patientId, patientEmail, updates) => {
         }
         console.log('User info updated', updatedUserInfo.rows);
 
-        if (updates.languages && updates.languages.length) {
-            if (updates.languages[0] !== null && updates.languages[0] !== undefined && updates.languages[0] !== '') {
+        if (Array.isArray(updates.languages) && updates.languages.length > 0) {
+            const validLanguages = updates.languages.filter(language => language !== '' && language !== null && language !== undefined);
+            if (validLanguages.length > 0) {
                 const deletedLanguages = await pool.query('DELETE FROM languages WHERE lang_user_id = $1 RETURNING *', [patientId]);
                 if (!deletedLanguages.rows.length) {
                     console.log('Could not delete languages');
                     return false;
                 }
 
-                for (const language of updates.languages) {
-                    if (language !== '' && language !== null && language !== undefined) {
-                        const updatedLanguage = await pool.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2) RETURNING *', [patientId, language]);
-                        if (!updatedLanguage.rows.length) {
-                            console.log('Could not update languages');
-                            return false;
-                        }
-                        console.log('Languages updated', updatedLanguage.rows);
+                for (const language of validLanguages) {
+                    const updatedLanguage = await pool.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2) RETURNING *', [patientId, language]);
+                    if (!updatedLanguage.rows.length) {
+                        console.log('Could not update languages');
+                        return false;
                     }
+                    console.log('Languages updated', updatedLanguage.rows);
                 }
             } else {
                 console.log('Invalid languages provided');
