@@ -1,7 +1,6 @@
 const  database  = require('../../Database/Patient/Edit');
 const { passwordValidation } = require('../../Utilities');
 
-
 const editInfo = async (req, res) => {
     const patientId = req.id;
     const patientEmail = req.email;
