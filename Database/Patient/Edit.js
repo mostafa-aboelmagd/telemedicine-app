@@ -44,32 +44,31 @@ const updateInfo = async (patientId, patientEmail, updates) => {
             }
         }
 
-        if (!userFields.length) {
-            console.log('No updates provided');
-            return false;
+        if (userFields.length > 0) {
+            userValues.push(patientId, 'Patient', patientEmail);
+            const userQuery = `UPDATE users SET ${userFields.join(', ')} WHERE user_id = $${userIndex} AND user_role = $${userIndex + 1} AND user_email = $${userIndex + 2} RETURNING *`;
+            const updatedUserInfo = await pool.query(userQuery, userValues);
+    
+            if (!updatedUserInfo.rows.length) {
+                console.log('Could not update user info');
+            } else {
+                console.log('User info updated', updatedUserInfo.rows);
+            }
         }
 
-        userValues.push(patientId, 'Patient', patientEmail);
-        const userQuery = `UPDATE users SET ${userFields.join(', ')} WHERE user_id = $${userIndex} AND user_role = $${userIndex + 1} AND user_email = $${userIndex + 2} RETURNING *`;
-        const updatedUserInfo = await pool.query(userQuery, userValues);
-
-        if (!updatedUserInfo.rows.length) {
-            console.log('Could not update user info');
-            return false;
-        }
-        console.log('User info updated', updatedUserInfo.rows);
+        console.log('No user info provided');
 
         if (Array.isArray(updates.languages) && updates.languages.length > 0) {
             const validLanguages = updates.languages.filter(language => language !== '' && language !== null && language !== undefined);
             if (validLanguages.length > 0) {
-                await pool.query('DELETE FROM languages WHERE lang_user_id = $1 RETURNING *', [patientId]);
+                await pool.query('DELETE FROM languages WHERE lang_user_id = $1', [patientId]);
                 for (const language of validLanguages) {
                     const updatedLanguage = await pool.query('INSERT INTO languages (lang_user_id, language) VALUES ($1, $2) RETURNING *', [patientId, language]);
                     if (!updatedLanguage.rows.length) {
-                        console.log('Could not update languages');
-                        return false;
+                        console.log('Could not update user languages to include', language);
+                    } else {
+                        console.log('User languages updated to include', language);
                     }
-                    console.log('Languages updated', updatedLanguage.rows);
                 }
             } else {
                 console.log('Invalid languages provided');
