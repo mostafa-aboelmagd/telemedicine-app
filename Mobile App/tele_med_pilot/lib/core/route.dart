@@ -11,6 +11,7 @@ import 'package:tele_med_pilot/features/profile/views/profile_screen.dart';
 import 'package:tele_med_pilot/features/sign_in/views/signin_screen.dart';
 import 'package:tele_med_pilot/features/sign_up/views/sign_up_screen.dart';
 import 'package:tele_med_pilot/features/support/views/support_screen.dart';
+import 'package:tele_med_pilot/ui/main_screen_layout.dart';
 
 class RouteClass {
   static const String initRoute = "/";
