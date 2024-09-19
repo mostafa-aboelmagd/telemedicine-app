@@ -16,7 +16,7 @@ const BookingButton = ({ doctor }: { doctor: any }) => {
     <button
       className={
         stylesButton.gradient_button +
-        " text-xs md:text-md text-white py-1 px-1 md:px-0 md:py-3 rounded-xl w-full "
+        " text-xs md:text-md text-white py-1 px-1 md:px-0 md:py-3 rounded-xl w-full hover:scale-110 transition "
       }
       onClick={handleBookNow}
     >

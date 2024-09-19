@@ -431,5 +431,142 @@
       "url": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
       "created_at": "2024-09-07T16:15:00Z"
     }
+  ],
+  "prescriptionListDoc": [
+    {
+      "appId": 1,
+      "doctorName": "Dr. John",
+      "doctorImage": "/assets/doctorM.jpg",
+      "visitDate": "2023-02-10",
+      "specialty": "Dermatologist",
+      "medicationList": [
+        {
+          "mid": 1,
+          "name": "Hydrocortisone Cream",
+          "dose": "Apply thin layer",
+          "frequency": "2 times a day",
+          "start": "2023-02-10",
+          "end": "2023-02-20",
+          "notes": "For affected areas"
+        },
+        {
+          "mid": 2,
+          "name": "Cetirizine",
+          "dose": "1 pill",
+          "frequency": "1 time a day",
+          "start": "2023-02-10",
+          "end": "2023-02-17",
+          "notes": "Take before sleep"
+        }
+      ]
+    },
+    {
+      "appId": 2,
+      "doctorName": "Dr. Emily",
+      "doctorImage": "/assets/doctorF.jpg",
+      "visitDate": "2023-09-05",
+      "specialty": "Neurologist",
+      "medicationList": [
+        {
+          "mid": 1,
+          "name": "Gabapentin",
+          "dose": "300 mg",
+          "frequency": "3 times a day",
+          "start": "2023-09-05",
+          "end": "2023-09-19",
+          "notes": "Take with food"
+        },
+        {
+          "mid": 2,
+          "name": "Amitriptyline",
+          "dose": "10 mg",
+          "frequency": "1 time a day",
+          "start": "2023-09-05",
+          "end": "2023-09-19",
+          "notes": "Before bedtime"
+        }
+      ]
+    },
+    {
+      "appId": 3,
+      "doctorName": "Dr. Omar",
+      "doctorImage": "/assets/doctorM.jpg",
+      "visitDate": "2022-11-28",
+      "specialty": "Ophthalmologist",
+      "medicationList": [
+        {
+          "mid": 1,
+          "name": "Eye Drops",
+          "dose": "2 drops",
+          "frequency": "3 times a day",
+          "start": "2022-11-28",
+          "end": "2022-12-05",
+          "notes": "Use after waking up"
+        },
+        {
+          "mid": 2,
+          "name": "Artificial Tears",
+          "dose": "As needed",
+          "frequency": "4 times a day",
+          "start": "2022-11-28",
+          "end": "2022-12-05",
+          "notes": "Use whenever eyes are dry"
+        }
+      ]
+    },
+    {
+      "appId": 4,
+      "doctorName": "Dr. Noura",
+      "doctorImage": "/assets/doctorF.jpg",
+      "visitDate": "2023-08-02",
+      "specialty": "Endocrinologist",
+      "medicationList": [
+        {
+          "mid": 1,
+          "name": "Metformin",
+          "dose": "500 mg",
+          "frequency": "2 times a day",
+          "start": "2023-08-02",
+          "end": "2023-08-30",
+          "notes": "With meals"
+        },
+        {
+          "mid": 2,
+          "name": "Insulin",
+          "dose": "10 units",
+          "frequency": "1 time a day",
+          "start": "2023-08-02",
+          "end": "2023-08-30",
+          "notes": "Inject before bed"
+        }
+      ]
+    },
+    {
+      "appId": 5,
+      "doctorName": "Dr. Ali",
+      "doctorImage": "/assets/doctorM.jpg",
+      "visitDate": "2023-01-14",
+      "specialty": "Pulmonologist",
+      "medicationList": [
+        {
+          "mid": 1,
+          "name": "Salbutamol",
+          "dose": "2 puffs",
+          "frequency": "As needed",
+          "start": "2023-01-14",
+          "end": "2023-01-28",
+          "notes": "Use during asthma attacks"
+        },
+        {
+          "mid": 2,
+          "name": "Prednisone",
+          "dose": "5 mg",
+          "frequency": "1 time a day",
+          "start": "2023-01-14",
+          "end": "2023-01-21",
+          "notes": "Take in the morning"
+        }
+      ]
+    }
   ]
 }

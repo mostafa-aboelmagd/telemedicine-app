@@ -21,7 +21,7 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
     : ""; // Handle the case if no image is available
 
   return (
-    <div className="bg-white rounded-3xl p-4 flex flex-col space-y-8">
+    <div className="bg-white rounded-3xl p-4 flex flex-col space-y-8 hover:scale-105 transition shadow-lg">
       <div className="flex flex-col space-y-4 md:space-y-0 items-center md:items-start md:flex-row space-x-2">
         <div>
           {base64Image ? (
@@ -96,7 +96,7 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
         </div>
       </div>
       <div className="flex justify-center space-x-12">
-        <button className="text-xs md:text-md text-[#60A899] hover:text-[#4b8377] py-1 px-1 md:px-0 md:py-2 rounded-xl w-full">
+        <button className="text-xs md:text-md text-[#60A899] hover:text-[#4b8377] py-1 px-1 md:px-0 md:py-2 rounded-xl w-full hover:scale-110 transition">
           View Profile
         </button>
         <BookingButton doctor={doctor} />
