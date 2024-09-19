@@ -68,7 +68,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           _passwordController.clear();
 
           // Navigate to HomeScreen
-          Navigator.pushReplacementNamed(context, RouteClass.homeRoute);
+          Navigator.pushReplacementNamed(context, RouteClass.mainLayoutRoute);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

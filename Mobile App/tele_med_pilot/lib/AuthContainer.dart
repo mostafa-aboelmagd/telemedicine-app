@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
 import 'package:tele_med_pilot/ui/main_screen.dart';
+import 'package:tele_med_pilot/ui/main_screen_layout.dart';
 
 /// A StatefulWidget that determines the authentication state and navigates accordingly.
 class AuthContainer extends StatefulWidget {
@@ -42,7 +43,7 @@ class _AuthContainerState extends State<AuthContainer> {
     if (access_token == null) {
       return const MainScreen();
     } else {
-      return const HomeScreen();
+      return const MainScreenLayout();
       }
     }
 }
