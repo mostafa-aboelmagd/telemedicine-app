@@ -76,6 +76,7 @@ class _SignUpStep1ScreenState extends ConsumerState<SignUpStep1Screen> {
                         Icon(Icons.arrow_circle_left_outlined, size: 35.spMin),
                     onPressed: () {
                       Navigator.pop(context);
+                      viewModelNotifier.resetState();
                     },
                   ),
                   Text(
@@ -243,6 +244,9 @@ class _SignUpStep1ScreenState extends ConsumerState<SignUpStep1Screen> {
                               backgroundColor: AppColors.green100,
                             ),
                           );
+                          viewModelNotifier.resetState();
+                          Navigator.pushReplacementNamed(
+                              context, RouteClass.signInRoute);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

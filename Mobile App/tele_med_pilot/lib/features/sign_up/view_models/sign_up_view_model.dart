@@ -108,6 +108,10 @@ class SignUpViewModel extends StateNotifier<SignInState> {
     return null;
   }
 
+  void resetState() {
+    state = SignInState.initial();
+  }
+
   Future<bool> signUp() async {
     if (!state.isFormValid) return false;
     state = state.copyWith(isLoading: true);
