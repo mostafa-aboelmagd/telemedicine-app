@@ -5,8 +5,6 @@ import { FaUserCircle } from "react-icons/fa";
 import AppointmentsGrid from "./AppointmentsGrid";
 const Appointments = () => {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
-  const [fullName, SetFullName] = useState("");
-
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
@@ -16,18 +14,6 @@ const Appointments = () => {
     birthYear: "",
     languages: "",
   });
-
-  const [tempData, setTempData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    gender: "",
-    birthYear: "",
-    languages: [],
-  });
-
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
@@ -40,28 +26,8 @@ const Appointments = () => {
       },
     })
       .then((response) => response.json())
-      .then((response) => setTempData(() => response.formattedPatient))
-      .finally(() => setLoading(false));
+      .then((response) => setProfileData(() => response.formattedPatient));
   }, []);
-
-  useEffect(() => {
-    let languagesString = tempData?.languages.join(" ");
-    const tempObj = { ...tempData, languages: languagesString };
-    setProfileData(() => tempObj);
-    SetFullName(tempData.firstName + " " + tempData.lastName);
-  }, [tempData]);
-
-  const profileFields = [
-    { name: "firstName", title: "First Name" },
-    { name: "lastName", title: "Last Name" },
-    { name: "phone", title: "Phone Number" },
-    { name: "email", title: "Email" },
-    { name: "languages", title: "Languages" },
-    { name: "birthYear", title: "Year Of Birth" },
-    { name: "gender", title: "Gender" },
-  ];
-
-  const [minMaxFees, setMinMaxFees] = useState({ min: 0, max: 1000 });
 
   const [doctors, setDoctors] = useState<any>([]);
 
@@ -98,159 +64,12 @@ const Appointments = () => {
       const data = await response.json();
       handleFillOptions(data);
       setDoctors(data);
-      // handleShownDoctors(filters);
     }
   };
-  const [filters, setFilters] = useState({
-    speciality: "",
-    gender: "",
-    rating: "",
-    price: [],
-    todayDate: "",
-    thisWeek: "",
-    dateRange1: "",
-    dateRange2: "",
-    country: [],
-    language: [],
-    sort: "",
-    isOnline: "",
-  });
-  const [filteredDoctors, setFilteredDoctors] = useState(doctors);
 
-  const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => {
-    setOpenModal(!openModal);
-  };
-  const handleShownDoctors = (filters: any) => {
-    let filtered = doctors;
-
-    if (filters.isOnline) {
-      filtered = filtered.filter(
-        (doctor: any) => doctor.isOnline === filters.isOnline
-      );
-    }
-
-    if (filters.speciality.length > 0) {
-      filtered = filtered.filter((doctor: any) =>
-        filters.speciality.includes(doctor.title)
-      );
-    }
-    if (filters.gender) {
-      filtered = filtered.filter(
-        (doctor: any) => doctor.gender === filters.gender
-      );
-    }
-    if (filters.rating) {
-      const ratingValue = parseFloat(filters.rating);
-      if (!isNaN(ratingValue)) {
-        filtered = filtered.filter(
-          (doctor: any) => doctor.rating >= ratingValue
-        );
-      }
-    }
-    if (filters.price.length > 0) {
-      if (!isNaN(filters.price[0]) && !isNaN(filters.price[1])) {
-        filtered = filtered.filter(
-          (doctor: any) =>
-            doctor.fees60min >= filters.price[0] &&
-            doctor.fees60min <= filters.price[1]
-        );
-      }
-    }
-    if (filters.country.length > 0) {
-      filtered = filtered.filter((doctor: any) =>
-        filters.country.includes(doctor.country)
-      );
-    }
-    if (filters.language.length > 0) {
-      filtered = filtered.filter((doctor: any) =>
-        doctor.language.some((lang: string) => filters.language.includes(lang))
-      );
-    }
-
-    if (filters.sort) {
-      switch (filters.sort) {
-        case "ascFees":
-          filtered = filtered.sort(
-            (a: any, b: any) => a.fees60min - b.fees60min
-          );
-          break;
-        case "descFees":
-          filtered = filtered.sort(
-            (a: any, b: any) => b.fees60min - a.fees60min
-          );
-          break;
-        case "rating":
-          filtered = filtered.sort((a: any, b: any) => b.rating - a.rating);
-          break;
-        case "reset":
-          setFilters({ ...filters, sort: "" });
-          break;
-        default:
-          break;
-      }
-    }
-
-    setFilteredDoctors(filtered);
-    return filtered;
-  };
-  const handleResetFilters = () => {
-    setFilters({
-      ...filters,
-      speciality: "",
-      gender: "",
-      rating: "",
-      price: [],
-      todayDate: "",
-      thisWeek: "",
-      country: [],
-      language: [],
-      isOnline: "",
-    });
-  };
-
-  const handleChangeFilterDrop = (selectedOption: any, actionMeta: any) => {
-    const { name } = actionMeta;
-    const value = selectedOption
-      ? Array.isArray(selectedOption)
-        ? selectedOption.map((option: any) => option.value)
-        : selectedOption.value
-      : [];
-    setFilters({ ...filters, [name]: value });
-  };
-  const handleChangeOptions = (e: any) => {
-    const { name, value } = e.target;
-    setFilters({ ...filters, [name]: value });
-  };
-
-  const getMinMaxFees = () => {
-    let min = Number.MAX_VALUE;
-    let max = Number.MIN_VALUE;
-    doctors.forEach((doctor: any) => {
-      if (doctor.fees60min < min) {
-        min = doctor.fees60min;
-      }
-      if (doctor.fees60min > max) {
-        max = doctor.fees60min;
-      }
-    });
-    setMinMaxFees({ min, max });
-  };
-  const sortOptions = [
-    { value: "ascFees", label: "Fees Low to High" },
-    { value: "descFees", label: "Fees High to Low" },
-    { value: "rating", label: "Top Rated" },
-    { value: "reset", label: "Reset" },
-  ];
   useEffect(() => {
     fetchDoctors();
-    getMinMaxFees();
   }, []);
-  useEffect(() => {
-    if (doctors.length > 0) {
-      handleShownDoctors(filters);
-    }
-  }, [doctors, filters]);
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
       <div className="flex flex-col gap-4">
@@ -317,11 +136,8 @@ const Appointments = () => {
           </div>
         </div>
         <div className="flex flex-col m-4">
-          {filteredDoctors.length > 0 ? (
-            <AppointmentsGrid
-              doctors={filteredDoctors}
-              profileFields={fullName}
-            />
+          {doctors.length > 0 ? (
+            <AppointmentsGrid doctors={doctors} />
           ) : (
             <div className="mx-10 text-xl">Loading...</div>
           )}

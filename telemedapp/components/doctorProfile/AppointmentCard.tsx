@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import stylesButton from "../navbarComp/navbar.module.css";
 import { FaUserCircle } from "react-icons/fa";
-const AppointmentCard = ({
-  doctor,
-  profileFields,
-}: {
-  doctor: any;
-  profileFields: any;
-}) => {
+const AppointmentCard = ({ doctor }: { doctor: any }) => {
   const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
 
   const [userRole, setUserRole] = useState<any>();
@@ -69,11 +63,12 @@ const AppointmentCard = ({
       {/* Appointment Details */}
       <div className="flex flex-col space-y-2">
         <div className="text-sm text-gray-600">
-          {profileFields && (
-            <p>
-              <strong>Patient:</strong> {profileFields}
-            </p>
-          )}
+          {/* {profileFields && ( */}
+          <p>
+            <strong>Patient: Mahmoud Mansy</strong>
+            {/* {profileFields} */}
+          </p>
+          {/* )} */}
           <p className="flex flex-row justify-start gap-4 items-center ">
             <p>
               <strong>Duration:</strong> {appointmentData.appointment_duration}

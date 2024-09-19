@@ -1,21 +1,9 @@
 import React from "react";
 import AppointmentCard from "./AppointmentCard";
 
-const AppointmentsGrid = ({
-  doctors,
-  profileFields,
-}: {
-  doctors: any[];
-  profileFields: any;
-}) => {
+const AppointmentsGrid = ({ doctors }: { doctors: any[] }) => {
   let doctorList = doctors.map((doctor) => {
-    return (
-      <AppointmentCard
-        doctor={doctor}
-        key={doctor.id}
-        profileFields={profileFields}
-      />
-    );
+    return <AppointmentCard doctor={doctor} key={doctor.id} />;
   });
   return (
     <div className="col-span-2 overflow-y-auto">
