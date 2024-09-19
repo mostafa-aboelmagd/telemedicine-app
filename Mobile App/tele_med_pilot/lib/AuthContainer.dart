@@ -20,7 +20,7 @@ class AuthContainer extends StatefulWidget {
 /// The state for the AuthContainer widget.
 class _AuthContainerState extends State<AuthContainer> {
   // ignore: non_constant_identifier_names
-  late String? access_token; // Variable to store the access token
+  String? access_token; // Variable to store the access token
 
 
   @override
