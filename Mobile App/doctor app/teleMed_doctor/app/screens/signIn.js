@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import Custombutton from '../components/button';
 import { StatusBar } from 'expo-status-bar';
 import SafeArea from '../components/safeArea.js';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function Login({ navigation }) {
 
@@ -11,9 +12,9 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
-  const handelSubmit = () => {
+  const signIn = () => {
     if (email && password) {
-      navigation.navigate('profile');
+      navigation.navigate('home page');
     } else {
       Alert.alert('You must enter your email and password!')
     }
@@ -71,10 +72,16 @@ export default function Login({ navigation }) {
 
         <View style={styles.container4}>
           <Custombutton
-            onPress={handelSubmit}>
-            <Text style={styles.buttonText}>SIGN IN</Text>
+            onPress={signIn}>
+            <Text>Sign in</Text>
           </Custombutton>
         </View>
+      </View>
+      <View style={{alignItems:'center', marginTop: '10%'}}>
+        <AntDesign name="customerservice" size={40} color="black" />
+        <Text style={{fontWeight:'bold'}}>
+          Support
+        </Text>
       </View>
 
       <StatusBar style="auto" />
@@ -115,7 +122,7 @@ const styles = StyleSheet.create({
   },
 
   container4: {
-    marginTop: "45%",
+    marginTop: "25%",
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -150,15 +157,6 @@ const styles = StyleSheet.create({
     fontSize:17,
     // fontFamily: 'PlayfairDisplay-Regular',
 
-  },
-
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 280,
-    height: 40,
-    backgroundColor: 'darkblue',
-    borderRadius: 10
   },
 
   link: {
