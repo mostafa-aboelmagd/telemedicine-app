@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tele_med_pilot/core/theme.dart';
+import 'package:tele_med_pilot/ui/components/loader.dart';
 
 class Button extends StatelessWidget {
   final String label;
@@ -10,6 +11,7 @@ class Button extends StatelessWidget {
   final VoidCallback onTap;
   final bool? outlinedButton;
   final Color? outlineColor;
+  final bool? isLoading;
 
   const Button({
     required this.label,
@@ -19,6 +21,7 @@ class Button extends StatelessWidget {
     required this.onTap,
     this.outlinedButton,
     this.outlineColor,
+    this.isLoading,
     super.key,
   });
 
@@ -64,12 +67,14 @@ class Button extends StatelessWidget {
             ),
           ),
           onPressed: isValid ? onTap : null,
-          child: Text(
-            label,
-            style: AppTextStyles.bodyTextMediumNormal.copyWith(
-              color: labelColor,
-            ),
-          ),
+          child: isLoading == true
+              ? const SizedBox(height: 20, width: 20, child: Loader())
+              : Text(
+                  label,
+                  style: AppTextStyles.bodyTextMediumNormal.copyWith(
+                    color: labelColor,
+                  ),
+                ),
         ),
       ),
     );

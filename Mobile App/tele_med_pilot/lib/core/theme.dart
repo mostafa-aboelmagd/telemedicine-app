@@ -13,6 +13,7 @@ class AppColors {
   static const Color red100 = Color(0xFFD41F1C);
   static const Color blue100 = Color(0xFF035FE9);
   static const Color blue60 = Color(0xFF5D91E1);
+  static const Color green100 = Color(0xFF00B527);
 }
 
 class AppTextStyles {
