@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import userImage from "@/images/user.png";
 import InputComponent from "@/components/auth/InputComponent";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
+
 function EditProfile() {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
 
@@ -14,7 +13,6 @@ function EditProfile() {
     firstName: "",
     lastName: "",
     phone: "",
-    email: "",
     gender: "",
     birthYear: "",
     residenceCountry: "",
@@ -28,7 +26,6 @@ function EditProfile() {
     firstName: "",
     lastName: "",
     phone: "",
-    email: "",
     gender: "",
     birthYear: "",
     residenceCountry: "",
@@ -42,7 +39,6 @@ function EditProfile() {
     firstName: "",
     lastName: "",
     phone: "",
-    email: "",
     birthYear: "",
     residenceCountry: "",
     specialization: "",
@@ -63,15 +59,20 @@ function EditProfile() {
 
   useEffect(() => {
     token = localStorage.getItem("jwt");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setTempForm(() => response.formattedDoctor))
-      .finally(() => setLoading(false));
+    if(!token) {
+      window.location.href = "/auth/signin";
+    }
+    else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
+        mode: "cors",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => setTempForm(() => response.formattedDoctor))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   useEffect(() => {
@@ -87,8 +88,7 @@ function EditProfile() {
   const formFields = [
     { name: "firstName", title: "First Name", type: "text" },
     { name: "lastName", title: "Last Name", type: "text" },
-    { name: "email", title: "Email", type: "email" },
-    { name: "phone", title: "Phone Number", type: "tel" },
+    { name: "phone", title: "Phone Number", type: "number" },
     { name: "birthYear", title: "Birth Year", type: "number" },
     { name: "residenceCountry", title: "Residence Country", type: "text" },
     { name: "specialization", title: "Specialization", type: "text" },
@@ -163,35 +163,10 @@ function EditProfile() {
     }
   };
 
-  const validateEmail = () => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    let changedValidation = false;
-    if (formData.email && !emailPattern.test(formData.email)) {
-      if (errorMessage.email === "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({
-        ...prevError,
-        email: "Email Is Invalid",
-      }));
-    } else {
-      if (errorMessage.email !== "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({ ...prevError, email: "" }));
-    }
-
-    if (changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({ ...prevForm }));
-    }
-  };
-
   const validatePhone = () => {
-    const phonePattern = /^\+201(0|1|2|5)(\d{8})$/;
+    const phonePattern = /^-?\d+$/;
     let changedValidation = false;
-    if (
-      formData.phone &&
-      (!phonePattern.test(formData.phone) || formData.phone.length != 13)
+    if (formData.phone && (!phonePattern.test(formData.phone))
     ) {
       if (errorMessage.phone === "") {
         changedValidation = true;
@@ -213,11 +188,12 @@ function EditProfile() {
   };
 
   const validateBirthYear = () => {
+    const birthYearPattern = /^-?\d+$/;
     let changedValidation = false;
 
     if (
       formData.birthYear &&
-      (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011)
+      (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011 || !birthYearPattern.test(formData.birthYear))
     ) {
       if (errorMessage.birthYear === "") {
         changedValidation = true;
@@ -368,10 +344,6 @@ function EditProfile() {
         validateLastName();
         break;
 
-      case "email":
-        validateEmail();
-        break;
-
       case "phone":
         validatePhone();
         break;
@@ -469,11 +441,21 @@ function EditProfile() {
         <CircularProgress className="absolute top-1/2" />
       ) : (
         <>
-          <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
-            {userImage}
-            <p className="text-blue-500 mb-1 font-semibold">
-              Dr. {tempForm?.firstName} {tempForm?.lastName}
-            </p>
+          <div className="flex flex-col gap-4">
+            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
+              {userImage}
+              <p className="text-blue-500 mb-1 font-semibold">
+                Dr. {tempForm?.firstName} {tempForm?.lastName}
+              </p>
+            </div>
+            <button
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+              onClick={() =>
+                (window.location.href = "/doctorProfile/appointments")
+              }
+            >
+              My Appointments
+            </button>
           </div>
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
             <form onSubmit={handleSubmit}>
@@ -553,7 +535,7 @@ function EditProfile() {
                   </button>
                   {error && (
                     <p className="font-semibold text-red-700 mt-4">
-                      Email Already Registered With Another Account!
+                      Couldn't Edit Profile Info!
                     </p>
                   )}
                 </div>

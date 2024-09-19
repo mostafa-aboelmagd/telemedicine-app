@@ -5,7 +5,6 @@ import { FaUserCircle } from "react-icons/fa";
 import AppointmentsGrid from "./AppointmentsGrid";
 const Appointments = () => {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
-
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
@@ -16,29 +15,40 @@ const Appointments = () => {
     languages: "",
   });
 
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     let token = localStorage.getItem("jwt");
-
-    if (!token) {
-      window.location.href = "/auth/signin";
-    } else {
-      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => setProfileData(() => response.formattedPatient))
-        .finally(() => setLoading(false));
-    }
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => setProfileData(() => response.formattedPatient));
   }, []);
 
   const [doctors, setDoctors] = useState<any>([]);
+
+  const handleFillOptions = (doctors: any[]) => {
+    let speciality: any = [];
+    let country: any = [];
+    let language: any = [];
+    doctors.forEach((doctor: any) => {
+      if (!speciality.includes(doctor.title)) {
+        speciality.push({ value: doctor.title, label: doctor.title });
+      }
+      if (!country.includes(doctor.country)) {
+        country.push({ value: doctor.country, label: doctor.country });
+      }
+      doctor.language.forEach((lang: string) => {
+        if (!language.includes(lang)) {
+          language.push({ value: lang, label: lang });
+        }
+      });
+    });
+  };
 
   const headers = {
     "Content-Type": "application/json",
@@ -52,15 +62,17 @@ const Appointments = () => {
       console.log("Error: Request sent no data");
     } else {
       const data = await response.json();
+      handleFillOptions(data);
       setDoctors(data);
     }
   };
+
   useEffect(() => {
     fetchDoctors();
   }, []);
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
-      <div>
+      <div className="flex flex-col gap-4">
         <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
           {userImage}
           <p className="text-blue-500 mb-1 font-semibold">{`${profileData.firstName} ${profileData.lastName}`}</p>
@@ -85,9 +97,7 @@ const Appointments = () => {
         </div>
         <button
           className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
-          onClick={() =>
-            (window.location.href = "/patientProfile/appointments")
-          }
+          onClick={() => (window.location.href = "/doctorProfile/appointments")}
         >
           My Appointments
         </button>
@@ -127,10 +137,7 @@ const Appointments = () => {
         </div>
         <div className="flex flex-col m-4">
           {doctors.length > 0 ? (
-            <AppointmentsGrid
-              doctors={doctors}
-              profileFields={`${profileData.firstName} ${profileData.lastName}`}
-            />
+            <AppointmentsGrid doctors={doctors} />
           ) : (
             <div className="mx-10 text-xl">Loading...</div>
           )}

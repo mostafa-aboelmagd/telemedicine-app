@@ -1,38 +1,17 @@
 "use client";
-
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import DoctorInfo from "@/components/booking/DoctorInfo";
-import DurationSelector from "@/components/booking/DurationSelector";
+import DetailsSelector from "@/components/booking/DetailsSelector";
 import BookingSummary from "@/components/booking/BookingSummary";
 import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
+import { FaUserCircle } from "react-icons/fa";
+import { formatDoctorAvailabilities } from "@/utils/formatDoctorAvailabilities";
+import { Toast } from "primereact/toast";
+import ConfirmDialog from "./ConfirmDialog"; // Import the external component
 
-const initialDoctor = {
-  image: "/assets/doctorM.jpg",
-  name: "Mahmoud Mansy",
-  title: "Psychologist",
-  rating: 4.7,
-  numReviews: 1144,
-  fees60min: 200,
-  fees30min: 100,
-  availableDates: [
-    { date: "2024-09-01", slots: ["02:00 PM", "03:00 PM", "04:00 PM"] },
-    { date: "2024-09-02", slots: ["01:00 PM", "02:00 PM", "03:00 PM"] },
-    { date: "2024-09-03", slots: ["02:00 PM", "03:00 PM", "04:00 PM"] },
-    { date: "2024-09-04", slots: ["01:00 PM", "02:00 PM", "03:00 PM"] },
-    { date: "2024-09-05", slots: ["02:00 PM", "03:00 PM", "04:00 PM"] },
-    { date: "2024-09-06", slots: ["01:00 PM", "02:00 PM", "03:00 PM"] },
-    { date: "2024-09-07", slots: ["02:00 PM", "03:00 PM", "04:00 PM"] },
-    { date: "2024-09-08", slots: ["01:00 PM", "02:00 PM", "03:00 PM"] },
-    { date: "2024-09-09", slots: ["02:00 PM", "03:00 PM", "04:00 PM"] },
-    { date: "2024-09-10", slots: ["01:00 PM", "02:00 PM", "03:00 PM"] },
-    {
-      date: "2024-09-11",
-      slots: ["02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM"],
-    },
-  ],
-};
+const userImage = <FaUserCircle className="h-10 w-10 text-[#035fe9]" />;
 
 const DoctorBooking = () => {
   const searchParams = useSearchParams();
@@ -40,31 +19,120 @@ const DoctorBooking = () => {
   const [selectedDuration, setSelectedDuration] = useState(60);
   const [selectedDate, setSelectedDate] = useState<any>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [availableDates, setAvailableDates] = useState<any[]>([]);
+  const [appointmentType, setAppointmentType] = useState("Remote");
+  const [appointmentState, setAppointmentState] = useState("first-time");
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
+
+  // Reference for Toast
+  const toast = useRef<any>(null);
+
+  const cancelCreate = () => {
+    setShowConfirmDialog(false);
+  };
+
+  const confirmCreate = async () => {
+    setLoading(true); // Show loading state when confirming
+    try {
+      // Simulate the appointment creation process (replace with actual logic)
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          },
+          body: JSON.stringify({
+            doctorId: doctor?.id,
+            date: selectedDate,
+            slot: selectedSlot,
+            type: appointmentType,
+            duration: selectedDuration,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to create appointment");
+      }
+
+      // Close the dialog and show success message
+      setShowConfirmDialog(false);
+      toast.current.show({
+        severity: "success",
+        detail: `Appointment booked successfully!`,
+        life: 3000,
+        className:
+          "bg-green-600 ml-2 text-white font-semibold rounded-lg shadow-lg p-3",
+      });
+    } catch (error) {
+      toast.current.show({
+        severity: "error",
+        detail: `Failed to book appointment: ${error}`,
+        life: 3000,
+        className:
+          "bg-red-600 ml-2 text-white font-semibold rounded-lg shadow-lg p-3",
+      });
+    } finally {
+      setLoading(false); // Stop loading state
+    }
+  };
 
   // Retrieve the doctor data from the query parameters
   useEffect(() => {
     const doctorParam = searchParams.get("doctor");
+
     if (doctorParam) {
-      // const doctorData = JSON.parse(decodeURIComponent(doctorParam));
-      const doctorData = JSON.parse(doctorParam) || initialDoctor;
-
-      // Ensure that availableDates exists and is an array before setting selectedDate
-      if (doctorData.availableDates && doctorData.availableDates.length > 0) {
-        setSelectedDate(doctorData.availableDates[0]); // Set initial selected date
-      } else {
-        setSelectedDate(null); // Handle case where there are no available dates
+      try {
+        const parsedDoctor = JSON.parse(decodeURIComponent(doctorParam));
+        setDoctor(parsedDoctor);
+      } catch (error) {
+        console.error("Error parsing doctor parameter:", error);
       }
-
-      setDoctor(doctorData);
-      console.log("Doctor: ", doctor);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    let token = localStorage.getItem("jwt");
+
+    const fetchDoctorAvailability = async () => {
+      if (doctor && doctor.id) {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/${doctor.id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch doctor availability");
+          }
+
+          const data = await response.json();
+          const formattedDates = formatDoctorAvailabilities(data);
+          setAvailableDates(formattedDates);
+        } catch (error) {
+          console.error("Error fetching doctor availability", error);
+        }
+      }
+    };
+
+    if (doctor) {
+      fetchDoctorAvailability();
+    }
+  }, [doctor]);
 
   const handleDurationChange = (duration: number) => {
     setSelectedDuration(duration);
   };
 
-  const handleDateSelect = (dateObj: { date: string; slots: string[] }) => {
+  const handleDateSelect = (dateObj: {
+    date: string;
+    slots: { time: string; id: number; type: string }[];
+  }) => {
     setSelectedDate(dateObj);
     setSelectedSlot(null); // Reset the selected slot when the date changes
   };
@@ -74,49 +142,39 @@ const DoctorBooking = () => {
   };
 
   if (!doctor) {
-    return <div>Loading...</div>;
+    return <div className="mx-10 text-xl">Loading doctor data...</div>;
   }
 
   return (
     <div className="flex flex-col md:flex-row items-center md:justify-center p-6 bg-gray-50 gap-4 mx-auto max-w-[1200px]">
-      <div className="flex flex-col p-6 bg-gray-50 gap-10 min-w-[350px] md:min-w-[450px]">
+      <div className="flex flex-col p-6 bg-gray-50 gap-5 min-w-[350px] md:min-w-[450px] md:h-[500px]">
         <DoctorInfo doctor={doctor} />
-        <DurationSelector
+        <DetailsSelector
           selectedDuration={selectedDuration}
           handleDurationChange={handleDurationChange}
+          appointmentState={appointmentState}
+          setAppointmentState={setAppointmentState}
         />
         <BookingSummary
           selectedSlot={selectedSlot}
           selectedDuration={selectedDuration}
           doctor={doctor}
           selectedDate={selectedDate}
+          appointmentType={appointmentType}
         />
       </div>
-      <div className="flex gap-8 flex-col bg-white rounded-3xl shadow-md p-6 min-w-[350px] lg:min-w-[650px]">
+
+      <div className="flex gap-8 flex-col bg-white rounded-3xl shadow-md p-6 min-w-[350px] lg:min-w-[650px] md:h-[450px]">
         <WeekCalendar
           selectedDate={selectedDate}
           handleDateSelect={handleDateSelect}
-          availableDates={doctor.availableDates || initialDoctor.availableDates}
+          availableDates={availableDates}
         />
         <SlotSelector
           selectedDate={selectedDate}
           selectedSlot={selectedSlot}
           handleSlotSelect={handleSlotSelect}
         />
-        <div className="flex items-center justify-center mt-2 space-x-4 text-sm">
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-gray-300 mr-2"></div>
-            <span>Available</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
-            <span>Selected</span>
-          </div>
-        </div>
-        <hr className="my-2 border-gray-200" />
-        <p className="flex items-center justify-center text-sm text-gray-500">
-          *Note: The available slots are based on your local timezone.
-        </p>
       </div>
     </div>
   );

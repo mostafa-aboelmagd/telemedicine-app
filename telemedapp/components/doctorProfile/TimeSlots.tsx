@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import userImage from "@/images/user.png";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
+
 function TimeSlots() {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
 
@@ -81,27 +80,32 @@ function TimeSlots() {
 
   useEffect(() => {
     token = localStorage.getItem("jwt");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setProfileData(() => response.formattedDoctor));
-
-    fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/availabilities`,
-      {
+    if(!token) {
+      window.location.href = "/auth/signin";
+    }
+    else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
         mode: "cors",
         headers: {
           Authorization: "Bearer " + token,
         },
-      }
-    )
-      .then((response) => response.json())
-      .then((response) => setOldTimesTemp(() => response.availabilities))
-      .finally(() => setLoading(false));
+      })
+        .then((response) => response.json())
+        .then((response) => setProfileData(() => response.formattedDoctor));
+
+      fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/availabilities`,
+        {
+          mode: "cors",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((response) => setOldTimesTemp(() => response.availabilities))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   useEffect(() => {
@@ -320,11 +324,21 @@ function TimeSlots() {
         <CircularProgress className="absolute top-1/2" />
       ) : (
         <>
-          <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
-            {userImage}
-            <p className="text-blue-500 mb-1 font-semibold">
-              Dr. {profileData?.firstName} {profileData?.lastName}
-            </p>
+          <div className="flex flex-col gap-4">
+            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
+              {userImage}
+              <p className="text-blue-500 mb-1 font-semibold">
+                Dr. {profileData?.firstName} {profileData?.lastName}
+              </p>
+            </div>
+            <button
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+              onClick={() =>
+                (window.location.href = "/doctorProfile/appointments")
+              }
+            >
+              My Appointments
+            </button>
           </div>
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[980px]:basis-7/12 min-[980px]:max-w-full">
             <div className="flex pt-4 mb-3">

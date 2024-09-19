@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-
+import React, { useState, useRef } from "react";
+import ConfirmDialog from "./ConfirmDialog";
+import { Toast } from "primereact/toast";
 interface BookingSummaryProps {
   selectedSlot: string | null;
   selectedDuration: number;
@@ -8,7 +9,11 @@ interface BookingSummaryProps {
     fees60min: number;
     fees30min: number;
   };
-  selectedDate: { date: string; slots: string[] } | null;
+  selectedDate: {
+    date: string;
+    slots: { id: number; time: string }[];
+  };
+  appointmentType: string;
 }
 
 const BookingSummary: React.FC<BookingSummaryProps> = ({
@@ -16,13 +21,29 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   selectedDuration,
   doctor,
   selectedDate,
+  appointmentType,
 }) => {
-  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const patientId = localStorage.getItem("userId");
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
 
-  // Handle booking API call
-  const handleBooking = async () => {
+  // Reference for Toast
+  const toast = useRef<any>(null);
+
+  const cancelCreate = () => {
+    setShowConfirmDialog(false);
+  };
+
+  const bookAppointment = () => {
+    if (!selectedSlot || !selectedDate) return;
+    setLoading(true);
+    setTimeout(() => {
+      setShowConfirmDialog(true);
+      setLoading(false);
+    }, 1000);
+  };
+  const confirmCreate = async () => {
     if (!selectedSlot || !selectedDate) return;
 
     setLoading(true);
@@ -32,21 +53,19 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       const token = localStorage.getItem("jwt");
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_NAME}/appointment/create`,
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/book`,
         {
           method: "POST",
+          mode: "cors",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            doctor_id: doctor.id,
-            patient_id: patientId,
-            appointment_date_time: `${selectedDate.date} ${selectedSlot}`,
-            appointment_duration: selectedDuration,
-            appointment_type: selectedDuration === 60 ? "60min" : "30min",
-            appointment_status: "pending", // You can change based on requirements
-            appointment_location: "Online", // Assuming it's online, modify if needed
+            appointmentDuration: selectedDuration,
+            availabilityId: selectedDate.slots.find(
+              (slot) => slot.time === selectedSlot
+            )?.id,
           }),
         }
       );
@@ -55,24 +74,36 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         throw new Error("Failed to create appointment");
       }
 
-      const data = await response.json();
-      alert(
-        `Appointment booked successfully with ID: ${data.appointment.appointment_id}`
-      );
+      // Close the dialog and show success message
+      setShowConfirmDialog(false);
+      toast.current.show({
+        severity: "success",
+        detail: `Appointment booked successfully!`,
+        life: 3000,
+        className:
+          "bg-green-600 ml-2 text-white font-semibold rounded-lg shadow-lg p-3",
+      });
     } catch (error) {
-      setErrorMessage("Failed to book appointment");
+      toast.current.show({
+        severity: "error",
+        detail: `Failed to book appointment: ${error}`,
+        life: 3000,
+        className:
+          "bg-red-600 ml-2 text-white font-semibold rounded-lg shadow-lg p-3",
+      });
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading state
     }
   };
 
   return (
     <div className="flex flex-col gap-4 bg-white rounded-3xl shadow-md p-6 w-full">
+      <Toast ref={toast} />
       <div className="flex items-center justify-center">
         <div className="my-4 text-blue-600 font-bold ">
           {selectedSlot ? (
             <>
-              <span className="px-4 py-2 rounded-lg bg-green-600 text-white">
+              <span className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white">
                 {selectedDate?.date} {selectedSlot}
               </span>{" "}
               Slot is selected
@@ -83,9 +114,9 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         </div>
       </div>
       <button
-        className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
         disabled={!selectedSlot || loading}
-        onClick={handleBooking}
+        onClick={() => bookAppointment()}
       >
         {loading
           ? "Booking..."
@@ -97,9 +128,15 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                       : `${doctor.fees30min} EGP`
                   }`
                 : ""
-            } EGP`}
+            } `}
       </button>
       {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+      <ConfirmDialog
+        visible={showConfirmDialog}
+        onConfirm={confirmCreate}
+        onCancel={cancelCreate}
+        loading={loading}
+      />
     </div>
   );
 };

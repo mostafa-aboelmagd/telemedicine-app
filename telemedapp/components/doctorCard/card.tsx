@@ -7,10 +7,11 @@ import { FaMoneyBill1Wave } from "react-icons/fa6";
 import styles from "./card.module.css";
 import { formatDate } from "@/utils/date";
 import BookingButton from "./BookingButton";
-
+import { FaUserCircle } from "react-icons/fa";
 const DoctorCard = ({ doctor }: { doctor: any }) => {
   // console.log("Doctor: ", doctor);
 
+  const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
   const bufferToBase64 = (buffer: number[]) => {
     const binary = String.fromCharCode.apply(null, buffer);
     return window.btoa(binary);
@@ -31,7 +32,7 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
               alt="doc"
             />
           ) : (
-            <div className="w-20 h-20 rounded-full bg-gray-200" /> // Placeholder for missing image
+            userImage
           )}
         </div>
         <div className="flex flex-col space-y-2 grow">
