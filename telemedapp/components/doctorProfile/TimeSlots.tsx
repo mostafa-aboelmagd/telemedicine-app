@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import userImage from "@/images/user.png";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
+
 function TimeSlots() {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
 
@@ -81,27 +80,32 @@ function TimeSlots() {
 
   useEffect(() => {
     token = localStorage.getItem("jwt");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setProfileData(() => response.formattedDoctor));
-
-    fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/availabilities`,
-      {
+    if(!token) {
+      window.location.href = "/auth/signin";
+    }
+    else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
         mode: "cors",
         headers: {
           Authorization: "Bearer " + token,
         },
-      }
-    )
-      .then((response) => response.json())
-      .then((response) => setOldTimesTemp(() => response.availabilities))
-      .finally(() => setLoading(false));
+      })
+        .then((response) => response.json())
+        .then((response) => setProfileData(() => response.formattedDoctor));
+
+      fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/availabilities`,
+        {
+          mode: "cors",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((response) => setOldTimesTemp(() => response.availabilities))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   useEffect(() => {

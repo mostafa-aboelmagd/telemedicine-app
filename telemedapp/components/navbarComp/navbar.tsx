@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import styles from "./navbar.module.css";
 import Link from "next/link";
@@ -25,9 +26,10 @@ const Navbar = () => {
   useEffect(() => {
     setToken(localStorage.getItem("jwt"));
     setUserRole(localStorage.getItem("userRole"));
-  }, [token, userRole]);
+  }, []);
+
   return (
-    <nav className="h-14 bg-white border border-b-[1px] sticky top-0 z-10 mb-8">
+    <nav className="h-14 bg-white border border-b-[1px] sticky top-0 z-10 pb-8">
       <div className="max-w-full md:max-w-[90%] lg:max-w-[75%] flex justify-between items-center mx-auto">
         <Link href="/">
           <div className="flex justify-center items-center">
@@ -37,15 +39,15 @@ const Navbar = () => {
         </Link>
         <div className="hidden lg:inline-block  justify-between space-x-4 text-[#4d4d4f] text-sm font-light">
           <Link href="/doctors">
-            <button className="hover:text-[#035fe9]">Doctor List</button>
+            <button className="font-semibold hover:text-[#035fe9]">Doctor List</button>
           </Link>
-          <button className="hover:text-[#035fe9]">Tests</button>
-          <button className="hover:text-[#035fe9]">Find A Doctor</button>
-          <button className="hover:text-[#035fe9]">Blog</button>
+          <button className="font-semibold hover:text-[#035fe9]">Tests</button>
+          <button className="font-semibold hover:text-[#035fe9]">Find A Doctor</button>
+          <button className="font-semibold hover:text-[#035fe9]">Blog</button>
         </div>
         <div className="flex justify-between items-center space-x-0 md:space-x-4 lg:space-x-6">
-          <a className="cursor-pointer">العربيه</a>
-          {!token! ? (
+          <a className="cursor-pointer font-medium">العربيه</a>
+          {!token ? (
             <>
               <Link href="/auth/signin">
                 <button className="hidden lg:inline-block border border-[#035fe9] rounded-lg text-[#035fe9] px-12 py-2 my-2">
@@ -79,12 +81,12 @@ const Navbar = () => {
                         "/patientProfile/prescriptions",
                         "/patientProfile/patientDocuments",
                         "/patientProfile/paymentInfo",
-                        // add signout link
+                        "/auth/signout"
                       ]
                     : [
                         "/doctorProfile/view",
                         "/doctorProfile/timeSlots",
-                        // add signout link
+                        "/auth/signout"
                       ]
                 }
                 linkName={
@@ -94,8 +96,9 @@ const Navbar = () => {
                         "My Prescriptions",
                         "My Documents",
                         "Wallet",
+                        "Sign Out"
                       ]
-                    : ["View Profile", "Set Time Slots"]
+                    : ["View Profile", "Set Time Slots", "Sign Out"]
                 }
                 text={signedInIcon}
               />

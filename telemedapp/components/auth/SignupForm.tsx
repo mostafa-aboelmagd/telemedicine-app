@@ -27,9 +27,7 @@ function SignUpForm() {
   });
 
   const [changedField, setChangedField] = useState("");
-
   const [formValid, setFormValid] = useState(false);
-
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -40,7 +38,7 @@ function SignUpForm() {
     { name: "firstName", title: "First Name", type: "text" },
     { name: "lastName", title: "Last Name", type: "text" },
     { name: "email", title: "Email", type: "email" },
-    { name: "phone", title: "Phone Number", type: "tel" },
+    { name: "phone", title: "Phone Number", type: "number" },
     { name: "password", title: "Password", type: "password" },
     { name: "confirmPassword", title: "Confirm Password", type: "password" },
     { name: "birthYear", title: "Birth Year", type: "number" },
@@ -185,12 +183,9 @@ function SignUpForm() {
   };
 
   const validatePhone = () => {
-    const phonePattern = /^\+201(0|1|2|5)(\d{8})$/;
+    const phonePattern = /^-?\d+$/;
     let changedValidation = false;
-    if (
-      formData.phone &&
-      (!phonePattern.test(formData.phone) || formData.phone.length != 13)
-    ) {
+    if (formData.phone && (!phonePattern.test(formData.phone))) {
       if (errorMessage.phone === "") {
         changedValidation = true;
       }
@@ -211,11 +206,12 @@ function SignUpForm() {
   };
 
   const validateBirthYear = () => {
+    const birthYearPattern = /^-?\d+$/;
     let changedValidation = false;
 
     if (
       formData.birthYear &&
-      (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011)
+      (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011 || !birthYearPattern.test(formData.birthYear))
     ) {
       if (errorMessage.birthYear === "") {
         changedValidation = true;

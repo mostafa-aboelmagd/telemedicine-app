@@ -1,7 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import userImage from "@/images/user.png";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import { FaRegFilePdf } from "react-icons/fa6";
@@ -36,17 +34,22 @@ const PatientDocuments = () => {
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setTempData(() => response.formattedPatient))
-      .finally(() => setLoading(false));
+    if(!token) {
+      window.location.href = "/auth/signin";
+    }
+    else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => setTempData(() => response.formattedPatient))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   useEffect(() => {
@@ -129,25 +132,28 @@ const PatientDocuments = () => {
       </div>
 
       <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
-        <div className="flex pt-4 mb-3">
-          <Link href="/patientProfile/view" className="font-bold ml-7 w-1/4">
-            Personal Information
+        <div className="flex pt-4 mb-3 justify-between gap-2">
+          <Link
+            href="/patientProfile/view"
+            className="font-bold ml-7"
+          >
+            Personal Info
           </Link>
           <Link
             href="/patientProfile/paymentInfo"
-            className="font-bold ml-7 mr-7 md:mr-0 w-1/4"
+            className="font-bold"
           >
-            Payment Information
+            Payment Info
           </Link>
           <Link
             href="/patientProfile/prescriptions"
-            className="font-bold text-center w-1/4"
+            className="font-bold"
           >
             Prescriptions
           </Link>
           <Link
             href="/patientProfile/patientDocuments"
-            className="text-blue-500 font-bold text-center w-1/4"
+            className="text-blue-500 font-bold mr-7"
           >
             Documents
           </Link>

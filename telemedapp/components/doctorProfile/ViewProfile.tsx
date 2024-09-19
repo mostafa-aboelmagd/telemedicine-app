@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import userImage from "@/images/user.png";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
+
 function ViewProfile() {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
   const [profileData, setProfileData] = useState({
@@ -40,15 +39,20 @@ function ViewProfile() {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setTempData(() => response.formattedDoctor))
-      .finally(() => setLoading(false));
+    if(!token) {
+      window.location.href = "/auth/signin";
+    }
+    else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
+        mode: "cors",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => setTempData(() => response.formattedDoctor))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   useEffect(() => {
@@ -70,6 +74,12 @@ function ViewProfile() {
     { name: "thirtyMinPrice", title: "30 Minutes Price" },
     { name: "sixtyMinPrice", title: "60 Minutes Price" },
   ];
+
+  const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    localStorage.clear();
+    window.location.href = "/auth/signin";
+  };
 
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 min-[880px]:flex-row min-[880px]:items-start">
@@ -146,7 +156,7 @@ function ViewProfile() {
                   </Link>
                 </div>
                 <div className="mt-5 mb-3">
-                  <button className="font-medium p-3 border border-solid text-red-600 border-red-600 rounded-full">
+                  <button onClick={handleSignOut} className="font-medium p-3 border border-solid text-red-600 border-red-600 rounded-full">
                     Sign Out
                   </button>
                 </div>
