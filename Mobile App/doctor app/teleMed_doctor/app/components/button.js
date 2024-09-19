@@ -16,14 +16,13 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#1565c0',
     margin: 10,
-    borderRadius: 15,
-    padding: 10,
-    width: 150,
-    alignItems: 'center'
+    borderRadius: 10,
+    padding: 5,
+    alignItems: 'center',
+    width: '90%'
   },
   text: {
     color: 'white',
-    fontSize: 32,
-    fontWeight: 'bold',
+    fontSize: 22,
   }
 });
