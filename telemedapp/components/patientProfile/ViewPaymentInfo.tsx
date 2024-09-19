@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import userImage from "@/images/user.png";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
 
@@ -19,15 +17,20 @@ function ViewPaymentInfo() {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setProfileData(() => response.formattedPatient))
-      .finally(() => setLoading(false));
+    if(!token) {
+      window.location.href = "/auth/signin";
+    }
+    else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
+        mode: "cors",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => setProfileData(() => response.formattedPatient))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   return (
@@ -72,28 +75,28 @@ function ViewPaymentInfo() {
           </div>
 
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
-            <div className="flex pt-4 mb-3">
+            <div className="flex pt-4 mb-3 justify-between gap-2">
               <Link
                 href="/patientProfile/view"
-                className="font-bold ml-7 w-1/4"
+                className="font-bold ml-7"
               >
-                Personal Information
+                Personal Info
               </Link>
               <Link
                 href="/patientProfile/paymentInfo"
-                className="text-blue-500 font-bold ml-7 mr-7 md:mr-0 w-1/4"
+                className="text-blue-500 font-bold"
               >
-                Payment Information
+                Payment Info
               </Link>
               <Link
                 href="/patientProfile/prescriptions"
-                className="font-bold ml-7 w-1/4"
+                className="font-bold"
               >
                 Prescriptions
               </Link>
               <Link
                 href="/patientProfile/patientDocuments"
-                className="font-bold ml-7 mr-7 md:mr-0 w-1/4"
+                className="font-bold mr-7"
               >
                 Documents
               </Link>

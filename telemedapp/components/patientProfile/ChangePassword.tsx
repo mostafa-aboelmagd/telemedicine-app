@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import userImage from "@/images/user.png";
 import InputComponent from "@/components/auth/InputComponent";
 import { CircularProgress } from "@mui/material";
 import { FaUserCircle } from "react-icons/fa";
 function ChangePassword() {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
+
+  const [profileData, setProfileData] = useState({
+    firstName: "",
+    lastName: "",
+  });
 
   const [formData, setFormData] = useState({
     oldPassword: "",
@@ -24,14 +27,9 @@ function ChangePassword() {
 
   const [changedField, setChangedField] = useState("");
 
-  const [formValid, setFormValid] = useState(false);
-
-  const [profileData, setProfileData] = useState({
-    firstName: "",
-    lastName: "",
-  });
-
   const [loading, setLoading] = useState(true);
+
+  const [formValid, setFormValid] = useState(false);
 
   const [oldPasswordError, setOldPasswordError] = useState(false);
 
@@ -39,16 +37,20 @@ function ChangePassword() {
 
   useEffect(() => {
     token = localStorage.getItem("jwt");
-
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setProfileData(() => response.formattedPatient))
-      .finally(() => setLoading(false));
+    if(!token) {
+      window.location.href = "/auth/signin";
+    }
+    else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
+        mode: "cors",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => setProfileData(() => response.formattedPatient))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   useEffect(() => {
