@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tele_med_pilot/AuthContainer.dart';
 import 'package:tele_med_pilot/features/Booking/view/Bookingg_view.dart';
-import 'package:tele_med_pilot/features/book%20appointment/view/add_appointment_view.dart';
+import 'package:tele_med_pilot/features/book%20appointment/view/add_appointment_vie/add_appointment_view.dart';
 import 'package:tele_med_pilot/features/doctors/views/doctors_screen.dart';
 import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
 import 'package:tele_med_pilot/features/more/views/more_screen.dart';
