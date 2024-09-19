@@ -262,7 +262,7 @@ const Doctors = () => {
         {filteredDoctors.length > 0 ? (
           <DoctorGrid doctors={filteredDoctors} />
         ) : (
-          <div> Loading...</div>
+          <div className="mx-10 text-xl">Loading...</div>
         )}
       </section>
     </main>

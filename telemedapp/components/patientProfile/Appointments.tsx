@@ -325,7 +325,7 @@ const Appointments = () => {
               profileFields={fullName}
             />
           ) : (
-            <div> Loading...</div>
+            <div className="mx-10 text-xl">Loading...</div>
           )}
         </div>
       </div>

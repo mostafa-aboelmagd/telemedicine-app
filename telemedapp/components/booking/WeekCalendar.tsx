@@ -8,12 +8,18 @@ import {
 } from "date-fns";
 
 interface WeekCalendarProps {
-  availableDates: { date: string; slots: { time: string; id: number }[] }[];
+  availableDates: {
+    date: string;
+    slots: { time: string; id: number; type: string }[];
+  }[];
   handleDateSelect: (date: {
     date: string;
-    slots: { time: string; id: number }[];
+    slots: { time: string; id: number; type: string }[];
   }) => void;
-  selectedDate: { date: string; slots: { time: string; id: number }[] } | null;
+  selectedDate: {
+    date: string;
+    slots: { time: string; id: number; type: string }[];
+  } | null;
 }
 
 const WeekCalendar: React.FC<WeekCalendarProps> = ({
@@ -63,7 +69,7 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
         <div className="mx-auto items-center flex justify-evenly">
           <button
             onClick={handlePreviousWeek}
-            className=" px-3 py-1 bg-gray-200 rounded-full text-gray-700"
+            className=" px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-full text-gray-700"
           >
             {"<"}
           </button>
@@ -73,7 +79,7 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
           </span>
           <button
             onClick={handleNextWeek}
-            className=" px-3 py-1 bg-gray-200 rounded-full text-gray-700 "
+            className=" px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-full text-gray-700 "
           >
             {">"}
           </button>
@@ -86,10 +92,10 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
             onClick={() => handleDateSelect({ date, slots })}
             className={`px-4 py-2 rounded-lg ${
               selectedDate?.date === date
-                ? "bg-green-500 text-white"
+                ? "bg-green-500 hover:bg-green-600 text-white"
                 : slots.length > 0
-                ? "bg-gray-200 text-gray-800"
-                : "bg-gray-100 text-gray-500"
+                ? "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                : "bg-gray-50 hover:bg-gray-100 text-gray-500"
             }`}
           >
             {format(new Date(date), "EEE d")} {/* Display the day and number */}
