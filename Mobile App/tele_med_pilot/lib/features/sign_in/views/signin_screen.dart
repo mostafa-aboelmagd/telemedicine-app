@@ -118,7 +118,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_circle_left_outlined, size: 35.spMin),
+                    icon:
+                        Icon(Icons.arrow_circle_left_outlined, size: 35.spMin),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -156,7 +157,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => Navigator.pushReplacementNamed(
-                                  context, RouteClass.signUpStep1Route),
+                                  context, RouteClass.signUpStepRoute),
                           ),
                         ],
                       ),
@@ -199,8 +200,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     SizedBox(height: 16.h),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: AppColors.white, backgroundColor: AppColors.blue100, // Text color
-                        minimumSize: Size(double.infinity, 48.h), // Full width and height
+                        foregroundColor: AppColors.white,
+                        backgroundColor: AppColors.blue100, // Text color
+                        minimumSize: Size(
+                            double.infinity, 48.h), // Full width and height
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.r),
                         ),
@@ -216,7 +219,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                               width: 24.sp,
                               height: 24.sp,
                               child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    AppColors.white),
                               ),
                             )
                           : Text(

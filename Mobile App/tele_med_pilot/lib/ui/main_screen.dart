@@ -45,8 +45,7 @@ class MainScreen extends StatelessWidget {
                 labelColor: AppColors.white,
                 isValid: true,
                 onTap: () {
-                  Navigator.pushReplacementNamed(
-                      context, RouteClass.signInRoute);
+                  Navigator.pushNamed(context, RouteClass.signInRoute);
                 },
               ),
               SizedBox(height: 8.h),
@@ -57,8 +56,7 @@ class MainScreen extends StatelessWidget {
                 outlinedButton: true,
                 outlineColor: AppColors.black,
                 onTap: () {
-                  Navigator.pushReplacementNamed(
-                      context, RouteClass.signUpStep1Route);
+                  Navigator.pushNamed(context, RouteClass.signUpStepRoute);
                 },
               ),
               SizedBox(height: 8.h),
