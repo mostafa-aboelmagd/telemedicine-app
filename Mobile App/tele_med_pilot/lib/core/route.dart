@@ -9,12 +9,8 @@ import 'package:tele_med_pilot/features/my_sessions/views/my_sessions_screen.dar
 import 'package:tele_med_pilot/features/notification/views/notifications_screen.dart';
 import 'package:tele_med_pilot/features/profile/views/profile_screen.dart';
 import 'package:tele_med_pilot/features/sign_in/views/signin_screen.dart';
-import 'package:tele_med_pilot/features/sign_up/signup_step2_screen.dart';
-import 'package:tele_med_pilot/features/sign_up/signup_step1_screen.dart';
-import 'package:tele_med_pilot/features/sign_up/signup_step3_screen.dart';
+import 'package:tele_med_pilot/features/sign_up/views/sign_up_screen.dart';
 import 'package:tele_med_pilot/features/support/views/support_screen.dart';
-import 'package:tele_med_pilot/ui/main_screen.dart';
-import 'package:tele_med_pilot/ui/main_screen_layout.dart';
 
 class RouteClass {
   static const String initRoute = "/";
@@ -35,12 +31,8 @@ class RouteClass {
   //Registration and athentication routes
 
   static const String signInRoute = "/sign_in_screen";
-  static const String signUpStep1Route = "/sign_up_step1_screen";
-  static const String signUpStep2Route = "/sign_up_step2_screen";
-  static const String signUpStep3Route = "/sign_up_step3_screen";
+  static const String signUpStepRoute = "/sign_up_screen";
 
-  
-  
   static const String doctorCards = "/Booking";
   static const String addAppointment = "/add_appointment_view";
 
@@ -56,7 +48,7 @@ class RouteClass {
         break;
 
       case addAppointment:
-        page =  AddAppointmentView(card: args!['card']);
+        page = AddAppointmentView(card: args!['card']);
         break;
 
       case homeRoute:
@@ -92,16 +84,8 @@ class RouteClass {
         page = const SignInScreen();
         break;
 
-      case signUpStep1Route:
+      case signUpStepRoute:
         page = const SignUpStep1Screen();
-        break;
-
-      case signUpStep2Route:
-        page = const SignUpStep2Screen();
-        break;
-
-      case signUpStep3Route:
-        page = const SignUpStep3Screen();
         break;
 
       default:
@@ -155,7 +139,7 @@ class RouteClass {
           transitionDuration: animationDuration,
         );
 
-        case 'slideRight':
+      case 'slideRight':
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => page,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
