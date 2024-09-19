@@ -161,6 +161,16 @@ create table doctor_availability
 );
 
 
+CREATE TABLE appointment_requests (
+    request_appointment_id SERIAL PRIMARY KEY,
+    request_appointment_patient_id INTEGER REFERENCES patients(patient_user_id_reference),
+    request_appointment_doctor_id INTEGER REFERENCES doctors(doctor_user_id_reference),
+    request_appointment_date_time TIMESTAMP,
+    request_appointment_reason TEXT,
+    request_appointment_status VARCHAR CHECK (request_appointment_status IN ('pending', 'approved', 'declined')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 
 create table languages
@@ -214,41 +224,41 @@ create table prescriptions
 );
 
 
-create table request_appointment
+create table appointment
 (
-    request_appointment_patient_id        integer
+    appointment_patient_id        integer
         constraint appointment_request_patient_id_fkey
             references patient
             on delete cascade,
-    request_appointment_doctor_id         integer
+    appointment_doctor_id         integer
         constraint appointment_request_doctor_id_fkey
             references doctor
             on delete cascade,
-    request_appointment_availability_slot integer default nextval('appointment_slot_seq'::regclass) not null
+    appointment_availability_slot integer default nextval('appointment_slot_seq'::regclass) not null
         constraint appointment_slot_fkey
             references doctor_availability
             on delete cascade,
-    request_appointment_type              varchar
+    appointment_type              varchar
         constraint check_appointment_type
-            check ((request_appointment_type)::text = ANY
+            check ((appointment_type)::text = ANY
                    (ARRAY ['Followup'::text, 'Investigation'::text])),
-    request_appointment_duration          integer,
-    request_appointment_id                serial
-        constraint pk_request_appointment
+    appointment_duration          integer,
+    appointment_id                serial
+        constraint pk_appointment
             primary key,
-    request_appointment_complaint text not null,
+    appointment_complaint text not null,
 
-    request_appointment_location          varchar
+    appointment_location          varchar
         constraint appointment_appointment_location_check
-            check ((request_appointment_location)::text = ANY
+            check ((appointment_location)::text = ANY
                    ((ARRAY ['online'::character varying, 'onsite'::character varying])::text[])),
 
-    request_appointment_status varchar check ((request_appointment_status)::text = ANY
+    appointment_status varchar check ((appointment_status)::text = ANY
                    (ARRAY ['Approved'::text, 'Chat'::text, 'Waiting'::text, 'Declined'::text])),
     created_at                   timestamp default CURRENT_TIMESTAMP,
     updated_at                   timestamp default CURRENT_TIMESTAMP
 );
-alter sequence appointment_slot_seq owned by request_appointment.request_appointment_availability_slot;
+alter sequence appointment_slot_seq owned by appointment.appointment_availability_slot;
 
 
 create table medications_plan
@@ -257,7 +267,7 @@ create table medications_plan
         primary key,
     medication_plan_appointment_reference_id integer
         constraint medication_plan_appointment_reference_id_fkey
-            references request_appointment,
+            references appointment,
     medication_plan_name         varchar(255),
     medication_plan_dosage      varchar(255),
     medication_plan_note        text,
@@ -292,7 +302,7 @@ create table followup
 
     followup_appointment_reference integer
         constraint followup_appointment_reference_fkey
-            references request_appointment
+            references appointment
             on delete cascade    ,
     followup_next_appointment integer -- here when the value is not null it creates a new appointment with an accepted request
         -- if the attribute of followup in the appointment table is true
