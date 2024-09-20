@@ -6,70 +6,86 @@ import AppointmentsGrid from "./AppointmentsGrid";
 const Appointments = () => {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
   const [profileData, setProfileData] = useState({
-    firstName: "",
-    lastName: "",
+    firstName: "D",
+    lastName: "r",
     phone: "",
     email: "",
     gender: "",
     birthYear: "",
+    residenceCountry: "",
+    specialization: "",
     languages: "",
+    thirtyMinPrice: "",
+    sixtyMinPrice: "",
   });
+
+  const [appointments, setAppointments] = useState([
+    {
+      appointment_availability_slot: 155,
+      appointment_doctor_id: 77,
+      appointment_duration: 30,
+      appointment_id: 56,
+      appointment_location: null,
+      appointment_patient_id: 78,
+      appointment_status: null,
+      appointment_type: "online",
+      created_at: "2024-09-19T12:45:49.112Z",
+      doctor_city: null,
+      doctor_clinic_location: null,
+      doctor_country: "Egypt",
+      doctor_image: null,
+      doctor_nearest_appointment_id: null,
+      doctor_sixty_min_price: 750,
+      doctor_specialization: "Cardiology",
+      doctor_table_id: 8,
+      doctor_thirty_min_price: 400,
+      doctor_user_id_reference: 77,
+      patient_first_name: "Mahmoud",
+      patient_last_name: "Mansy",
+      updated_at: "2024-09-19T12:45:49.112Z",
+      user_birth_year: 1999,
+      user_email: "doctor@test.com",
+      user_first_name: "yahya",
+      user_gender: "Male",
+      user_last_name: "ahmed",
+      user_phone_number: "+201009900000",
+    },
+  ]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+      window.location.href = "/auth/signin";
+    } else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
+        mode: "cors",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => setProfileData(() => response.formattedDoctor));
+    }
+  }, []);
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/appointments`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then((response) => response.json())
-      .then((response) => setProfileData(() => response.formattedPatient));
+      .then((response) => setAppointments(() => response));
   }, []);
+  console.log(appointments);
 
-  const [doctors, setDoctors] = useState<any>([]);
-
-  const handleFillOptions = (doctors: any[]) => {
-    let speciality: any = [];
-    let country: any = [];
-    let language: any = [];
-    doctors.forEach((doctor: any) => {
-      if (!speciality.includes(doctor.title)) {
-        speciality.push({ value: doctor.title, label: doctor.title });
-      }
-      if (!country.includes(doctor.country)) {
-        country.push({ value: doctor.country, label: doctor.country });
-      }
-      doctor.language.forEach((lang: string) => {
-        if (!language.includes(lang)) {
-          language.push({ value: lang, label: lang });
-        }
-      });
-    });
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-  };
-  const fetchDoctors = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/home`,
-      { headers }
-    );
-    if (!response.ok) {
-      console.log("Error: Request sent no data");
-    } else {
-      const data = await response.json();
-      handleFillOptions(data);
-      setDoctors(data);
-    }
-  };
-
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
       <div className="flex flex-col gap-4">
@@ -136,8 +152,11 @@ const Appointments = () => {
           </div>
         </div>
         <div className="flex flex-col m-4">
-          {doctors.length > 0 ? (
-            <AppointmentsGrid doctors={doctors} />
+          {appointments?.length > 0 ? (
+            <AppointmentsGrid
+              appointments={appointments}
+              profileData={profileData}
+            />
           ) : (
             <div className="mx-10 text-xl">Loading...</div>
           )}

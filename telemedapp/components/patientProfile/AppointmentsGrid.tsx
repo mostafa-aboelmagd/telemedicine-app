@@ -2,24 +2,24 @@ import React from "react";
 import AppointmentCard from "./AppointmentCard";
 
 const AppointmentsGrid = ({
-  doctors,
-  profileFields,
+  appointments,
+  profileData,
 }: {
-  doctors: any[];
-  profileFields: any;
+  appointments: any[];
+  profileData: any;
 }) => {
-  let doctorList = doctors.map((doctor) => {
+  let appointmentList = appointments.map((appointment) => {
     return (
       <AppointmentCard
-        doctor={doctor}
-        key={doctor.id}
-        profileFields={profileFields}
+        appointment={appointment}
+        key={appointment.id}
+        profileData={profileData}
       />
     );
   });
   return (
     <div className="col-span-2 overflow-y-auto">
-      <div className="grid grid-cols-2 gap-4">{doctorList}</div>
+      <div className="grid grid-cols-2 gap-4">{appointmentList}</div>
     </div>
   );
 };

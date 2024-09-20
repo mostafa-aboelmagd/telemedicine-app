@@ -10,8 +10,8 @@ import { FaUserCircle } from "react-icons/fa";
 const Prescriptions = () => {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
   const [profileData, setProfileData] = useState({
-    firstName: "",
-    lastName: "",
+    firstName: "firstName",
+    lastName: "lastName",
     phone: "",
     email: "",
     gender: "",
@@ -33,10 +33,9 @@ const Prescriptions = () => {
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
-    if(!token) {
+    if (!token) {
       window.location.href = "/auth/signin";
-    }
-    else {
+    } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
         method: "GET",
         mode: "cors",
@@ -75,7 +74,7 @@ const Prescriptions = () => {
       prescriptionList.find((prescription) => prescription.id === id)
     );
   };
-  const handleDownloadPrescription = () => { };
+  const handleDownloadPrescription = () => {};
   const handlePrevPrescription = () => {
     const currentIndex = prescriptionList.findIndex(
       (prescription) => prescription.id === openPrescription.id
@@ -100,7 +99,10 @@ const Prescriptions = () => {
   const [prescriptionList, setPrescriptionList] = useState<any[]>([]);
   const fetchPrescriptions = async (id: any, headers: any) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/prescription/view/${id}`, { mode: 'cors', headers });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/prescription/view/${id}`,
+        { mode: "cors", headers }
+      );
       // const response = await fetch(`http://localhost:3000/prescriptionList`);
       const data = await response.json();
       const orderedData = data.sort(
@@ -114,9 +116,9 @@ const Prescriptions = () => {
   };
   useEffect(() => {
     const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-    }
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    };
     const id = localStorage.getItem("userId");
     fetchPrescriptions(id, headers);
   }, []);
@@ -157,16 +159,10 @@ const Prescriptions = () => {
 
       <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
         <div className="flex pt-4 mb-3 justify-between gap-2">
-          <Link
-            href="/patientProfile/view"
-            className="font-bold ml-7"
-          >
+          <Link href="/patientProfile/view" className="font-bold ml-7">
             Personal Info
           </Link>
-          <Link
-            href="/patientProfile/paymentInfo"
-            className="font-bold"
-          >
+          <Link href="/patientProfile/paymentInfo" className="font-bold">
             Payment Info
           </Link>
           <Link
