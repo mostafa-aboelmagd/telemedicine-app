@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import stylesButton from "../navbarComp/navbar.module.css";
 import { FaUserCircle } from "react-icons/fa";
-const AppointmentCard = ({ doctor }: { doctor: any }) => {
+const AppointmentCard = ({
+  appointment,
+  profileData,
+}: {
+  appointment: any;
+  profileData: any;
+}) => {
   const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
 
   const [userRole, setUserRole] = useState<any>();
@@ -9,42 +15,26 @@ const AppointmentCard = ({ doctor }: { doctor: any }) => {
   const selectedSlot = "09:00";
   const appointmentData = {
     appointment_date_time: `${selectedDate.date} ${selectedSlot}`,
-    appointment_duration: doctor.appointmentDuration || "30 minutes",
-    appointment_type: doctor.isRemote ? "Remote" : "Remote",
+    appointment_duration: appointment.appointment_duration || "30 minutes",
+    appointment_type: appointment.appointment_type ? "Remote" : "Remote",
   };
 
   useEffect(() => {
     setUserRole(localStorage.getItem("userRole"));
   }, [userRole]);
 
-  // Buffer to Base64 conversion for the doctor's image
-  const bufferToBase64 = (buffer: number[]) => {
-    const binary = String.fromCharCode.apply(null, buffer);
-    return window.btoa(binary);
-  };
-
-  const base64Image = doctor.image
-    ? `data:image/jpeg;base64,${bufferToBase64(doctor.image.data)}`
-    : ""; // Placeholder for missing image
-
   return (
     <div className="bg-white rounded-3xl p-6 shadow-lg flex flex-col space-y-3">
       {/* Doctor Information */}
       {userRole === "Patient" ? (
         <div className="flex items-center space-x-4">
-          {base64Image ? (
-            <img
-              className="w-20 h-20 rounded-full object-cover"
-              src={base64Image}
-              alt="Doctor"
-            />
-          ) : (
-            userImage
-          )}
+          {userImage}
           <div className="flex flex-col">
-            <h2 className="text-lg font-semibold">{doctor.name}</h2>
+            <h2 className="text-lg font-semibold">
+              {` ${appointment.user_first_name} ${appointment.user_last_name}`}
+            </h2>
             <p className="text-sm text-[#035fe9]">
-              {doctor.title || "Specialist"}
+              {appointment.doctor_specialization || "Specialist"}
             </p>
           </div>
         </div>
@@ -52,9 +42,11 @@ const AppointmentCard = ({ doctor }: { doctor: any }) => {
         <div className="flex items-center space-x-4">
           {userImage}
           <div className="flex flex-col">
-            <h2 className="text-lg font-semibold">{doctor.name}</h2>
+            <h2 className="text-lg font-semibold">
+              {` ${appointment.user_first_name} ${appointment.user_last_name}`}
+            </h2>
             <p className="text-sm text-[#035fe9]">
-              {doctor.title || "Specialist"}
+              {appointment.doctor_specialization || "Specialist"}
             </p>
           </div>
         </div>
@@ -65,7 +57,10 @@ const AppointmentCard = ({ doctor }: { doctor: any }) => {
         <div className="text-sm text-gray-600">
           {/* {profileFields && ( */}
           <p>
-            <strong>Patient: Mahmoud Mansy</strong>
+            <strong>
+              Patient:
+              {` ${appointment.patient_first_name} ${appointment.patient_last_name}`}
+            </strong>
             {/* {profileFields} */}
           </p>
           {/* )} */}

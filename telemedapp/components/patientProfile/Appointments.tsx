@@ -7,15 +7,38 @@ const Appointments = () => {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
 
   const [profileData, setProfileData] = useState({
-    firstName: "",
-    lastName: "",
+    firstName: "firstName",
+    lastName: "lastName",
     phone: "",
     email: "",
     gender: "",
     birthYear: "",
     languages: "",
   });
-
+  const [appointments, setAppointments] = useState([
+    {
+      user_email: "mahmoud2abdalfattah123@gmail.com",
+      user_phone_number: "+201010352387",
+      user_gender: "Male",
+      user_birth_year: 1991,
+      user_first_name: "Mahmoud",
+      user_last_name: "Mansy",
+      patient_user_id_reference: 67,
+      patient_current_doctor_id: null,
+      patient_wallet: 0,
+      patient_table_id: 41,
+      appointment_patient_id: 67,
+      appointment_doctor_id: 77,
+      appointment_type: null,
+      appointment_duration: 60,
+      appointment_id: 59,
+      appointment_status: null,
+      appointment_availability_slot: 171,
+      appointment_location: null,
+      doctor_first_name: "yahya",
+      doctor_last_name: "ahmed",
+    },
+  ]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -58,6 +81,24 @@ const Appointments = () => {
   useEffect(() => {
     fetchDoctors();
   }, []);
+  useEffect(() => {
+    let token = localStorage.getItem("jwt");
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/appointments`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((response) => setAppointments(() => response));
+  }, []);
+  console.log(appointments);
+
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
       <div>
@@ -126,10 +167,10 @@ const Appointments = () => {
           </div>
         </div>
         <div className="flex flex-col m-4">
-          {doctors.length > 0 ? (
+          {appointments?.length > 0 ? (
             <AppointmentsGrid
-              doctors={doctors}
-              profileFields={`${profileData.firstName} ${profileData.lastName}`}
+              appointments={appointments}
+              profileData={profileData}
             />
           ) : (
             <div className="mx-10 text-xl">Loading...</div>
