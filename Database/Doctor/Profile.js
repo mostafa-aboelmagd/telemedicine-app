@@ -93,20 +93,22 @@ const retrieveDoctorAppointments = async (id, email) => {
         `SELECT 
         U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
         D.*,
-        A.*
+        A.*,
+        P.user_first_name AS patient_first_name, P.user_last_name AS patient_last_name
         FROM doctor D
         LEFT JOIN users U ON D.doctor_user_id_reference = U.user_id
         LEFT JOIN appointment A ON D.doctor_user_id_reference = A.appointment_doctor_id
+        LEFT JOIN users P ON A.appointment_patient_id = P.user_id
         WHERE D.doctor_user_id_reference = $1 AND U.user_role = $2 AND U.user_email = $3`;
-
+    
         const result = await pool.query(query, [id, 'Doctor', email]);
-        if (result.rows.length) {
-            console.log('Doctor appointments found', result.rows);
-            return result.rows;
+        if (!result.rows.length) {
+            console.log('Doctor appointments not found');
+            return false;
         }
 
-        console.log('Doctor appointments not found');
-        return false;
+        console.log('Doctor appointments found', result.rows);
+        return result.rows;
 
     } catch (error) {
         console.error(error.stack);
