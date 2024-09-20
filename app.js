@@ -22,6 +22,7 @@ const doctorEditRoute = require('./Routes/Doctor/Edit');
 const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/add');
 const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Delete');
 const doctorProfilePictureUploadRoute = require('./Routes/Doctor/Profile Picture/Upload');
+const doctorPatientPrescriptionAddRoute = require('./Routes/Doctor/Patient Prescription/Add');
 const port = process.env.PORT || 4000;
 const app = express();
 
@@ -84,6 +85,7 @@ app.use('/doctor/profile', doctorProfileRoute);
 app.use('/doctor/availability/add', doctorAddAvailabilityRoute);
 app.use('/doctor/availability/delete', doctorDeleteAvailabilityRoute);
 app.use('/doctor/profile-picture/upload', doctorProfilePictureUploadRoute);
+app.use('/doctor/patient-prescription/add', doctorPatientPrescriptionAddRoute);
 
 
 
