@@ -25,12 +25,15 @@ export default function Profile ({ navigation }){
 
         <View style={styles.card}>
           <View style={styles.profileRow}>
-            
+            <Image source={require('../../assets/images/pp.png')}
+            style={styles.profileImage} />
             <View style={styles.profileInfo}>
-              <Text style={styles.name}>Dr. John Doe</Text>
-              <TouchableOpacity style={styles.editButton}>
-                <Text style={styles.editButtonText}>Edit Profile</Text>
-              </TouchableOpacity>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.name}>Dr. John Doe</Text>
+                <TouchableOpacity style={styles.editButton}>
+                  <Text style={styles.editButtonText}>Edit Profile</Text>
+                </TouchableOpacity>
+              </View>
 
               <View style={styles.infoRow}>
                 <MaterialIcons name="medical-services" size={20} />
@@ -44,10 +47,10 @@ export default function Profile ({ navigation }){
                 <Ionicons name="call" size={20} />
                 <Text style={styles.infoText}>01234567892</Text>
               </View>
-              <View style={styles.infoRow}>
+              {/* <View style={styles.infoRow}>
                 <Ionicons name="calendar" size={20} />
                 <Text style={styles.infoText}>1990</Text>
-              </View>
+              </View> */}
             </View>
           </View>
         </View>
@@ -152,6 +155,7 @@ const styles = StyleSheet.create({
   editButtonText: {
     color: '#1565c0',
     fontSize: 14,
+    marginLeft: '30%',
   },
   infoRow: {
     flexDirection: 'row',

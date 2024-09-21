@@ -9,7 +9,11 @@ import CustomScroll from '../components/scroll';
 export default function Request ({ navigation }) {
 
   // for testing
-  const names = ['username1', 'username2', 'username3'];
+  const names = ['username1', 'username2', 'username3', 'username4'];
+
+  const details = () => {
+    navigation.navigate('details')
+  }
 
 return (
     <SafeArea>
@@ -19,19 +23,26 @@ return (
         {names.map((item) => 
         <View>
           <View style={[styles.card]}>
+            {/* add history button (...) in a row with the state */}
+            {/* add the date and time */ }
             <Text style={styles.state}>online / follow up</Text>
             <Text style={styles.name}>{item}</Text>
             <Text>Stating complaints: I've been experiencing severe chest pain for the past two days.</Text>
           </View>
           <View style={{flexDirection: 'row'}}>
-          <Custombutton buttonStyle={{backgroundColor: 'green', width: '25%'}} textStyle={{fontSize: 15}}>
+          <Custombutton 
+          buttonStyle={[styles.button, {backgroundColor: 'green'}]}
+          textStyle={{fontSize: 15}}>
             Accept
           </Custombutton>
-          <Custombutton buttonStyle={{backgroundColor: 'red', width: '25%'}} textStyle={{fontSize: 15}}>
+          <Custombutton buttonStyle={[styles.button, {backgroundColor: 'red'}]} textStyle={{fontSize: 15}}>
             Decline
           </Custombutton>
-          <Custombutton buttonStyle={{width: '25%'}} textStyle={{fontSize: 15}}>
-            Details
+          <Custombutton
+          buttonStyle={[styles.button, {width: '35%'}]}
+          textStyle={{fontSize: 15}}
+          onPress={details}>
+            Ask for details
           </Custombutton>
           </View>
           </View>
@@ -47,12 +58,13 @@ return (
 const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: 'lightgray',
     borderRadius: 10,
-    margin: '3%',
-    width: '80%',
+    marginTop: '3%',
+    width: '100%',
     height: 120,
-    padding: 5
+    padding: 5,
+    backgroundColor: 'white'
   },
   state: {
     backgroundColor: 'black',
@@ -65,6 +77,10 @@ const styles = StyleSheet.create({
   },
   name:{
     marginBottom: '3%'
-  }
+  },
+  button: {
+    width: '25%',
+    marginRight: '0%'
+  },
   
 })
