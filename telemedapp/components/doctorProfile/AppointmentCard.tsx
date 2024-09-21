@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import stylesButton from "../navbarComp/navbar.module.css";
 import { FaUserCircle } from "react-icons/fa";
+import { formatDate } from "../../utils/date";
+import Link from "next/link";
+
 const AppointmentCard = ({
   appointment,
   profileData,
@@ -31,7 +34,7 @@ const AppointmentCard = ({
           {userImage}
           <div className="flex flex-col">
             <h2 className="text-lg font-semibold">
-              {` ${appointment.user_first_name} ${appointment.user_last_name}`}
+              {` ${appointment.patient_first_name} ${appointment.patient_last_name}`}
             </h2>
             <p className="text-sm text-[#035fe9]">
               {appointment.doctor_specialization || "Specialist"}
@@ -43,7 +46,7 @@ const AppointmentCard = ({
           {userImage}
           <div className="flex flex-col">
             <h2 className="text-lg font-semibold">
-              {` ${appointment.user_first_name} ${appointment.user_last_name}`}
+              {` ${appointment.patient_first_name} ${appointment.patient_last_name}`}
             </h2>
             <p className="text-sm text-[#035fe9]">
               {appointment.doctor_specialization || "Specialist"}
@@ -57,40 +60,51 @@ const AppointmentCard = ({
         <div className="text-sm text-gray-600">
           {/* {profileFields && ( */}
           <p>
-            <strong>
+            {/* <strong>
               Patient:
               {` ${appointment.patient_first_name} ${appointment.patient_last_name}`}
-            </strong>
+            </strong> */}
             {/* {profileFields} */}
           </p>
           {/* )} */}
           <p className="flex flex-row justify-start gap-4 items-center ">
             <p>
-              <strong>Duration:</strong> {appointmentData.appointment_duration}
+              <strong>Duration:</strong> {appointment.appointment_duration}
             </p>
             <p>
-              <strong>Type:</strong> {appointmentData.appointment_type}
+              <strong>Type:</strong> {appointment.appointment_type}
             </p>
           </p>
           <p>
             <strong>Date & Time:</strong>{" "}
-            {appointmentData.appointment_date_time}
+            {/* {appointmentData.appointment_date_time} */}
+            {appointment.created_at && formatDate(appointment.created_at)}
           </p>
         </div>
       </div>
 
       {/* Buttons Section */}
       <div className="flex justify-between space-x-4">
-        <button
-          className={`text-sm font-medium text-white bg-[#60A899] py-2 px-4 rounded-lg hover:bg-[#4b8377] w-full`}
+        <Link
+          href={`/doctorProfile/documentsList/${appointment.appointment_id}`}
+          className="text-blue-500 font-bold ml-7 w-1/2"
         >
-          My Documents
-        </button>
-        <button
-          className={`${stylesButton.gradient_button} text-sm font-medium text-white py-2 px-4 rounded-lg w-full`}
+          <button
+            className={`text-sm font-medium text-white bg-[#60A899] py-2 px-4 rounded-lg hover:bg-[#4b8377] w-full`}
+          >
+            My Documents
+          </button>
+        </Link>
+        <Link
+          href={`/doctorProfile/prescriptions/${appointment.appointment_id}`}
+          className="text-blue-500 font-bold ml-7 w-1/2"
         >
-          My Appointments
-        </button>
+          <button
+            className={`${stylesButton.gradient_button} text-sm font-medium text-white py-2 px-4 rounded-lg w-full`}
+          >
+            My Appointments
+          </button>
+        </Link>
       </div>
     </div>
   );

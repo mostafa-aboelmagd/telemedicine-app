@@ -8,10 +8,6 @@ import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
 import { FaUserCircle } from "react-icons/fa";
 import { formatDoctorAvailabilities } from "@/utils/formatDoctorAvailabilities";
-import { Toast } from "primereact/toast";
-import ConfirmDialog from "./ConfirmDialog"; // Import the external component
-
-const userImage = <FaUserCircle className="h-10 w-10 text-[#035fe9]" />;
 
 const DoctorBooking = () => {
   const searchParams = useSearchParams();
