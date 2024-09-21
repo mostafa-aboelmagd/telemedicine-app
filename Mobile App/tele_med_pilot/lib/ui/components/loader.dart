@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:tele_med_pilot/core/theme.dart';
 
 class Loader extends StatelessWidget {
-  const Loader({super.key});
+  final Color loaderColor;
+  final double width;
+  const Loader({
+    super.key,
+    required this.loaderColor,
+    required this.width,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const CircularProgressIndicator(
-      strokeWidth: 1,
-      color: AppColors.white,
+    return CircularProgressIndicator(
+      strokeWidth: width,
+      color: loaderColor,
     );
   }
 }
