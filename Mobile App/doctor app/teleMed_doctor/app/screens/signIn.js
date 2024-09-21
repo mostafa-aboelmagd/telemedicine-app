@@ -5,6 +5,7 @@ import Custombutton from '../components/button';
 import { StatusBar } from 'expo-status-bar';
 import SafeArea from '../components/safeArea.js';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import CustomTitle from '../components/title.js';
 
 export default function Login({ navigation }) {
 
@@ -24,13 +25,17 @@ export default function Login({ navigation }) {
     navigation.navigate('register');
   }
 
+  const vsupport = () => {
+    navigation.navigate('visitor support')
+  }
+
   return (
     <SafeArea>
     <View style={styles.container}>
       <View style={styles.container2}>
-        <Text style={styles.text2}>
+        <CustomTitle>
           Sign in
-        </Text>
+        </CustomTitle>
         <View style={[styles.container3, {marginTop: '50%'}]}>  
           <TextInput
             placeholder='example@gmai.com'
@@ -77,12 +82,13 @@ export default function Login({ navigation }) {
           </Custombutton>
         </View>
       </View>
-      <View style={{alignItems:'center', marginTop: '10%'}}>
-        <AntDesign name="customerservice" size={40} color="black" />
-        <Text style={{fontWeight:'bold'}}>
-          Support
-        </Text>
-      </View>
+      <TouchableOpacity onPress={vsupport}
+        style={{alignItems:'center', marginTop: '10%'}}>
+          <AntDesign name="customerservice" size={40} color="black" />
+          <Text style={{fontWeight:'bold'}}>
+              Support
+          </Text>
+      </TouchableOpacity>
 
       <StatusBar style="auto" />
     </View>
@@ -125,19 +131,6 @@ const styles = StyleSheet.create({
     marginTop: "25%",
     justifyContent: 'center',
     alignItems: 'center',
-  },
-
-  text1: {
-    color: '#1565c0',
-    fontSize: 30, // Added font size for better visibility
-    marginTop: 10, // Space between image and text
-  },
-
-  text2: {
-    color: '#1565c0',
-    fontSize: 24, // Added font size for better visibility
-    marginBottom: 10, // Space between image and text
-    fontWeight: 'bold'
   },
 
   input: {

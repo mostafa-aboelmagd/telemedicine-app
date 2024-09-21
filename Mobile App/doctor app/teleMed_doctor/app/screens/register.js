@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import SafeArea from '../components/safeArea';
 import Custombutton from '../components/button';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import CustomTitle from '../components/title';
 
 export default function Register({ navigation }){
 
@@ -26,14 +27,18 @@ export default function Register({ navigation }){
         navigation.navigate('sign in')
     }
 
+    const vsupport = () => {
+        navigation.navigate('visitor support')
+    }
+
     return (
         <SafeArea>
         <View style={styles.container}>
             
             <View>
-                <Text style={styles.text2}>
+                <CustomTitle>
                     Register
-                </Text>
+                </CustomTitle>
                 
                 <View style={[styles.container3, {marginTop: '20%'}]}>  
                     <TextInput
@@ -105,18 +110,19 @@ export default function Register({ navigation }){
                 </View>
             </View>
 
-            <View>
+            <View style={{width: '90%'}}>
                 <Custombutton
                 onPress={home}>
                     <Text>Sign up</Text>
                 </Custombutton>
             </View>
-            <View style={{alignItems:'center', marginTop: '10%'}}>
-            <AntDesign name="customerservice" size={40} color="black" />
-            <Text style={{fontWeight:'bold'}}>
-                Support
-            </Text>
-            </View>
+            <TouchableOpacity onPress={vsupport}
+            style={{alignItems:'center', marginTop: '10%'}}>
+                <AntDesign name="customerservice" size={40} color="black" />
+                <Text style={{fontWeight:'bold'}}>
+                    Support
+                </Text>
+            </TouchableOpacity>
         </View>
         </SafeArea>
     );

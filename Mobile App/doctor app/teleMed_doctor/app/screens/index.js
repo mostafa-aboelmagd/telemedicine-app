@@ -16,7 +16,7 @@ export default function Index({ navigation }) {
   }
 
   const support = () => {
-    navigation.navigate('support');
+    navigation.navigate('visitor support');
   }
 
   return (

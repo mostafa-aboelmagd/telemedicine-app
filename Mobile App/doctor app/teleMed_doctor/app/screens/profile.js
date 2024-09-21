@@ -4,12 +4,17 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import SafeArea from '../components/safeArea';
 import Custombutton from '../components/button';
 import Footer from '../components/footer';
+import CustomScroll from '../components/scroll';
 
 export default function Profile ({ navigation }){
 
+  const logOut = () => {
+    navigation.navigate("sign in")
+  }
+
   return (
     <SafeArea>
-      <ScrollView>
+      <CustomScroll>
         <View style={styles.headerRow}>
           <TouchableOpacity>
             <Ionicons name="arrow-back" size={35} style={styles.backIcon} />
@@ -86,12 +91,13 @@ export default function Profile ({ navigation }){
         </View>
 
         <TouchableOpacity
+        onPress={logOut}
           style={styles.signOutButton}
         >
           <Ionicons name="log-out" size={25} color="red" />
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </CustomScroll>
       <Footer navigation={navigation}/>
     </SafeArea>
   );
@@ -189,7 +195,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 16,
-    marginBottom: '25%'
+    // marginBottom: '25%'
   },
   signOutText: {
     color: 'red',
