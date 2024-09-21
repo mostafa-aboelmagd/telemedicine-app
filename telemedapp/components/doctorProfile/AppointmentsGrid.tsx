@@ -18,8 +18,8 @@ const AppointmentsGrid = ({
     );
   });
   return (
-    <div className="col-span-2 overflow-y-auto">
-      <div className="grid grid-cols-2 gap-4">{appointmentList}</div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {appointmentList}
     </div>
   );
 };

@@ -15,6 +15,12 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onCancel,
   loading,
 }) => {
+  const [complaint, setComplaint] = React.useState("");
+  const handleConfirm = () => {
+    onConfirm();
+    setComplaint("");
+  };
+
   return (
     <Dialog
       visible={visible}
@@ -31,24 +37,33 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     >
       <div className="flex flex-col h-full">
         <h2 className="text-xl font-semibold text-start">
-          Confirm Appointment
+          Request Appointment
         </h2>
-        <p className="mt-12 text-center italic text-gray-700">
-          Are you sure you want to add this appointment?
+        <p className="my-6 text-center italic text-gray-600">
+          Are you sure you want to send this appointment request?
         </p>
+        <textarea
+          value={complaint}
+          onChange={(e) => {
+            setComplaint(e.target.value);
+          }}
+          placeholder="Patient's complaint goes here..."
+          className="  rounded border p-4"
+        />
+
         <div className="flex justify-end h-[100px] items-end">
           <div className="flex gap-4">
             <button
-              onClick={onConfirm}
+              onClick={handleConfirm}
               disabled={loading}
               className="bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
             >
-              {loading ? "Booking..." : "Confirm"}
+              {loading ? "Sending..." : "Request"}
             </button>
             <button
               onClick={onCancel}
               disabled={loading}
-              className="bg-red-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-800 disabled:opacity-50"
+              className=" py-3 px-6 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-800 disabled:opacity-50"
             >
               Cancel
             </button>

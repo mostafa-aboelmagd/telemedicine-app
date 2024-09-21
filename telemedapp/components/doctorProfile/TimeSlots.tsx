@@ -7,6 +7,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 function TimeSlots() {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
+  const [appointmentType, setAppointmentType] = useState("remote");
 
   const today = new Date();
   let datesList = [];
@@ -80,10 +81,9 @@ function TimeSlots() {
 
   useEffect(() => {
     token = localStorage.getItem("jwt");
-    if(!token) {
+    if (!token) {
       window.location.href = "/auth/signin";
-    }
-    else {
+    } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
         mode: "cors",
         headers: {
@@ -357,59 +357,87 @@ function TimeSlots() {
               <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
             </div>
             <div className="p-7 relative">
-              <div className="flex gap-16 mt-3 min-[980px]:gap-28">
-                <div className="flex flex-col gap-40 min-[430px]:gap-24 min-[470px]:gap-12 min-[550px]:gap-5">
-                  {datesList.map((date) => {
-                    return (
-                      <button
-                        key={days[date.getDay()]}
-                        name={date.toDateString()}
-                        onClick={handleDayClick}
-                        className={
-                          date.toDateString() === dayDate
-                            ? clickedDayClass
-                            : dayButtonClass
-                        }
-                      >
-                        {days[date.getDay()].toUpperCase()}
-                        <br></br>({date.getDate()} / {today.getMonth() + 1} /{" "}
-                        {today.getFullYear()})
-                      </button>
-                    );
-                  })}
-                </div>
-                <div className="grid grid-cols-1 gap-5 min-[470px]:grid-cols-2 min-[550px]:grid-cols-3">
-                  {Object.entries(timesList).map((timeEntry) => {
-                    return (
-                      <button
-                        key={timeEntry[0]}
-                        name={timeEntry[1]}
-                        onClick={handleTimeClick}
-                        className={getTimeClass(timeEntry[1])}
-                      >
-                        {timeEntry[0]}
-                      </button>
-                    );
-                  })}
+              <div className="flex items-baseline flex-col justify-between ">
+                <div className="flex gap-16 mt-3 min-[980px]:gap-20">
+                  <div className="flex flex-col gap-40 min-[430px]:gap-24 min-[470px]:gap-12 min-[550px]:gap-5">
+                    {datesList.map((date) => {
+                      return (
+                        <button
+                          key={days[date.getDay()]}
+                          name={date.toDateString()}
+                          onClick={handleDayClick}
+                          className={
+                            date.toDateString() === dayDate
+                              ? clickedDayClass
+                              : dayButtonClass
+                          }
+                        >
+                          {days[date.getDay()].toUpperCase()}
+                          <br></br>({date.getDate()} / {today.getMonth() + 1} /{" "}
+                          {today.getFullYear()})
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className=" grid grid-cols-1 gap-5 min-[470px]:grid-cols-2 min-[550px]:grid-cols-3">
+                    {Object.entries(timesList).map((timeEntry) => {
+                      return (
+                        <button
+                          key={timeEntry[0]}
+                          name={timeEntry[1]}
+                          onClick={handleTimeClick}
+                          className={getTimeClass(timeEntry[1])}
+                        >
+                          {timeEntry[0]}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-              <button onClick={handleSubmit} className={submitButtonClass}>
-                {toggleChecked ? "Delete" : "Add"}
-              </button>
-              <label className={toggleLabelClass}>
-                <input
-                  type="checkbox"
-                  value=""
-                  className="sr-only peer"
-                  checked={toggleChecked}
-                  onChange={handleChangeToggle}
-                />
-                <div className={toggleClass}></div>
-                <span className="ms-3 text-base font-bold text-black">
-                  {toggleChecked ? "DEL" : "ADD"}
-                </span>
-              </label>
+              <div className=" flex sm:flex-row flex-col items-baseline md:gap-20 gap-4">
+                <button onClick={handleSubmit} className={submitButtonClass}>
+                  {toggleChecked ? "Delete" : "Add"}
+                </button>
+                <div className="flex items-center flex-row gap-4 justify-center">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="type"
+                      value="remote"
+                      checked={appointmentType === "remote"}
+                      onChange={() => setAppointmentType("remote")}
+                    />
+
+                    <span className="ml-2">Remote</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="type"
+                      value="onsite"
+                      checked={appointmentType === "onsite"}
+                      onChange={() => setAppointmentType("onsite")}
+                    />
+
+                    <span className="ml-2">Onsite</span>
+                  </label>
+                </div>
+              </div>
             </div>
+            <label className={toggleLabelClass}>
+              <input
+                type="checkbox"
+                value=""
+                className="sr-only peer"
+                checked={toggleChecked}
+                onChange={handleChangeToggle}
+              />
+              <div className={toggleClass}></div>
+              <span className="ms-3 text-base font-bold text-black">
+                {toggleChecked ? "DEL" : "ADD"}
+              </span>
+            </label>
           </div>
         </>
       )}

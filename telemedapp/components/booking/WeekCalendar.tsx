@@ -31,7 +31,7 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
 
   // Fix the type to handle slots with time and id
   const [datesWithSlots, setDatesWithSlots] = useState<
-    { date: string; slots: { time: string; id: number; type: string  }[] }[]
+    { date: string; slots: { time: string; id: number; type: string }[] }[]
   >([]);
 
   useEffect(() => {
@@ -46,7 +46,8 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
       // Ensure that slots include both time and id
       return {
         date: dateStr,
-        slots: existingDate ? existingDate.slots.map((slot) => ({ ...slot, type: "online" }))
+        slots: existingDate
+          ? existingDate.slots.map((slot) => ({ ...slot, type: "online" }))
           : [], // Use empty slots if none exist
       };
     });
@@ -86,7 +87,7 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
           </button>
         </div>
       </div>
-      <div className="grid lg:grid-cols-7 grid-cols-4 gap-2 lg:text-[14px] text-sm">
+      <div className="grid lg:grid-cols-7 grid-cols-4 gap-2 md:text-sm text-xs min-w-[340px] lg:min-w-[650px]">
         {datesWithSlots.map(({ date, slots }) => (
           <button
             key={date}

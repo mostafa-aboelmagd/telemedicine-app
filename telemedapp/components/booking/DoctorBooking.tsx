@@ -1,12 +1,11 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import DoctorInfo from "@/components/booking/DoctorInfo";
 import DetailsSelector from "@/components/booking/DetailsSelector";
 import BookingSummary from "@/components/booking/BookingSummary";
 import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
-import { FaUserCircle } from "react-icons/fa";
 import { formatDoctorAvailabilities } from "@/utils/formatDoctorAvailabilities";
 
 const DoctorBooking = () => {
@@ -16,64 +15,7 @@ const DoctorBooking = () => {
   const [selectedDate, setSelectedDate] = useState<any>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [availableDates, setAvailableDates] = useState<any[]>([]);
-  const [appointmentType, setAppointmentType] = useState("Remote");
   const [appointmentState, setAppointmentState] = useState("first-time");
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [loading, setLoading] = useState(false); // Loading state
-
-  // Reference for Toast
-  const toast = useRef<any>(null);
-
-  const cancelCreate = () => {
-    setShowConfirmDialog(false);
-  };
-
-  const confirmCreate = async () => {
-    setLoading(true); // Show loading state when confirming
-    try {
-      // Simulate the appointment creation process (replace with actual logic)
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/create`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-          },
-          body: JSON.stringify({
-            doctorId: doctor?.id,
-            date: selectedDate,
-            slot: selectedSlot,
-            type: appointmentType,
-            duration: selectedDuration,
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to create appointment");
-      }
-
-      // Close the dialog and show success message
-      setShowConfirmDialog(false);
-      toast.current.show({
-        severity: "success",
-        detail: `Appointment booked successfully!`,
-        life: 3000,
-        className:
-          "bg-green-600 ml-2 text-white font-semibold rounded-lg shadow-lg p-3",
-      });
-    } catch (error) {
-      toast.current.show({
-        severity: "error",
-        detail: `Failed to book appointment: ${error}`,
-        life: 3000,
-        className:
-          "bg-red-600 ml-2 text-white font-semibold rounded-lg shadow-lg p-3",
-      });
-    } finally {
-      setLoading(false); // Stop loading state
-    }
-  };
 
   // Retrieve the doctor data from the query parameters
   useEffect(() => {
@@ -130,7 +72,7 @@ const DoctorBooking = () => {
     slots: { time: string; id: number; type: string }[];
   }) => {
     setSelectedDate(dateObj);
-    setSelectedSlot(null); // Reset the selected slot when the date changes
+    // setSelectedSlot(null); // Reset the selected slot when the date changes
   };
 
   const handleSlotSelect = (slot: string) => {
@@ -156,7 +98,6 @@ const DoctorBooking = () => {
           selectedDuration={selectedDuration}
           doctor={doctor}
           selectedDate={selectedDate}
-          appointmentType={appointmentType}
         />
       </div>
 
