@@ -148,7 +148,7 @@ create table doctor_availability
             on delete cascade,
     doctor_availability_type    varchar(16) constraint users_role_check
             check ((doctor_availability_status)::text = ANY
-                   (ARRAY [('Online'::character varying)::text, ('Onsite'::character varying)::text])),
+                   (ARRAY [('Online'::character varying)::text, ('Onsite'::character varying)::text]), ('Online/Onsite'::character varying)::text])),
     doctor_availability_status    varchar(16) constraint users_role_check
             check ((doctor_availability_status)::text = ANY
                    (ARRAY [('Booked'::character varying)::text, ('Pending'::character varying)::text, ('Available'::character varying)::text])),
@@ -158,18 +158,6 @@ create table doctor_availability
         primary key,
     created_at                   timestamp default CURRENT_TIMESTAMP,
     updated_at                   timestamp default CURRENT_TIMESTAMP
-);
-
-
-CREATE TABLE appointment_requests (
-    request_appointment_id SERIAL PRIMARY KEY,
-    request_appointment_patient_id INTEGER REFERENCES patients(patient_user_id_reference),
-    request_appointment_doctor_id INTEGER REFERENCES doctors(doctor_user_id_reference),
-    request_appointment_date_time TIMESTAMP,
-    request_appointment_reason TEXT,
-    request_appointment_status VARCHAR CHECK (request_appointment_status IN ('pending', 'approved', 'declined')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -201,7 +189,9 @@ create table appointment_review
                    (appointment_review_providing_solutions_rating < 6)),
     appointment_review_commitment_rating          smallint
         constraint appointment_review_commitment_rating_check
-            check ((appointment_review_commitment_rating > 0) AND (appointment_review_commitment_rating < 6))
+            check ((appointment_review_commitment_rating > 0) AND (appointment_review_commitment_rating < 6)),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- we will delete the prescription table and merge it with the follow up table
@@ -223,7 +213,21 @@ create table prescriptions
     updated_at                   timestamp default CURRENT_TIMESTAMP
 );
 
+CREATE TABLE appointment_requests (
+    request_appointment_id SERIAL PRIMARY KEY,
+    request_appointment_patient_id INTEGER REFERENCES patient(patient_user_id_reference),
+    request_appointment_doctor_id INTEGER REFERENCES doctor(doctor_user_id_reference),
+    request_appointment_slot INTEGER REFERENCES doctor_availability(doctor_availability_id),
 
+    request_appointment_date_time TIMESTAMP,
+    request_appointment_reason TEXT,
+    request_appointment_status VARCHAR CHECK (request_appointment_status IN ('pending', 'approved', 'declined')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+alter sequence appointment_slot_seq owned by appointment.appointment_availability_slot;
 create table appointment
 (
     appointment_patient_id        integer
@@ -234,10 +238,10 @@ create table appointment
         constraint appointment_request_doctor_id_fkey
             references doctor
             on delete cascade,
-    appointment_availability_slot integer default nextval('appointment_slot_seq'::regclass) not null
+    /*appointment_availability_slot integer default nextval('appointment_slot_seq'::regclass) not null
         constraint appointment_slot_fkey
             references doctor_availability
-            on delete cascade,
+            on delete cascade,*/
     appointment_type              varchar
         constraint check_appointment_type
             check ((appointment_type)::text = ANY
@@ -254,15 +258,24 @@ create table appointment
                    ((ARRAY ['online'::character varying, 'onsite'::character varying])::text[])),
 
     appointment_status varchar check ((appointment_status)::text = ANY
-                   (ARRAY ['Approved'::text, 'Chat'::text, 'Waiting'::text, 'Declined'::text])),
+                                      (ARRAY ['Approved'::text, 'Chat'::text, 'Waiting'::text, 'Declined'::text])),
+    appointment_followup integer constraint appointment_request_patient_id_fkey
+        references followup
+        on delete cascade,
     created_at                   timestamp default CURRENT_TIMESTAMP,
     updated_at                   timestamp default CURRENT_TIMESTAMP
 );
-alter sequence appointment_slot_seq owned by appointment.appointment_availability_slot;
 
 
-create table medications_plan
+create table treatment_plan
 (
+    -- prescriptions
+    -- requests of scans
+    -- referrals:
+        --speciality
+        --note
+    -- diagnosis
+    -- reference the
     medication_plan_id           serial
         primary key,
     medication_plan_appointment_reference_id integer
@@ -277,6 +290,7 @@ create table medications_plan
 
 create table medical_documents
 (
+    -- reference the appointment requested
     medical_document_id          serial
         primary key,
     medical_document_appointment_reference integer
@@ -290,25 +304,28 @@ create table medical_documents
     medical_document_data        bytea,
     created_at                   timestamp default CURRENT_TIMESTAMP,
     updated_at                   timestamp default CURRENT_TIMESTAMP
-
 );
 
-create table followup
+create table followup -- rename it to appointment results
 (
-    --treatment plan
+    --treatment plans
     --next appointment
     --prescription
+    --operations and producers
+    --scans and tests
     followup_diagnosis text not null ,
 
-    followup_appointment_reference integer
+    followup_appointment_reference integer -- referencing the current appointment
         constraint followup_appointment_reference_fkey
             references appointment
-            on delete cascade    ,
-    followup_next_appointment integer -- here when the value is not null it creates a new appointment with an accepted request
-        -- if the attribute of followup in the appointment table is true
-        constraint followup_next_appointment_reference_fkey
-        references appointment
-        on delete cascade ,
+            on delete cascade,
+
+--     followup_next_appointment integer -- here when the value is not null it creates a new appointment with an accepted request
+--         -- if the attribute of followup in the appointment table is true
+--         constraint followup_next_appointment_reference_fkey
+--         references appointment
+--         on delete cascade ,
+
     created_at                   timestamp default CURRENT_TIMESTAMP,
     updated_at                   timestamp default CURRENT_TIMESTAMP
 );
