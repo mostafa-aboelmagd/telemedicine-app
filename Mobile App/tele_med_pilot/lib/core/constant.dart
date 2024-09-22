@@ -28,4 +28,5 @@ class AppConstants {
   static String get doctorAddAvailabilityEndpoint => '$baseURL/doctor/availability/add';
   static String get doctorDeleteAvailabilityEndpoint => '$baseURL/doctor/availability/delete';
   static String get doctorProfilePictureUploadEndpoint => '$baseURL/doctor/profile-picture/upload';
+  static String doctorAvailability(int doctorId) => '$baseURL/patient/appointment/Availabilities/$doctorId';
 }
