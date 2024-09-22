@@ -68,7 +68,13 @@ class Button extends StatelessWidget {
           ),
           onPressed: isValid ? onTap : null,
           child: isLoading == true
-              ? const SizedBox(height: 20, width: 20, child: Loader())
+              ? const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Loader(
+                    loaderColor: AppColors.white,
+                    width: 1,
+                  ))
               : Text(
                   label,
                   style: AppTextStyles.bodyTextMediumNormal.copyWith(

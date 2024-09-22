@@ -26,6 +26,14 @@
     },
     "web": {
       "favicon": "./assets/images/logo.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "The app needs to access your calendar."
+        }
+      ]
+    ]
   }
 }

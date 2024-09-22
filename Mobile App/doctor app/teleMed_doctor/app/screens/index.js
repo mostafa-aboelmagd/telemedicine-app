@@ -1,13 +1,22 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import Custombutton from '../components/button.js';
 import SafeArea from '../components/safeArea.js';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function Index({ navigation }) {
 
   const sign = () => {
     navigation.navigate('sign in');
+  }
+
+  const register = () => {
+    navigation.navigate('register')
+  }
+
+  const support = () => {
+    navigation.navigate('visitor support');
   }
 
   return (
@@ -17,9 +26,25 @@ export default function Index({ navigation }) {
         <Text style={styles.title}>Telemedicine</Text>
         <Text style={styles.title}>Pilot</Text>
         <View style={styles.center}>
+
+        <Custombutton>
+          Explore our services
+        </Custombutton>
+        <Custombutton onPress={register}>
+          Register now
+        </Custombutton>
         <Custombutton onPress={sign}>
           Sign in
         </Custombutton>
+
+        </View>
+        <View style={{alignItems:'center', marginTop: '10%'}}>
+          <Pressable onPress={support}>
+            <AntDesign name="customerservice" size={40} />
+          </Pressable>
+          <Text style={{fontWeight:'bold'}}>
+              Support
+          </Text>
         </View>
         <StatusBar style="auto" />
       </View>
@@ -30,7 +55,6 @@ export default function Index({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
     backgroundColor: '#f0f0f0',
     padding: '10%'
   },
@@ -41,6 +65,6 @@ const styles = StyleSheet.create({
   },
   center: {
     alignItems: 'center',
-    marginTop: '70%'
+    marginTop: '50%'
   }
 });
