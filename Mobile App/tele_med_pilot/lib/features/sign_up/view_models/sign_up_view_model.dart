@@ -71,7 +71,9 @@ class SignUpViewModel extends StateNotifier<SignInState> {
       isFormValid: emailError == null && passwordError == null,
     );
 
-    return emailError == null && passwordError == null;
+    return emailError == null &&
+        passwordError == null &&
+        confirmPasswordError == null;
   }
 
   String? _validateEmail(String email) {
@@ -110,6 +112,10 @@ class SignUpViewModel extends StateNotifier<SignInState> {
 
   void resetState() {
     state = SignInState.initial();
+  }
+
+  void setErrorMessage(String message) {
+    state = state.copyWith(errorMessage: message);
   }
 
   Future<bool> signUp() async {

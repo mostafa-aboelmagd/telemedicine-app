@@ -30,7 +30,7 @@ class _SupportScreenState extends ConsumerState<SupportScreen> {
                   SizedBox(height: 12.h),
                   Text(
                     "Support",
-                    style: AppTextStyles.bodyTextExtraLargeBold
+                    style: AppTextStyles.bodyTextLargeBold
                         .copyWith(color: AppColors.blue100),
                   ),
                   SizedBox(height: 12.h),

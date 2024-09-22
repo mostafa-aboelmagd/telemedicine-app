@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tele_med_pilot/core/constant.dart';
-import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -24,26 +23,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      actions: [
-        Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          if (identifier == 1 || identifier == 2)
-            IconButton(
-              padding: const EdgeInsets.all(0),
-              icon: const Icon(Icons.notifications),
-              onPressed: () {
-                Navigator.pushNamed(context, RouteClass.notificationsRoute);
-              },
-            ),
-          if (identifier == 1)
-            IconButton(
-              padding: const EdgeInsets.all(0),
-              icon: const Icon(Icons.person),
-              onPressed: () {
-                Navigator.pushNamed(context, RouteClass.profileRoute);
-              },
-            ),
-        ])
-      ],
     );
   }
 

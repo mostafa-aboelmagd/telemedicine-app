@@ -236,24 +236,26 @@ class _SignUpStep1ScreenState extends ConsumerState<SignUpStep1Screen> {
                       isValid: viewModelNotifier.validateForm(),
                       isLoading: viewModel.isLoading,
                       onTap: () async {
-                        viewModelNotifier.validateFormData();
-                        if (await viewModelNotifier.signUp()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Account created succefully'),
-                              backgroundColor: AppColors.green100,
-                            ),
-                          );
-                          viewModelNotifier.resetState();
-                          Navigator.pushReplacementNamed(
-                              context, RouteClass.signInRoute);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("${viewModel.errorMessage}"),
-                              backgroundColor: AppColors.red100,
-                            ),
-                          );
+                        if (viewModelNotifier.validateFormData()) {
+                          if (await viewModelNotifier.signUp()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Account created succefully'),
+                                backgroundColor: AppColors.green100,
+                              ),
+                            );
+                            viewModelNotifier.resetState();
+                            Navigator.pushReplacementNamed(
+                                context, RouteClass.signInRoute);
+                          } else {
+                            print(viewModel.errorMessage);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("${viewModel.errorMessage}"),
+                                backgroundColor: AppColors.red100,
+                              ),
+                            );
+                          }
                         }
                       },
                     ),
