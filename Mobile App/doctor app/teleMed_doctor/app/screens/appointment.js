@@ -1,14 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import SafeArea from '../components/safeArea';
 import Footer from '../components/footer';
 import CustomScroll from '../components/scroll';
 import CustomTitle from '../components/title';
 import Custombutton from '../components/button';
+import Entypo from '@expo/vector-icons/Entypo';
+import { patients } from '../test/data';
 
 export default function Appointment ({ navigation }) {
 
-  const names = ['username1', 'username2', 'username3', 'username4']
+  const patientList = Object.entries(patients);
+
+  const history = () => {
+    navigation.navigate('history')
+  }
 
 return (
     <SafeArea safeStyle={{alignItems: 'center'}}>
@@ -16,13 +22,21 @@ return (
         <View style={styles.container}>
           <CustomTitle titleStyle={{marginTop: '10%'}}>Appointments</CustomTitle>
         </View>
-        {names.map((item) =>
+        {patientList.map(([id, name]) =>
         <View>
           <View style={[styles.card]}>
-            {/* add history button (...) in a row with the state */}
-            {/* add date and time*/}
-            <Text style={styles.state}>online / follow up</Text>
-            <Text style={styles.name}>{item}</Text>
+          <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+              <Text style={styles.state}>online / follow up</Text>
+              <View style={{justifyContent:'flex-end'}}>
+                <TouchableOpacity onPress={history}>
+                  <Entypo name="dots-three-horizontal" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+              <Text key={id} style={styles.name}>{name}</Text>
+              <Text>03:00 pm</Text>
+            </View>
             <Text>Stating complaints: I've been experiencing severe chest pain for the past two days.</Text>
           </View>
           <Custombutton textStyle={{fontSize: 15}} buttonStyle={{width: '35%'}}>

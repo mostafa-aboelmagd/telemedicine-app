@@ -5,14 +5,20 @@ import Footer from '../components/footer';
 import CustomTitle from '../components/title';
 import Custombutton from '../components/button';
 import CustomScroll from '../components/scroll';
+import Entypo from '@expo/vector-icons/Entypo';
+import { patients } from '../test/data';
 
 export default function Request ({ navigation }) {
 
   // for testing
-  const names = ['username1', 'username2', 'username3', 'username4'];
+  const patientList = Object.entries(patients)
 
   const details = () => {
     navigation.navigate('details')
+  }
+
+  const history = () => {
+    navigation.navigate('history')
   }
 
 return (
@@ -20,13 +26,21 @@ return (
       <CustomScroll>
       <View style={{alignItems: 'center'}}>      
         <CustomTitle titleStyle={{marginTop: '10%'}}>Requests</CustomTitle>
-        {names.map((item) => 
+        {patientList.map(([id, name]) => 
         <View>
           <View style={[styles.card]}>
-            {/* add history button (...) in a row with the state */}
-            {/* add the date and time */ }
-            <Text style={styles.state}>online / follow up</Text>
-            <Text style={styles.name}>{item}</Text>
+            <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+              <Text style={styles.state}>online / follow up</Text>
+              <View style={{justifyContent:'flex-end'}}>
+                <TouchableOpacity onPress={history}>
+                  <Entypo name="dots-three-horizontal" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+              <Text key={id} style={styles.name}>{name}</Text>
+              <Text>03:00 pm - 23/09</Text>
+            </View>
             <Text>Stating complaints: I've been experiencing severe chest pain for the past two days.</Text>
           </View>
           <View style={{flexDirection: 'row'}}>

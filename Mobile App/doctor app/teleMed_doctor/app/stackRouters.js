@@ -12,6 +12,8 @@ import Support from './screens/support';
 import VSupport from './screens/visitor_support';
 import Pending from './screens/pending';
 import Details from './screens/moreDetails';
+import History from './screens/history';
+import Availability from './screens/availability';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +32,8 @@ export default function StackRouters() {
             <Stack.Screen name='request' component={Request} options={{ headerShown : false}} />
             <Stack.Screen name='support' component={Support} options={{ headerShown : false}} />
             <Stack.Screen name='details' component={Details} options={{ headerShown : false}} />
+            <Stack.Screen name='history' component={History} options={{ headerShown : false}} />
+            <Stack.Screen name='availability' component={Availability} options={{ headerShown : false}} />
         </Stack.Navigator>
     </NavigationContainer>
   );

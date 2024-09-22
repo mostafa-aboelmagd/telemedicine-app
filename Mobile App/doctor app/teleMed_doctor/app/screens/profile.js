@@ -12,13 +12,17 @@ export default function Profile ({ navigation }){
     navigation.navigate("sign in")
   }
 
+  const availability = () => {
+    navigation.navigate('availability')
+  }
+
   return (
     <SafeArea>
       <CustomScroll>
-        <View style={styles.headerRow}>
-          <TouchableOpacity>
+        <View style={[styles.headerRow]}>
+          {/* <TouchableOpacity>
             <Ionicons name="arrow-back" size={35} style={styles.backIcon} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <Text style={styles.title}>Doctor Profile</Text>
           <View style={{ width: 48 }} />
         </View>
@@ -66,7 +70,7 @@ export default function Profile ({ navigation }){
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Availability</Text>
           <Text style={styles.sectionContent}>Mon / 2 pm - 4 pm</Text>
-          <Custombutton>
+          <Custombutton onPress={availability}>
             <Text style={styles.actionButtonText}>Edit Availability</Text>
           </Custombutton>
         </View>
@@ -112,8 +116,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
   },
   headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingTop: 10,

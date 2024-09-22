@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 export default function CustomScroll ({ children, scrollStyle,...props }) {
   return (
