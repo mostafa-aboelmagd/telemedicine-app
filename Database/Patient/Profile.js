@@ -57,11 +57,15 @@ const retrievePatientAppointments = async (id, email) => {
     U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
     P.*,
     A.*,
-    U2.user_first_name AS doctor_first_name, U2.user_last_name AS doctor_last_name
+    U2.user_first_name AS doctor_first_name, U2.user_last_name AS doctor_last_name,
+    DA.doctor_availability_day_hour AS appointment_day_hour,
+    D.doctor_specialization 
     FROM patient P
     LEFT JOIN users U ON P.patient_user_id_reference = U.user_id
     LEFT JOIN appointment A ON P.patient_user_id_reference = A.appointment_patient_id
     LEFT JOIN users U2 ON A.appointment_doctor_id = U2.user_id
+    LEFT JOIN doctor_availability DA ON A.appointment_availability_slot = DA.doctor_availability_id
+    LEFT JOIN doctor D ON A.appointment_doctor_id = D.doctor_user_id_reference
     WHERE P.patient_user_id_reference = $1 AND U.user_email = $2 AND U.user_role = $3`;
 
     const result = await pool.query(query, [id, email, 'Patient']);
