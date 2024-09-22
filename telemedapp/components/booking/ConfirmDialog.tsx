@@ -55,14 +55,14 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           <div className="flex gap-4">
             <button
               onClick={handleConfirm}
-              disabled={loading}
+              disabled={loading || complaint === ""}
               className="bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
             >
               {loading ? "Sending..." : "Request"}
             </button>
             <button
               onClick={onCancel}
-              disabled={loading}
+              disabled={loading || complaint === ""}
               className=" py-3 px-6 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-800 disabled:opacity-50"
             >
               Cancel
