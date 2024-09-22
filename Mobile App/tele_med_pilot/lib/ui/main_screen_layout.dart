@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tele_med_pilot/core/theme.dart';
-import 'package:tele_med_pilot/features/doctors/views/doctors_screen.dart';
+import 'package:tele_med_pilot/features/appointments/views/appointments_screen.dart';
 import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
-import 'package:tele_med_pilot/features/more/views/more_screen.dart';
-import 'package:tele_med_pilot/features/my_sessions/views/my_sessions_screen.dart';
+import 'package:tele_med_pilot/features/profile/views/profile_screen.dart';
 import 'package:tele_med_pilot/features/support/views/support_screen.dart';
 
 class MainScreenLayout extends StatefulWidget {
@@ -18,10 +17,10 @@ class _MainScreenLayoutState extends State<MainScreenLayout> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const DoctorsScreen(),
-    const MySessionsScreen(),
+    const AppointmentsScreen(),
+    const ProfileScreen(),
+    //requests
     const SupportScreen(),
-    const MoreScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -45,20 +44,20 @@ class _MainScreenLayoutState extends State<MainScreenLayout> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.groups),
-            label: 'Doctors',
+            icon: Icon(Icons.domain_verification_rounded),
+            label: 'Appointments',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_pin_outlined),
-            label: 'My ',
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_to_queue),
+            label: 'Requests',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.support_agent),
             label: 'Support',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz),
-            label: 'More',
           ),
         ],
         currentIndex: _selectedIndex,

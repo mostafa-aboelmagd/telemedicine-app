@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tele_med_pilot/AuthContainer.dart';
 import 'package:tele_med_pilot/features/Booking/view/Bookingg_view.dart';
+import 'package:tele_med_pilot/features/appointments/views/appointments_screen.dart';
 import 'package:tele_med_pilot/features/book%20appointment/view/add_appointment_vie/add_appointment_view.dart';
-import 'package:tele_med_pilot/features/doctors/views/doctors_screen.dart';
 import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
-import 'package:tele_med_pilot/features/more/views/more_screen.dart';
-import 'package:tele_med_pilot/features/my_sessions/views/my_sessions_screen.dart';
 import 'package:tele_med_pilot/features/notification/views/notifications_screen.dart';
 import 'package:tele_med_pilot/features/profile/views/profile_screen.dart';
 import 'package:tele_med_pilot/features/sign_in/views/signin_screen.dart';
@@ -19,18 +17,14 @@ class RouteClass {
   // Navigation bar screen routes
   static const String mainLayoutRoute = "/main_layout_screen";
   static const String homeRoute = "/home_screen";
-  static const String doctorsRoute = "/doctors_screen";
   static const String supportRoute = "/support";
-  static const String moreRoute = "//more_screen";
-  static const String myTherapistsScreen =
-      "/main_layout_screen/my_therapists_screen";
+  static const String appointmentsRoute = "/appointments";
+  static const String profileRoute = "/profile_screen";
 
   // Application internal screen routes
-  static const String profileRoute = "/profile_screen";
   static const String notificationsRoute = "/notification_screen";
 
   //Registration and athentication routes
-
   static const String signInRoute = "/sign_in_screen";
   static const String signUpStepRoute = "/sign_up_screen";
 
@@ -60,20 +54,12 @@ class RouteClass {
         page = const HomeScreen();
         break;
 
-      case doctorsRoute:
-        page = const DoctorsScreen();
-        break;
-
       case supportRoute:
         page = const SupportScreen();
         break;
 
-      case moreRoute:
-        page = const MoreScreen();
-        break;
-
-      case myTherapistsScreen:
-        page = const MySessionsScreen();
+      case appointmentsRoute:
+        page = const AppointmentsScreen();
         break;
 
       case profileRoute:

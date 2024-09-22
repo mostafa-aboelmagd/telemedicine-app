@@ -52,25 +52,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 12.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.arrow_circle_left_outlined,
-                                size: 35.spMin),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          Text(
-                            "My Profile",
-                            style: AppTextStyles.bodyTextExtraLargeBold
-                                .copyWith(color: AppColors.blue100),
-                          ),
-                          SizedBox(width: 48.w),
-                        ],
+                      Text(
+                        "My Profile",
+                        style: AppTextStyles.bodyTextLargeBold
+                            .copyWith(color: AppColors.blue100),
                       ),
                       SizedBox(height: 10.h),
                       Container(
@@ -188,13 +173,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 8.h),
-                      Button(
-                          label: "My History",
-                          labelColor: AppColors.white,
-                          isValid: true,
-                          onTap: () {}),
-                      SizedBox(height: 8.h),
                       Container(
                         width: double.infinity,
                         margin: EdgeInsets.symmetric(vertical: 8.h),
