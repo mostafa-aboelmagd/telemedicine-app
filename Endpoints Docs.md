@@ -1,5 +1,3 @@
-## **TeleMedPilot End points documentation**
-
 ### **General Notes**
 ##### **- This is a primary documentation for each endpoint in the the application just for development in integration tests.**
 ##### **- If you face any issues with integration don't hesitate to contact any of our APIs developers**
@@ -42,18 +40,22 @@
 
 ## **Endpoint Documentation**
 
-
 1. **User Login:** `/login`
   * **Method:** POST
+  * **Request Headers:**
+    * `Content-Type: application/json`
   * **Request Body:**
     ```json
     {
-     
+      "email": "",
+      "password": ""
     }
     ```
   * **Response Body:**
     ```json
     {
+      "message": "Login successful",
+      "token": ""
     }
     ```
 
@@ -63,14 +65,23 @@
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
     ---
 
 3. **Patient Registration:** `/patient/register`
   * **Method:** POST
+  * **Request Headers:**
+    * `Content-Type: application/json`
   * **Request Body:**
     ```json
     {
-      
+      "fName": "",
+      "lName": "",
+      "email": "",
+      "password": "",
+      "gender": "",
+      "phone": "",
+      "birthYear": ""
     }
     ```
   * **Response Body:**
@@ -103,16 +114,23 @@
   * **Method:** PUT
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
   * **Request Body:**
     ```json
     {
-      
+      "firstName": "John",
+      "lastName": "Doe",
+      "gender": "",
+      "phone": "",
+      "birthYear": "",
+      "languages": ["French"]
     }
     ```
-    * **Response Body:**
+  * **Response Body:**
     ```json
     {
-     
+      "message": "Patient info updated successfully",
+      "patient": ""
     }
     ```
     ---
@@ -121,16 +139,20 @@
   * **Method:** PUT
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
   * **Request Body:**
     ```json
     {
-
+      "oldPassword": "",
+      "password": "",
+      "confirmPassword": ""
     }
     ```
-    * **Response Body:**
+  * **Response Body:**
     ```json
     {
-     
+      "message": "Patient password updated successfully",
+      "patient": ""
     }
     ```
     ---
@@ -139,13 +161,14 @@
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
   * **Request Body:**
     ```json
     {
       
     }
     ```
-    * **Response Body:**
+  * **Response Body:**
     ```json
     {
      
@@ -175,8 +198,9 @@
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
   * **Request Body:** (Multipart form data)
-    * `file`: The medical document file
+    * [`file`]("Go to definition"): The medical document file
     ---
 
 14. **Patient Medical Document Viewing:** `/patient/medical-document/view`
@@ -189,7 +213,7 @@
 
     }
     ```
-    * **Response Body:**
+  * **Response Body:**
     ```json
     {
      
@@ -201,12 +225,14 @@
   * **Method:** DELETE
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
+  * **Request Body:**
     ```json
     {
 
     }
     ```
-    * **Response Body:**
+  * **Response Body:**
     ```json
     {
      
@@ -214,11 +240,11 @@
     ```
 ---
 
-
 16. **Doctor Profile Edit:** `/doctor/edit/info`
   * **Method:** PUT
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
   * **Request Body:**
     ```json
     {
@@ -231,6 +257,7 @@
   * **Method:** PUT
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
   * **Request Body:**
     ```json
     {
@@ -262,6 +289,8 @@
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    ---
+
 22. **Doctor View Education:** `/doctor/profile/education`
   * **Method:** GET
   * **Request Headers:**
@@ -284,6 +313,7 @@
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
   * **Request Body:**
     ```json
     {
@@ -296,20 +326,23 @@
   * **Method:** DELETE
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
     ---
 
 27. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
   * **Method:** PUT
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
   * **Request Body:** (Multipart form data)
-    * `file`: The profile picture file
+    * [`file`]("Go to definition"): The profile picture file
     ---
 
 28. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add/:appointmentId`
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
   * **Request Body:**
     ```json
     {
@@ -326,9 +359,8 @@
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
   * **Parameters:**
-    * `appointmentId`: The ID of the appointment
-    * `response`: "accept" or "decline"
+    * [`appointmentId`]("Go to definition"): The ID of the appointment
+    * [`response`]("Go to definition"): "accept" or "decline"
     ---
-
-
