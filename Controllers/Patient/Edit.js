@@ -7,27 +7,31 @@ const editInfo = async (req, res) => {
     let message = '';
     if (!patientId) {
         message = 'Patient ID not found';
+        console.log(message);
         return res.status(404).json({ message });
     }
     if (!patientEmail) {
         message = 'Patient email not found';
+        console.log(message);
         return res.status(404).json({ message });
     }
-    const { firstName, lastName, gender, phone, birthYear, languages } = req.body;
+    const { firstName, lastName, gender, phone, birthDate, languages } = req.body;
     const updatedInfo = {
         user_first_name: firstName,
         user_last_name: lastName,
         user_gender: gender,
         user_phone_number: phone,
-        user_birth_year: birthYear,
+        user_birth_date: birthDate,
         languages: languages
     };
+    console.log(updatedInfo);
     const patient = await database.updateInfo(patientId, patientEmail, updatedInfo);
     if (patient) {
         message = 'Patient info updated successfully';
         return res.json({ message, patient });
     }
     message = 'Could not update patient info';
+    console.log(message);
     return res.status(400).json({ message });
 }
 

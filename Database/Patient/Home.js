@@ -25,7 +25,6 @@ const pool = new pg.Pool({
         console.error('Database connection error', error.stack);
     }
 })();
-
 const retrievePatient = async (id, email) => {
     try {
         const result = await pool.query('SELECT * FROM users WHERE user_email = $1 AND user_role = $2 AND user_id = $3', [email, 'Patient', id]);

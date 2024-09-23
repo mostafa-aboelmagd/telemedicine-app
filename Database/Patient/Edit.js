@@ -79,7 +79,7 @@ const updateInfo = async (patientId, patientEmail, updates) => {
 
         const combinedQuery = `
             SELECT 
-                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year,
+                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_date,
                 array_agg(l.language) AS languages
             FROM 
                 users u
@@ -88,7 +88,7 @@ const updateInfo = async (patientId, patientEmail, updates) => {
             WHERE 
                 u.user_id = $1 AND u.user_role = $2 AND u.user_email = $3
             GROUP BY 
-                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year
+                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_date
         `;
         const combinedResult = await pool.query(combinedQuery, [patientId, 'Patient', patientEmail]);
 

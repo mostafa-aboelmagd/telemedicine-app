@@ -11,9 +11,9 @@
 3. **Patient Registration:** `/patient/register` (tested)
 4. **Patient Profile info:** `/patient/profile/info`(tested)
 5. **Patient appointments:** `/patient/profile/appointments`(tested)
-6. **Patient Requests:** `/patient/profile/requests`
-7. **Patient Profile Edit:** `/patient/edit/info`
-8. **Patient Change Password:** `/patient/edit/password`
+6. **Patient Requests:** `/patient/profile/requests`(tested)
+7. **Patient Profile Edit:** `/patient/edit/info`(tested)
+8. **Patient Change Password:** `/patient/edit/password`(tested)
 9. **Patient Appointment Request:** `/patient/appointment/book`
 10. **Patient Get doctors availability:** `/patient/appointment/Availabilities/:doctorId`
 11. **Patient Get Appointment details:** `/patient/appointment/appointmentdetails/:appointmentId`
@@ -35,6 +35,7 @@
 27. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
 28. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
 29. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
+
 ---
 ---
 
@@ -161,6 +162,53 @@
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+    * **Response Body:**
+    ```json
+    {
+    "appointments": [
+        {
+            "appointment_patient_id": 6,
+            "appointment_doctor_id": 13,
+            "appointment_availability_slot": 5,
+            "appointment_type": "First_time",
+            "appointment_duration": 30,
+            "appointment_id": 14,
+            "appointment_complaint": "chest pain",
+            "appointment_status": "Declined",
+            "created_at": "2024-09-23T10:12:52.291Z",
+            "updated_at": "2024-09-23T10:12:52.291Z",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": null,
+            "doctor": {
+                "firstName": "Ethan",
+                "lastName": "Wilson",
+                "specialization": "Cardiology",
+                "clinicLocation": null
+            }
+        },
+        {
+            "appointment_patient_id": 6,
+            "appointment_doctor_id": 13,
+            "appointment_availability_slot": 5,
+            "appointment_type": "Followup",
+            "appointment_duration": 60,
+            "appointment_id": 5,
+            "appointment_complaint": "headache",
+            "appointment_status": "Pending",
+            "created_at": "2024-09-23T10:12:33.849Z",
+            "updated_at": "2024-09-23T10:12:33.849Z",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": null,
+            "doctor": {
+                "firstName": "Ethan",
+                "lastName": "Wilson",
+                "specialization": "Cardiology",
+                "clinicLocation": null
+            }
+        }
+    ]
+    }
+    ```
     ---
 
 7. **Patient Profile Edit:** `/patient/edit/info`
@@ -175,16 +223,29 @@
       "lastName": "Doe",
       "gender": "",
       "phone": "",
-      "birthYear": "",
+      "birthDate": "1999-05-11",
       "languages": ["French"]
     }
     ```
   * **Response Body:**
     ```json
     {
-      "message": "Patient info updated successfully",
-      "patient": ""
-    }
+    "message": "Patient info updated successfully",
+    "patient": [
+        {
+            "user_id": 6,
+            "user_first_name": "John",
+            "user_last_name": "Doe",
+            "user_email": "patient4@test.com",
+            "user_gender": "Male",
+            "user_phone_number": "+442081234567",
+            "user_birth_date": "1999-05-10T21:00:00.000Z",
+            "languages": [
+                "French"
+            ]
+           }
+         ]
+      }
     ```
     ---
 
@@ -196,16 +257,30 @@
   * **Request Body:**
     ```json
     {
-      "oldPassword": "",
-      "password": "",
-      "confirmPassword": ""
+      "oldPassword": "test@123!!",
+      "password": "test@123!",
+      "confirmPassword": "test@123!"
     }
     ```
   * **Response Body:**
     ```json
     {
-      "message": "Patient password updated successfully",
-      "patient": ""
+    "message": "Patient password updated successfully",
+    "patient": [
+        {
+            "user_id": 6,
+            "user_email": "patient4@test.com",
+            "user_password_hash": "$2a$10$OOCQTu5MBH1NFK6KUWGrsO4CvfgUHHrAgFUjdomX145t1TbtQ7jvK",
+            "user_role": "Patient",
+            "user_phone_number": "+442081234567",
+            "user_gender": "Male",
+            "user_first_name": "John",
+            "user_last_name": "Doe",
+            "user_birth_date": "1999-05-10T21:00:00.000Z",
+            "created_at": "2024-09-23T09:13:40.513Z",
+            "updated_at": "2024-09-23T09:13:40.513Z"
+        }
+       ]
     }
     ```
     ---

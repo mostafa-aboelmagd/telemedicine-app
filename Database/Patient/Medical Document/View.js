@@ -25,7 +25,6 @@ const pool = new pg.Pool({
         console.error('Database connection error', error.stack);
     }
 })();
-
 const retrieveFiles = async (patientId) => {
     try {
         const result = await pool.query('SELECT * FROM medical_documents WHERE medical_documents_patient_id = $1', [patientId]);
