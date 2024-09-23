@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tele_med_pilot/AuthContainer.dart';
 import 'package:tele_med_pilot/features/Booking/view/Bookingg_view.dart';
+import 'package:tele_med_pilot/features/appointments/views/appointment_details_screen.dart';
 import 'package:tele_med_pilot/features/appointments/views/appointments_screen.dart';
 import 'package:tele_med_pilot/features/book%20appointment/view/add_appointment_view.dart';
 import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
@@ -23,6 +24,7 @@ class RouteClass {
 
   // Application internal screen routes
   static const String notificationsRoute = "/notification_screen";
+  static const String appointmentDetailsRoute = "/appointment_details_screen";
 
   //Registration and athentication routes
   static const String signInRoute = "/sign_in_screen";
@@ -77,6 +79,10 @@ class RouteClass {
 
       case signUpStepRoute:
         page = const SignUpStep1Screen();
+        break;
+
+      case appointmentDetailsRoute:
+        page = const AppointmentDetailsScreen();
         break;
 
       default:
