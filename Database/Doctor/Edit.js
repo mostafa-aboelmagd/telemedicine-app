@@ -79,7 +79,7 @@ const updateInfo = async (doctorId, doctorEmail, updates) => {
         }
         const combinedQuery = `
             SELECT 
-                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_year,
+                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_date,
                 d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization,
                 array_agg(l.language) AS languages
             FROM 
