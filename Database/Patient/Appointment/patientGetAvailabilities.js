@@ -32,7 +32,7 @@ const retrieveDoctorAvailabilities = async (doctorId) => {
     try {
         const result = await pool.query(
             'SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_status = $2',
-            [doctorId, true]
+            [doctorId, 'Available']
         );
         if (result.rows.length) {
             console.log('Doctor availabilities retrieved successfully', result.rows);

@@ -60,32 +60,32 @@ const retrieveDoctorInfo = async (id, email) => {
     }
 };
 
-const retrieveDoctorPatients = async (id, email) => {
-    try {
-        const query = 
-        `SELECT 
-        U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
-        D.*,
-        P.*
-        FROM doctor D
-        LEFT JOIN users U ON D.doctor_user_id_reference = U.user_id
-        LEFT JOIN patient P ON D.doctor_user_id_reference = P.patient_current_doctor_id
-        WHERE D.doctor_user_id_reference = $1 AND U.user_role = $2 AND U.user_email = $3`;
+// const retrieveDoctorPatients = async (id, email) => {
+//     try {
+//         const query = 
+//         `SELECT 
+//         U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
+//         D.*,
+//         P.*
+//         FROM doctor D
+//         LEFT JOIN users U ON D.doctor_user_id_reference = U.user_id
+//         LEFT JOIN patient P ON D.doctor_user_id_reference = P.patient_current_doctor_id
+//         WHERE D.doctor_user_id_reference = $1 AND U.user_role = $2 AND U.user_email = $3`;
 
-        const result = await pool.query(query, [id, 'Doctor', email]);
-        if (result.rows.length) {
-            console.log('Doctor patients found', result.rows);
-            return result.rows;
-        }
+//         const result = await pool.query(query, [id, 'Doctor', email]);
+//         if (result.rows.length) {
+//             console.log('Doctor patients found', result.rows);
+//             return result.rows;
+//         }
 
-        console.log('Doctor patients not found');
-        return false;
+//         console.log('Doctor patients not found');
+//         return false;
 
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
+//     } catch (error) {
+//         console.error(error.stack);
+//         return false;
+//     }
+// };
 
 const retrieveDoctorAppointments = async (id, email) => {
     try {

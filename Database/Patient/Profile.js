@@ -50,36 +50,93 @@ const retrievePatientInfo = async (id, email) => {
     }
 };
 
-const retrievePatientAppointments = async (id, email) => {
-    try {
-    const query = 
-    `SELECT 
-    U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
-    P.*,
-    A.*,
-    U2.user_first_name AS doctor_first_name, U2.user_last_name AS doctor_last_name,
-    DA.doctor_availability_day_hour AS appointment_day_hour,
-    D.doctor_specialization 
-    FROM patient P
-    LEFT JOIN users U ON P.patient_user_id_reference = U.user_id
-    LEFT JOIN appointment A ON P.patient_user_id_reference = A.appointment_patient_id
-    LEFT JOIN users U2 ON A.appointment_doctor_id = U2.user_id
-    LEFT JOIN doctor_availability DA ON A.appointment_availability_slot = DA.doctor_availability_id
-    LEFT JOIN doctor D ON A.appointment_doctor_id = D.doctor_user_id_reference
-    WHERE P.patient_user_id_reference = $1 AND U.user_email = $2 AND U.user_role = $3`;
 
-    const result = await pool.query(query, [id, email, 'Patient']);
-    if (result.rows.length) {
-        console.log('Patient appointments found', result.rows);
-        return result.rows;
-    }
-    console.log('Patient info not found');
-    return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
+// not tested with new data model
+const getPatientRequests = async (patientId) => {
+    const result = await pool.query(
+      `SELECT * 
+       FROM appointment 
+       WHERE appointment_patient_id = $1 
+       AND appointment_status IN ('Pending', 'Declined')`,
+      [patientId]
+    );
+  
+    return result.rows;
+  };
+
+  const retrievePatientAppointments = async (patientId) => {
+    const result = await pool.query(
+      `SELECT * 
+       FROM appointment 
+       WHERE appointment_patient_id = $1 AND appointment_status = $2`,
+      [patientId,'Approved']
+    );
+  
+    return result.rows;
+  };
+  // not tested with new data model
+
+  const getDoctorDetails = async (doctorId) => {
+    const result = await pool.query(
+      `SELECT u.user_first_name, u.user_last_name, d.doctor_specialization
+       FROM users u
+       INNER JOIN doctor d ON u.user_id = d.doctor_user_id_reference
+       WHERE d.doctor_user_id_reference = $1`,
+      [doctorId]
+    );
+  
+    return result.rows[0]; // Assuming there's only one doctor per ID
+  };
+  // not tested with new data model
+
+  const getDoctorClinicLocation = async (doctorId) => {
+    const result = await pool.query(
+      `SELECT doctor_clinic_location
+       FROM doctor
+       WHERE doctor_user_id_reference = $1`,
+      [doctorId]
+    );
+  
+    return result.rows[0] ? result.rows[0].doctor_clinic_location : null; // Return null if no location exists
+  };
+
+
+
+
+
+
+// need to be edited to new version of this function
+
+// const retrievePatientAppointments = async (id, email) => {
+//     try {
+//     const query = 
+//     `SELECT 
+//     U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
+//     P.*,
+//     A.*,
+//     U2.user_first_name AS doctor_first_name, U2.user_last_name AS doctor_last_name,
+//     DA.doctor_availability_day_hour AS appointment_day_hour,
+//     D.doctor_specialization 
+//     FROM patient P
+//     LEFT JOIN users U ON P.patient_user_id_reference = U.user_id
+//     LEFT JOIN appointment A ON P.patient_user_id_reference = A.appointment_patient_id
+//     LEFT JOIN users U2 ON A.appointment_doctor_id = U2.user_id
+//     LEFT JOIN doctor_availability DA ON A.appointment_availability_slot = DA.doctor_availability_id
+//     LEFT JOIN doctor D ON A.appointment_doctor_id = D.doctor_user_id_reference
+//     WHERE P.patient_user_id_reference = $1 AND U.user_email = $2 AND U.user_role = $3 `;
+
+//     const result = await pool.query(query, [id, email, 'Patient']);
+//     if (result.rows.length) {
+//         console.log('Patient appointments found', result.rows);
+//         return result.rows;
+//     }
+//     console.log('Patient info not found');
+//     return false;
+//     } catch (error) {
+//         console.error(error.stack);
+//         return false;
+//     }
+// };
 
 const retrievePatientDoctors = async (id, email) => {
     try {
@@ -132,4 +189,10 @@ const retrievePatientReviews = async (id, email) => {
     }
 };
 
-module.exports = { retrievePatientInfo, retrievePatientAppointments, retrievePatientDoctors, retrievePatientReviews };
+module.exports = { retrievePatientInfo,
+    retrievePatientAppointments, 
+    retrievePatientDoctors, 
+    retrievePatientReviews,
+    getPatientRequests,
+    getDoctorDetails,
+    getDoctorClinicLocation };

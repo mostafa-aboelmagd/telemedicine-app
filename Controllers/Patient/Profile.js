@@ -31,25 +31,95 @@ const patientInfo = async (req, res) => {
     return res.json({ message, formattedPatient });
 };
 
-const patientAppointments = async (req, res) => {
-    const patientUserId = req.id;
+// not tested with new data model
+const patientViewRequests = async (req, res) => {
+    const patientId = req.id; //  patient ID is retrieved from req.id
     const patientEmail = req.email;
-    let message = '';
-    if (!patientUserId) {
-        message = 'Patient ID not found';
-        return res.status(404).json(message);
+    try {
+      const appointments = await database.getPatientRequests(patientId);
+  
+      if (!appointments.length) {
+        return res.json({ message: 'No pending or declined appointments found' });
+      }
+  
+      const formattedAppointments = await Promise.all(
+        appointments.map(async (appointment) => {
+          const doctorDetails = await database.getDoctorDetails(appointment.appointment_doctor_id);
+          const doctorClinicLocation = appointment.appointment_place === 'Onsite' ? await database.getDoctorClinicLocation(appointment.appointment_doctor_id) : null;
+  
+          return {
+            ...appointment,
+            doctor: {
+              firstName: doctorDetails.user_first_name,
+              lastName: doctorDetails.user_last_name,
+              specialization: doctorDetails.doctor_specialization,
+              clinicLocation: doctorClinicLocation, // Only include if appointment_place is "Onsite"
+            },
+          };
+        })
+      );
+  
+      return res.json({ appointments: formattedAppointments });
+    } catch (error) {
+      console.error('Error retrieving patient requests:', error);
+      return res.status(500).json({ message: 'Internal server error' });
     }
-    if (!patientEmail) {
-        message = 'Patient email not found';
-        return res.status(404).json(message);
+  };
+  
+  const patientAppointments = async (req, res) => {
+    const patientId = req.id; //  patient ID is retrieved from req.id
+    const patientEmail = req.email;
+    try {
+      const appointments = await database.getPatientRequests(patientId);
+  
+      if (!appointments.length) {
+        return res.json({ message: 'No pending or declined appointments found' });
+      }
+  
+      const formattedAppointments = await Promise.all(
+        appointments.map(async (appointment) => {
+          const doctorDetails = await database.getDoctorDetails(appointment.appointment_doctor_id);
+          const doctorClinicLocation = appointment.appointment_place === 'Onsite' ? await database.getDoctorClinicLocation(appointment.appointment_doctor_id) : null;
+  
+          return {
+            ...appointment,
+            doctor: {
+              firstName: doctorDetails.user_first_name,
+              lastName: doctorDetails.user_last_name,
+              specialization: doctorDetails.doctor_specialization,
+              clinicLocation: doctorClinicLocation, // Only include if appointment_place is "Onsite"
+            },
+          };
+        })
+      );
+  
+      return res.json({ appointments: formattedAppointments });
+    } catch (error) {
+      console.error('Error retrieving patient requests:', error);
+      return res.status(500).json({ message: 'Internal server error' });
     }
-    const appointments = await database.retrievePatientAppointments(patientUserId, patientEmail);
-    if (!appointments) {
-        message = 'Could not retrieve patient appointments';
-        return res.status(400).json(message);
-    }
-    return res.json(appointments);
-};
+  };
+  
+// need to be edited to new version of this function
+// const patientAppointments = async (req, res) => {
+//     const patientUserId = req.id;
+//     const patientEmail = req.email;
+//     let message = '';
+//     if (!patientUserId) {
+//         message = 'Patient ID not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!patientEmail) {
+//         message = 'Patient email not found';
+//         return res.status(404).json(message);
+//     }
+//     const appointments = await database.retrievePatientAppointments(patientUserId, patientEmail);
+//     if (!appointments) {
+//         message = 'Could not retrieve patient appointments';
+//         return res.status(400).json(message);
+//     }
+//     return res.json(appointments);
+// };
 
 const patientDoctors = async (req, res) => {
     const patientUserId = req.id;
@@ -91,4 +161,8 @@ const patientReviews = async (req, res) => {
     return res.json(reviews);
 };
 
-module.exports = { patientInfo, patientAppointments, patientDoctors, patientReviews };
+module.exports = { patientInfo, 
+    patientAppointments, 
+    patientDoctors, 
+    patientReviews,
+    patientViewRequests };

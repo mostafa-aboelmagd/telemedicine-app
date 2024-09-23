@@ -54,7 +54,7 @@ const doctorPatients = async (req, res) => {
     }
     return res.json(patients);
 }
-
+// view doctors coming appointments.
 const doctorAppointments = async (req, res) => {
     const doctorUserId = req.id;
     const doctorEmail = req.email;
