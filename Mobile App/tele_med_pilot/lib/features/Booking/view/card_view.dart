@@ -34,7 +34,7 @@ class _CardViewState extends State<CardView> {
       }
     } else {
       // If no image is available, use a placeholder
-      imageProvider = AssetImage('assets/pp.png');
+      imageProvider = const AssetImage('assets/pp.png');
     }
 
     String nearestAppFormatted = card.nearestApp != null
@@ -46,12 +46,12 @@ class _CardViewState extends State<CardView> {
     double rating = card.rating ?? 0.0; // Replace with the actual rating value
 
     return Container(
-      padding: EdgeInsets.all(16),
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             spreadRadius: 1,
@@ -71,19 +71,20 @@ class _CardViewState extends State<CardView> {
                 backgroundColor: Colors.transparent,
                 backgroundImage: imageProvider,
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     card.name ?? "Unknown Doctor",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
                     card.title ?? "Specialty not available",
                     style: TextStyle(color: Colors.grey[600]),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Row(
                     children: List.generate(5, (index) {
                       return Icon(
@@ -95,7 +96,7 @@ class _CardViewState extends State<CardView> {
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,12 +107,12 @@ class _CardViewState extends State<CardView> {
                           radius: 8,
                           backgroundColor: Colors.transparent,
                           child: Image.asset('assets/icons/team.png')),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         card.numSessions.toString() ?? "0",
-                        style: TextStyle(color: AppColors.blue100),
+                        style: const TextStyle(color: AppColors.blue100),
                       ),
-                      Text(' sessions',
+                      const Text(' sessions',
                           style: TextStyle(color: AppColors.blue100)),
                     ],
                   ),
@@ -121,12 +122,12 @@ class _CardViewState extends State<CardView> {
                           radius: 8,
                           backgroundColor: Colors.transparent,
                           child: Image.asset('assets/icons/star.png')),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         card.rating != null
                             ? "${card.rating.toString()} ("
                             : "0",
-                        style: TextStyle(color: AppColors.blue100),
+                        style: const TextStyle(color: AppColors.blue100),
                       ),
                       const Text('Reviews)',
                           style: TextStyle(color: AppColors.blue100)),
@@ -136,7 +137,7 @@ class _CardViewState extends State<CardView> {
               )
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SizedBox(
             height: 40, // Adjust height as needed
             child: SingleChildScrollView(
@@ -144,57 +145,56 @@ class _CardViewState extends State<CardView> {
               child: Row(
                 children: (card.interests ?? []).map<Widget>((interest) {
                   // Safeguard for null or empty interest
-                  if (interest == null) {
-                    interest = 'No interest specified';
-                  }
+                  interest ??= 'No interest specified';
                   return Container(
-                    margin:
-                        EdgeInsets.only(right: 8), // Spacing between interests
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    margin: const EdgeInsets.only(
+                        right: 8), // Spacing between interests
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
                       interest,
-                      style: TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   );
                 }).toList(),
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
               CircleAvatar(
                 radius: 8,
                 child: Image.asset('assets/icons/clock.png'),
               ),
-              SizedBox(width: 4),
-              Text('Next available: '),
+              const SizedBox(width: 4),
+              const Text('Next available: '),
               Text(
                 nearestAppFormatted,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
               CircleAvatar(
                 radius: 8,
                 child: Image.asset('assets/icons/money.png'),
               ),
-              SizedBox(width: 4),
-              Text('Fees: '),
+              const SizedBox(width: 4),
+              const Text('Fees: '),
               Text(
                 'EGP ${card.fees60min ?? 'N/A'}/ 60 min, EGP ${card.fees30min ?? 'N/A'}/ 30 min',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -217,15 +217,16 @@ class _CardViewState extends State<CardView> {
                   ),
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(10.0), // add some padding
+                  padding: const EdgeInsets.all(10.0), // add some padding
                   child: Button(
                     label: 'Book Now',
                     labelColor: Colors.white,
                     isValid: true,
                     onTap: () async {
+                      print('DoctorId: ${card.id}');
                       Navigator.pushNamed(
                         context,
                         RouteClass.addAppointment,

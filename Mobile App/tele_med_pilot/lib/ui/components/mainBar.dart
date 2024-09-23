@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
 
 class Mainbar extends StatefulWidget {
@@ -38,28 +37,29 @@ class _MainbarState extends State<Mainbar> {
             ? IconButton(
                 icon: Icon(Icons.arrow_circle_left_outlined, size: 35.spMin),
                 onPressed: () {
-
                   // Ensure the duration is not null
                   final transitionDuration = widget.duration != null
                       ? Duration(milliseconds: widget.duration!)
                       : const Duration(milliseconds: 300); // Default duration
                   widget.pop
-                  ?Navigator.pushReplacementNamed(
-                    context,
-                    widget.page,
-                    arguments: {
-                      'transition': widget.transition ?? 'slideLeft', // Default transition if null
-                      'duration': transitionDuration,
-                    },
-                  )
-                  :Navigator.pushNamed(
-                    context,
-                    widget.page,
-                    arguments: {
-                      'transition': widget.transition ?? 'slideLeft', // Default transition if null
-                      'duration': transitionDuration,
-                    },
-                  );
+                      ? Navigator.pushReplacementNamed(
+                          context,
+                          widget.page,
+                          arguments: {
+                            'transition': widget.transition ??
+                                'slideLeft', // Default transition if null
+                            'duration': transitionDuration,
+                          },
+                        )
+                      : Navigator.pushNamed(
+                          context,
+                          widget.page,
+                          arguments: {
+                            'transition': widget.transition ??
+                                'slideLeft', // Default transition if null
+                            'duration': transitionDuration,
+                          },
+                        );
                 },
               )
             : Container(),

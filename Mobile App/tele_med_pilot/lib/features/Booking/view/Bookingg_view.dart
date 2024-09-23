@@ -48,7 +48,7 @@ class _BookingSessionState extends State<BookingSession> {
               title: "Our Doctors",
               isLeading: true,
               pop: true,
-              page: RouteClass.homeRoute,
+              page: RouteClass.mainLayoutRoute,
               transition: 'slideLeft',
             ),
             Column(
@@ -80,7 +80,7 @@ class _BookingSessionState extends State<BookingSession> {
               ],
             ),
             Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     SizedBox(
@@ -154,15 +154,15 @@ class _BookingSessionState extends State<BookingSession> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: Platform.isAndroid
-                        ? CircularProgressIndicator()
-                        : CupertinoActivityIndicator(),
+                        ? const CircularProgressIndicator()
+                        : const CupertinoActivityIndicator(),
                   );
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Text('An error occurred: ${snapshot.error}'),
                   );
                 } else if (!snapshot.hasData || snapshot.data == null) {
-                  return Center(
+                  return const Center(
                     child: Text('No data available'),
                   );
                 } else {

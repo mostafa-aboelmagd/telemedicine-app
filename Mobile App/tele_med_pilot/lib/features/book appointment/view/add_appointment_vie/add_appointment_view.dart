@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tele_med_pilot/core/constant.dart';
 import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
-import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
 import 'package:tele_med_pilot/ui/components/mainBar.dart';
 
 class AddAppointmentView extends StatefulWidget {
@@ -87,9 +86,13 @@ class _AddAppointmentViewState extends State<AddAppointmentView> {
                       children: [
                         Text(widget.card.name,
                             style: AppTextStyles.bodyTextBold),
-                        const SizedBox(height: 5,),
-                        Text(widget.card.title,
-                            style: AppTextStyles.textMidBlue,),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          widget.card.title,
+                          style: AppTextStyles.textMidBlue,
+                        ),
                       ],
                     ),
                     const Spacer(),
@@ -97,18 +100,20 @@ class _AddAppointmentViewState extends State<AddAppointmentView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Row(
-                          children: List.generate(5, (index) {
-                            return Icon(
-                              index < rating ? Icons.star : Icons.star_border,
-                              color: Colors.amber,
-                              size: 20,
-                            );
-                          })),
-                          const SizedBox(height: 5,),
-                          Text(
-                            "${widget.card.rating}(${widget.card.numReviews} reviews)",
-                            style: AppTextStyles.bodyTextSmallNormal,
-                          ),
+                            children: List.generate(5, (index) {
+                          return Icon(
+                            index < rating ? Icons.star : Icons.star_border,
+                            color: Colors.amber,
+                            size: 20,
+                          );
+                        })),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "${widget.card.rating}(${widget.card.numReviews} reviews)",
+                          style: AppTextStyles.bodyTextSmallNormal,
+                        ),
                       ],
                     )
                   ],
