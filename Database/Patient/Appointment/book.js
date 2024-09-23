@@ -61,29 +61,12 @@ const getDoctorFromAvailability = async (doctor_availability_id) => {
 // Not tested yet
 
 const createAppointment = async (appointmentData) => {
-  const {
-    patientId, 
-    appointment_doctor_id,
-    availabilitySlot,
-    appointmentType,
-    appointmentDuration,
-    appointment_complaint,
-    appointmentStatus = 'Pending'
-  } = appointmentData;
 
-  console.log( 
-    patientId,
-    appointment_doctor_id,
-    availabilitySlot,
-    appointmentType,
-    appointmentDuration,
-    appointment_complaint
-  );
-  
+  console.log( appointmentData);
   try {
       const result = await pool.query(
           'INSERT INTO appointment (appointment_patient_id, appointment_doctor_id, appointment_availability_slot, appointment_type, appointment_duration, appointment_complaint, appointment_status) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-          [patientId, appointment_doctor_id, availabilitySlot, appointmentType, appointmentDuration, appointment_complaint, appointmentStatus]
+          [appointmentData.patientId, appointmentData.appointment_doctor_id, appointmentData.availabilitySlot, appointmentData.appointmentType, appointmentData.appointmentDuration, appointmentData.appointment_complaint, appointmentData.appointmentStatus]
       );
 
       if (result.rows.length) {

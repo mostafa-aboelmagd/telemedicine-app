@@ -64,15 +64,9 @@ const bookAppointment = async (req, res) => {
         appointmentDuration,
         appointment_complaint);
 
-    const appointment = await database.createAppointment({
-           patientId, 
-           appointment_doctor_id,
-           availabilitySlot,
-           appointmentType,
-           appointmentDuration,
-           appointment_complaint,
-           appointment_status: 'Pending'
-       });   
+    const appointmentData = { patientId: patientId, appointment_doctor_id: appointment_doctor_id, availabilitySlot: availabilitySlot, appointmentType: appointmentType, appointmentDuration: appointmentDuration, appointment_complaint: appointment_complaint, appointmentStatus: 'Pending'};
+
+    const appointment = await database.createAppointment(appointmentData);   
    
     if (!appointment) {
         return res.status(400).json('Appointment could not be booked');
