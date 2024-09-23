@@ -44,11 +44,11 @@ const checkDoctorAvailability = async (doctorId, availabilityDayHour) => {
     }
 };
 
-const insertAvailability = async (doctorId, availabilityDayHour) => {
+const insertAvailability = async (doctorId, availabilityDayHour, doctorAvailabilityType) => {
     try {
         const result = await pool.query(
-            'INSERT INTO doctor_availability(doctor_availability_doctor_id, doctor_availability_day_hour, doctor_availability_status) VALUES($1, $2, $3) RETURNING *',
-            [doctorId, availabilityDayHour, true]
+            'INSERT INTO doctor_availability(doctor_availability_doctor_id, doctor_availability_day_hour, doctor_availability_status, doctor_availability_type) VALUES($1, $2, $3, $4) RETURNING *',
+            [doctorId, availabilityDayHour, 'Available', doctorAvailabilityType]
         );
         if (result.rows.length) {
             console.log('Doctor availability added successfully', result.rows);

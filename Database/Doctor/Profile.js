@@ -87,29 +87,23 @@ const retrieveDoctorInfo = async (id, email) => {
 //     }
 // };
 
-const retrieveDoctorAppointments = async (id, email) => {
+const retrieveDoctorAppointments = async (doctorId) => {
     try {
         const query = 
         `SELECT 
-        U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
-        D.*,
-        A.*,
-        P.user_first_name AS patient_first_name, P.user_last_name AS patient_last_name
-        FROM doctor D
-        LEFT JOIN users U ON D.doctor_user_id_reference = U.user_id
-        LEFT JOIN appointment A ON D.doctor_user_id_reference = A.appointment_doctor_id
-        LEFT JOIN users P ON A.appointment_patient_id = P.user_id
-        WHERE D.doctor_user_id_reference = $1 AND U.user_role = $2 AND U.user_email = $3`;
-    
-        const result = await pool.query(query, [id, 'Doctor', email]);
-        if (!result.rows.length) {
-            console.log('Doctor appointments not found');
-            return false;
+            *
+        FROM appointment A
+        WHERE A.appointment_doctor_id = $1 
+          AND A.appointment_status = $2`;
+
+        const result = await pool.query(query, [doctorId, 'Approved']);
+        if (result.rows.length) {
+            console.log('Pending appointments found', result.rows);
+            return result.rows;
         }
 
-        console.log('Doctor appointments found', result.rows);
-        return result.rows;
-
+        console.log('No pending appointments found');
+        return false;
     } catch (error) {
         console.error(error.stack);
         return false;
@@ -147,7 +141,8 @@ const retrieveDoctorAvailabilities = async (doctorId) => {
     try {
         const result = await pool.query(
             'SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_status = $2',
-            [doctorId, true]
+            
+            [doctorId, 'Available']
         );
         if (result.rows.length) {
             console.log('Doctor availabilities retrieved successfully', result.rows);

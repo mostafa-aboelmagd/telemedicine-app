@@ -25,17 +25,20 @@
 17. **Doctor Password change:** `/doctor/edit/password`
 18. **Doctor Profile info:** `/doctor/profile/info`
 19. **Doctor View appointments** `/doctor/profile/appointments`
-20. **Doctor View Availability:** `/doctor/profile/availabilities`
-21. **Doctor View Experience:** `/doctor/profile/experience`
-22. **Doctor View Education:** `/doctor/profile/education`
-23. **Doctor View reviews:** `/doctor/profile/reviews`
-24. **Doctor View interests:** `/doctor/profile/interests`
-25. **Doctor Availability Addition:** `/doctor/availability/add`
-26. **Doctor Availability Deletion:** `/doctor/availability/delete`
-27. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
-28. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
-29. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
+20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`(Tested)
+21. **Doctor View Availability:** `/doctor/profile/availabilities`(Tested)
+22. **Doctor View Experience:** `/doctor/profile/experience`
+23. **Doctor View Education:** `/doctor/profile/education`
+24. **Doctor View reviews:** `/doctor/profile/reviews`
+25. **Doctor View interests:** `/doctor/profile/interests`
+26. **Doctor Availability Addition:** `/doctor/availability/add`
+27. **Doctor Availability Deletion:** `/doctor/availability/delete`
+28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
+29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
+30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
+(Tested)
 
+---
 ---
 ---
 
@@ -451,43 +454,136 @@
     * `Authorization: Bearer your_access_token`
   * **Response Body:**
     ```json
+    [
     {
-      "appoointments": ""
+        "appointment_patient_id": 6,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 5,
+        "appointment_type": "First_time",
+        "appointment_duration": 30,
+        "appointment_id": 8,
+        "appointment_complaint": "arm pain",
+        "appointment_status": "Approved",
+        "created_at": "2024-09-23T10:12:35.903Z",
+        "updated_at": "2024-09-23T10:12:35.903Z",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": null
+    }
+    ]
+    ```
+    ---
+20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
+  * **Response Body:**
+    ```json
+    {
+    [
+    {
+        "appointment_patient_id": 3,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 2,
+        "appointment_type": "Followup",
+        "appointment_duration": 60,
+        "appointment_id": 2,
+        "appointment_complaint": "Fever",
+        "appointment_status": "Pending",
+        "created_at": "2024-09-23T10:11:35.189Z",
+        "updated_at": "2024-09-23T10:11:35.189Z",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": null
+    },
+    {
+        "appointment_patient_id": 6,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 5,
+        "appointment_type": "Followup",
+        "appointment_duration": 60,
+        "appointment_id": 5,
+        "appointment_complaint": "headache",
+        "appointment_status": "Pending",
+        "created_at": "2024-09-23T10:12:33.849Z",
+        "updated_at": "2024-09-23T10:12:33.849Z",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": null
+    }
+    ]
+    }
+    ```
+21. **Doctor View Availability:** `/doctor/profile/availabilities`
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+  * **Response Body:**
+    ```json
+    {
+    "message": "Doctor availabilities retrieved successfully",
+    "availabilities": {
+        "Wed Oct 2 2024": [
+            {
+                "time": "15:00:00",
+                "id": 2,
+                "type": "Onsite"
+            },
+            {
+                "time": "15:00:00",
+                "id": 8,
+                "type": "Onsite"
+            }
+        ],
+        "Wed Oct 9 2024": [
+            {
+                "time": "15:00:00",
+                "id": 5,
+                "type": "Onsite"
+            }
+        ],
+        "Fri Feb 2 2024": [
+            {
+                "time": "15:00:00",
+                "id": 11,
+                "type": "Onsite"
+            }
+        ],
+        "Tue Feb 13 2024": [
+            {
+                "time": "15:00:00",
+                "id": 14,
+                "type": "Onsite"
+            }
+        ]
+    }
     }
     ```
     ---
 
-20. **Doctor View Availability:** `/doctor/profile/availabilities`
+22. **Doctor View Experience:** `/doctor/profile/experience`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     ---
 
-21. **Doctor View Experience:** `/doctor/profile/experience`
+23. **Doctor View Education:** `/doctor/profile/education`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     ---
 
-22. **Doctor View Education:** `/doctor/profile/education`
+24. **Doctor View Reviews:** `/doctor/profile/reviews`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     ---
 
-23. **Doctor View Reviews:** `/doctor/profile/reviews`
+25. **Doctor View Interests:** `/doctor/profile/interests`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     ---
 
-24. **Doctor View Interests:** `/doctor/profile/interests`
-  * **Method:** GET
-  * **Request Headers:**
-    * `Authorization: Bearer your_access_token`
-    ---
-
-25. **Doctor Availability Addition:** `/doctor/availability/add`
+26. **Doctor Availability Addition:** `/doctor/availability/add`
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
@@ -500,14 +596,14 @@
     ```
     ---
 
-26. **Doctor Availability Deletion:** `/doctor/availability/delete/{availabilityId}`
+27. **Doctor Availability Deletion:** `/doctor/availability/delete/{availabilityId}`
   * **Method:** DELETE
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     * `Content-Type: application/json`
     ---
 
-27. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
+28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
   * **Method:** PUT
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
@@ -523,7 +619,7 @@
     ```
     ---
 
-28. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add/:appointmentId`
+29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add/:appointmentId`
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
@@ -540,12 +636,20 @@
     ```
     ---
 
-29. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
+30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     * `Content-Type: application/json`
   * **Parameters:**
-    * [`appointmentId`]("Go to definition"): The ID of the appointment
-    * [`response`]("Go to definition"): "accept" or "decline"
+    * [`appointmentId`]The ID of the appointment
+    * [`response`]"accept" or "decline"
+  * **Response Body:**
+    ```json
+    {
+    "message": "Appointment declined successfully"
+    "or",
+    "message": "Appointment accepted successfully"
+    }
+    ```
     ---
