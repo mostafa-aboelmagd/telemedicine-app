@@ -86,20 +86,23 @@ const doctorAppointments = async (req, res) => {
     const doctorUserId = req.id;
     const doctorEmail = req.email;
     let message = '';
+
     if (!doctorUserId) {
         message = 'Doctor ID not found';
-        return res.status(404).json(message);
+        return res.status(404).json({ message });
     }
     if (!doctorEmail) {
         message = 'Doctor email not found';
-        return res.status(404).json(message);
+        return res.status(404).json({ message });
     }
-    const appointments = await database.retrieveDoctorAppointments(doctorUserId, doctorEmail);
-    if (!appointments) {
-        message = 'Could not retrieve appointments';
-        return res.status(400).json(message);
+
+    const pendingAppointments = await database.retrieveDoctorAppointments(doctorUserId);
+    if (!pendingAppointments) {
+        message = 'Could not retrieve pending appointments';
+        return res.status(400).json({ message });
     }
-    return res.json(appointments);
+
+    return res.json(pendingAppointments);
 }
 
 const doctorAvailabilities = async (req, res) => {
@@ -114,6 +117,7 @@ const doctorAvailabilities = async (req, res) => {
 
     try {
         const availabilities = await database.retrieveDoctorAvailabilities(doctorId);
+        console.log(availabilities);
         if (availabilities) {
             availabilities.forEach(availability => {
                 const date = new Date(availability.doctor_availability_day_hour);
@@ -129,7 +133,7 @@ const doctorAvailabilities = async (req, res) => {
                 if (!formattedAvailabilities[formattedDate]) {
                     formattedAvailabilities[formattedDate] = [];
                 }
-                formattedAvailabilities[formattedDate].push({ time: formattedTime, id: availability.doctor_availability_id });
+                formattedAvailabilities[formattedDate].push({ time: formattedTime, id: availability.doctor_availability_id,type: availability.doctor_availability_type });
             });
             message = 'Doctor availabilities retrieved successfully';
             return res.json({ message, availabilities: formattedAvailabilities });

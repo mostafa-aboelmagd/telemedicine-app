@@ -15,27 +15,30 @@
 7. **Patient Profile Edit:** `/patient/edit/info`(tested)
 8. **Patient Change Password:** `/patient/edit/password`(tested)
 9. **Patient Appointment Request:** `/patient/appointment/book`
-10. **Patient Get doctors availability:** `/patient/appointment/Availabilities/:doctorId`
-11. **Patient Get Appointment details:** `/patient/appointment/appointmentdetails/:appointmentId`
-12. **Patient Home (Dashboard):** `/patient/home`
+10. **Patient Get doctors availability:** `/patient/appointment/Availabilities/:doctorId`(tested)
+11. **Patient Get Appointment details:** `/patient/appointment/appointmentdetails/:appointmentId` (tested)
+12. **Patient Home (Dashboard retriev doctors data):** `/patient/home`(tested)
 13. **Patient Medical Document Upload:** `/patient/medical-document/upload`
 14. **Patient Medical Document Viewing:** `/patient/medical-document/view`
 15. **Patient Medical Document Deletion:** `/patient/medical-document/delete`
-16. **Doctor Profile Edit:** `/doctor/edit/info`
-17. **Doctor Password change:** `/doctor/edit/password`
-18. **Doctor Profile info:** `/doctor/profile/info`
-19. **Doctor View appointments** `/doctor/profile/appointments`
-20. **Doctor View Availability:** `/doctor/profile/availabilities`
-21. **Doctor View Experience:** `/doctor/profile/experience`
-22. **Doctor View Education:** `/doctor/profile/education`
-23. **Doctor View reviews:** `/doctor/profile/reviews`
-24. **Doctor View interests:** `/doctor/profile/interests`
-25. **Doctor Availability Addition:** `/doctor/availability/add`
-26. **Doctor Availability Deletion:** `/doctor/availability/delete`
-27. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
-28. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
-29. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
+16. **Doctor Profile Edit:** `/doctor/edit/info`(tested)
+17. **Doctor Password change:** `/doctor/edit/password`(tested)
+18. **Doctor Profile info:** `/doctor/profile/info`(tested)
+19. **Doctor View appointments** `/doctor/profile/appointments`(Tested)
+20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`(Tested)
+21. **Doctor View Availability:** `/doctor/profile/availabilities`(Tested)
+22. **Doctor View Experience:** `/doctor/profile/experience`
+23. **Doctor View Education:** `/doctor/profile/education`
+24. **Doctor View reviews:** `/doctor/profile/reviews`
+25. **Doctor View interests:** `/doctor/profile/interests`
+26. **Doctor Availability Addition:** `/doctor/availability/add`
+27. **Doctor Availability Deletion:** `/doctor/availability/delete`
+28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
+29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
+30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
+(Tested)
 
+---
 ---
 ---
 
@@ -314,18 +317,95 @@
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    ---
+  * **Response Body:**
+    ```json
+    {
+    "message": "Doctor availabilities retrieved successfully",
+    "availabilities": {
+        "Wed Oct 9 2024": [
+            {
+                "time": "15:00:00",
+                "id": 5
+            }
+        ],
+        "Wed Oct 2 2024": [
+            {
+                "time": "15:00:00",
+                "id": 8
+            },
+            {
+                "time": "15:00:00",
+                "id": 2
+            }
+        ],
+        "Fri Feb 2 2024": [
+            {
+                "time": "15:00:00",
+                "id": 11
+            }
+        ],
+        "Tue Feb 13 2024": [
+            {
+                "time": "15:00:00",
+                "id": 14
+            }
+        ]
+    }
+    }
+    ```
+
+---
 
 12. **Patient Home (Dashboard):** `/patient/home`
   * **Method:** GET
   * **Response Body:**
     ```json
-    {
-      "doctors": ""
-    }
-    ```
-  
-    ---
+      [
+      {
+          "id": "12",
+          "name": "Dr. Olivia Martinez",
+          "nearestApp": "2024-09-23T20:28:41.256Z",
+          "title": "Internal Medicine",
+          "rating": 0,
+          "numSessions": 0,
+          "numReviews": 0,
+          "fees60min": 150,
+          "fees30min": 100,
+          "image": null,
+          "interests": [
+              null
+          ],
+          "country": "Egypt",
+          "language": [
+              null
+          ],
+          "gender": "Female",
+          "isOnline": "true"
+      },
+      {
+          "id": "13",
+          "name": "Dr. Ethan Wilson",
+          "nearestApp": "2024-09-23T20:28:41.256Z",
+          "title": "Cardiology",
+          "rating": 0,
+          "numSessions": 0,
+          "numReviews": 0,
+          "fees60min": 300,
+          "fees30min": 200,
+          "image": null,
+          "interests": [
+              null
+          ],
+          "country": "USA",
+          "language": [
+              null
+          ],
+          "gender": "Male",
+          "isOnline": "true"
+      }]
+      ```
+    
+---
 
 13. **Patient Medical Document Upload:** `/patient/medical-document/upload`
   * **Method:** POST
@@ -389,24 +469,40 @@
   * **Request Body:**
     ```json
     {
-      "firstName": "",
-      "lastName": "",
+      "firstName": "samy",
+      "lastName": "ali",
       "gender": "",   
       "phone": "",
-      "birthYear": "1980",
-      "languages": [""],
-      "residenceCountry": "",
-      "sixtyMinPrice": "",
-      "thirtyMinPrice": "",
+      "birthDate": "1989-08-27",
+      "languages": ["Ordo"],
+      "residenceCountry": "Oman",
+      "sixtyMinPrice": "600",
+      "thirtyMinPrice": "350",
       "specialization": ""
     }
     ```
   * **Response Body:**
     ```json
     {
-      "message": "Doctor info updated successfully",
-      "doctor": ""
-
+    "message": "Doctor info updated successfully",
+    "doctor": [
+        {
+            "user_id": 13,
+            "user_first_name": "samy",
+            "user_last_name": "ali",
+            "user_email": "doctor2@test.com",
+            "user_gender": "Male",
+            "user_phone_number": "+791234567890",
+            "user_birth_date": "1997-05-21T21:00:00.000Z",
+            "doctor_country": "Oman",
+            "doctor_sixty_min_price": 600,
+            "doctor_thirty_min_price": 350,
+            "doctor_specialization": "Cardiology",
+            "languages": [
+                "Ordo"
+            ]
+        }
+    ]
     }
     ```
     ---
@@ -419,18 +515,33 @@
   * **Request Body:**
     ```json
     {
-      "oldPassword": "",
-      "password": "",
-      "confirmPassword": ""
+      "oldPassword": "test@123!!",
+      "password": "test@123!",
+      "confirmPassword": "test@123!"
     }
     ```
   * **Response Body:**
     ```json
     {
-      "message": "Doctor password updated successfully",
-      "doctor": ""
-    } ```
-    ---
+    "message": "Doctor password updated successfully",
+    "doctor": [
+        {
+            "user_id": 13,
+            "user_email": "doctor2@test.com",
+            "user_password_hash": "$2a$10$khI7nw4O4U1eyloFxyIiduQdWXdbq828519gjbYMNlMxv2/09BtHC",
+            "user_role": "Doctor",
+            "user_phone_number": "+791234567890",
+            "user_gender": "Male",
+            "user_first_name": "samy",
+            "user_last_name": "ali",
+            "user_birth_date": "1997-05-21T21:00:00.000Z",
+            "created_at": "2024-09-23T09:17:29.138Z",
+            "updated_at": "2024-09-23T09:17:29.138Z"
+        }
+    ]
+    } 
+    ```
+---
 
 18. **Doctor Profile Info:** `/doctor/profile/info`
   * **Method:** GET
@@ -439,8 +550,22 @@
   * **Response Body:**
     ```json
     {
-      "message": "Doctor info retrieved successfully",
-      "formattedDoctor": ""
+    "message": "Doctor info retrieved successfully",
+    "formattedDoctor": {
+        "firstName": "samy",
+        "lastName": "ali",
+        "email": "doctor2@test.com",
+        "gender": "Male",
+        "phone": "+791234567890",
+        "image": null,
+        "residenceCountry": "Oman",
+        "sixtyMinPrice": 600,
+        "thirtyMinPrice": 350,
+        "specialization": "Cardiology",
+        "languages": [
+            "Ordo"
+        ]
+    }
     }
     ```
     ---
@@ -451,43 +576,136 @@
     * `Authorization: Bearer your_access_token`
   * **Response Body:**
     ```json
+    [
     {
-      "appoointments": ""
+        "appointment_patient_id": 6,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 5,
+        "appointment_type": "First_time",
+        "appointment_duration": 30,
+        "appointment_id": 8,
+        "appointment_complaint": "arm pain",
+        "appointment_status": "Approved",
+        "created_at": "2024-09-23T10:12:35.903Z",
+        "updated_at": "2024-09-23T10:12:35.903Z",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": null
+    }
+    ]
+    ```
+    ---
+20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
+  * **Response Body:**
+    ```json
+    {
+    [
+    {
+        "appointment_patient_id": 3,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 2,
+        "appointment_type": "Followup",
+        "appointment_duration": 60,
+        "appointment_id": 2,
+        "appointment_complaint": "Fever",
+        "appointment_status": "Pending",
+        "created_at": "2024-09-23T10:11:35.189Z",
+        "updated_at": "2024-09-23T10:11:35.189Z",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": null
+    },
+    {
+        "appointment_patient_id": 6,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 5,
+        "appointment_type": "Followup",
+        "appointment_duration": 60,
+        "appointment_id": 5,
+        "appointment_complaint": "headache",
+        "appointment_status": "Pending",
+        "created_at": "2024-09-23T10:12:33.849Z",
+        "updated_at": "2024-09-23T10:12:33.849Z",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": null
+    }
+    ]
+    }
+    ```
+21. **Doctor View Availability:** `/doctor/profile/availabilities`
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+  * **Response Body:**
+    ```json
+    {
+    "message": "Doctor availabilities retrieved successfully",
+    "availabilities": {
+        "Wed Oct 2 2024": [
+            {
+                "time": "15:00:00",
+                "id": 2,
+                "type": "Onsite"
+            },
+            {
+                "time": "15:00:00",
+                "id": 8,
+                "type": "Onsite"
+            }
+        ],
+        "Wed Oct 9 2024": [
+            {
+                "time": "15:00:00",
+                "id": 5,
+                "type": "Onsite"
+            }
+        ],
+        "Fri Feb 2 2024": [
+            {
+                "time": "15:00:00",
+                "id": 11,
+                "type": "Onsite"
+            }
+        ],
+        "Tue Feb 13 2024": [
+            {
+                "time": "15:00:00",
+                "id": 14,
+                "type": "Onsite"
+            }
+        ]
+    }
     }
     ```
     ---
 
-20. **Doctor View Availability:** `/doctor/profile/availabilities`
+22. **Doctor View Experience:** `/doctor/profile/experience`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     ---
 
-21. **Doctor View Experience:** `/doctor/profile/experience`
+23. **Doctor View Education:** `/doctor/profile/education`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     ---
 
-22. **Doctor View Education:** `/doctor/profile/education`
+24. **Doctor View Reviews:** `/doctor/profile/reviews`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     ---
 
-23. **Doctor View Reviews:** `/doctor/profile/reviews`
+25. **Doctor View Interests:** `/doctor/profile/interests`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     ---
 
-24. **Doctor View Interests:** `/doctor/profile/interests`
-  * **Method:** GET
-  * **Request Headers:**
-    * `Authorization: Bearer your_access_token`
-    ---
-
-25. **Doctor Availability Addition:** `/doctor/availability/add`
+26. **Doctor Availability Addition:** `/doctor/availability/add`
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
@@ -500,14 +718,14 @@
     ```
     ---
 
-26. **Doctor Availability Deletion:** `/doctor/availability/delete/{availabilityId}`
+27. **Doctor Availability Deletion:** `/doctor/availability/delete/{availabilityId}`
   * **Method:** DELETE
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     * `Content-Type: application/json`
     ---
 
-27. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
+28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
   * **Method:** PUT
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
@@ -523,7 +741,7 @@
     ```
     ---
 
-28. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add/:appointmentId`
+29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add/:appointmentId`
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
@@ -540,12 +758,20 @@
     ```
     ---
 
-29. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
+30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     * `Content-Type: application/json`
   * **Parameters:**
-    * [`appointmentId`]("Go to definition"): The ID of the appointment
-    * [`response`]("Go to definition"): "accept" or "decline"
+    * [`appointmentId`]The ID of the appointment
+    * [`response`]"accept" or "decline"
+  * **Response Body:**
+    ```json
+    {
+    "message": "Appointment declined successfully"
+    "or",
+    "message": "Appointment accepted successfully"
+    }
+    ```
     ---
