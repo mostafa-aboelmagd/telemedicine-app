@@ -24,7 +24,7 @@
 16. **Doctor Profile Edit:** `/doctor/edit/info`
 17. **Doctor Password change:** `/doctor/edit/password`
 18. **Doctor Profile info:** `/doctor/profile/info`
-19. **Doctor View appointments** `/doctor/profile/appointments`
+19. **Doctor View appointments** `/doctor/profile/appointments`(Tested)
 20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`(Tested)
 21. **Doctor View Availability:** `/doctor/profile/availabilities`(Tested)
 22. **Doctor View Experience:** `/doctor/profile/experience`
@@ -433,7 +433,7 @@
       "message": "Doctor password updated successfully",
       "doctor": ""
     } ```
-    ---
+---
 
 18. **Doctor Profile Info:** `/doctor/profile/info`
   * **Method:** GET
