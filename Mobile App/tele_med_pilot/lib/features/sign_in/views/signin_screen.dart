@@ -71,7 +71,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           Navigator.pushReplacementNamed(context, RouteClass.mainLayoutRoute);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Failed to retrieve token.'),
               backgroundColor: Colors.red,
             ),
@@ -79,7 +79,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Invalid email or password. Please try again.'),
             backgroundColor: Colors.red,
           ),
@@ -88,7 +88,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     } catch (e) {
       print('Exception occurred during login: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('An error occurred. Please try again.'),
           backgroundColor: Colors.red,
         ),
@@ -218,7 +218,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           ? SizedBox(
                               width: 24.sp,
                               height: 24.sp,
-                              child: CircularProgressIndicator(
+                              child: const CircularProgressIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                     AppColors.white),
                               ),
