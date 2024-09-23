@@ -269,4 +269,30 @@ const retrieveDoctorEducation = async (id, email) => {
     }
 };
 
-module.exports = { retrieveDoctorInfo, retrieveDoctorAppointments, retrieveDoctorReviews, retrieveDoctorAvailabilities, retrieveDoctorExperience, retrieveDoctorInterests, retrieveDoctorLanguages, retrieveDoctorEducation };
+const retrievePendingAppointments = async (doctorId) => {
+    try {
+        const query = 
+        `SELECT 
+            *
+        FROM appointment A
+        WHERE A.appointment_doctor_id = $1 
+          AND A.appointment_status = $2`;
+
+        const result = await pool.query(query, [doctorId, 'Pending']);
+        if (result.rows.length) {
+            console.log('Pending appointments found', result.rows);
+            return result.rows;
+        }
+
+        console.log('No pending appointments found');
+        return false;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
+
+
+
+
+module.exports = {retrievePendingAppointments, retrieveDoctorInfo, retrieveDoctorAppointments, retrieveDoctorReviews, retrieveDoctorAvailabilities, retrieveDoctorExperience, retrieveDoctorInterests, retrieveDoctorLanguages, retrieveDoctorEducation };
