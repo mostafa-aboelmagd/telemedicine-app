@@ -54,6 +54,33 @@ const doctorPatients = async (req, res) => {
     }
     return res.json(patients);
 }
+// Doctor View pending requests
+const doctorPendingRequests = async (req, res) => {
+    const doctorUserId = req.id;
+    const doctorEmail = req.email;
+    let message = '';
+
+    if (!doctorUserId) {
+        message = 'Doctor ID not found';
+        return res.status(404).json({ message });
+    }
+    if (!doctorEmail) {
+        message = 'Doctor email not found';
+        return res.status(404).json({ message });
+    }
+
+    const pendingAppointments = await database.retrievePendingAppointments(doctorUserId);
+    if (!pendingAppointments) {
+        message = 'Could not retrieve pending appointments';
+        return res.status(400).json({ message });
+    }
+
+    return res.json(pendingAppointments);
+}
+
+
+
+
 // view doctors coming appointments.
 const doctorAppointments = async (req, res) => {
     const doctorUserId = req.id;
@@ -215,4 +242,4 @@ const doctorLanguages = async (req, res) => {
     return res.json(languages);
 }   
 
-module.exports = { doctorInfo, doctorPatients, doctorAppointments, doctorAvailabilities, doctorReviews, doctorExperience, doctorEducation, doctorInterests, doctorLanguages };
+module.exports = { doctorInfo, doctorPatients, doctorAppointments, doctorAvailabilities, doctorReviews, doctorExperience, doctorEducation, doctorInterests, doctorLanguages, doctorPendingRequests };
