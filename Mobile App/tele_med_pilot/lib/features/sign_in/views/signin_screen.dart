@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http; // For HTTP requests
 import 'package:shared_preferences/shared_preferences.dart'; // For storing token
+import 'package:tele_med_pilot/Utility/token_service.dart';
 import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
 import 'package:tele_med_pilot/features/sign_in/view_models/sign_in_view_model.dart';
@@ -60,8 +61,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         final token = data['token'];
 
         if (token != null) {
-          final SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('token', token);
+          TokenService.saveToken(token);
 
           // Clear the text controllers
           _emailController.clear();

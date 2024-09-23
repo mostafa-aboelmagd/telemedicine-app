@@ -226,6 +226,7 @@ class _CardViewState extends State<CardView> {
                     labelColor: Colors.white,
                     isValid: true,
                     onTap: () async {
+                      print('DoctorId: ${card.id}');
                       Navigator.pushNamed(
                         context,
                         RouteClass.addAppointment,

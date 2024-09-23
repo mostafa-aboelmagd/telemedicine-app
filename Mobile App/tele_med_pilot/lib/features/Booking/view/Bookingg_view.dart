@@ -48,7 +48,7 @@ class _BookingSessionState extends State<BookingSession> {
               title: "Our Doctors",
               isLeading: true,
               pop: true,
-              page: RouteClass.homeRoute,
+              page: RouteClass.mainLayoutRoute,
               transition: 'slideLeft',
             ),
             Column(
