@@ -15,7 +15,7 @@
 7. **Patient Profile Edit:** `/patient/edit/info`(tested)
 8. **Patient Change Password:** `/patient/edit/password`(tested)
 9. **Patient Appointment Request:** `/patient/appointment/book`
-10. **Patient Get doctors availability:** `/patient/appointment/Availabilities/:doctorId`
+10. **Patient Get doctors availability:** `/patient/appointment/Availabilities/:doctorId`(tested)
 11. **Patient Get Appointment details:** `/patient/appointment/appointmentdetails/:appointmentId` (tested)
 12. **Patient Home (Dashboard retriev doctors data):** `/patient/home`(tested)
 13. **Patient Medical Document Upload:** `/patient/medical-document/upload`
@@ -351,7 +351,8 @@
             }
         ]
     }
-    }```
+    }
+    ```
 
 ---
 
