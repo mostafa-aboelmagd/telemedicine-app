@@ -1,91 +1,30 @@
 const  database  = require('../../../Database/Patient/Appointment/Book');
 
 const bookAppointment = async (req, res) => {
-    const patientId = req.id;
-    const patientEmail = req.email;
-    const { doctor_availability_id, appointment_complain, doctor_availability_type, appointmentType, appointmentDuration, availabilitySlot, doctorId } = req.body;
-    message = '';
-    if (!patientId) {
-        message = 'Patient ID not found';
-        return res.status(404).json(message);
-    }
-    if (!patientEmail) {
-        message = 'Patient email not found';
-        return res.status(404).json(message);
-    }
-    if (!appointmentType) {
-        message = 'Patient appointment type not found';
-        return res.status(404).json(message);
-    }
-    if (!appointmentDuration) {
-        message = 'Patient appointment duration not found';
-        return res.status(404).json(message);
-    }
-    if (!availabilitySlot) {
-        message = 'Availability slot not found';
-        return res.status(404).json(message);
-    }
-
-    if (!doctorId) {
-        message = 'Doctor ID not found';
-        return res.status(404).json(message);
-    }
-
-        //New 
-    if (!doctor_availability_id) {
-            message = 'Doctor availability ID not found';
-            return res.status(404).json(message);
-        }
-    if (!appointment_complain) {
-            message = 'Appointment complain not found';
-            return res.status(404).json(message);
-        }
-    if (!doctor_availability_type) {
-            message = 'Doctor availability type not found';
-            return res.status(404).json(message);
+    try {
+        const patientId = req.id; // Assuming patient ID is retrieved from middleware or authentication
+    
+        // Validate request body (consider using a validation library)
+        if (!req.body || !req.body.appointment_availability_slot || !req.body.complaint || !req.body.duration || !req.body.appointment_settings_type || !req.body.appointment_type) {
+          return res.status(400).json({ message: 'Missing required fields in request body' });
         }
     
-    const patient = await database.retrievePatient(patientId, patientEmail);
-    if (!patient) {
-        message = 'Patient not registered';
-        return res.status(400).json(message);
-    }
-    const doctor = await database.retrieveDoctor(doctorId);
-    if (!doctor) {
-        message = 'Doctor not registered';
-        return res.status(400).json(message);
-    }
-
-    // To be tested 
-    const doctorAvailability = await database.retrieveDoctorAvailability(doctor_availability_id);
-       if (!doctorAvailability || doctorAvailability.status !== 'Available') {
-           message = 'Doctor is not available at this time';
-           return res.status(400).json(message);
-       }
-   
-       // Create appointment with status "Pending"
-    const appointment = await database.insertAppointment({
-           patientId, 
-           doctor_availability_id,
-           availabilitySlot,
-           appointment_type,
-           appointmentDuration,
-           appointment_complain,
-           appointment_status: 'Pending'
-       });   
-   
-    if (!appointment) {
-        return res.status(400).json('Appointment could not be booked');
-    }
-
-    const updateAvailability = await database.updateDoctorAvailabilityStatus(doctor_availability_id, 'Pending');
-    if (!updateAvailability) {
-        return res.status(400).json('Failed to update doctor availability');
-    }
-
+        const { appointment_availability_slot, complaint, duration, appointment_settings_type, appointment_type, appointment_parent_reference } = req.body;
     
-    return res.json({ message: 'Appointment booked successfully', appointment });
-};
+        const doctorId = await database.getDoctorIdFromSlot(appointment_availability_slot);
+    
+        if (!doctorId) {
+          return res.status(404).json({ message: 'Appointment slot not found or invalid' });
+        }
+    
+        await database.createAppointment(patientId, doctorId, appointment_availability_slot, complaint, duration, appointment_settings_type, appointment_type, appointment_parent_reference);
+    
+        return res.status(201).json({ message: 'Appointment scheduled successfully' });
+      } catch (error) {
+        console.error('Error scheduling appointment:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+    };
 
 
 module.exports = { bookAppointment };

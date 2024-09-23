@@ -14,7 +14,7 @@
 6. **Patient Requests:** `/patient/profile/requests`(tested)
 7. **Patient Profile Edit:** `/patient/edit/info`(tested)
 8. **Patient Change Password:** `/patient/edit/password`(tested)
-9. **Patient Appointment Request:** `/patient/appointment/book`
+9. **Patient Appointment Request:** `/patient/appointment/book`(tested)
 10. **Patient Get doctors availability:** `/patient/appointment/Availabilities/:doctorId`(tested)
 11. **Patient Get Appointment details:** `/patient/appointment/appointmentdetails/:appointmentId` (tested)
 12. **Patient Home (Dashboard retriev doctors data):** `/patient/home`(tested)
@@ -296,13 +296,18 @@
   * **Request Body:**
     ```json
     {
-      
+  "appointment_availability_slot": 1, // Replace with actual slot ID
+  "complaint": "I have a headache",
+  "duration": 30,
+  "appointment_settings_type": "Online",
+  "appointment_type": "Followup",
+  "appointment_parent_reference": null
     }
     ```
   * **Response Body:**
     ```json
     {
-     
+    "message": "Appointment scheduled successfully"
     }
     ```
     ---
