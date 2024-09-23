@@ -30,12 +30,12 @@ const retrievePatientInfo = async (id, email) => {
     try {
     const query = 
     `SELECT 
-    U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
+    U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name,
     array_agg(L.language) AS languages
     FROM users U
     LEFT JOIN languages L ON u.user_id = L.lang_user_id
     WHERE U.user_id = $1 AND U.user_email = $2 AND U.user_role = $3
-    GROUP BY U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name`;
+    GROUP BY U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name`;
 
     const result = await pool.query(query, [id, email, 'Patient']);
         if (result.rows.length) {

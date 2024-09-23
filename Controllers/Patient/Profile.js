@@ -70,10 +70,10 @@ const patientViewRequests = async (req, res) => {
     const patientId = req.id; //  patient ID is retrieved from req.id
     const patientEmail = req.email;
     try {
-      const appointments = await database.getPatientRequests(patientId);
+      const appointments = await database.retrievePatientAppointments(patientId);
   
       if (!appointments.length) {
-        return res.json({ message: 'No pending or declined appointments found' });
+        return res.json({ message: 'No Approved appointments found' });
       }
   
       const formattedAppointments = await Promise.all(

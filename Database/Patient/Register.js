@@ -45,8 +45,8 @@ const insertPatient = async (user) => {
     try {
         await pool.query('BEGIN');
         const userResult = await pool.query(
-            'INSERT INTO users(user_first_name, user_last_name, user_email, user_phone_number, user_gender, user_role, user_password_hash, user_birth_year) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-            [user.fName, user.lName, user.email, user.phone, user.gender, user.role, user.password, user.birthYear]
+            'INSERT INTO users(user_first_name, user_last_name, user_email, user_phone_number, user_gender, user_role, user_password_hash, user_birth_date) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+            [user.fName, user.lName, user.email, user.phone, user.gender, user.role, user.password, user.birthDay]
         );
         if (!userResult.rows.length) {
             console.log('User not added');
@@ -66,7 +66,7 @@ const insertPatient = async (user) => {
         await pool.query('COMMIT');
         const combinedResult = await pool.query(
             `SELECT 
-                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_phone_number, u.user_gender, u.user_role, u.user_birth_year,
+                u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_phone_number, u.user_gender, u.user_role, u.user_birth_date,
                 p.patient_wallet
             FROM 
                 users u

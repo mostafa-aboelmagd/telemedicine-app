@@ -6,11 +6,11 @@
 
 ---
 #### Endpoints listed are:
-1. **User Login:** `/login`
+1. **User Login:** `/login` (tested)
 2. **User Logout:** `/logout`
-3. **Patient Registration:** `/patient/register`
-4. **Patient Profile info:** `/patient/profile/info`
-5. **Patient appointments:** `/patient/profile/appointments`
+3. **Patient Registration:** `/patient/register` (tested)
+4. **Patient Profile info:** `/patient/profile/info`(tested)
+5. **Patient appointments:** `/patient/profile/appointments`(tested)
 6. **Patient Requests:** `/patient/profile/requests`
 7. **Patient Profile Edit:** `/patient/edit/info`
 8. **Patient Change Password:** `/patient/edit/password`
@@ -47,15 +47,15 @@
   * **Request Body:**
     ```json
     {
-      "email": "",
-      "password": ""
+      "email": "patient4@test.com",
+      "password": "test@123!"
     }
     ```
   * **Response Body:**
     ```json
     {
-      "message": "Login successful",
-      "token": ""
+    "message": "Login successful",
+    "token": ""
     }
     ```
 
@@ -74,21 +74,30 @@
     * `Content-Type: application/json`
   * **Request Body:**
     ```json
-    {
-      "fName": "",
-      "lName": "",
-      "email": "",
-      "password": "",
-      "gender": "",
-      "phone": "",
-      "birthYear": ""
-    }
+    {"fName": "Jacob",
+  "lName": "Anderson",
+  "email": "patient4@test.com",
+  "password": "test@123!",
+  "gender": "Male",
+  "phone": "+521234567890",
+  "birthDay": "1994-03-28"}
+  
     ```
   * **Response Body:**
     ```json
     {
-      "message": "Patient created successfuly",
-      "patient": ""
+    "message": "Patient created successfully",
+    "patient": {
+        "user_id": 15,
+        "user_first_name": "Jacob",
+        "user_last_name": "Anderson",
+        "user_email": "patient4@test.com",
+        "user_phone_number": "+521234567890",
+        "user_gender": "Male",
+        "user_role": "Patient",
+        "user_birth_date": "1994-03-27T22:00:00.000Z",
+        "patient_wallet": 0
+        }
     }
     ```
     ---
@@ -97,12 +106,20 @@
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-
   * **Response Body:**
     ```json
     {
-      "message": "Patient info retrieved successfully",
-      "formattedPatient": ""
+    "message": "Patient info retrieved successfully",
+    "formattedPatient": {
+        "firstName": "David",
+        "lastName": "Miller",
+        "email": "patient4@test.com",
+        "gender": "Male",
+        "phone": "+442081234567",
+        "languages": [
+            null
+        ]
+    }
     }
     ```
     ---
@@ -111,11 +128,31 @@
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-
   * **Response Body:**
     ```json
     {
-      "formattedAppointments": ""
+    "appointments": [
+        {
+            "appointment_patient_id": 6,
+            "appointment_doctor_id": 13,
+            "appointment_availability_slot": 5,
+            "appointment_type": "First_time",
+            "appointment_duration": 30,
+            "appointment_id": 8,
+            "appointment_complaint": "arm pain",
+            "appointment_status": "Approved",
+            "created_at": "2024-09-23T10:12:35.903Z",
+            "updated_at": "2024-09-23T10:12:35.903Z",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": null,
+            "doctor": {
+                "firstName": "Ethan",
+                "lastName": "Wilson",
+                "specialization": "Cardiology",
+                "clinicLocation": null
+            }
+        }
+    ]
     }
     ```
     ---
@@ -139,7 +176,7 @@
       "gender": "",
       "phone": "",
       "birthYear": "",
-      "languages": [""]
+      "languages": ["French"]
     }
     ```
   * **Response Body:**
@@ -206,13 +243,13 @@
 
 12. **Patient Home (Dashboard):** `/patient/home`
   * **Method:** GET
-
   * **Response Body:**
     ```json
     {
       "doctors": ""
     }
     ```
+  
     ---
 
 13. **Patient Medical Document Upload:** `/patient/medical-document/upload`
@@ -294,6 +331,7 @@
     {
       "message": "Doctor info updated successfully",
       "doctor": ""
+
     }
     ```
     ---
@@ -316,15 +354,13 @@
     {
       "message": "Doctor password updated successfully",
       "doctor": ""
-    }
-    ```
+    } ```
     ---
 
 18. **Doctor Profile Info:** `/doctor/profile/info`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-
   * **Response Body:**
     ```json
     {
@@ -338,7 +374,6 @@
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-
   * **Response Body:**
     ```json
     {

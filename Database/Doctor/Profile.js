@@ -269,4 +269,4 @@ const retrieveDoctorEducation = async (id, email) => {
     }
 };
 
-module.exports = { retrieveDoctorInfo, retrieveDoctorPatients, retrieveDoctorAppointments, retrieveDoctorReviews, retrieveDoctorAvailabilities, retrieveDoctorExperience, retrieveDoctorInterests, retrieveDoctorLanguages, retrieveDoctorEducation };
+module.exports = { retrieveDoctorInfo, retrieveDoctorAppointments, retrieveDoctorReviews, retrieveDoctorAvailabilities, retrieveDoctorExperience, retrieveDoctorInterests, retrieveDoctorLanguages, retrieveDoctorEducation };
