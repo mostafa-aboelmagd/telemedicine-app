@@ -3,8 +3,8 @@ const  database  = require('../../../Database/Patient/Appointment/Book');
 const bookAppointment = async (req, res) => {
     const patientId = req.id;
     const patientEmail = req.email;
-    const { doctor_availability_id, appointment_complain, doctor_availability_type, appointmentType, appointmentDuration, availabilitySlot, doctorId } = req.body;
-    message = '';
+    const { doctor_availability_id, appointment_complaint, doctor_availability_type, appointmentType, appointmentDuration, availabilitySlot } = req.body;
+    let message = '';
     if (!patientId) {
         message = 'Patient ID not found';
         return res.status(404).json(message);
@@ -26,17 +26,13 @@ const bookAppointment = async (req, res) => {
         return res.status(404).json(message);
     }
 
-    if (!doctorId) {
-        message = 'Doctor ID not found';
-        return res.status(404).json(message);
-    }
 
-        //New 
+        //New Daaata Requested
     if (!doctor_availability_id) {
             message = 'Doctor availability ID not found';
             return res.status(404).json(message);
         }
-    if (!appointment_complain) {
+    if (!appointment_complaint) {
             message = 'Appointment complain not found';
             return res.status(404).json(message);
         }
@@ -50,27 +46,31 @@ const bookAppointment = async (req, res) => {
         message = 'Patient not registered';
         return res.status(400).json(message);
     }
-    const doctor = await database.retrieveDoctor(doctorId);
-    if (!doctor) {
-        message = 'Doctor not registered';
-        return res.status(400).json(message);
-    }
+
 
     // To be tested 
-    const doctorAvailability = await database.retrieveDoctorAvailability(doctor_availability_id);
-       if (!doctorAvailability || doctorAvailability.status !== 'Available') {
-           message = 'Doctor is not available at this time';
+    const appointment_doctor_id = await database.getDoctorFromAvailability(doctor_availability_id);
+       if (!appointment_doctor_id) {
+           message = 'Doctor Id not found';
            return res.status(400).json(message);
        }
-   
+
        // Create appointment with status "Pending"
-    const appointment = await database.insertAppointment({
+    console.log(
+        patientId, 
+        appointment_doctor_id,
+        availabilitySlot,
+        appointmentType,
+        appointmentDuration,
+        appointment_complaint);
+
+    const appointment = await database.createAppointment({
            patientId, 
-           doctor_availability_id,
+           appointment_doctor_id,
            availabilitySlot,
-           appointment_type,
+           appointmentType,
            appointmentDuration,
-           appointment_complain,
+           appointment_complaint,
            appointment_status: 'Pending'
        });   
    
@@ -78,10 +78,7 @@ const bookAppointment = async (req, res) => {
         return res.status(400).json('Appointment could not be booked');
     }
 
-    const updateAvailability = await database.updateDoctorAvailabilityStatus(doctor_availability_id, 'Pending');
-    if (!updateAvailability) {
-        return res.status(400).json('Failed to update doctor availability');
-    }
+
 
     
     return res.json({ message: 'Appointment booked successfully', appointment });
@@ -89,3 +86,4 @@ const bookAppointment = async (req, res) => {
 
 
 module.exports = { bookAppointment };
+
