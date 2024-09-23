@@ -33,7 +33,7 @@ const editInfo = async (req, res) => {
         return res.status(400).json(message);
     }
     message = 'Doctor info updated successfully';
-    return res.json({message, doctor});
+    return res.json( {message, doctor });
 }
 
 const editPassword = async (req, res) => {

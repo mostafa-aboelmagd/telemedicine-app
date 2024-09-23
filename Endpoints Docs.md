@@ -87,7 +87,8 @@
   * **Response Body:**
     ```json
     {
-     
+      "message": "Patient created successfuly",
+      "patient": ""
     }
     ```
     ---
@@ -96,12 +97,27 @@
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+
+  * **Response Body:**
+    ```json
+    {
+      "message": "Patient info retrieved successfully",
+      "formattedPatient": ""
+    }
+    ```
     ---
 
 5. **Patient Appointments:** `/patient/profile/appointments`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+
+  * **Response Body:**
+    ```json
+    {
+      "formattedAppointments": ""
+    }
+    ```
     ---
 
 6. **Patient Requests:** `/patient/profile/requests`
@@ -123,7 +139,7 @@
       "gender": "",
       "phone": "",
       "birthYear": "",
-      "languages": ["French"]
+      "languages": [""]
     }
     ```
   * **Response Body:**
@@ -190,17 +206,30 @@
 
 12. **Patient Home (Dashboard):** `/patient/home`
   * **Method:** GET
-  * **Request Headers:**
-    * `Authorization: Bearer your_access_token`
+
+  * **Response Body:**
+    ```json
+    {
+      "doctors": ""
+    }
+    ```
     ---
 
 13. **Patient Medical Document Upload:** `/patient/medical-document/upload`
   * **Method:** POST
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    * `Content-Type: application/json`
+    * `Content-Type: multipart/form-data`
   * **Request Body:** (Multipart form data)
-    * [`file`]("Go to definition"): The medical document file
+    * [`files`]("Go to definition"): The medical document file
+
+  * **Response Body:**
+    ```json
+    {
+      "message": "Successfully uploaded ${insertedFiles.length} files from ${uploadedFiles.length}",
+      "files": ""
+    }
+    ```
     ---
 
 14. **Patient Medical Document Viewing:** `/patient/medical-document/view`
@@ -248,7 +277,23 @@
   * **Request Body:**
     ```json
     {
-
+      "firstName": "",
+      "lastName": "",
+      "gender": "",   
+      "phone": "",
+      "birthYear": "1980",
+      "languages": [""],
+      "residenceCountry": "",
+      "sixtyMinPrice": "",
+      "thirtyMinPrice": "",
+      "specialization": ""
+    }
+    ```
+  * **Response Body:**
+    ```json
+    {
+      "message": "Doctor info updated successfully",
+      "doctor": ""
     }
     ```
     ---
@@ -261,8 +306,16 @@
   * **Request Body:**
     ```json
     {
-      
-
+      "oldPassword": "",
+      "password": "",
+      "confirmPassword": ""
+    }
+    ```
+  * **Response Body:**
+    ```json
+    {
+      "message": "Doctor password updated successfully",
+      "doctor": ""
     }
     ```
     ---
@@ -271,12 +324,27 @@
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+
+  * **Response Body:**
+    ```json
+    {
+      "message": "Doctor info retrieved successfully",
+      "formattedDoctor": ""
+    }
+    ```
     ---
 
 19. **Doctor View Appointments:** `/doctor/profile/appointments`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+
+  * **Response Body:**
+    ```json
+    {
+      "appoointments": ""
+    }
+    ```
     ---
 
 20. **Doctor View Availability:** `/doctor/profile/availabilities`
@@ -333,9 +401,16 @@
   * **Method:** PUT
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    * `Content-Type: application/json`
+    * `Content-Type: multipart/form-data`
   * **Request Body:** (Multipart form data)
     * [`file`]("Go to definition"): The profile picture file
+  * **Response Body:**
+    ```json
+    {
+      "message": "File uploaded successfully",
+      "file": ""
+    }
+    ```
     ---
 
 28. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add/:appointmentId`
