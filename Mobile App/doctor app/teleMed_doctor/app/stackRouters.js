@@ -14,6 +14,8 @@ import Pending from './screens/pending';
 import Details from './screens/moreDetails';
 import History from './screens/history';
 import Availability from './screens/availability';
+import App_Detials from './screens/app_details';
+import Documents from './screens/documents';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +36,8 @@ export default function StackRouters() {
             <Stack.Screen name='details' component={Details} options={{ headerShown : false}} />
             <Stack.Screen name='history' component={History} options={{ headerShown : false}} />
             <Stack.Screen name='availability' component={Availability} options={{ headerShown : false}} />
+            <Stack.Screen name='app details' component={App_Detials} options={{ headerShown : false}} />
+            <Stack.Screen name='documents' component={Documents} options={{ headerShown : false}} />
         </Stack.Navigator>
     </NavigationContainer>
   );

@@ -25,7 +25,7 @@ return (
         {patientList.map(([id, name]) =>
         <View>
           <View style={[styles.card]}>
-          <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+            <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
               <Text style={styles.state}>online / follow up</Text>
               <View style={{justifyContent:'flex-end'}}>
                 <TouchableOpacity onPress={history}>

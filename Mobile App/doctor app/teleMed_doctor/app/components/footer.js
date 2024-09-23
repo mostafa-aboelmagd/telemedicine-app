@@ -75,9 +75,10 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        padding: 15,
+        padding: 10,
         alignItems: 'center',
         backgroundColor: '#f0f0f0',
+        justifyContent: 'space-between',
     },
 
     icon: {
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
 
     container: {
         alignItems: 'center',
-        marginRight: '7%'
+        // marginRight: '7%'
     }
 });
 
