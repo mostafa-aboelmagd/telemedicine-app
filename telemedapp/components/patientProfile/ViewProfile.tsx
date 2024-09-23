@@ -13,7 +13,7 @@ function ViewProfile() {
     phone: "",
     email: "",
     gender: "",
-    birthYear: "",
+    birthDate: "",
     languages: "",
   });
 
@@ -23,7 +23,7 @@ function ViewProfile() {
     phone: "",
     email: "",
     gender: "",
-    birthYear: "",
+    birthDate: "",
     languages: [],
   });
 
@@ -31,10 +31,9 @@ function ViewProfile() {
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
-    if(!token) {
+    if (!token) {
       window.location.href = "/auth/signin";
-    }
-    else {
+    } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
         method: "GET",
         mode: "cors",
@@ -61,7 +60,7 @@ function ViewProfile() {
     { name: "phone", title: "Phone Number" },
     { name: "email", title: "Email" },
     { name: "languages", title: "Languages" },
-    { name: "birthYear", title: "Year Of Birth" },
+    { name: "birthDate", title: "Date Of Birth" },
     { name: "gender", title: "Gender" },
   ];
 
@@ -120,16 +119,10 @@ function ViewProfile() {
               >
                 Personal Info
               </Link>
-              <Link
-                href="/patientProfile/paymentInfo"
-                className="font-bold"
-              >
+              <Link href="/patientProfile/paymentInfo" className="font-bold">
                 Payment Info
               </Link>
-              <Link
-                href="/patientProfile/prescriptions"
-                className="font-bold"
-              >
+              <Link href="/patientProfile/prescriptions" className="font-bold">
                 Prescriptions
               </Link>
               <Link
@@ -164,7 +157,10 @@ function ViewProfile() {
                   </Link>
                 </div>
                 <div className="mt-5 mb-3">
-                  <button onClick={handleSignOut} className="font-medium p-3 border border-solid text-red-600 border-red-600 rounded-full">
+                  <button
+                    onClick={handleSignOut}
+                    className="font-medium p-3 border border-solid text-red-600 border-red-600 rounded-full"
+                  >
                     Sign Out
                   </button>
                 </div>

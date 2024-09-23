@@ -16,6 +16,7 @@ const DoctorBooking = () => {
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [availableDates, setAvailableDates] = useState<any[]>([]);
   const [appointmentState, setAppointmentState] = useState("first-time");
+  const [appointments, setAppointments] = useState<any[]>([]);
 
   // Retrieve the doctor data from the query parameters
   useEffect(() => {
@@ -63,6 +64,24 @@ const DoctorBooking = () => {
     }
   }, [doctor]);
 
+  useEffect(() => {
+    let token = localStorage.getItem("jwt");
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/appointments`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((response) => setAppointments(() => response));
+    console.log(appointments);
+  }, [setAppointmentState, appointmentState]);
+
   const handleDurationChange = (duration: number) => {
     setSelectedDuration(duration);
   };
@@ -92,6 +111,7 @@ const DoctorBooking = () => {
           handleDurationChange={handleDurationChange}
           appointmentState={appointmentState}
           setAppointmentState={setAppointmentState}
+          appointments={appointments} // Pass appointments here
         />
         <BookingSummary
           selectedSlot={selectedSlot}

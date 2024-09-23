@@ -7,6 +7,8 @@ interface ConfirmDialogProps {
   onConfirm: () => void;
   onCancel: () => void;
   loading?: boolean;
+  complaint?: string;
+  setComplaint: (complaint: string) => void;
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
@@ -14,8 +16,9 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onConfirm,
   onCancel,
   loading,
+  complaint,
+  setComplaint,
 }) => {
-  const [complaint, setComplaint] = React.useState("");
   const handleConfirm = () => {
     onConfirm();
     setComplaint("");

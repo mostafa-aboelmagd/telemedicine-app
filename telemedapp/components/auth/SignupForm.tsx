@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import InputComponent from "./InputComponent";
+import { Calendar } from "primereact/calendar";
+import { format } from "date-fns"; // For formatting dates (optional)
 
 function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -12,7 +14,7 @@ function SignUpForm() {
     password: "",
     confirmPassword: "",
     phone: "",
-    birthYear: "",
+    birthDate: "",
     gender: "",
   });
 
@@ -23,7 +25,7 @@ function SignUpForm() {
     password: "",
     confirmPassword: "",
     phone: "",
-    birthYear: "",
+    birthDate: "",
   });
 
   const [changedField, setChangedField] = useState("");
@@ -41,7 +43,7 @@ function SignUpForm() {
     { name: "phone", title: "Phone Number", type: "number" },
     { name: "password", title: "Password", type: "password" },
     { name: "confirmPassword", title: "Confirm Password", type: "password" },
-    { name: "birthYear", title: "Birth Year", type: "number" },
+    { name: "birthDate", title: "Birth Date", type: "number" },
   ];
 
   const submitButtonClass = [
@@ -185,7 +187,7 @@ function SignUpForm() {
   const validatePhone = () => {
     const phonePattern = /^-?\d+$/;
     let changedValidation = false;
-    if (formData.phone && (!phonePattern.test(formData.phone))) {
+    if (formData.phone && !phonePattern.test(formData.phone)) {
       if (errorMessage.phone === "") {
         changedValidation = true;
       }
@@ -205,27 +207,49 @@ function SignUpForm() {
     }
   };
 
-  const validateBirthYear = () => {
-    const birthYearPattern = /^-?\d+$/;
+  const handleDateChange = (e: any) => {
+    const { value } = e.target;
+    setFormData((prevForm) => ({
+      ...prevForm,
+      birthDate: value,
+    }));
+    setChangedField(() => "birthDate");
+  };
+  const validateBirthDate = () => {
     let changedValidation = false;
 
-    if (
-      formData.birthYear &&
-      (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011 || !birthYearPattern.test(formData.birthYear))
-    ) {
-      if (errorMessage.birthYear === "") {
+    if (formData.birthDate) {
+      const selectedDate = new Date(formData.birthDate);
+      const today = new Date();
+      let age = today.getFullYear() - selectedDate.getFullYear();
+      const m = today.getMonth() - selectedDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < selectedDate.getDate())) {
+        age--;
+      }
+
+      if (age < 13) {
+        // Example: User must be at least 13 years old
+        if (errorMessage.birthDate === "") {
+          changedValidation = true;
+        }
+        setErrorMessage((prevError) => ({
+          ...prevError,
+          birthDate: "You must be at least 13 years old.",
+        }));
+      } else {
+        if (errorMessage.birthDate !== "") {
+          changedValidation = true;
+        }
+        setErrorMessage((prevError) => ({ ...prevError, birthDate: "" }));
+      }
+    } else {
+      if (errorMessage.birthDate === "") {
         changedValidation = true;
       }
       setErrorMessage((prevError) => ({
         ...prevError,
-        birthYear: "BirthDate Is Not Valid",
-        // "Birth Year Must Be date
+        birthDate: "Birth Date is required.",
       }));
-    } else {
-      if (errorMessage.birthYear !== "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({ ...prevError, birthYear: "" }));
     }
 
     if (changedValidation && validateFieldsChosen()) {
@@ -260,8 +284,8 @@ function SignUpForm() {
         validatePhone();
         break;
 
-      case "birthYear":
-        validateBirthYear();
+      case "birthDate":
+        validateBirthDate();
         break;
 
       default:
@@ -310,7 +334,9 @@ function SignUpForm() {
             password: formData.password,
             gender: formData.gender,
             phone: formData.phone,
-            birthYear: formData.birthYear,
+            birthDate: formData.birthDate
+              ? format(new Date(formData.birthDate), "yyyy-MM-dd")
+              : null, // Formats date as YYYY-MM-DD
           }),
           mode: "cors",
         }
@@ -335,26 +361,57 @@ function SignUpForm() {
       <form onSubmit={handleSubmit}>
         {formFields.map((field) => {
           return (
-            <InputComponent
-              key={field.name}
-              label={field.title}
-              type={field.type}
-              name={field.name}
-              placeholder={
-                field.name === "phone" && !formData.phone
-                  ? "+20 XXXX XXX XXX"
-                  : `Enter ${field.title}`
-              }
-              value={formData[field.name as keyof typeof formData]}
-              onChange={handleChange}
-              errorText={errorMessage[field.name as keyof typeof errorMessage]}
-              required
-              additionalText={
-                field.name === "phone" && !errorMessage.phone
-                  ? "Please Enter A Valid Phone Number"
-                  : ""
-              }
-            />
+            <>
+              {field.name === "birthDate" ? (
+                <>
+                  <label className="block text-base mb-1.5 font-semibold text-neutral-700">
+                    {field.title} *
+                  </label>
+                  <Calendar
+                    value={
+                      formData.birthDate ? new Date(formData.birthDate) : null
+                    }
+                    onChange={handleDateChange}
+                    showIcon
+                    dateFormat="yy-mm-dd"
+                    placeholder="Select your birth date (yyyy-mm-dd)"
+                    maxDate={new Date()}
+                    yearRange="1900:2023"
+                    className={`bg-neutral-100 w-full py-4 px-6 text-base rounded-lg border border-solid border-neutral-300 grey-100 outline-none transition-[border-color] focus:border-sky-500 focus:bg-neutral-50 ${
+                      errorMessage.birthDate ? "p-invalid" : ""
+                    }`}
+                  />
+                  {errorMessage.birthDate && (
+                    <small className="text-xs mt-1 text-red-700 font-semibold">
+                      {errorMessage.birthDate}
+                    </small>
+                  )}
+                </>
+              ) : (
+                <InputComponent
+                  key={field.name}
+                  label={field.title}
+                  type={field.type}
+                  name={field.name}
+                  placeholder={
+                    field.name === "phone" && !formData.phone
+                      ? "+20 XXXX XXX XXX"
+                      : `Enter ${field.title}`
+                  }
+                  value={formData[field.name as keyof typeof formData]}
+                  onChange={handleChange}
+                  errorText={
+                    errorMessage[field.name as keyof typeof errorMessage]
+                  }
+                  required
+                  additionalText={
+                    field.name === "phone" && !errorMessage.phone
+                      ? "Please Enter A Valid Phone Number"
+                      : ""
+                  }
+                />
+              )}
+            </>
           );
         })}
         <div className="mb-4">

@@ -21,6 +21,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   doctor,
   selectedDate,
 }) => {
+  const [complaint, setComplaint] = React.useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const patientId = localStorage.getItem("userId");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -60,10 +61,13 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
+            // patient_id: patientId,
+            // complain: complaint,
             appointmentDuration: selectedDuration,
             availabilityId: selectedDate.slots.find(
               (slot) => slot.time === selectedSlot
             )?.id,
+            // online/onsite
           }),
         }
       );
@@ -134,6 +138,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         onConfirm={confirmCreate}
         onCancel={cancelCreate}
         loading={loading}
+        complaint={complaint}
+        setComplaint={setComplaint}
       />
     </div>
   );
