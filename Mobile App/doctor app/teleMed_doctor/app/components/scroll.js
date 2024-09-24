@@ -11,6 +11,6 @@ export default function CustomScroll ({ children, scrollStyle,...props }) {
 
 const styles = StyleSheet.create({
   scroll: {
-    marginBottom: '25%'
+    marginBottom: '20%'
   }
 });

@@ -18,26 +18,53 @@ export const patients ={
     'id4': 'Mazen'
 }
 
-export const appointments = {
-    'app1': {
-        'state': 'online / follow up',
-        'dr': 'Dr. Ahmed / cardiologist',
-        'date': '14/7/2024',
-        'complain': "I've been experiencing severe chest pain for the past two days."
+export const appointments = [
+    {
+        "appointment_patient_id": 6,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 5,
+        "appointment_type": "Followup",
+        "appointment_duration": 60,
+        "appointment_complaint": "headache",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": null,
+        "patient_first_name": "John",
+        "patient_last_name": "Doe",
+        "doctor_first_name": "samy",
+        "doctor_last_name": "ali",
+        "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
     },
-    'app2': {
-        'state': 'online / first time',
-        'dr': 'Dr. Ahmed / cardiologist',
-        'date': '14/7/2024',
-        'complain': "I've been experiencing severe chest pain for the past two days."
+    {
+        "appointment_patient_id": 6,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 7,
+        "appointment_type": "Followup",
+        "appointment_duration": 60,
+        "appointment_complaint": "headache",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": null,
+        "patient_first_name": "John",
+        "patient_last_name": "Doe",
+        "doctor_first_name": "samy",
+        "doctor_last_name": "ali",
+        "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
     },
-    'app3': {
-        'state': 'online / first time',
-        'dr': 'Dr. Ahmed / cardiologist',
-        'date': '14/7/2024',
-        'complain': "I've been experiencing severe chest pain for the past two days."
+    {
+        "appointment_patient_id": 6,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 6,
+        "appointment_type": "Followup",
+        "appointment_duration": 60,
+        "appointment_complaint": "headache",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": null,
+        "patient_first_name": "John",
+        "patient_last_name": "Doe",
+        "doctor_first_name": "samy",
+        "doctor_last_name": "ali",
+        "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
     }
-}
+]
 
 export const detials ={
     'date': '17/7/2024',
