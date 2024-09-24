@@ -757,7 +757,7 @@
     ```
   * **Response Body:**
   ```json
-  {
+    {
     "deleted": [
         4
     ],
@@ -767,7 +767,7 @@
         3
     ],
     "message": "Some appointments could not be deleted."
-    }
+    } ``
     ---
 
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
