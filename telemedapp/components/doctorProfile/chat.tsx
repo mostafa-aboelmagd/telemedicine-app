@@ -59,7 +59,7 @@ function Chat() {
         </div>
 
         <div className="h-3/4 border-solid border-x-[1px] border-x-zinc-300 p-2 overflow-y-scroll">
-          {messagesList.length > 1 ? messagesList.slice(1, -1).map((message) => (
+          {messagesList.length > 1 ? messagesList.slice(1, messagesList.length).map((message) => (
             <Message key={message.text + message.time} senderType={message.senderType} senderName={message.senderName} time={message.time} text={message.text} />
           )) :
           <></>}
