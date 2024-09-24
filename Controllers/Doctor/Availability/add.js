@@ -2,47 +2,24 @@ const database = require('../../../Database/Doctor/Availability/Add');
 
 const addAvailability = async (req, res) => {
     const doctorId = req.id;
-    const doctorAvailabilityDaysHours = req.body;
-    const successfullyEnteredAvailabilities = [];
-    let message = '';
+  const { doctorAvailabilityDayHour, doctorAvailabilityType } = req.body;
 
-    if (!doctorId) {
-        message = 'Doctor ID not found';
-        return res.status(404).json({ message });
-    }
-    if (!doctorAvailabilityDaysHours) {
-        message = 'Doctor availability days and hours not found';
-        return res.status(404).json({ message });
-    }
+  // Validate input (optional)
+  if (!doctorId || !doctorAvailabilityDayHour || !doctorAvailabilityType) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
 
-    try {
-        for (const [day, hours] of Object.entries(doctorAvailabilityDaysHours)) {
-            for (const hour of hours) {
-                const doctorAvailabilityDayHour = `${day} ${hour}`;
-                const doctorAvailabilityDayHourNoTZ = new Date(doctorAvailabilityDayHour).toISOString().slice(0, 19).replace('T', ' ');
-
-                const doctorAvailabilityFlag = await database.checkDoctorAvailability(doctorId, doctorAvailabilityDayHourNoTZ);
-                if (doctorAvailabilityFlag) {
-                    const availability = await database.insertAvailability(doctorId, doctorAvailabilityDayHourNoTZ);
-                    if (availability) {
-                        successfullyEnteredAvailabilities.push(availability);
-                    } else {
-                        console.log({message: 'failed after insertion', availability});
-                    }
-                } else {
-                    console.log({message: 'failed after availability check', doctorAvailabilityFlag});
-                }
-            }
-        }
-        if (successfullyEnteredAvailabilities.length === 0) {
-            message = 'Could not add any availability';
-            return res.status(400).json({ message });
-        }
-        return res.json({ message: 'Availability added successfully', successfullyEnteredAvailabilities });
-    } catch (error) {
-        console.error('Error adding availability:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+  try {
+    const insertedAvailability = await database.insertDoctorAvailability(doctorId, doctorAvailabilityDayHour, doctorAvailabilityType); // Pass additional data if needed
+    if (insertedAvailability) {
+      return res.json({ message: 'Doctor availability added successfully', availability: insertedAvailability });
+    } else {
+      return res.status(500).json({ message: 'Failed to add doctor availability' });
     }
+  } catch (error) {
+    console.error('Error adding doctor availability:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
 module.exports = { addAvailability};

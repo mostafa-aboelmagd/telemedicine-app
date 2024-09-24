@@ -345,6 +345,9 @@
         "patient_last_name": "khalaf",
         "doctor_first_name": "Olivia",
         "doctor_last_name": "Martinez",
+        "doctor_availability_day_hour": "2024-10-01T07:00:00.000Z",
+        "doctor_specialization": "Internal Medicine",
+        "doctor_clinic_location": "Maadi",
         "appointmentResults": [
             {
                 "appointment_diagnosis": "Migraine",
@@ -595,21 +598,23 @@
     * `Authorization: Bearer your_access_token`
   * **Response Body:**
     ```json
-    [
-    {
-        "appointment_patient_id": 6,
-        "appointment_doctor_id": 13,
-        "appointment_availability_slot": 5,
-        "appointment_type": "First_time",
-        "appointment_duration": 30,
-        "appointment_complaint": "arm pain",
-        "appointment_parent_reference": null,
-        "appointment_settings_type": null,
-        "user_first_name": "John",
-        "user_last_name": "Doe",
-        "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
-    }
-    ]
+      [
+        {
+            "appointment_patient_id": 6,
+            "appointment_doctor_id": 13,
+            "appointment_availability_slot": 5,
+            "appointment_type": "First_time",
+            "appointment_duration": 30,
+            "appointment_complaint": "arm pain",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": null,
+            "patient_first_name": "John",
+            "patient_last_name": "Doe",
+            "doctor_first_name": "samy",
+            "doctor_last_name": "ali",
+            "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
+        }
+        ]
     ```
     ---
 20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`
@@ -619,21 +624,23 @@
     * `Content-Type: application/json`
   * **Response Body:**
     ```json
-    [
-    {
-        "appointment_patient_id": 6,
-        "appointment_doctor_id": 13,
-        "appointment_availability_slot": 5,
-        "appointment_type": "Followup",
-        "appointment_duration": 60,
-        "appointment_complaint": "headache",
-        "appointment_parent_reference": null,
-        "appointment_settings_type": null,
-        "user_first_name": "John",
-        "user_last_name": "Doe",
-        "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
-    }
-    ]
+      [
+      {
+          "appointment_patient_id": 6,
+          "appointment_doctor_id": 13,
+          "appointment_availability_slot": 5,
+          "appointment_type": "Followup",
+          "appointment_duration": 60,
+          "appointment_complaint": "headache",
+          "appointment_parent_reference": null,
+          "appointment_settings_type": null,
+          "patient_first_name": "John",
+          "patient_last_name": "Doe",
+          "doctor_first_name": "samy",
+          "doctor_last_name": "ali",
+          "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
+      }
+      ]
     ```
 21. **Doctor View Availability:** `/doctor/profile/availabilities`
   * **Method:** GET
