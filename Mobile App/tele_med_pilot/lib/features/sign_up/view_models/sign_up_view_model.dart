@@ -122,7 +122,7 @@ class SignUpViewModel extends StateNotifier<SignInState> {
     if (!state.isFormValid) return false;
     state = state.copyWith(isLoading: true);
     try {
-      await _signUpService.signUp(
+      final response = await _signUpService.signUp(
         state.firstName,
         state.lastName,
         state.email,
@@ -131,9 +131,12 @@ class SignUpViewModel extends StateNotifier<SignInState> {
         state.birthYear,
         state.password,
       );
-
-      state = state.copyWith(errorMessage: null, isLoading: false);
-      return true;
+      if (response.contains("Success")) {
+        state = state.copyWith(errorMessage: response, isLoading: false);
+        return true;
+      }
+      state = state.copyWith(errorMessage: response, isLoading: false);
+      return false;
     } catch (error) {
       state = state.copyWith(errorMessage: error.toString(), isLoading: false);
       return false;

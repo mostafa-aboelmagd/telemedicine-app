@@ -18,6 +18,7 @@ class BaseService {
         if (token != null) 'Authorization': 'Bearer $token',
       },
     );
+    print("BASE SERVICE${response.body}");
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);

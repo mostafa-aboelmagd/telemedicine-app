@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tele_med_pilot/core/constant.dart';
-import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
+import 'package:tele_med_pilot/models/appointment_model.dart';
 import 'package:tele_med_pilot/ui/components/button.dart';
+import 'package:tele_med_pilot/core/route.dart';
 
 class AppointmentCard extends StatelessWidget {
-  const AppointmentCard({super.key});
+  final AppointmentModel appointment;
+
+  const AppointmentCard({required this.appointment, super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,11 +41,11 @@ class AppointmentCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Dr. Yahya",
+                        "${appointment.doctorFirstName} ${appointment.doctorLastName}",
                         style: AppTextStyles.bodyTextBold,
                       ),
                       Text(
-                        "Specialist",
+                        appointment.doctorSpecialization ?? "",
                         style: AppTextStyles.bodyTextSmallNormal,
                       )
                     ],
@@ -59,7 +63,7 @@ class AppointmentCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.r),
                     ),
                     child: Text(
-                      "Online / Follow Up",
+                      "${appointment.appointmentSettingsType} / ${appointment.appointmentType}",
                       style: AppTextStyles.bodyTextSmallBold
                           .copyWith(color: AppColors.black),
                     ),
@@ -72,7 +76,7 @@ class AppointmentCard extends StatelessWidget {
           ),
           SizedBox(height: 12.h),
           Text(
-            "Stating complaints: I've been experiencing severe chest pain for the past two days.",
+            "Complaint: ${appointment.appointmentComplaint}",
             style:
                 AppTextStyles.bodyTextMedium.copyWith(color: AppColors.black),
             softWrap: true,
@@ -81,11 +85,15 @@ class AppointmentCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("September 9, 2024"),
-                  Text("9:30 PM"),
+                  Text(
+                    _formatDate(appointment.appointmentDate),
+                  ),
+                  Text(
+                    _formatTime(appointment.appointmentDate),
+                  ),
                 ],
               ),
               SizedBox(
@@ -105,5 +113,31 @@ class AppointmentCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _formatDate(DateTime date) {
+    return "${date.day} ${_getMonthName(date.month)} ${date.year}";
+  }
+
+  String _formatTime(DateTime date) {
+    return "${date.hour}:${date.minute.toString().padLeft(2, '0')} ${date.hour >= 12 ? 'PM' : 'AM'}";
+  }
+
+  String _getMonthName(int month) {
+    const List<String> monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+    return monthNames[month - 1];
   }
 }

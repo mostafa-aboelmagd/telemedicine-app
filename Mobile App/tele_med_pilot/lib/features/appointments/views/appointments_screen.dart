@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tele_med_pilot/core/constant.dart';
 import 'package:tele_med_pilot/core/theme.dart';
+import 'package:tele_med_pilot/features/appointments/view_models/appointments_view_model.dart';
 import 'package:tele_med_pilot/ui/components/appointment_card.dart';
+import 'package:tele_med_pilot/ui/components/loading_screen.dart';
 
 class AppointmentsScreen extends ConsumerStatefulWidget {
   const AppointmentsScreen({super.key});
@@ -66,28 +68,62 @@ class OngoingAppointmentsView extends ConsumerStatefulWidget {
 }
 
 class _OngoingAppointmentsViewState
-    extends ConsumerState<ConsumerStatefulWidget> {
+    extends ConsumerState<OngoingAppointmentsView> {
+  bool isLoading = false;
+
+  void _getData() async {
+    setState(() {
+      isLoading = true;
+    });
+    print("JERJERJEJ");
+    await ref.read(appointmentsViewModelProvider.notifier).fetchAppointments();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    _getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-        child: Column(
-          children: [
-            Text(
-              "Upcoming Appointments",
-              style: AppTextStyles.bodyTextLargeBold
-                  .copyWith(color: AppColors.blue100),
+    final appointmentState = ref.watch(appointmentsViewModelProvider);
+    final appointmentViewModel =
+        ref.watch(appointmentsViewModelProvider.notifier);
+
+    if (appointmentState.errorMessage != null) {
+      return Center(child: Text('Error: ${appointmentState.errorMessage}'));
+    }
+
+    if (appointmentState.appointments.isEmpty && !isLoading) {
+      return const Center(child: Text('No upcoming appointments.'));
+    }
+
+    return isLoading
+        ? const LoadingScreen()
+        : PopScope(
+            onPopInvoked: (didPop) => appointmentViewModel.resetState(),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+                child: Column(
+                  children: [
+                    Text(
+                      "Upcoming Appointments",
+                      style: AppTextStyles.bodyTextLargeBold
+                          .copyWith(color: AppColors.blue100),
+                    ),
+                    ...appointmentState.appointments.map((appointment) {
+                      return AppointmentCard(appointment: appointment);
+                    }),
+                  ],
+                ),
+              ),
             ),
-            const AppointmentCard(),
-            const AppointmentCard(),
-            const AppointmentCard(),
-            const AppointmentCard(),
-            const AppointmentCard(),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }
 
@@ -98,7 +134,7 @@ class PastAppointmentsView extends ConsumerStatefulWidget {
       _PastAppointmentsViewState();
 }
 
-class _PastAppointmentsViewState extends ConsumerState<ConsumerStatefulWidget> {
+class _PastAppointmentsViewState extends ConsumerState<PastAppointmentsView> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -111,11 +147,6 @@ class _PastAppointmentsViewState extends ConsumerState<ConsumerStatefulWidget> {
               style: AppTextStyles.bodyTextLargeBold
                   .copyWith(color: AppColors.blue100),
             ),
-            const AppointmentCard(),
-            const AppointmentCard(),
-            const AppointmentCard(),
-            const AppointmentCard(),
-            const AppointmentCard(),
           ],
         ),
       ),

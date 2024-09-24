@@ -11,7 +11,6 @@ class ProfileService {
   Future<UserModel> getProfile() async {
     final response =
         await _baseService.get(AppConstants.patientProfileEndpoint);
-    print(response);
     return UserModel.fromJson(response["formattedPatient"]);
   }
 }
