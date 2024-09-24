@@ -24,6 +24,7 @@ const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Dele
 const doctorProfilePictureUploadRoute = require('./Routes/Doctor/Profile Picture/Upload');
 const doctorPatientPrescriptionAddRoute = require('./Routes/Doctor/Patient Prescription/Add');
 const doctorAppointmentResponseAddRoute = require('./Routes/Doctor/AppointmentResponse');
+const doctorAppointmentResultsAddRoute = require('./Routes/Doctor/AppointmentResults');
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -89,6 +90,7 @@ app.use('/doctor/availability/delete', doctorDeleteAvailabilityRoute);
 app.use('/doctor/profile-picture/upload', doctorProfilePictureUploadRoute);
 app.use('/doctor/patient-prescription/add', doctorPatientPrescriptionAddRoute);
 app.use('/doctor/AppointmentResponse', doctorAppointmentResponseAddRoute);
+app.use('/doctor/AppointmentResults', doctorAppointmentResultsAddRoute);
 
 
 
