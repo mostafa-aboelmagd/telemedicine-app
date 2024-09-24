@@ -75,7 +75,6 @@ class _OngoingAppointmentsViewState
     setState(() {
       isLoading = true;
     });
-    print("JERJERJEJ");
     await ref.read(appointmentsViewModelProvider.notifier).fetchAppointments();
     setState(() {
       isLoading = false;
@@ -135,21 +134,61 @@ class PastAppointmentsView extends ConsumerStatefulWidget {
 }
 
 class _PastAppointmentsViewState extends ConsumerState<PastAppointmentsView> {
+  bool isLoading = false;
+
+  void _getData() async {
+    setState(() {
+      isLoading = true;
+    });
+    await ref
+        .read(appointmentsViewModelProvider.notifier)
+        .fetchHistoryAppointments();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    _getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-        child: Column(
-          children: [
-            Text(
-              "Past Appointments",
-              style: AppTextStyles.bodyTextLargeBold
-                  .copyWith(color: AppColors.blue100),
+    final appointmentState = ref.watch(appointmentsViewModelProvider);
+    final appointmentViewModel =
+        ref.watch(appointmentsViewModelProvider.notifier);
+
+    if (appointmentState.errorMessage != null) {
+      return Center(child: Text('Error: ${appointmentState.errorMessage}'));
+    }
+
+    if (appointmentState.appointments.isEmpty && !isLoading) {
+      return const Center(child: Text('No upcoming appointments.'));
+    }
+
+    return isLoading
+        ? const LoadingScreen()
+        : PopScope(
+            onPopInvoked: (didPop) => appointmentViewModel.resetState(),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+                child: Column(
+                  children: [
+                    Text(
+                      "Upcoming Appointments",
+                      style: AppTextStyles.bodyTextLargeBold
+                          .copyWith(color: AppColors.blue100),
+                    ),
+                    ...appointmentState.appointments.map((appointment) {
+                      return AppointmentCard(appointment: appointment);
+                    }),
+                  ],
+                ),
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

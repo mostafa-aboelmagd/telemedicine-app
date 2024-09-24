@@ -17,6 +17,8 @@ class AppConstants {
   static String get patientProfileEndpoint => '$baseURL/patient/profile/info';
   static String get patientAppointmentsEndpoint =>
       '$baseURL/patient/profile/appointments';
+  static String get patientAppointmentsHistoryEndpoint =>
+      '$baseURL/patient/appointment/appointmentsHistory';
   static String get patientEditEndpoint => '$baseURL/patient/edit';
   static String get patientAppointmentBookEndpoint =>
       '$baseURL/patient/appointment/book';

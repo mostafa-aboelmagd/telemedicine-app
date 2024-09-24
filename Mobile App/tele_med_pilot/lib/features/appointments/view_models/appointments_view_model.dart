@@ -26,6 +26,20 @@ class AppointmentsViewModel extends StateNotifier<AppointmentState> {
       state = state.copyWith(isLoading: false, errorMessage: error.toString());
     }
   }
+
+  Future<void> fetchHistoryAppointments() async {
+    try {
+      final appointments = await _appointmentsService.getHistoryAppointments();
+
+      if (appointments.isEmpty) {
+        state = state.copyWith(appointments: [], isLoading: false);
+      } else {
+        state = state.copyWith(appointments: appointments, isLoading: false);
+      }
+    } catch (error) {
+      state = state.copyWith(isLoading: false, errorMessage: error.toString());
+    }
+  }
 }
 
 final appointmentsViewModelProvider =

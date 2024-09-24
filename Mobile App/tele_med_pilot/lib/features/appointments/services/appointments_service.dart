@@ -25,6 +25,26 @@ class AppointmentsService {
       rethrow;
     }
   }
+
+  Future<List<AppointmentModel>> getHistoryAppointments() async {
+    try {
+      final response = await _baseService
+          .get(AppConstants.patientAppointmentsHistoryEndpoint);
+
+      print(response);
+
+      if (response['appointments'] == null ||
+          response['appointments'] is! List) {
+        return [];
+      }
+
+      return (response['appointments'] as List)
+          .map((appointmentJson) => AppointmentModel.fromJson(appointmentJson))
+          .toList();
+    } catch (error) {
+      rethrow;
+    }
+  }
 }
 
 final appointmentsServiceProvider = Provider<AppointmentsService>((ref) {
