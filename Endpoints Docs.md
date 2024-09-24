@@ -31,8 +31,8 @@
 23. **Doctor View Education:** `/doctor/profile/education`
 24. **Doctor View reviews:** `/doctor/profile/reviews`
 25. **Doctor View interests:** `/doctor/profile/interests`
-26. **Doctor Availability Addition:** `/doctor/availability/add`
-27. **Doctor Availability Deletion:** `/doctor/availability/delete`
+26. **Doctor Availability Addition:** `/doctor/availability/add`(Tested)
+27. **Doctor Availability Deletion:** `/doctor/availability/delete`(Tested)
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
 29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
 30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
@@ -720,10 +720,26 @@
     * `Content-Type: application/json`
   * **Request Body:**
     ```json
-    {
-    
-    }
+        [
+      {
+        "doctor_availability_type": "Online",
+        "doctor_availability_day_hour": "2024-10-25 11:00:00"
+      },
+      {
+        "doctor_availability_type": "Onsite",
+        "doctor_availability_day_hour": "2024-11-01 14:00:00"
+      },
+      {
+        "doctor_availability_type": "Online/Onsite",
+        "doctor_availability_day_hour": "2024-11-10 09:00:00"
+      }
+        ]
     ```
+  * **Response Body:**
+    ```json
+    {
+    "message": "Doctor availability added successfully"
+    }
     ---
 
 27. **Doctor Availability Deletion:** `/doctor/availability/delete/{availabilityId}`
@@ -731,6 +747,27 @@
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     * `Content-Type: application/json`
+  * **Request Body:**
+    ```json
+        {
+    "appointmentIds": [
+      1,2,3,4
+      ]
+      }
+    ```
+  * **Response Body:**
+  ```json
+  {
+    "deleted": [
+        4
+    ],
+    "failed": [
+        1,
+        2,
+        3
+    ],
+    "message": "Some appointments could not be deleted."
+    }
     ---
 
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`

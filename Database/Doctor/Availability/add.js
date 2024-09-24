@@ -44,20 +44,25 @@ const checkDoctorAvailability = async (doctorId, availabilityDayHour) => {
     }
 };
 
-const insertDoctorAvailability = async (doctorId, doctorAvailabilityDayHour, doctorAvailabilityType, additionalData = {}) => {
-    try {
-      const result = await pool.query(
-        'INSERT INTO doctor_availability(doctor_availability_doctor_id, doctor_availability_type, doctor_availability_status, doctor_availability_day_hour) VALUES($1, $2, $3, $4) RETURNING *',
-        [doctorId, doctorAvailabilityType, 'Available', doctorAvailabilityDayHour, ...Object.values(additionalData)] // Construct additional values
-      );
-      if (result.rows.length) {
-        return result.rows[0]; // Return the inserted row
-      }
-      return false;
-    } catch (error) {
-      console.error('Error inserting doctor availability:', error);
-      return false;
-    }
+const insertDoctorAvailability = async (data) => {
+    const {
+        doctor_availability_type,
+        doctor_availability_day_hour,
+      } = data;
+    const query = `
+      INSERT INTO doctor_availability (
+      doctor_availability_doctor_id,
+      doctor_availability_type,
+      doctor_availability_status,
+      doctor_availability_day_hour,
+      created_at,
+      updated_at
+    ) VALUES ($1, $2, $3, $4, NOW(), NOW())`;
+      const result = await pool.query(query, [
+        data.doctor_availability_doctor_id,
+        doctor_availability_type,
+        "Available", // Set default status in the query
+        doctor_availability_day_hour,
+    ]);
   };
-
 module.exports = { checkDoctorAvailability, insertDoctorAvailability};

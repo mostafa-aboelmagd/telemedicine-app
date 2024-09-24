@@ -1,41 +1,45 @@
 const database = require('../../../Database/Doctor/Availability/Delete');
 
 const deleteAvailability = async (req, res) => {
-    const doctorId = req.id;
-    const doctorEmail = req.email;
-    const doctorAvailabilityIds = req.body.slots_id;
-    const deletedAvailabilities = [];
-
-    let message = '';
-    if (!doctorId) {
-        message = 'Doctor ID not found';
-        return res.status(404).json(message);
-    }
-    if (!doctorEmail) {
-        message = 'Doctor email not found';
-        return res.status(401).json(message);
-    }
-    if (!doctorAvailabilityIds) {
-        message = 'Availability IDs not found';
-        return res.status(404).json(message);
-    }
-    for (const doctorAvailabilityId of doctorAvailabilityIds) {
-        const doctorAvailabilityFlag = await database.checkDoctorAvailability(doctorId, doctorAvailabilityId);
-        if (doctorAvailabilityFlag) {
-            const availability = await database.deleteAvailability(doctorId, doctorAvailabilityId);
-            if (availability) {
-                console.log(`Availability of id ${doctorAvailabilityId} deleted successfully`);
-                deletedAvailabilities.push(doctorAvailabilityId);
-            }
-            console.log(`Could not delete availability of id ${doctorAvailabilityId}`);
+    try {
+        const appointmentIds = req.body.appointmentIds;
+    
+        if (!appointmentIds || appointmentIds.length === 0) {
+        return res.status(400).json({ message: "No appointment IDs provided" });
         }
-        console.log(`Doctor availability of id ${doctorAvailabilityId} not found`);
+    
+        const deletedAppointmentIds = [];
+        const failedAppointmentIds = [];
+    
+        // Loop through appointment IDs and delete one by one
+        for (const appointmentId of appointmentIds) {
+        try {
+            await database.deleteAppointment(appointmentId);
+            deletedAppointmentIds.push(appointmentId);
+        } catch (error) {
+            if (error.code === '23503') { // Assuming PostgreSQL's error code for foreign key violation
+            failedAppointmentIds.push(appointmentId);
+            } else {
+            console.error(`Error deleting appointment ${appointmentId}:`, error);
+            failedAppointmentIds.push(appointmentId);
+            }
+        }
+        }
+    
+        const response = {
+        deleted: deletedAppointmentIds,
+        failed: failedAppointmentIds,
+        message: "Appointments deleted successfully."
+        };
+    
+        if (failedAppointmentIds.length > 0) {
+        response.message = "Some appointments could not be deleted.";
+        }
+    
+        res.status(200).json(response);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error deleting appointments" });
     }
-    if (deletedAvailabilities.length === 0) {
-        message = 'Could not delete any availability';
-        return res.status(400).json(message);
-    }
-    return res.json(`Successfully deleted ${deletedAvailabilities.length} availabilities from ${doctorAvailabilityIds.length}`);    
-}
-
+    };
 module.exports = { deleteAvailability };
