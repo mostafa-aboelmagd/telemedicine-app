@@ -40,26 +40,9 @@ const patientViewRequests = async (req, res) => {
   
       if (!appointments.length) {
         return res.json({ message: 'No pending or declined appointments found' });
-      }
-  
-      const formattedAppointments = await Promise.all(
-        appointments.map(async (appointment) => {
-          const doctorDetails = await database.getDoctorDetails(appointment.appointment_doctor_id);
-          const doctorClinicLocation = appointment.appointment_place === 'Onsite' ? await database.getDoctorClinicLocation(appointment.appointment_doctor_id) : null;
-  
-          return {
-            ...appointment,
-            doctor: {
-              firstName: doctorDetails.user_first_name,
-              lastName: doctorDetails.user_last_name,
-              specialization: doctorDetails.doctor_specialization,
-              clinicLocation: doctorClinicLocation, // Only include if appointment_place is "Onsite"
-            },
+      
           };
-        })
-      );
-  
-      return res.json({ appointments: formattedAppointments });
+      return res.json({ appointments });
     } catch (error) {
       console.error('Error retrieving patient requests:', error);
       return res.status(500).json({ message: 'Internal server error' });
@@ -74,26 +57,8 @@ const patientViewRequests = async (req, res) => {
   
       if (!appointments.length) {
         return res.json({ message: 'No Approved appointments found' });
-      }
-  
-      const formattedAppointments = await Promise.all(
-        appointments.map(async (appointment) => {
-          const doctorDetails = await database.getDoctorDetails(appointment.appointment_doctor_id);
-          const doctorClinicLocation = appointment.appointment_place === 'Onsite' ? await database.getDoctorClinicLocation(appointment.appointment_doctor_id) : null;
-  
-          return {
-            ...appointment,
-            doctor: {
-              firstName: doctorDetails.user_first_name,
-              lastName: doctorDetails.user_last_name,
-              specialization: doctorDetails.doctor_specialization,
-              clinicLocation: doctorClinicLocation, // Only include if appointment_place is "Onsite"
-            },
-          };
-        })
-      );
-  
-      return res.json({ appointments: formattedAppointments });
+      }  
+      return res.json({ appointments });
     } catch (error) {
       console.error('Error retrieving patient requests:', error);
       return res.status(500).json({ message: 'Internal server error' });

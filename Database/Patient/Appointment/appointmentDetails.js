@@ -29,9 +29,31 @@ const pool = new pg.Pool({
 // not tested with new data model
 const getAppointmentDetails = async (appointmentId) => {
   const result = await pool.query(
-    `SELECT * 
-     FROM appointment 
-     WHERE appointment_id = $1`,
+    `SELECT
+    a.appointment_patient_id,
+    a.appointment_doctor_id,
+    a.appointment_availability_slot,
+    a.appointment_type,
+    a.appointment_duration,
+    a.appointment_complaint,
+    a.appointment_status,
+    a.appointment_parent_reference,
+    a.appointment_settings_type,
+    p.user_first_name AS patient_first_name,
+    p.user_last_name AS patient_last_name,
+    d.user_first_name AS doctor_first_name,
+    d.user_last_name AS doctor_last_name,
+    da.doctor_availability_day_hour,
+    doc.doctor_specialization,
+    doc.doctor_clinic_location
+FROM
+    appointment a
+JOIN users p ON a.appointment_patient_id = p.user_id
+JOIN users d ON a.appointment_doctor_id = d.user_id
+JOIN doctor doc ON a.appointment_doctor_id = doc.doctor_user_id_reference
+JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
+WHERE
+    a.appointment_id = $1`,
     [appointmentId]
   );
 
@@ -40,7 +62,7 @@ const getAppointmentDetails = async (appointmentId) => {
 
 const getAppointmentResults = async (appointmentId) => {
   const result = await pool.query(
-    `SELECT appointment_diagnosis, appointment_report
+    `SELECT appointment_diagnosis, appointment_report ,updated_at
      FROM appointment_results
      WHERE results_appointment_reference = $1`,
     [appointmentId]
@@ -51,8 +73,10 @@ const getAppointmentResults = async (appointmentId) => {
 
 const getTreatmentPlan = async (appointmentId) => {
   const result = await pool.query(
-    `SELECT treatment_plan_operations, treatment_plan_speciality_referral,
-     treatment_plan_referral_notes, created_at, treatment_plan_id
+    `SELECT treatment_plan_operations, 
+    treatment_plan_speciality_referral,
+     treatment_plan_referral_notes, 
+     treatment_plan_id
      FROM treatment_plan
      WHERE treatment_plan_appointment_reference = $1`,
     [appointmentId]
@@ -63,8 +87,12 @@ const getTreatmentPlan = async (appointmentId) => {
 
 const getMedications = async (treatmentPlanId) => {
   const result = await pool.query(
-    `SELECT medication_plan_note, medication_plan_start_date,
-     medication_plan_end_date, medication_id, medication_plan_name, medication_plan_dosage
+    `SELECT medication_note,
+     medication_start_date,
+     medication_end_date, 
+     medication_id, 
+     medication_name, 
+     medication_dosage
      FROM medications
      WHERE medication_treatment_plan_reference = $1`,
     [treatmentPlanId]
