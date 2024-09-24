@@ -40,6 +40,12 @@ function ChangePassword() {
     if(!token) {
       window.location.href = "/auth/signin";
     }
+
+    else if(Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
+      localStorage.clear();
+      window.location.href = "/auth/signin";
+    }
+
     else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
         mode: "cors",

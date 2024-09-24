@@ -10,7 +10,13 @@ function SignInPage() {
 
   useEffect(() => {
     if(localStorage.getItem("jwt")) {
-      window.location.href = "/";
+      if(Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
+        localStorage.clear();
+        setLoading(false);
+      }
+      else {
+        window.location.href = "/";
+      }
     }
     else {
       setLoading(false);

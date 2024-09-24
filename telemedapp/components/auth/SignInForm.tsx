@@ -39,6 +39,7 @@ function SignInForm() {
           req.id = decodedToken.id;
           req.email = decodedToken.email;
           req.userRole = decodedToken.role;
+          req.tokenExpiryDate = decodedToken.exp;
 
           return true;
         }
@@ -103,6 +104,7 @@ function SignInForm() {
       const users = await response.json();
       if (tokenAuthentication(users)) {
         localStorage.setItem("jwt", users.token);
+        localStorage.setItem("expiryDate", users.tokenExpiryDate);
         localStorage.setItem("userRole", users.userRole);
         localStorage.setItem("userId", users.id);
         window.location.href = "/";
