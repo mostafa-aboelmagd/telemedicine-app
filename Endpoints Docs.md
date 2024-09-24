@@ -628,7 +628,8 @@
       {
         "appointment_patient_id": 3,
         "appointment_doctor_id": 13,
-        "appointment_availability_slot": 54,
+        "appointment_availability_slot": 55,
+        "appointment_id": 72,
         "appointment_type": "Followup",
         "appointment_duration": 30,
         "appointment_complaint": "I have a headache",
@@ -638,8 +639,8 @@
         "patient_last_name": "salem",
         "doctor_first_name": "samy",
         "doctor_last_name": "ali",
-        "doctor_availability_day_hour": "2024-11-26T12:00:00.000Z"
-      }
+        "doctor_availability_day_hour": "2024-11-17T07:00:00.000Z"
+    }
       ]
     ```
 21. **Doctor View Availability:** `/doctor/profile/availabilities`
