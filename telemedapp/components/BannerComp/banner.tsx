@@ -7,7 +7,7 @@ const Banner = () => {
             <div className='flex flex-col h-full space-y-4'>
                 <div className='flex flex-col p-2 space-y-6'>
                     <p className='text-xs text-[#343a40] font-light'>YOU TALK WE HELP</p>
-                    <h1 className='text-black text-6xl text-[#343a40] font-light'>Talk <span className='font-bold'>to your doctor online privately </span> anytime anywhere!</h1>
+                    <h1 className='text-black text-6xl font-light'>Talk <span className='font-bold'>to your doctor online privately </span> anytime anywhere!</h1>
                     <p className='text-lg font-semibold text-[#343a40]'>TeleMedPilot is number one in online Arabic
                         Telemedicine worldwide.</p>
                 </div>

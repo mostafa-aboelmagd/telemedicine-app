@@ -10,6 +10,12 @@ const BookingButton = ({ doctor }: { doctor: any }) => {
     if(!localStorage.getItem("jwt")) {
       window.location.href = "/auth/signin";
     }
+
+    else if(Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
+      localStorage.clear();
+      window.location.href = "/auth/signin";
+    }
+    
     else {
       const encodedDoctor = encodeURIComponent(JSON.stringify(doctor)); // Encode the doctor object
       router.push(`/booking?doctor=${encodedDoctor}`); // Construct URL manually

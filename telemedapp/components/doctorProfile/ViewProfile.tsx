@@ -42,6 +42,12 @@ function ViewProfile() {
     if(!token) {
       window.location.href = "/auth/signin";
     }
+
+    else if(Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
+      localStorage.clear();
+      window.location.href = "/auth/signin";
+    }
+
     else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
         mode: "cors",
@@ -94,6 +100,14 @@ function ViewProfile() {
                 Dr. {profileData.firstName} {profileData.lastName}
               </p>
             </div>
+            <button
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+              onClick={() =>
+                (window.location.href = "/doctorProfile/requests")
+              }
+            >
+              View Requests
+            </button>
             <button
               className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
               onClick={() =>

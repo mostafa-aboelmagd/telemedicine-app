@@ -24,20 +24,24 @@ const Navbar = () => {
   const [userRole, setUserRole] = useState<any>();
 
   useEffect(() => {
+    const expiryDate = localStorage.getItem("expiryDate");
+    if(expiryDate && (Math.floor(new Date().getTime() / 1000) > Number(expiryDate))) {
+      localStorage.clear();
+    }
     setToken(localStorage.getItem("jwt"));
     setUserRole(localStorage.getItem("userRole"));
   }, []);
 
   return (
     <nav className="h-14 bg-white border border-b-[1px] sticky top-0 z-10 pb-8">
-      <div className="max-w-full md:max-w-[90%] lg:max-w-[75%] flex justify-between items-center mx-auto">
+      <div className="max-w-full md:max-w-[90%] min-[1130px]:max-w-[75%] flex justify-between items-center mx-auto">
         <Link href="/">
           <div className="flex justify-center items-center">
             <img className="w-14 h-14" src="/assets/logo.png" alt="logo" />
             <span className="texl-base md:text-xl">TeleMedPilot</span>
           </div>
         </Link>
-        <div className="hidden lg:inline-block  justify-between space-x-4 text-[#4d4d4f] text-sm font-light">
+        <div className="hidden min-[1130px]:inline-block justify-between space-x-4 text-[#4d4d4f] text-sm font-light">
           <Link href="/doctors">
             <button className="font-semibold hover:text-[#035fe9]">Doctor List</button>
           </Link>
@@ -45,15 +49,15 @@ const Navbar = () => {
           <button className="font-semibold hover:text-[#035fe9]">Find A Doctor</button>
           <button className="font-semibold hover:text-[#035fe9]">Blog</button>
         </div>
-        <div className="flex justify-between items-center space-x-0 md:space-x-4 lg:space-x-6">
+        <div className="flex justify-between items-center space-x-0 md:space-x-4 min-[1130px]:space-x-6">
           <a className="cursor-pointer font-medium">العربيه</a>
           {!token ? (
             <>
               <Link href="/auth/signin">
-                <button className="hidden lg:inline-block border border-[#035fe9] rounded-lg text-[#035fe9] px-12 py-2 my-2">
+                <button className="hidden min-[1130px]:inline-block border border-[#035fe9] rounded-lg text-[#035fe9] px-12 py-2 my-2">
                   Sign in
                 </button>
-                <button className="lg:hidden text-[#035fe9] p-2 my-2">
+                <button className="min-[1130px]:hidden text-[#035fe9] p-2 my-2">
                   <PiSignInBold className="h-6 w-6 text-[#035fe9]" />
                 </button>
               </Link>
@@ -61,12 +65,12 @@ const Navbar = () => {
                 <button
                   className={
                     styles.gradient_button +
-                    " hidden lg:inline-block px-12 py-2 my-2 text-white rounded-lg "
+                    " hidden min-[1130px]:inline-block px-12 py-2 my-2 text-white rounded-lg "
                   }
                 >
                   Sign up
                 </button>
-                <button className="lg:hidden p-2 my-2 text-[#035fe9] rounded-lg">
+                <button className="min-[1130px]:hidden p-2 my-2 text-[#035fe9] rounded-lg">
                   <BsPersonFillAdd className="h-6 w-6 text-[#035fe9]" />
                 </button>
               </Link>
@@ -104,7 +108,7 @@ const Navbar = () => {
               />
             </div>
           )}
-          <div className="lg:hidden">
+          <div className="min-[1130px]:hidden">
             <MenuList
               linkTo={["/doctors", "", "", ""]}
               linkName={["Doctor List", "Tests", "Find a Doctor", "Blog"]}
