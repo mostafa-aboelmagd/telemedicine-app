@@ -765,11 +765,10 @@
         1,
         2,
         3
-      ],
-      "message": "Some appointments could not be deleted."
-      }
-    ```
----
+    ],
+    "message": "Some appointments could not be deleted."
+    } ``
+    ---
 
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
   * **Method:** PUT
