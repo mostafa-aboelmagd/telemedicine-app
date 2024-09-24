@@ -79,13 +79,13 @@
   * **Request Body:**
     ```json
     {"fName": "Jacob",
-  "lName": "Anderson",
-  "email": "patient4@test.com",
-  "password": "test@123!",
-  "gender": "Male",
-  "phone": "+521234567890",
-  "birthDay": "1994-03-28"}
-  
+    "lName": "Anderson",
+    "email": "patient4@test.com",
+    "password": "test@123!",
+    "gender": "Male",
+    "phone": "+521234567890",
+    "birthDate": "1994-03-28"
+    }
     ```
   * **Response Body:**
     ```json
