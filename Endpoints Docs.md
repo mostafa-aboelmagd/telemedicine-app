@@ -31,8 +31,8 @@
 23. **Doctor View Education:** `/doctor/profile/education`
 24. **Doctor View reviews:** `/doctor/profile/reviews`
 25. **Doctor View interests:** `/doctor/profile/interests`
-26. **Doctor Availability Addition:** `/doctor/availability/add`
-27. **Doctor Availability Deletion:** `/doctor/availability/delete`
+26. **Doctor Availability Addition:** `/doctor/availability/add`(Tested)
+27. **Doctor Availability Deletion:** `/doctor/availability/delete`(Tested)
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
 29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
 30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
@@ -79,13 +79,13 @@
   * **Request Body:**
     ```json
     {"fName": "Jacob",
-  "lName": "Anderson",
-  "email": "patient4@test.com",
-  "password": "test@123!",
-  "gender": "Male",
-  "phone": "+521234567890",
-  "birthDay": "1994-03-28"}
-  
+    "lName": "Anderson",
+    "email": "patient4@test.com",
+    "password": "test@123!",
+    "gender": "Male",
+    "phone": "+521234567890",
+    "birthDate": "1994-03-28"
+    }
     ```
   * **Response Body:**
     ```json
@@ -345,6 +345,9 @@
         "patient_last_name": "khalaf",
         "doctor_first_name": "Olivia",
         "doctor_last_name": "Martinez",
+        "doctor_availability_day_hour": "2024-10-01T07:00:00.000Z",
+        "doctor_specialization": "Internal Medicine",
+        "doctor_clinic_location": "Maadi",
         "appointmentResults": [
             {
                 "appointment_diagnosis": "Migraine",
@@ -595,21 +598,23 @@
     * `Authorization: Bearer your_access_token`
   * **Response Body:**
     ```json
-    [
-    {
-        "appointment_patient_id": 6,
-        "appointment_doctor_id": 13,
-        "appointment_availability_slot": 5,
-        "appointment_type": "First_time",
-        "appointment_duration": 30,
-        "appointment_complaint": "arm pain",
-        "appointment_parent_reference": null,
-        "appointment_settings_type": null,
-        "user_first_name": "John",
-        "user_last_name": "Doe",
-        "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
-    }
-    ]
+      [
+        {
+            "appointment_patient_id": 6,
+            "appointment_doctor_id": 13,
+            "appointment_availability_slot": 5,
+            "appointment_type": "First_time",
+            "appointment_duration": 30,
+            "appointment_complaint": "arm pain",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": null,
+            "patient_first_name": "John",
+            "patient_last_name": "Doe",
+            "doctor_first_name": "samy",
+            "doctor_last_name": "ali",
+            "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
+        }
+        ]
     ```
     ---
 20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`
@@ -619,21 +624,23 @@
     * `Content-Type: application/json`
   * **Response Body:**
     ```json
-    [
-    {
-        "appointment_patient_id": 6,
-        "appointment_doctor_id": 13,
-        "appointment_availability_slot": 5,
-        "appointment_type": "Followup",
-        "appointment_duration": 60,
-        "appointment_complaint": "headache",
-        "appointment_parent_reference": null,
-        "appointment_settings_type": null,
-        "user_first_name": "John",
-        "user_last_name": "Doe",
-        "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
-    }
-    ]
+      [
+      {
+          "appointment_patient_id": 6,
+          "appointment_doctor_id": 13,
+          "appointment_availability_slot": 5,
+          "appointment_type": "Followup",
+          "appointment_duration": 60,
+          "appointment_complaint": "headache",
+          "appointment_parent_reference": null,
+          "appointment_settings_type": null,
+          "patient_first_name": "John",
+          "patient_last_name": "Doe",
+          "doctor_first_name": "samy",
+          "doctor_last_name": "ali",
+          "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
+      }
+      ]
     ```
 21. **Doctor View Availability:** `/doctor/profile/availabilities`
   * **Method:** GET
@@ -713,10 +720,26 @@
     * `Content-Type: application/json`
   * **Request Body:**
     ```json
-    {
-    
-    }
+        [
+      {
+        "doctor_availability_type": "Online",
+        "doctor_availability_day_hour": "2024-10-25 11:00:00"
+      },
+      {
+        "doctor_availability_type": "Onsite",
+        "doctor_availability_day_hour": "2024-11-01 14:00:00"
+      },
+      {
+        "doctor_availability_type": "Online/Onsite",
+        "doctor_availability_day_hour": "2024-11-10 09:00:00"
+      }
+        ]
     ```
+  * **Response Body:**
+    ```json
+    {
+    "message": "Doctor availability added successfully"
+    }
     ---
 
 27. **Doctor Availability Deletion:** `/doctor/availability/delete/{availabilityId}`
@@ -724,7 +747,28 @@
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     * `Content-Type: application/json`
-    ---
+  * **Request Body:**
+    ```json
+        {
+    "appointmentIds": [
+      1,2,3,4
+      ]
+      }
+    ```
+  * **Response Body:**
+    ```json
+        {
+        "deleted": [
+            4
+        ],
+        "failed": [
+          1,
+          2,
+          3
+      ],
+      "message": "Some appointments could not be deleted."
+      }     
+---
 
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
   * **Method:** PUT

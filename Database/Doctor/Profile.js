@@ -91,24 +91,27 @@ const retrieveDoctorAppointments = async (doctorId) => {
     try {
         const query = 
        `SELECT
-            a.appointment_patient_id,
-            a.appointment_doctor_id,
-            a.appointment_availability_slot,
-            a.appointment_type,
-            a.appointment_duration,
-            a.appointment_complaint,
-            a.appointment_parent_reference,
-            a.appointment_settings_type,
-            u.user_first_name,
-            u.user_last_name,
-            da.doctor_availability_day_hour
-        FROM
-            appointment a
-        JOIN users u ON a.appointment_patient_id = u.user_id
-        JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
-        WHERE
-            a.appointment_doctor_id = $1 AND
-            a.appointment_status = $2`;
+                a.appointment_patient_id,
+                a.appointment_doctor_id,
+                a.appointment_availability_slot,
+                a.appointment_type,
+                a.appointment_duration,
+                a.appointment_complaint,
+                a.appointment_parent_reference,
+                a.appointment_settings_type,
+                p.user_first_name AS patient_first_name,
+                p.user_last_name AS patient_last_name,
+                d.user_first_name AS doctor_first_name,
+                d.user_last_name AS doctor_last_name,
+                da.doctor_availability_day_hour
+            FROM
+                appointment a
+            JOIN users p ON a.appointment_patient_id = p.user_id
+            JOIN users d ON a.appointment_doctor_id = d.user_id
+            JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
+            WHERE
+                a.appointment_doctor_id = $1 AND
+                a.appointment_status = $2`;
 
         const result = await pool.query(query, [doctorId, 'Approved']);
         if (result.rows.length) {
@@ -282,24 +285,27 @@ const retrievePendingAppointments = async (doctorId) => {
     try {
         const query = 
                 `SELECT
-            a.appointment_patient_id,
-            a.appointment_doctor_id,
-            a.appointment_availability_slot,
-            a.appointment_type,
-            a.appointment_duration,
-            a.appointment_complaint,
-            a.appointment_parent_reference,
-            a.appointment_settings_type,
-            u.user_first_name,
-            u.user_last_name,
-            da.doctor_availability_day_hour
-        FROM
-            appointment a
-        JOIN users u ON a.appointment_patient_id = u.user_id
-        JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
-        WHERE
-            a.appointment_doctor_id = $1 AND
-            a.appointment_status = $2`;
+                a.appointment_patient_id,
+                a.appointment_doctor_id,
+                a.appointment_availability_slot,
+                a.appointment_type,
+                a.appointment_duration,
+                a.appointment_complaint,
+                a.appointment_parent_reference,
+                a.appointment_settings_type,
+                p.user_first_name AS patient_first_name,
+                p.user_last_name AS patient_last_name,
+                d.user_first_name AS doctor_first_name,
+                d.user_last_name AS doctor_last_name,
+                da.doctor_availability_day_hour
+            FROM
+                appointment a
+            JOIN users p ON a.appointment_patient_id = p.user_id
+            JOIN users d ON a.appointment_doctor_id = d.user_id
+            JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
+            WHERE
+                a.appointment_doctor_id = $1 AND
+                a.appointment_status = $2`;
 
         const result = await pool.query(query, [doctorId, 'Pending']);
         if (result.rows.length) {

@@ -25,37 +25,13 @@ const pool = new pg.Pool({
         console.error('Database connection error', error.stack);
     }
 })();
+const deleteAppointment = async (appointmentId) => {
+    const query = `
+      DELETE FROM doctor_availability
+      WHERE doctor_availability_id = $1
+    `;
+  
+    await pool.query(query, [appointmentId]);
+  };
 
-const checkDoctorAvailability = async (doctorId, availabilityId) => {
-    try {
-        const result = await pool.query('SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_status = $2 AND doctor_availability_id = $3', [doctorId, true, availabilityId]);
-        if (result.rows.length) {
-            console.log('Doctor availability is available', result.rows);
-            return true;
-        }
-        console.log('Doctor availability is already not available');
-        return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
-
-const deleteAvailability = async (doctorId, availabilityId) => {
-    try {
-        const result = await pool.query('DELETE FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_status = $2 AND doctor_availability_id = $3 RETURNING *',
-             [doctorId, true, availabilityId]
-        );
-        if (result.rows.length) {
-            console.log('Doctor availability deleted successfully', result.rows);
-            return true;
-        }
-        console.log('Could not delete doctor availability');
-        return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
-
-module.exports = { checkDoctorAvailability, deleteAvailability };
+module.exports = { deleteAppointment };

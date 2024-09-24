@@ -5,8 +5,8 @@ const saltRounds = 10;
 
 const patientRegister = async (req, res) => {
     let message = '';
-    const { fName, lName, email, password, gender, phone, birthDay } = req.body;
-    if (!fName || !lName || !email || !password || !gender || !phone || !birthDay) {
+    const { fName, lName, email, password, gender, phone, birthDate } = req.body;
+    if (!fName || !lName || !email || !password || !gender || !phone || !birthDate) {
         message = 'Please fill all the fields';
         console.log(message);
         return res.status(404).json({ message });
@@ -32,7 +32,7 @@ const patientRegister = async (req, res) => {
         gender: req.body.gender,
         role: 'Patient',
         password: hashedPassword,
-        birthDay: req.body.birthDay
+        birthDate: req.body.birthDate
     };
     const patient = await database.insertPatient(user);
     if (patient) {

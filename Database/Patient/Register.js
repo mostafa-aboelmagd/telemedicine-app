@@ -46,7 +46,7 @@ const insertPatient = async (user) => {
         await pool.query('BEGIN');
         const userResult = await pool.query(
             'INSERT INTO users(user_first_name, user_last_name, user_email, user_phone_number, user_gender, user_role, user_password_hash, user_birth_date) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-            [user.fName, user.lName, user.email, user.phone, user.gender, user.role, user.password, user.birthDay]
+            [user.fName, user.lName, user.email, user.phone, user.gender, user.role, user.password, user.birthDate]
         );
         if (!userResult.rows.length) {
             console.log('User not added');
