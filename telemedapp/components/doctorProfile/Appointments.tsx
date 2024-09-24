@@ -98,7 +98,11 @@ const Appointments = () => {
       <div className="flex flex-col gap-4">
         <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
           {userImage}
-          <p className="text-blue-500 mb-1 font-semibold">{`${profileData.firstName} ${profileData.lastName}`}</p>
+          <p className="text-blue-500 mb-1 font-semibold">{`${
+            profileData && profileData?.firstName && profileData.firstName
+          } ${
+            profileData && profileData?.lastName && profileData.lastName
+          }`}</p>
           <div className="flex gap-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -129,26 +133,14 @@ const Appointments = () => {
       <div className="flex flex-col max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
         <div className="flex-initial m-5 bg-white rounded-xl relative ">
           <div className="flex pt-4 mb-3">
-            <Link href="/patientProfile/view" className="font-bold ml-7 w-1/4">
-              Personal Information
+            <Link href="/" className="text-blue-500 font-bold ml-7 w-1/2">
+              Personal Info
             </Link>
             <Link
-              href="/patientProfile/paymentInfo"
-              className="font-bold ml-7 mr-7 md:mr-0 w-1/4"
+              href="/doctorProfile/timeSlots"
+              className="font-bold ml-7 mr-7 min-[880px]:mr-0 w-1/2"
             >
-              Payment Information
-            </Link>
-            <Link
-              href="/patientProfile/Prescriptions"
-              className=" font-bold ml-7 w-1/4"
-            >
-              Prescriptions
-            </Link>
-            <Link
-              href="/patientProfile/patientDocuments"
-              className="font-bold ml-7 mr-7 md:mr-0 w-1/4"
-            >
-              Documents
+              Time Slots
             </Link>
           </div>
           <div className="flex">

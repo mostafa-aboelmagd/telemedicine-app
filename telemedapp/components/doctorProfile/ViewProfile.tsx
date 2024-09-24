@@ -13,7 +13,7 @@ function ViewProfile() {
     phone: "",
     email: "",
     gender: "",
-    birthYear: "",
+    birthDate: "",
     residenceCountry: "",
     specialization: "",
     languages: "",
@@ -27,7 +27,7 @@ function ViewProfile() {
     phone: "",
     email: "",
     gender: "",
-    birthYear: "",
+    birthDate: "",
     residenceCountry: "",
     specialization: "",
     languages: [],
@@ -39,10 +39,10 @@ function ViewProfile() {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    if(!token) {
+    if (!token) {
       window.location.href = "/auth/signin";
     }
-
+    
     else if(Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
       localStorage.clear();
       window.location.href = "/auth/signin";
@@ -72,7 +72,7 @@ function ViewProfile() {
     { name: "lastName", title: "Last Name" },
     { name: "phone", title: "Phone Number" },
     { name: "email", title: "Email" },
-    { name: "birthYear", title: "Year Of Birth" },
+    { name: "birthDate", title: "Date Of Birth" },
     { name: "gender", title: "Gender" },
     { name: "residenceCountry", title: "Residence Country" },
     { name: "specialization", title: "Specialization" },
@@ -170,7 +170,10 @@ function ViewProfile() {
                   </Link>
                 </div>
                 <div className="mt-5 mb-3">
-                  <button onClick={handleSignOut} className="font-medium p-3 border border-solid text-red-600 border-red-600 rounded-full">
+                  <button
+                    onClick={handleSignOut}
+                    className="font-medium p-3 border border-solid text-red-600 border-red-600 rounded-full"
+                  >
                     Sign Out
                   </button>
                 </div>

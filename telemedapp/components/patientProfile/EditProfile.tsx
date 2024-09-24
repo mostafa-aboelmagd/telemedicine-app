@@ -5,6 +5,8 @@ import Link from "next/link";
 import InputComponent from "@/components/auth/InputComponent";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
+import { Calendar } from "primereact/calendar";
+import { format } from "date-fns"; // For formatting dates (optional)
 
 function EditProfile() {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
@@ -15,7 +17,7 @@ function EditProfile() {
     phone: "",
     languages: [],
     gender: "",
-    birthYear: "",
+    birthDate: "",
   });
 
   const [formData, setFormData] = useState({
@@ -24,7 +26,7 @@ function EditProfile() {
     phone: "",
     languages: "",
     gender: "",
-    birthYear: "",
+    birthDate: "",
   });
 
   const [errorMessage, setErrorMessage] = useState({
@@ -32,7 +34,7 @@ function EditProfile() {
     lastName: "",
     phone: "",
     languages: "",
-    birthYear: "",
+    birthDate: "",
   });
 
   const [loading, setLoading] = useState(true);
@@ -47,7 +49,7 @@ function EditProfile() {
 
   useEffect(() => {
     token = localStorage.getItem("jwt");
-    if(!token) {
+    if (!token) {
       window.location.href = "/auth/signin";
     }
 
@@ -88,7 +90,7 @@ function EditProfile() {
       title: "Languages (Space Between Each Language)",
       type: "text",
     },
-    { name: "birthYear", title: "Birth Year", type: "number" },
+    { name: "birthDate", title: "Birth Date", type: "number" },
   ];
 
   const submitButtonClass = [
@@ -156,7 +158,7 @@ function EditProfile() {
   const validatePhone = () => {
     const phonePattern = /^-?\d+$/;
     let changedValidation = false;
-    if (formData.phone && (!phonePattern.test(formData.phone))) {
+    if (formData.phone && !phonePattern.test(formData.phone)) {
       if (errorMessage.phone === "") {
         changedValidation = true;
       }
@@ -200,33 +202,55 @@ function EditProfile() {
     }
   };
 
-  const validateBirthYear = () => {
-    const birthYearPattern = /^-?\d+$/;
+  const handleDateChange = (e: any) => {
+    const { value } = e.target;
+    setFormData((prevForm) => ({
+      ...prevForm,
+      birthDate: value,
+    }));
+    setChangedField(() => "birthDate");
+  };
+  const validateBirthDate = () => {
     let changedValidation = false;
 
-    if (
-      formData.birthYear &&
-      (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011 || !birthYearPattern.test(formData.birthYear))
-    ) {
-      if (errorMessage.birthYear === "") {
+    if (formData.birthDate) {
+      const selectedDate = new Date(formData.birthDate);
+      const today = new Date();
+      let age = today.getFullYear() - selectedDate.getFullYear();
+      const m = today.getMonth() - selectedDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < selectedDate.getDate())) {
+        age--;
+      }
+
+      if (age < 13) {
+        // Example: User must be at least 13 years old
+        if (errorMessage.birthDate === "") {
+          changedValidation = true;
+        }
+        setErrorMessage((prevError) => ({
+          ...prevError,
+          birthDate: "You must be at least 13 years old.",
+        }));
+      } else {
+        if (errorMessage.birthDate !== "") {
+          changedValidation = true;
+        }
+        setErrorMessage((prevError) => ({ ...prevError, birthDate: "" }));
+      }
+    } else {
+      if (errorMessage.birthDate === "") {
         changedValidation = true;
       }
       setErrorMessage((prevError) => ({
         ...prevError,
-        birthYear: "Age Isn't Valid",
+        birthDate: "Birth Date is required.",
       }));
-    } else {
-      if (errorMessage.birthYear !== "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({ ...prevError, birthYear: "" }));
     }
 
     if (changedValidation && validateFieldsChosen()) {
       setFormData((prevForm) => ({ ...prevForm }));
     }
   };
-
   const validateForm = () => {
     switch (changedField) {
       case "firstName":
@@ -245,8 +269,8 @@ function EditProfile() {
         validateLanguages();
         break;
 
-      case "birthYear":
-        validateBirthYear();
+      case "birthDate":
+        validateBirthDate();
         break;
 
       default:
@@ -391,19 +415,47 @@ function EditProfile() {
                   return (
                     <div key={field.title} className="mb-3 max-w-80">
                       <p className="font-semibold">{field.title}</p>
-                      <InputComponent
-                        label=""
-                        type={field.type}
-                        name={field.name}
-                        placeholder={`Enter ${field.title}`}
-                        value={
-                          formData[field.name as keyof typeof formData] ?? ""
-                        }
-                        onChange={handleChange}
-                        errorText={
-                          errorMessage[field.name as keyof typeof errorMessage]
-                        }
-                      />
+                      {field.name === "birthDate" ? (
+                        <>
+                          <Calendar
+                            value={
+                              formData.birthDate
+                                ? new Date(formData.birthDate)
+                                : null
+                            }
+                            onChange={handleDateChange}
+                            showIcon
+                            dateFormat="yy-mm-dd"
+                            placeholder="yyyy-mm-dd"
+                            maxDate={new Date()}
+                            yearRange="1900:2023"
+                            className={`bg-neutral-100 w-full py-4 px-6 text-base rounded-lg border border-solid border-neutral-300 grey-100 outline-none transition-[border-color] focus:border-sky-500 focus:bg-neutral-50 ${
+                              errorMessage.birthDate ? "p-invalid" : ""
+                            }`}
+                          />
+                          {errorMessage.birthDate && (
+                            <small className="text-xs mt-1 text-red-700 font-semibold">
+                              {errorMessage.birthDate}
+                            </small>
+                          )}
+                        </>
+                      ) : (
+                        <InputComponent
+                          label=""
+                          type={field.type}
+                          name={field.name}
+                          placeholder={`Enter ${field.title}`}
+                          value={
+                            formData[field.name as keyof typeof formData] ?? ""
+                          }
+                          onChange={handleChange}
+                          errorText={
+                            errorMessage[
+                              field.name as keyof typeof errorMessage
+                            ]
+                          }
+                        />
+                      )}
                     </div>
                   );
                 })}

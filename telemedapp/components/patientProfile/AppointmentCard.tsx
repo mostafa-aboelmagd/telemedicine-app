@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import stylesButton from "../navbarComp/navbar.module.css";
 import { FaUserCircle } from "react-icons/fa";
+import { formatDate } from "../../utils/date";
 const AppointmentCard = ({
   appointment,
   profileData,
@@ -11,13 +12,6 @@ const AppointmentCard = ({
   const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
 
   const [userRole, setUserRole] = useState<any>();
-  const selectedDate = { date: "2024-09-10" };
-  const selectedSlot = "09:00";
-  const appointmentData = {
-    appointment_date_time: `${selectedDate.date} ${selectedSlot}`,
-    appointment_duration: appointment.appointment_duration || "30 minutes",
-    appointment_type: appointment.appointment_type ? "Remote" : "Remote",
-  };
 
   useEffect(() => {
     setUserRole(localStorage.getItem("userRole"));
@@ -48,7 +42,7 @@ const AppointmentCard = ({
             userImage
           )}
           <div className="flex flex-col">
-            <h2 className="text-lg font-semibold">{` ${appointment.user_first_name} ${appointment.user_last_name}`}</h2>
+            <h2 className="text-lg font-semibold">{` ${appointment.doctor_first_name} ${appointment.doctor_last_name}`}</h2>
             <p className="text-sm text-[#035fe9]">
               {appointment.doctor_specialization || "Specialist"}
             </p>
@@ -58,9 +52,10 @@ const AppointmentCard = ({
         <div className="flex items-center space-x-4">
           {userImage}
           <div className="flex flex-col">
-            <h2 className="text-lg font-semibold">{` ${appointment.user_first_name} ${appointment.user_last_name}`}</h2>
+            <h2 className="text-lg font-semibold">{` ${appointment.doctor_first_name} ${appointment.doctor_last_name}`}</h2>
             <p className="text-sm text-[#035fe9]">
-              {appointment.doctor_specialization || "Specialist"}
+              {appointment.doctor_specialization &&
+                appointment.doctor_specialization}
             </p>
           </div>
         </div>
@@ -69,21 +64,25 @@ const AppointmentCard = ({
       {/* Appointment Details */}
       <div className="flex flex-col space-y-2">
         <div className="text-sm text-gray-600">
-          <strong>
+          {/* <strong>
             Dr:
             {` ${appointment.doctor_first_name} ${appointment.doctor_last_name}`}
-          </strong>
+          </strong> */}
           <p className="flex flex-row justify-start gap-4 items-center ">
             <p>
-              <strong>Duration:</strong> {appointmentData.appointment_duration}
+              <strong>Duration:</strong>{" "}
+              {appointment.appointment_duration &&
+                appointment.appointment_duration}
             </p>
             <p>
-              <strong>Type:</strong> {appointmentData.appointment_type}
+              <strong>Type:</strong>{" "}
+              {appointment.appointment_type && appointment.appointment_type}
             </p>
           </p>
           <p>
             <strong>Date & Time:</strong>{" "}
-            {appointmentData.appointment_date_time}
+            {appointment.appointment_date_time &&
+              formatDate(appointment.appointment_date_time)}
           </p>
         </div>
       </div>
