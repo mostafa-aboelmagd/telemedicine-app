@@ -6,21 +6,50 @@ import { StatusBar } from 'expo-status-bar';
 import SafeArea from '../components/safeArea.js';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import CustomTitle from '../components/title.js';
+import { NEXT_PUBLIC_SERVER_NAME } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
 
-    const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-  const signIn = () => {
-    if (email && password) {
-      navigation.navigate('home page');
-    } else {
-      Alert.alert('You must enter your email and password!')
-    }
-  }
 
+  const signIn = async () => {
+    if (email && password) {
+      try {
+        const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(`Login failed: ${errorMessage}`);
+        }
+
+        const responseData = await response.json();
+        const token = responseData.token; // Assuming the server returns a token
+        console.log(responseData)
+        // Store the token (e.g., in AsyncStorage or localStorage)
+        await AsyncStorage.setItem('userToken', token);
+
+        // Navigate to the home page
+        navigation.navigate('home page');
+      } catch (error) {
+        console.error('Login error:', error);
+        Alert.alert('Login failed', error.message);
+      }
+    } else {
+      Alert.alert('You must enter your email and password!');
+    }
+  };
   const register = () => {
     navigation.navigate('register');
   }
@@ -42,7 +71,7 @@ export default function Login({ navigation }) {
             keyboardType='email-address'
             inputType='email'
             value={email}
-            onChange={setEmail}
+            onChangeText={setEmail}
             style={styles.input} 
           />
         </View>
@@ -52,7 +81,7 @@ export default function Login({ navigation }) {
             placeholder='Your Password' 
             secureTextEntry={!showPassword}
             value={password}
-            onChange={setPassword}
+            onChangeText={setPassword}
             style={styles.input} 
           />
           <TouchableOpacity

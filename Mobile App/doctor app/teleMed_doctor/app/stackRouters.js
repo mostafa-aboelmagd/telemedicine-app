@@ -16,15 +16,17 @@ import History from './screens/history';
 import Availability from './screens/availability';
 import App_Detials from './screens/app_details';
 import Documents from './screens/documents';
+import Authorization from './screens/authintication';
 
 const Stack = createStackNavigator();
 
 export default function StackRouters() {
   return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="profile">
+        <Stack.Navigator initialRouteName="sign in">
             <Stack.Screen name='index' component={Index} options={{ headerShown : false}} />
             <Stack.Screen name='sign in' component={SignIn} options={{ headerShown : false}} />
+            <Stack.Screen name='authintication' component={Authorization} options={{ headerShown : false}} />
             <Stack.Screen name='register' component={Register} options={{ headerShown : false}} />
             <Stack.Screen name='pending' component={Pending} options={{ headerShown : false}} />
             <Stack.Screen name='visitor support' component={VSupport} options={{ headerShown : false}} />

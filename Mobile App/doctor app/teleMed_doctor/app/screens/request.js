@@ -25,7 +25,7 @@ export default function Request ({ navigation }) {
   const [resquest, setRequest] = useState('')
 
   const response = (userToken, appointmentId, action) => {
-    state.push=[appointmentId, action]
+    state.push([appointmentId, action])
     console.log(state)
     try {
         const response = fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/AppointmentResponse/${appointmentId}/${action}/`, {
@@ -35,15 +35,17 @@ export default function Request ({ navigation }) {
                 'Content-Type': 'application/json',
             }
         });
-        
+        // Modification
+        console.log(response.status);
         if (!response.ok) {
-            throw new Error('Failed to sent request');
+          if(response.status !== 200){
+            throw new Error('Failed to sent request');}
         }
+        //==============================
         const result = response.json();
         setRequest(result); // Save the fetched data to state
         console.log(result)
     } catch (err) {
-        setError(err.message);
         console.log(err.message)
     }
 
@@ -51,7 +53,6 @@ export default function Request ({ navigation }) {
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // Replace with your actual token
   const userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImVtYWlsIjoiZG9jdG9yMkB0ZXN0LmNvbSIsInJvbGUiOiJEb2N0b3IiLCJmaXJzdE5hbWUiOiJFdGhhbiIsImxhc3ROYW1lIjoiV2lsc29uIiwiaWF0IjoxNzI3MTEyMjg4LCJleHAiOjE3MjcxOTg2ODh9.gC5VMU-lu73MebWCs0MR1ByaYQLF3SWBqhC409HIcvk'; 
@@ -60,6 +61,7 @@ export default function Request ({ navigation }) {
       // Function to fetch data
       const fetchData = async () => {
           try {
+            // console.log(NEXT_PUBLIC_SERVER_NAME)
               const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/Doctor/Profile/PendingRequests`, {
                   method: 'GET',
                   headers: {
@@ -75,8 +77,7 @@ export default function Request ({ navigation }) {
               setData(result); // Save the fetched data to state
               // console.log(result)
           } catch (err) {
-              setError(err.message);
-              console.log(err.message)
+              console.log(err)
           } finally {
               setLoading(false); // End the loading state
           }
@@ -90,7 +91,7 @@ return (
       <View style={{alignItems: 'center'}}>      
         <CustomTitle titleStyle={{marginTop: '10%'}}>Requests</CustomTitle>
 
-        {!loading ? (data ? data.forEach((item, id) => 
+        {!loading ? (data ? data.map((item, id) => 
         <View key={id}>
           <View style={[styles.card]}>
             <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
@@ -104,7 +105,10 @@ return (
 
             <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
               <Text style={styles.name}>{item.patient_first_name} {item.patient_last_name}</Text>
-              <Text>{item.doctor_availability_day_hour.slice(0,10)} {item.doctor_availability_day_hour.slice(11,19)}</Text>
+              <View style={{alignItems: 'flex-end'}}>
+                <Text>{item.doctor_availability_day_hour.slice(0,10)}</Text>
+                <Text>{item.doctor_availability_day_hour.slice(11,19)}</Text>
+              </View>
             </View>
 
             <Text>{item.appointment_complaint}</Text>
