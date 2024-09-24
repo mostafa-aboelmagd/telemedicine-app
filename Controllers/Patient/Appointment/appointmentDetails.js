@@ -24,7 +24,7 @@ const AppointmentDetails = async (req, res) => {
         medications,
         medicalDocuments,
       };
-  
+      
       return res.json({ appointment: formattedAppointment });
     } catch (error) {
       console.error('Error retrieving appointment details:', error);

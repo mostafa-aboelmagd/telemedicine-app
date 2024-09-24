@@ -54,10 +54,28 @@ const retrievePatientInfo = async (id, email) => {
 // not tested with new data model
 const getPatientRequests = async (patientId) => {
     const result = await pool.query(
-      `SELECT * 
-       FROM appointment 
-       WHERE appointment_patient_id = $1 
-       AND appointment_status IN ('Pending', 'Declined')`,
+      `SELECT
+    a.appointment_patient_id,
+    a.appointment_doctor_id,
+    a.appointment_availability_slot,
+    a.appointment_type,
+    a.appointment_duration,
+    a.appointment_complaint,
+    a.appointment_parent_reference,
+    a.appointment_settings_type,
+    p.user_first_name AS patient_first_name,
+    p.user_last_name AS patient_last_name,
+    d.user_first_name AS doctor_first_name,
+    d.user_last_name AS doctor_last_name,
+    da.doctor_availability_day_hour
+FROM
+    appointment a
+JOIN users p ON a.appointment_patient_id = p.user_id
+JOIN users d ON a.appointment_doctor_id = d.user_id
+JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
+WHERE
+    a.appointment_patient_id = $1
+    AND a.appointment_status IN ('Pending', 'Declined')`,
       [patientId]
     );
   
@@ -66,9 +84,28 @@ const getPatientRequests = async (patientId) => {
 
   const retrievePatientAppointments = async (patientId) => {
     const result = await pool.query(
-      `SELECT * 
-       FROM appointment 
-       WHERE appointment_patient_id = $1 AND appointment_status = $2`,
+          `SELECT
+        a.appointment_patient_id,
+        a.appointment_doctor_id,
+        a.appointment_availability_slot,
+        a.appointment_type,
+        a.appointment_duration,
+        a.appointment_complaint,
+        a.appointment_parent_reference,
+        a.appointment_settings_type,
+        p.user_first_name AS patient_first_name,
+        p.user_last_name AS patient_last_name,
+        d.user_first_name AS doctor_first_name,
+        d.user_last_name AS doctor_last_name,
+        da.doctor_availability_day_hour
+    FROM
+        appointment a
+    JOIN users p ON a.appointment_patient_id = p.user_id
+    JOIN users d ON a.appointment_doctor_id = d.user_id
+    JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
+    WHERE
+        a.appointment_patient_id = $1 AND
+        a.appointment_status = $2`,
       [patientId,'Approved']
     );
   
