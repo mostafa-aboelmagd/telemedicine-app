@@ -626,19 +626,19 @@
     ```json
       [
       {
-          "appointment_patient_id": 6,
-          "appointment_doctor_id": 13,
-          "appointment_availability_slot": 5,
-          "appointment_type": "Followup",
-          "appointment_duration": 60,
-          "appointment_complaint": "headache",
-          "appointment_parent_reference": null,
-          "appointment_settings_type": null,
-          "patient_first_name": "John",
-          "patient_last_name": "Doe",
-          "doctor_first_name": "samy",
-          "doctor_last_name": "ali",
-          "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
+        "appointment_patient_id": 3,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 54,
+        "appointment_type": "Followup",
+        "appointment_duration": 30,
+        "appointment_complaint": "I have a headache",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": "Onsite",
+        "patient_first_name": "mohamed ",
+        "patient_last_name": "salem",
+        "doctor_first_name": "samy",
+        "doctor_last_name": "ali",
+        "doctor_availability_day_hour": "2024-11-26T12:00:00.000Z"
       }
       ]
     ```
