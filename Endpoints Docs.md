@@ -37,6 +37,8 @@
 29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
 30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
 (Tested)
+31. **Patient view appointments history:** `patient/appointment/appointmentsHistory`
+(Tested)
 
 ---
 ---
@@ -822,3 +824,31 @@
     }
     ```
     ---
+31. **Patient view appointments history:** `patient/appointment/appointmentsHistory`
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
+  * **Response Body:**
+    ```json
+    {
+        "appointments": [
+            {
+                "appointment_patient_id": 3,
+                "appointment_doctor_id": 13,
+                "appointment_availability_slot": 55,
+                "appointment_type": "Followup",
+                "appointment_duration": 30,
+                "appointment_complaint": "I have a headache",
+                "appointment_parent_reference": null,
+                "appointment_settings_type": "Onsite",
+                "patient_first_name": "mohamed ",
+                "patient_last_name": "salem",
+                "doctor_first_name": "samy",
+                "doctor_last_name": "ali",
+                "doctor_specialization": "Cardiology",
+                "doctor_availability_day_hour": "2024-11-17T07:00:00.000Z"
+            }
+        ]
+    }
+    ```
