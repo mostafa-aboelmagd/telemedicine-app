@@ -103,14 +103,6 @@ function ViewProfile() {
             <button
               className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
               onClick={() =>
-                (window.location.href = "/doctorProfile/requests")
-              }
-            >
-              View Requests
-            </button>
-            <button
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
-              onClick={() =>
                 (window.location.href = "/doctorProfile/appointments")
               }
             >
@@ -118,20 +110,27 @@ function ViewProfile() {
             </button>
           </div>
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[880px]:basis-7/12 min-[880px]:max-w-full">
-            <div className="flex pt-4 mb-3">
-              <Link href="/" className="text-blue-500 font-bold ml-7 w-1/2">
+            <div className="flex pt-4 mb-3 justify-between gap-2">
+              <Link href="/" className="text-blue-500 font-bold ml-7">
                 Personal Info
               </Link>
               <Link
                 href="/doctorProfile/timeSlots"
-                className="font-bold ml-7 mr-7 min-[880px]:mr-0 w-1/2"
+                className="font-bold"
               >
                 Time Slots
               </Link>
+              <Link
+                href="/doctorProfile/requests"
+                className="font-bold mr-7"
+              >
+                Pending Requests
+              </Link>
             </div>
             <div className="flex">
-              <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
-              <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
+              <hr className="bg-blue-500 border-none h-0.5 w-1/3"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
             </div>
             <div className="p-7">
               <div className="flex flex-col min-[450px]:flex-row min-[450px]:gap-10 lg:gap-24 xl:gap-56">

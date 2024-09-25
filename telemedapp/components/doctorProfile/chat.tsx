@@ -52,9 +52,19 @@ function Chat() {
               <Image className="inline-block h-10 w-10 rounded-full" src={userImage} alt="Doctor Image"/>
               <p className="font-bold">Mahmoud</p>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
+            <button
+              onClick={() =>(window.location.href = "/doctorProfile/requests")}>
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 hover:scale-105 hover:cursor-pointer"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+            </button>
           </div>
         </div>
 
