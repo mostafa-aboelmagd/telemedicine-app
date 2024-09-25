@@ -34,6 +34,7 @@ const retrievePatientAppointmentsHistory = async (patientId) => {
         a.appointment_doctor_id,
         a.appointment_availability_slot,
         a.appointment_type,
+        a.appointment_id,
         a.appointment_duration,
         a.appointment_complaint,
         a.appointment_parent_reference,
