@@ -42,9 +42,9 @@ export default function Login({ navigation }) {
       </View>
     );
   }
-  if(userToken){
-    navigation.navigate('home page')
-  }
+  // if(userToken){
+  //   navigation.navigate('home page')
+  // }
   const signIn = async () => {
     if (email && password) {
       try {

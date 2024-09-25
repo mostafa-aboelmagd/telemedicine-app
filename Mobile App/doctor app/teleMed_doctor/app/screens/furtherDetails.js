@@ -5,10 +5,13 @@ import CustomScroll from '../components/scroll';
 import CustomTitle from '../components/title';
 import Footer from '../components/footer';
 import Custombutton from '../components/button';
+import { useRoute } from '@react-navigation/native'
 
 const { height } = Dimensions.get('window'); // Get the window height
 
 const FurtherDetails = ({ navigation }) => {
+    const route = useRoute()
+    const { report , diagnosis , updatedInputs, appointment_id } = route.params
     const [operations, setOperations] = useState('');
 
     const clearOperationsInput = () => {
@@ -24,7 +27,15 @@ const FurtherDetails = ({ navigation }) => {
     const clearSpecialityReferralNotes = () => {
         setSpecialityReferralNotes(''); // Clear the operations input
     };
-
+    const toBeSent ={
+        report,
+        diagnosis,
+        updatedInputs,
+        operations,
+        specialityReferral,
+        specialityReferralNotes,
+        appointment_id
+    }
     return (
         <SafeAreaView style={styles.safeArea}>
             <CustomScroll>
@@ -90,7 +101,7 @@ const FurtherDetails = ({ navigation }) => {
                             </TouchableOpacity>
                         )}
                     </View>
-                    <Custombutton>
+                    <Custombutton onPress={()=>{console.log(toBeSent);}}>
                         Submit
                     </Custombutton>
                 </View>

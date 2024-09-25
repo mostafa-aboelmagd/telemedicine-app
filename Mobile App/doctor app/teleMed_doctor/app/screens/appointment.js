@@ -26,8 +26,8 @@ export default function Appointment({ navigation }) {
       lname: lname
     })
   }
-  const submitResults = (patientName) => {
-    navigation.navigate('submitResults', { patientName })
+  const submitResults = (patientFirstName , patientLastName, appointment_id) => {
+    navigation.navigate('submitResults', { patientFirstName , patientLastName, appointment_id })
   }
 
   const acceptedAppointmetns = async () => {
@@ -40,7 +40,6 @@ export default function Appointment({ navigation }) {
 
         },
       });
-      // console.log(response);
 
       if (!response.ok) {
         console.log(response);
@@ -48,7 +47,7 @@ export default function Appointment({ navigation }) {
       }
 
       const result = await response.json();
-      // console.log(result)
+      console.log(result)
 
       setData(result);
     } catch (error) {
@@ -97,7 +96,7 @@ export default function Appointment({ navigation }) {
               <Text>{item.appointment_complaint}</Text>
             </View>
             
-            <Custombutton textStyle={{fontSize: 15}} buttonStyle={{width: '35%'}}>
+            <Custombutton textStyle={{fontSize: 15}} buttonStyle={{width: '35%'}} onPress={()=>{submitResults(item.patient_first_name , item.patient_last_name, item.appointment_id)}}>
               Submit results
             </Custombutton>
           </View> ) 
