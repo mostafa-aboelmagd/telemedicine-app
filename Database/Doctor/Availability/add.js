@@ -25,44 +25,49 @@ const pool = new pg.Pool({
         console.error('Database connection error', error.stack);
     }
 })();
-
-const checkDoctorAvailability = async (doctorId, availabilityDayHour) => {
+const insertTimeslots = async (data, doctorId) => {
     try {
-        const result = await pool.query(
-            'SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_day_hour = $2 AND doctor_availability_status = $3',
-            [doctorId, availabilityDayHour, true]
-        );
-        if (result.rows.length) {
-            console.log('Doctor availability already exists', result.rows);
-            return false;
+      const client = await pool.connect(); // Create a connection to the database pool
+  
+      try {
+        await client.query('BEGIN'); // Start a transaction
+  
+        // Loop through each timeslot code in the data array
+        for (const timeslotCode of data) {
+          const [day_code, time_code, type_code] = timeslotCode.split('_'); // Extract number, type, and suffix
+  
+          // Validate extracted values (optional, consider input validation)
+          if (!day_code || !time_code || !type_code) {
+            throw new Error('Invalid timeslot code format');
+          }
+  
+          const timeslotData = {
+            timeslot_code: `${day_code}_${time_code}`, // Combine number and suffix
+            timeslot_type: type_code,
+            timeslot_doctor_id: doctorId,
+          };
+  
+          // Insert the timeslot data
+          await client.query(
+            `INSERT INTO timeslots (timeslot_code, timeslot_type, timeslot_doctor_id) 
+             VALUES ($1, $2, $3)`,
+            [timeslotData.timeslot_code, timeslotData.timeslot_type, timeslotData.timeslot_doctor_id]
+          );
         }
-        console.log('Doctor is available at this time');
-        return true;
+  
+        await client.query('COMMIT'); // Commit the transaction
+        return true; // Indicate successful insertion
+  
+      } catch (error) {
+        await client.query('ROLLBACK'); // Rollback the transaction if error occurs
+        throw error; // Re-throw the error to be handled by the controller
+      } finally {
+        client.release(); // Release the connection back to the pool
+      }
+  
     } catch (error) {
-        console.error(error.stack);
-        return false;
+      console.error(error);
+      return false; // Indicate unsuccessful insertion
     }
-};
-
-const insertDoctorAvailability = async (data) => {
-    const {
-        doctor_availability_type,
-        doctor_availability_day_hour,
-      } = data;
-    const query = `
-      INSERT INTO doctor_availability (
-      doctor_availability_doctor_id,
-      doctor_availability_type,
-      doctor_availability_status,
-      doctor_availability_day_hour,
-      created_at,
-      updated_at
-    ) VALUES ($1, $2, $3, $4, NOW(), NOW())`;
-      const result = await pool.query(query, [
-        data.doctor_availability_doctor_id,
-        doctor_availability_type,
-        "Available", // Set default status in the query
-        doctor_availability_day_hour,
-    ]);
   };
-module.exports = { checkDoctorAvailability, insertDoctorAvailability};
+module.exports = { insertTimeslots};

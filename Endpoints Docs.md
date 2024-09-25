@@ -722,20 +722,13 @@
     * `Content-Type: application/json`
   * **Request Body:**
     ```json
-        [
-      {
-        "doctor_availability_type": "Online",
-        "doctor_availability_day_hour": "2024-10-25 11:00:00"
-      },
-      {
-        "doctor_availability_type": "Onsite",
-        "doctor_availability_day_hour": "2024-11-01 14:00:00"
-      },
-      {
-        "doctor_availability_type": "Online/Onsite",
-        "doctor_availability_day_hour": "2024-11-10 09:00:00"
-      }
-        ]
+      [
+    "1_01_S",
+    "2_02_L",
+    "3_03_M",
+    "4_04_S",
+    "5_05_L"
+      ]
     ```
   * **Response Body:**
     ```json
