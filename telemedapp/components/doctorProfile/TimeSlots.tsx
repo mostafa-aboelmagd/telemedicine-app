@@ -347,21 +347,28 @@ function TimeSlots() {
               My Appointments
             </button>
           </div>
-          <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[980px]:basis-7/12 min-[980px]:max-w-full">
-            <div className="flex pt-4 mb-3">
-              <Link href="/doctorProfile/view" className="font-bold ml-7 w-1/2">
+          <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[880px]:basis-7/12 min-[880px]:max-w-full">
+            <div className="flex pt-4 mb-3 justify-between gap-2">
+              <Link href="/" className="font-bold ml-7">
                 Personal Info
               </Link>
               <Link
                 href="/doctorProfile/timeSlots"
-                className="text-blue-500 font-bold ml-7 mr-7 min-[980px]:mr-0 w-1/2"
+                className="text-blue-500 font-bold"
               >
                 Time Slots
               </Link>
+              <Link
+                href="/doctorProfile/requests"
+                className="font-bold mr-7"
+              >
+                Pending Requests
+              </Link>
             </div>
             <div className="flex">
-              <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
-              <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+              <hr className="bg-blue-500 border-none h-0.5 w-1/3"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
             </div>
             <div className="p-7 relative">
               <div className="flex items-baseline flex-col justify-between ">

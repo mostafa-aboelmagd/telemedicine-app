@@ -132,23 +132,28 @@ const Appointments = () => {
 
       <div className="flex flex-col max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
         <div className="flex-initial m-5 bg-white rounded-xl relative ">
-          <div className="flex pt-4 mb-3">
-            <Link href="/" className="text-blue-500 font-bold ml-7 w-1/2">
-              Personal Info
-            </Link>
-            <Link
-              href="/doctorProfile/timeSlots"
-              className="font-bold ml-7 mr-7 min-[880px]:mr-0 w-1/2"
-            >
-              Time Slots
-            </Link>
-          </div>
-          <div className="flex">
-            <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
-            <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
-            <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
-            <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
-          </div>
+        <div className="flex pt-4 mb-3 justify-between gap-2">
+          <Link href="/" className="font-bold ml-7">
+            Personal Info
+          </Link>
+          <Link
+            href="/doctorProfile/timeSlots"
+            className="font-bold"
+          >
+            Time Slots
+          </Link>
+          <Link
+            href="/doctorProfile/requests"
+            className="font-bold mr-7"
+          >
+            Pending Requests
+          </Link>
+        </div>
+        <div className="flex">
+          <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+          <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+          <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+        </div>
         </div>
         <div className="flex flex-col m-4">
           {appointments?.length > 0 ? (

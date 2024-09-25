@@ -39,6 +39,8 @@ function SignInForm() {
           req.id = decodedToken.id;
           req.email = decodedToken.email;
           req.userRole = decodedToken.role;
+          req.firstName = decodedToken.firstName;
+          req.lastName = decodedToken.lastName;
           req.tokenExpiryDate = decodedToken.exp;
 
           return true;
@@ -107,6 +109,8 @@ function SignInForm() {
         localStorage.setItem("expiryDate", users.tokenExpiryDate);
         localStorage.setItem("userRole", users.userRole);
         localStorage.setItem("userId", users.id);
+        localStorage.setItem("firstName", users.firstName);
+        localStorage.setItem("lastName", users.lastName);
         window.location.href = "/";
       } else {
         console.log("Error During Token Authentication");
