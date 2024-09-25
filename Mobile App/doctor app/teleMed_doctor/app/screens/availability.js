@@ -76,7 +76,6 @@ export default function Availability ({ navigation }) {
         }
     }
 
-
     const edit = async () => {
             try {
                 const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/availability/add`, {
