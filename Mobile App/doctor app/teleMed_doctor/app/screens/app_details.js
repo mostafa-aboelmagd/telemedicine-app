@@ -1,24 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import SafeArea from '../components/safeArea';
-import { detials } from '../test/data';
 import CustomTitle from '../components/title';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const getToken = async () => {
-    try {
-        const token = await AsyncStorage.getItem('userToken');
-        if (token !== null) {
-            // Token retrieved
-            return token;
-        }
-    } catch (e) {
-        // error reading value
-        console.log('Error retrieving token', e);
-    }
-    return null;
-};
+import { getToken } from '../components/getToken';
 
 const fetchAppointmentDetails = async () => {
     try {
@@ -26,7 +11,7 @@ const fetchAppointmentDetails = async () => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${await getToken()}`,
+                'Authorization': `Bearer ${await getToken()}`,
 
             },
         });
@@ -43,13 +28,13 @@ const fetchAppointmentDetails = async () => {
 export default function App_Details({ navigation, route }) {
     const [appointmentDetails, setAppointmentDetails] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const appointmentId = route.params?.appointmentId; // Get appointment ID from navigation params
+    const {appId} = route.params; // Get appointment ID from navigation params
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setIsLoading(true); // Set loading state to true
-                const response = await fetchAppointmentDetails(appointmentId); // Call API with appointment ID
+                const response = await fetchAppointmentDetails(appId); // Call API with appointment ID
                 setAppointmentDetails(response.appointment); // Extract appointment data
                 setIsLoading(false); // Set loading state to false after successful fetch
             } catch (error) {
@@ -58,7 +43,7 @@ export default function App_Details({ navigation, route }) {
         };
 
         fetchData();
-    }, [appointmentId]); // Re-run useEffect when appointment ID changes
+    }, [appId]); // Re-run useEffect when appointment ID changes
 
     const documents = () => {
         navigation.navigate('documents');

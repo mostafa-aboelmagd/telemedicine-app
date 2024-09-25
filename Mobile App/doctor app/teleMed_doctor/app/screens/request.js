@@ -8,6 +8,8 @@ import CustomScroll from '../components/scroll';
 import Entypo from '@expo/vector-icons/Entypo';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env'
 import { appointments } from '../test/data';
+import { getToken } from '../components/getToken';
+
 
 export default function Request ({ navigation }) {
 
@@ -65,8 +67,8 @@ export default function Request ({ navigation }) {
               const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/Doctor/Profile/PendingRequests`, {
                   method: 'GET',
                   headers: {
-                      'Authorization': `Bearer ${userToken}`, // Set the token in the Authorization header
-                      'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${await getToken()}`,
+                    'Content-Type': 'application/json',
                   }
               });
               
