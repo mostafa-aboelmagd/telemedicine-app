@@ -4,14 +4,26 @@ import SafeArea from '../components/safeArea';
 import { doctorAv } from '../test/data';
 import CustomScroll from '../components/scroll';
 import CustomTitle from '../components/title';
+import { getToken } from '../components/getToken';
+import { NEXT_PUBLIC_SERVER_NAME} from '@env';
 
 export default function Availability ({ navigation }) {
 
     const slots = Object.entries(doctorAv)
-    const [isOnline, setIsonline] = useState('online')
+    const [isOnline, setIsonline] = useState('L')
+    const [selectedDay, setSelectedDay] = useState('')
     const online = () => {
-        isOnline == 'online' ? setIsonline('on-site')
-        : setIsonline('online')
+        isOnline == 'L' ? setIsonline('S')
+        : setIsonline('L')
+    }
+
+    const [added, setAdded] = useState([])
+    const [editedslot, setEditedslot] = useState('')
+
+    const slotSrting = (day, hour, state) => {
+        setEditedslot(day + '_' + hour + '_' + state)
+        setAdded((prevAdded) => [...prevAdded, editedslot]);
+        console.log(added)
     }
 
     // add or remove slots switch
@@ -19,18 +31,23 @@ export default function Availability ({ navigation }) {
     const toggleSwitch = () => setAdd((previousState) => !previousState);
 
     const [days, setDays] = useState({
-        'sat': false,
-        'sun': false,
-        'mon': false,
-        'tue': false,
-        'wed': false,
-        'thu': false,
-        'fri': false,
+        '1': false,
+        '2': false,
+        '3': false,
+        '4': false,
+        '5': false,
+        '6': false,
+        '7': false,
     });
     const checkDay = (day) => {
         // Create a new object based on the current days state
         const newDays = Object.keys(days).reduce((acc, key) => {
-            acc[key] = key === day; // Set the selected day to true, others to false
+            if (key === day){
+                acc[key] = true
+                setSelectedDay(key)
+            } else {
+                acc[day] = false
+            }
             return acc;
         }, {});
         setDays(newDays); // Update the state    
@@ -38,18 +55,18 @@ export default function Availability ({ navigation }) {
 
     // Time slots array
     const timeSlots = {
-        '09:00 am' : false,
-        '10:00 am' : false,
-        '11:00 am' : false,
-        '12:00 pm' : false,
-        '01:00 pm' : false,
-        '02:00 pm' : false,
-        '03:00 pm' : false,
-        '04:00 pm' : false,
-        '05:00 pm' : false,
-        '06:00 pm' : false,
-        '07:00 pm' : false,
-        '08:00 pm' : false,
+        '01' : false,
+        '02' : false,
+        '03' : false,
+        '04' : false,
+        '05' : false,
+        '06' : false,
+        '07' : false,
+        '08' : false,
+        '09' : false,
+        '10' : false,
+        '11' : false,
+        '12' : false,
     };
     const checkTime = (slot, time, day, state) => {
         if (time == slot && days[day] && state == isOnline) {
@@ -59,6 +76,39 @@ export default function Availability ({ navigation }) {
         }
     }
 
+
+    const edit = async () => {
+            try {
+                const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/availability/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${await getToken()}`,
+                },
+                body: JSON.stringify({
+                    added
+                }),
+                });
+        
+                if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Login failed: ${errorMessage}`);
+                }
+        
+                const responseData = await response.json();
+                const token = responseData.token; // Assuming the server returns a token
+                console.log(responseData)
+                // Store the token (e.g., in AsyncStorage or localStorage)
+                await AsyncStorage.setItem('userToken', token);
+        
+                // Navigate to the home page
+                navigation.navigate('home page');
+            } catch (error) {
+                console.error('Login error:', error);
+                Alert.alert('Login failed', error.message);
+            }
+        }
+
 return (
     <SafeArea>
       <View style={styles.container}>
@@ -66,15 +116,67 @@ return (
 
         <View style={{margin: 10}}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {Object.keys(days).map((day) => (
-                    <TouchableOpacity key={day} onPress={() => checkDay(day)}>
-                        <Text style={days[day] ? 
-                            [styles.item, { color: 'white', backgroundColor: '#1565c0' }] 
-                            : [styles.item]}>
-                            {day.charAt(0).toUpperCase() + day.slice(1)}
-                        </Text>
-                    </TouchableOpacity>
-                ))}
+                <TouchableOpacity onPress={() => checkDay('7')}>
+                    <Text style={days['7'] ? 
+                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
+                        : [styles.item]
+                    }>
+                        Sat
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => checkDay('1')}>
+                    <Text style={days['1'] ? 
+                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
+                        : [styles.item]
+                    }>
+                        Sun
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => checkDay('2')}>
+                    <Text style={days['2'] ? 
+                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
+                        : [styles.item]
+                    }>
+                        Mon
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => checkDay('3')}>
+                    <Text style={days['3'] ? 
+                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
+                        : [styles.item]
+                    }>
+                        Tue
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => checkDay('4')}>
+                    <Text style={days['4'] ? 
+                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
+                        : [styles.item]
+                    }>
+                        Wed
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => checkDay('5')}>
+                    <Text style={days['5'] ? 
+                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
+                        : [styles.item]
+                    }>
+                        Thu
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => checkDay('6')}>
+                    <Text style={days['6'] ? 
+                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
+                        : [styles.item]
+                    }>
+                        Fri
+                    </Text>
+                </TouchableOpacity>
             </ScrollView>
         </View>
 
@@ -91,43 +193,43 @@ return (
         
         <CustomScroll>
             <View style={styles.row}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '01', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['09:00 am']) return;
-                        checkTime('09:00 am', time[1], time[0], time[2])
+                        if (timeSlots['01']) return;
+                        checkTime('01', time[1], time[0], time[2])
                     })}    
                     <Text style={add ? 
-                    (timeSlots['09:00 am'] ? styles.slot
+                    (timeSlots['01'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['09:00 am'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['01'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         09:00 am - 10:00 am
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '02', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['10:00 am']) return;
-                        checkTime('10:00 am', time[1], time[0], time[2])
+                        if (timeSlots['02']) return;
+                        checkTime('02', time[1], time[0], time[2])
                     })}    
                     <Text style={add ? 
-                    (timeSlots['10:00 am'] ? styles.slot
+                    (timeSlots['02'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['10:00 am'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['02'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         10:00 am - 11:00 am
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '03', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['11:00 am']) return;
-                        checkTime('11:00 am', time[1], time[0], time[2])
+                        if (timeSlots['03']) return;
+                        checkTime('03', time[1], time[0], time[2])
                     })}    
                     <Text style={add ? 
-                    (timeSlots['11:00 am'] ? styles.slot
+                    (timeSlots['03'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['11:00 am'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['03'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         11:00 am - 12:00 pm
@@ -136,43 +238,43 @@ return (
             </View>
 
             <View style={styles.row}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '04', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['12:00 pm']) return;
-                        checkTime('12:00 pm', time[1], time[0], time[2])
+                        if (timeSlots['04']) return;
+                        checkTime('04', time[1], time[0], time[2])
                     })}    
                     <Text style={add ? 
-                    (timeSlots['12:00 pm'] ? styles.slot
+                    (timeSlots['04'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['12:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['04'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         12:00 pm - 01:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '05', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['01:00 pm']) return;
-                        checkTime('01:00 pm', time[1], time[0], time[2])
+                        if (timeSlots['05']) return;
+                        checkTime('05', time[1], time[0], time[2])
                     })}
                     <Text style={add ? 
-                    (timeSlots['01:00 pm'] ? styles.slot
+                    (timeSlots['05'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['01:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['05'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         01:00 pm - 02:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '06', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['02:00 pm']) return;
-                        checkTime('02:00 pm', time[1], time[0], time[2])
+                        if (timeSlots['06']) return;
+                        checkTime('06', time[1], time[0], time[2])
                     })}    
                     <Text style={add ? 
-                    (timeSlots['02:00 pm'] ? styles.slot
+                    (timeSlots['06'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['02:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['06'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         02:00 pm - 03:00 pm
@@ -181,43 +283,43 @@ return (
             </View>
 
             <View style={styles.row}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '07', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['03:00 pm']) return;
-                        checkTime('03:00 pm', time[1], time[0], time[2])
+                        if (timeSlots['07']) return;
+                        checkTime('07', time[1], time[0], time[2])
                     })}
                     <Text style={add ? 
-                    (timeSlots['03:00 pm'] ? styles.slot
+                    (timeSlots['07'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['03:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['07'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         03:00 pm - 04:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '08', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['04:00 pm']) return;
-                        checkTime('04:00 pm', time[1], time[0], time[2])
+                        if (timeSlots['08']) return;
+                        checkTime('08', time[1], time[0], time[2])
                     })}
                     <Text style={add ? 
-                    (timeSlots['04:00 pm'] ? styles.slot
+                    (timeSlots['08'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['04:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['08'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         04:00 pm - 05:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '09', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['05:00 pm']) return;
-                        checkTime('05:00 pm', time[1], time[0], time[2])
+                        if (timeSlots['09']) return;
+                        checkTime('09', time[1], time[0], time[2])
                     })}                    
                     <Text style={add ? 
-                    (timeSlots['05:00 pm'] ? styles.slot
+                    (timeSlots['09'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['05:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['09'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         05:00 pm - 06:00 pm
@@ -226,43 +328,43 @@ return (
             </View>
             
             <View style={styles.row}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '10', isOnline)}>
                     {slots.forEach(([it, time]) => {
-                        if (timeSlots['06:00 pm']) return;
-                        checkTime('06:00 pm', time[1], time[0], time[2])
+                        if (timeSlots['10']) return;
+                        checkTime('10', time[1], time[0], time[2])
                     })}
                     <Text style={add ? 
-                    (timeSlots['06:00 pm'] ? styles.slot
+                    (timeSlots['10'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['06:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['10'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         06:00 pm - 07:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '11', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['07:00 pm']) return; // Skip further iterations
-                        checkTime('07:00 pm', time[1], time[0], time[2])
+                        if (timeSlots['11']) return; // Skip further iterations
+                        checkTime('11', time[1], time[0], time[2])
                     })}                    
                     <Text style={add ? 
-                    (timeSlots['07:00 pm'] ? styles.slot
+                    (timeSlots['11'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['07:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['11'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         07:00 pm - 08:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => slotSrting(selectedDay, '12', isOnline)}>
                     {slots.forEach(([id, time]) => {
-                        if (timeSlots['08:00 pm']) return;
-                        checkTime('08:00 pm', time[1], time[0], time[2])
+                        if (timeSlots['12']) return;
+                        checkTime('12', time[1], time[0], time[2])
                     })}
                     <Text style={add ? 
-                    (timeSlots['08:00 pm'] ? styles.slot
+                    (timeSlots['12'] ? styles.slot
                         : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['08:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                    : (timeSlots['12'] ? [styles.slot, {backgroundColor: 'red'}] 
                         : [styles.slot])}
                     >
                         08:00 pm - 09:00 pm
@@ -277,7 +379,7 @@ return (
 
                 <TouchableOpacity onPress={online}>
                     <Text style={styles.button}>
-                        {isOnline == 'online' ? 'Online' : 'On-site'}
+                        {isOnline == 'L' ? 'Online' : 'On-site'}
                     </Text>
                 </TouchableOpacity>                
             </View>

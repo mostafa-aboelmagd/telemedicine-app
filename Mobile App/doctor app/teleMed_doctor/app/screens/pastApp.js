@@ -74,32 +74,26 @@ export default function PastAppointment({ navigation }) {
             </TouchableOpacity>
             <CustomTitle>Past appointments</CustomTitle>
         </View>
-          {!loading ? ( data ? data.map((item, id) =>
-          <View key={id}>
-            <View style={[styles.card]}>
-              <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
-                <Text style={styles.state}>{item.appointment_settings_type} / {item.appointment_type}</Text>
-                <View style={{justifyContent:'flex-end'}}>
-                  <TouchableOpacity onPress={() => history(item.appointment_patient_id, item.patient_first_name, item.patient_last_name)}>
-                    <Entypo name="dots-three-horizontal" size={24} color="black" />
-                  </TouchableOpacity>
+            {!loading ? ( data ? data.map((item, id) =>
+            <View key={id}>
+                <View style={[styles.card]}>
+                <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+                    <Text style={styles.state}>{item.appointment_settings_type} / {item.appointment_type}</Text>
+                    <View style={{justifyContent:'flex-end', alignItems: 'flex-start'}}>
+                        <Text>{item.doctor_availability_day_hour.slice(0,10)}</Text>
+                        <Text>{item.doctor_availability_day_hour.slice(11,19)}</Text>
+                    </View>
                 </View>
-              </View>
 
-              <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
                 <Text key={id} style={styles.name}>{item.patient_first_name} {item.patient_last_name}</Text>
-                <View style={{alignItems:'flex-end'}}>
-                  <Text>{item.doctor_availability_day_hour.slice(0,10)}</Text>
-                  <Text>{item.doctor_availability_day_hour.slice(11,19)}</Text>
-                </View>
-              </View>
 
-              <Text>Duration: {item.appointment_duration} mins</Text>
-              <Text>{item.appointment_complaint}</Text>
+                <Text>Duration: {item.appointment_duration} mins</Text>
+                <Text>{item.appointment_complaint}</Text>
             </View>
             
-            <Custombutton textStyle={{fontSize: 15}} buttonStyle={{width: '35%'}}>
-              Submit results
+            <Custombutton textStyle={{fontSize: 15}} buttonStyle={{width: '35%'}}
+            onPress={() => history(item.appointment_patient_id, item.patient_first_name, item.patient_last_name)}>
+              View results
             </Custombutton>
           </View> ) 
           : (<Text>No past appointments</Text>) ) 
