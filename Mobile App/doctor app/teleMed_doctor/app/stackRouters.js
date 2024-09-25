@@ -14,6 +14,10 @@ import Pending from './screens/pending';
 import Details from './screens/moreDetails';
 import History from './screens/history';
 import Availability from './screens/availability';
+import SubmitResults from './screens/submitResults';
+import SubmitMedications from './screens/submitMedications';
+import furtherDetails from './screens/furtherDetails';
+import FurtherDetails from './screens/furtherDetails';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +38,9 @@ export default function StackRouters() {
             <Stack.Screen name='details' component={Details} options={{ headerShown : false}} />
             <Stack.Screen name='history' component={History} options={{ headerShown : false}} />
             <Stack.Screen name='availability' component={Availability} options={{ headerShown : false}} />
+            <Stack.Screen name='submitResults' component={SubmitResults} options={{ headerShown : false}} />
+            <Stack.Screen name='submitMedications' component={SubmitMedications} options={{ headerShown : false}} />
+            <Stack.Screen name='furtherDetails' component={FurtherDetails} options={{ headerShown : false}} />
         </Stack.Navigator>
     </NavigationContainer>
   );

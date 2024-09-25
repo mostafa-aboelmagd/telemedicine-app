@@ -8,43 +8,45 @@ import Custombutton from '../components/button';
 import Entypo from '@expo/vector-icons/Entypo';
 import { patients } from '../test/data';
 
-export default function Appointment ({ navigation }) {
+export default function Appointment({ navigation }) {
 
   const patientList = Object.entries(patients);
 
   const history = () => {
     navigation.navigate('history')
   }
-
-return (
-    <SafeArea safeStyle={{alignItems: 'center'}}>
+  const submitResults = (patientName) => {
+    navigation.navigate('submitResults', { patientName })
+  }
+  return (
+    <SafeArea safeStyle={{ alignItems: 'center' }}>
       <CustomScroll>
         <View style={styles.container}>
-          <CustomTitle titleStyle={{marginTop: '10%'}}>Appointments</CustomTitle>
+          <CustomTitle titleStyle={{ marginTop: '10%' }}>Appointments</CustomTitle>
         </View>
         {patientList.map(([id, name]) =>
-        <View>
-          <View style={[styles.card]}>
-          <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
-              <Text style={styles.state}>online / follow up</Text>
-              <View style={{justifyContent:'flex-end'}}>
-                <TouchableOpacity onPress={history}>
-                  <Entypo name="dots-three-horizontal" size={24} color="black" />
-                </TouchableOpacity>
+          <View>
+            <View style={[styles.card]}>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                <Text style={styles.state}>online / follow up</Text>
+                <View style={{ justifyContent: 'flex-end' }}>
+                  <TouchableOpacity onPress={history}>
+                    <Entypo name="dots-three-horizontal" size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
               </View>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                <Text key={id} style={styles.name}>{name}</Text>
+                <Text>03:00 pm</Text>
+              </View>
+              <Text>Stating complaints: I've been experiencing severe chest pain for the past two days.</Text>
             </View>
-            <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
-              <Text key={id} style={styles.name}>{name}</Text>
-              <Text>03:00 pm</Text>
-            </View>
-            <Text>Stating complaints: I've been experiencing severe chest pain for the past two days.</Text>
-          </View>
-          <Custombutton textStyle={{fontSize: 15}} buttonStyle={{width: '35%'}}>
-          Submit results
-        </Custombutton>
-        </View>)}
+            <Custombutton textStyle={{ fontSize: 15 }} buttonStyle={{ width: '35%' }} onPress={() => submitResults(name)}>
+              Submit results
+            </Custombutton>
+          </View>)}
       </CustomScroll>
-      <Footer navigation={navigation}/>
+      <Footer navigation={navigation} />
     </SafeArea>
   );
 };
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: '3%'
   },
-  name:{
+  name: {
     marginBottom: '3%'
   }
 })
