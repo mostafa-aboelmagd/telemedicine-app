@@ -7,13 +7,11 @@ import Custombutton from '../components/button';
 import CustomScroll from '../components/scroll';
 import Entypo from '@expo/vector-icons/Entypo';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env'
-import { appointments } from '../test/data';
 import { getToken } from '../components/getToken';
 
 
 export default function Request ({ navigation }) {
 
-  const apps = Object.entries(appointments)
   let state = []
 
   const details = () => {
@@ -26,22 +24,22 @@ export default function Request ({ navigation }) {
 
   const [resquest, setRequest] = useState('')
 
-  const response = (userToken, appointmentId, action) => {
+  const response = async (appointmentId, action) => {
     state.push([appointmentId, action])
     console.log(state)
     try {
-        const response = fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/AppointmentResponse/${appointmentId}/${action}/`, {
+        const response = fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/AppointmentResponse/${appointmentId}/${action}`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${userToken}`, // Set the token in the Authorization header
-                'Content-Type': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${await getToken()}`,
             }
         });
         // Modification
         console.log(response.status);
         if (!response.ok) {
           if(response.status !== 200){
-            throw new Error('Failed to sent request');}
+            throw new Error('Failed to send request');}
         }
         //==============================
         const result = response.json();
@@ -55,9 +53,6 @@ export default function Request ({ navigation }) {
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  // Replace with your actual token
-  const userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImVtYWlsIjoiZG9jdG9yMkB0ZXN0LmNvbSIsInJvbGUiOiJEb2N0b3IiLCJmaXJzdE5hbWUiOiJFdGhhbiIsImxhc3ROYW1lIjoiV2lsc29uIiwiaWF0IjoxNzI3MTEyMjg4LCJleHAiOjE3MjcxOTg2ODh9.gC5VMU-lu73MebWCs0MR1ByaYQLF3SWBqhC409HIcvk'; 
 
   useEffect(() => {
       // Function to fetch data
@@ -120,13 +115,13 @@ return (
             <Custombutton 
             buttonStyle={[styles.button, {backgroundColor: 'green'}]}
             textStyle={{fontSize: 15}}
-            onPress={() => response(userToken, item.appointment_availability_slot, 'accept')}>
+            onPress={() => response(item.appointment_availability_slot, 'accept')}>
               Accept
             </Custombutton>
             <Custombutton 
             buttonStyle={[styles.button, {backgroundColor: 'red'}]}
             textStyle={{fontSize: 15}}
-            onPress={() => response(userToken, item.appointment_availability_slot, 'decline')}>
+            onPress={() => response(item.appointment_availability_slot, 'decline')}>
               Decline
             </Custombutton>
             <Custombutton

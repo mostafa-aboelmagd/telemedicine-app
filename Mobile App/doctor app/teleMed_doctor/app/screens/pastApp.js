@@ -20,7 +20,7 @@ export default function PastAppointment({ navigation }) {
   }
 
   const history = (id, fname, lname) => {
-    navigation.navigate('history', 
+    navigation.navigate('app details', 
       {id: id,
       fname: fname,
       lname: lname
