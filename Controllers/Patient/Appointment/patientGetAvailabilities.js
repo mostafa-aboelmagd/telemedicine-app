@@ -5,14 +5,14 @@ const patientGetAvailabilities = async (req, res) => {
     try {
         const doctorId = req.params.doctorId; // Assuming doctor ID is available in req.id
     
-        const timeslots = await database.getDoctorTimeslots(doctorId);
-        const availability = await database.getDoctorAvailabilityDetails(doctorId, timeslots);
+        const available_slots = await database.getDoctorTimeslots(doctorId);
+        const booked = await database.getDoctorAvailabilityDetails(doctorId);
     
-        if (!timeslots.length && !availability.length) {
+        if (!available_slots.length && !booked.length) {
           return res.status(404).json({ message: 'No timeslots or availability found for the doctor' });
         }
     
-        res.status(200).json({ timeslots, availability });
+        res.status(200).json({ available_slots, booked });
       } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error retrieving availability' });

@@ -44,28 +44,38 @@ const getDoctorTimeslots = async (doctorId) => {
     }
   };
   
-  const getDoctorAvailabilityDetails = async (doctorId, timeslots) => {
+  const getDoctorAvailabilityDetails = async (doctorId) => {
     try {
-      const availability = [];
-      for (const timeslot of timeslots) {
-        const slotCode = `${timeslot.timeslot_code}_${timeslot.timeslot_type}`;
-        const result = await pool.query(
-          `SELECT doctor_availability_day_hour
+        // Retrieve doctor availability
+        const availabilityResult = await pool.query(
+          `SELECT doctor_availability_id, doctor_availability_day_hour
            FROM doctor_availability
-           WHERE doctor_availability_doctor_id = $1
-           AND time_slot_code = $2`,
-          [doctorId, slotCode]
+           WHERE doctor_availability_doctor_id = $1`,
+          [doctorId]
         );
-
-        if (result.rows.length > 0) {
-          availability.push(result.rows[0].doctor_availability_day_hour);
-        }
+    
+        const doctorAvailability = availabilityResult.rows;
+    
+        // Filter appointments
+        const appointmentResult = await pool.query(
+          `SELECT appointment_availability_slot
+           FROM appointment
+           WHERE appointment_doctor_id = $1
+           AND appointment_status IN ('Pending', 'Approved')`,
+          [doctorId]
+        );
+    
+        const bookedSlots = appointmentResult.rows.map(row => row.appointment_availability_slot);
+    
+        // Filter availability based on booked slots and extract day_hour
+        const availableSlots = doctorAvailability.filter(slot => !bookedSlots.includes(slot.doctor_availability_id)).map(slot => slot.doctor_availability_day_hour);
+    
+        return availableSlots;
+      } catch (error) {
+        console.error(error);
+        return [];
       }
-      return availability.filter(item => item !== null);
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  };
+    };
+    
 
 module.exports = { getDoctorAvailabilityDetails,getDoctorTimeslots};
