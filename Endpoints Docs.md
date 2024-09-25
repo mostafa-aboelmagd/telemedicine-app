@@ -139,13 +139,14 @@
     ```json
     {
     "appointments": [
-        {
+       {
             "appointment_patient_id": 3,
             "appointment_doctor_id": 13,
             "appointment_availability_slot": 2,
             "appointment_type": "Followup",
-            "appointment_duration": 30,
-            "appointment_complaint": "I have a headache",
+            "appointment_id": 2,
+            "appointment_duration": 60,
+            "appointment_complaint": "ta3ban ",
             "appointment_parent_reference": null,
             "appointment_settings_type": "Onsite",
             "patient_first_name": "mohamed ",
@@ -600,20 +601,21 @@
     ```json
       [
         {
-            "appointment_patient_id": 6,
-            "appointment_doctor_id": 13,
-            "appointment_availability_slot": 5,
-            "appointment_type": "First_time",
-            "appointment_duration": 30,
-            "appointment_complaint": "arm pain",
-            "appointment_parent_reference": null,
-            "appointment_settings_type": null,
-            "patient_first_name": "John",
-            "patient_last_name": "Doe",
-            "doctor_first_name": "samy",
-            "doctor_last_name": "ali",
-            "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
-        }
+        "appointment_patient_id": 3,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 2,
+        "appointment_type": "Followup",
+        "appointment_id": 2,
+        "appointment_duration": 60,
+        "appointment_complaint": "ta3ban ",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": "Onsite",
+        "patient_first_name": "mohamed ",
+        "patient_last_name": "salem",
+        "doctor_first_name": "samy",
+        "doctor_last_name": "ali",
+        "doctor_availability_day_hour": "2024-10-02T12:00:00.000Z"
+    }
         ]
     ```
 ---
@@ -721,28 +723,13 @@
   * **Request Body:**
     ```json
        [
-  "1_01_S",
-  "2_02_L",
-  "3_03_S",
-  "4_04_S",
-  "5_05_L"
-    ]
-    ```
-
-      
-  * **Response Body:**
-    ```json
-        {
-        "deleted": [
-            4
-        ],
-        "failed": [
-          1,
-          2,
-          3
-      ],
-      "message": "Some appointments could not be deleted."
-      }     
+    "1_01_S",
+    "2_02_L",
+    "3_03_S",
+    "4_04_S",
+    "5_05_L"
+      ]
+    ```  
 ---
 
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
@@ -805,21 +792,22 @@
     {
         "appointments": [
             {
-                "appointment_patient_id": 3,
-                "appointment_doctor_id": 13,
-                "appointment_availability_slot": 55,
-                "appointment_type": "Followup",
-                "appointment_duration": 30,
-                "appointment_complaint": "I have a headache",
-                "appointment_parent_reference": null,
-                "appointment_settings_type": "Onsite",
-                "patient_first_name": "mohamed ",
-                "patient_last_name": "salem",
-                "doctor_first_name": "samy",
-                "doctor_last_name": "ali",
-                "doctor_specialization": "Cardiology",
-                "doctor_availability_day_hour": "2024-11-17T07:00:00.000Z"
-            }
+            "appointment_patient_id": 3,
+            "appointment_doctor_id": 13,
+            "appointment_availability_slot": 55,
+            "appointment_type": "Followup",
+            "appointment_id": 72,
+            "appointment_duration": 30,
+            "appointment_complaint": "I have a headache",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": "Onsite",
+            "patient_first_name": "mohamed ",
+            "patient_last_name": "salem",
+            "doctor_first_name": "samy",
+            "doctor_last_name": "ali",
+            "doctor_specialization": "Cardiology",
+            "doctor_availability_day_hour": "2024-11-17T07:00:00.000Z"
+        }
         ]
     }
     ```
