@@ -737,18 +737,21 @@
     }
 ---
 
-27. **Doctor Availability Deletion:** `/doctor/availability/delete/{availabilityId}`
+27. **Doctor Availability Deletion:** `/doctor/availability/delete`
   * **Method:** DELETE
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     * `Content-Type: application/json`
   * **Request Body:**
     ```json
-        {
-    "appointmentIds": [
-      1,2,3,4
-      ]
-      }
+       [
+  "1_01_S",
+  "2_02_L",
+  "3_03_S",
+  "4_04_S",
+  "5_05_L"
+    ]
+    ```
 
       
   * **Response Body:**
