@@ -26,6 +26,7 @@ const doctorPatientPrescriptionAddRoute = require('./Routes/Doctor/Patient Presc
 const doctorAppointmentResponseAddRoute = require('./Routes/Doctor/AppointmentResponse');
 const doctorAppointmentResultsAddRoute = require('./Routes/Doctor/AppointmentResults');
 const doctorAppointmentHistoryRoute = require('./Routes/Doctor/AppointmentHistory');
+const doctorAppointmentDetailsRoute = require('./Routes/Doctor/AppointmentDetails');
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -93,6 +94,7 @@ app.use('/doctor/patient-prescription/add', doctorPatientPrescriptionAddRoute);
 app.use('/doctor/AppointmentResponse', doctorAppointmentResponseAddRoute);
 app.use('/doctor/AppointmentResults', doctorAppointmentResultsAddRoute);
 app.use('/doctor/appointmentHistory', doctorAppointmentHistoryRoute);
+app.use('/doctor/appointmentDetails', doctorAppointmentDetailsRoute);
 
 
 

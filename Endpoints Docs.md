@@ -38,6 +38,7 @@
 30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`(Tested)
 31. **Patient view appointments history:** `patient/appointment/appointmentsHistory`(Tested)
 32. **Doctor view appointments history:** `/doctor/appointmentHistory`(Tested)
+33. **Doctor view appointment details:** `/doctor/appointmentDetails/:appointmentId`(Tested)
 
 ---
 ---
@@ -367,6 +368,12 @@
     }
     }
     ```
+ with wrong appointmentId:
+  ```json
+    {
+    "message": "Appointment not found"
+    }
+  ```
 
 ---
 
@@ -879,4 +886,64 @@
     ```json
        { "message": "No Completed appointments found" }
     ```
+---
+
+33. **Doctor view appointment details:** `/doctor/appointmentDetails/:appointmentId`(Tested)
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+  * **Response Body:**
+    ```json
+    {
+    "appointment": {
+        "appointment_patient_id": 2,
+        "appointment_doctor_id": 12,
+        "appointment_availability_slot": 1,
+        "appointment_type": "First_time",
+        "appointment_duration": 30,
+        "appointment_complaint": "Headache",
+        "appointment_status": "Approved",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": null,
+        "patient_first_name": "yahya",
+        "patient_last_name": "khalaf",
+        "doctor_first_name": "Olivia",
+        "doctor_last_name": "Martinez",
+        "doctor_availability_day_hour": "2024-10-01T07:00:00.000Z",
+        "doctor_specialization": "Internal Medicine",
+        "doctor_clinic_location": "Maadi",
+        "appointmentResults": [
+            {
+                "appointment_diagnosis": "Migraine",
+                "appointment_report": "Patient will recover with rest and medication.",
+                "updated_at": "2024-09-23T10:13:15.984Z"
+            }
+        ],
+        "treatmentPlan": {
+            "treatment_plan_operations": "Rest, medication",
+            "treatment_plan_speciality_referral": null,
+            "treatment_plan_referral_notes": null,
+            "treatment_plan_id": 1
+        },
+        "medications": [
+            {
+                "medication_note": "For headache relief",
+                "medication_start_date": "2024-09-30T21:00:00.000Z",
+                "medication_end_date": "2024-10-06T21:00:00.000Z",
+                "medication_id": 1,
+                "medication_name": "Ibuprofen",
+                "medication_dosage": "400mg, 3 times daily"
+            }
+        ],
+        "medicalDocuments": []
+    }
+    }
+    ```
+  with wrong appointmentId:
+  ```json
+  {
+  "message": "Appointment not found"
+  }
+  ```
+
 ---
