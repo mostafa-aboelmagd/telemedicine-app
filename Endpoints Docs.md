@@ -955,12 +955,12 @@
     * `Authorization: Bearer your_access_token`
   * **Response Body:**
     ```json
-    {
+   {
     "appointments": [
         {
             "appointment_patient_id": 3,
             "appointment_doctor_id": 14,
-            "appointment_availability_slot": 3,
+            "appointment_id": 71,
             "appointment_type": "Followup",
             "appointment_duration": 30,
             "appointment_complaint": "I have a headache",
