@@ -263,18 +263,19 @@
   * **Request Body:**
     ```json
       {
-      "appointment_availability_slot": 1, // Replace with actual slot ID
-      "complaint": "I have a headache",
-      "duration": 30,
-      "appointment_settings_type": "Online",
-      "appointment_type": "Followup",
-      "appointment_parent_reference": null
-        }
+    "doctor_id": 14,
+    "complaint": "Ta3baaan",
+    "duration": 60,
+    "appointment_type": "First_time",
+    "appointment_date": "2024-09-26T14:00:00Z",
+    "appointment_parent_reference":null,
+    "time_slot_code": "1_03_S"
+      }
     ```
   * **Response Body:**
     ```json
     {
-    "message": "Appointment scheduled successfully"
+    "message": "Appointment created successfully"
     }
 ---
 
