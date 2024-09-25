@@ -26,8 +26,6 @@ function TimeSlots() {
     "friday",
     "saturday",
   ];
-  // 1_01_s : saturday, 9:00 AM : 10:00 AM, onsite
-  // 2_12_l : sunday, 9:00 PM : 10:00 PM, online
 
   const timesList = {
     "9:00 AM : 10:00 AM": "9:00:00",
@@ -48,15 +46,16 @@ function TimeSlots() {
 
   const [timesChosen, setTimesChosen] = useState(
     Object.fromEntries(
-      datesList.map((date) => [date.toDateString(), new Set<String>()])
+      datesList.map((date) => [date.toDateString(), new Set<string>()])
     )
   );
 
   const [oldTimes, setOldTimes] = useState(
     Object.fromEntries(
-      datesList.map((date) => [date.toDateString(), new Set<String>()])
+      datesList.map((date) => [date.toDateString(), new Set<string>()])
     )
   );
+  const [oldCodedTimes, setOldCodedTimes] = useState<string[]>(["2_02_L"]);
 
   const [oldTimesTemp, setOldTimesTemp] = useState(
     Object.fromEntries(
@@ -81,6 +80,64 @@ function TimeSlots() {
 
   let token: string | null = "";
 
+  const handleCodedOldTimes = () => {
+    const dayCodes: { [key: string]: string } = {
+      "1": "Sat",
+      "2": "Sun",
+      "3": "Mon",
+      "4": "Tue",
+      "5": "Wed",
+      "6": "Thu",
+      "7": "Fri",
+    };
+
+    const timeSlotCodes: { [key: string]: string } = {
+      "01": "09:00:00",
+      "02": "10:00:00",
+      "03": "11:00:00",
+      "04": "12:00:00",
+      "05": "13:00:00",
+      "06": "14:00:00",
+      "07": "15:00:00",
+      "08": "16:00:00",
+      "09": "17:00:00",
+      "10": "18:00:00",
+      "11": "19:00:00",
+      "12": "20:00:00",
+    };
+
+    // Initialize an empty object for storing results
+    const tempTimes: { [key: string]: string[] } = Object.fromEntries(
+      datesList.map((date) => [date.toDateString(), []])
+    );
+
+    // Iterate through oldCodedTimes to populate tempTimes
+    console.log("oldCodedTimes: ", oldCodedTimes);
+    for (const codedTime of oldCodedTimes) {
+      const [dayCode, timeSlotCode, state] = codedTime.split("_");
+      const dayName = dayCodes[dayCode];
+
+      // Find the corresponding date from datesList
+      const targetDate = datesList.find((date) =>
+        date.toDateString().startsWith(dayName)
+      );
+
+      if (targetDate) {
+        const formattedDate = targetDate.toDateString();
+        const time = timeSlotCodes[timeSlotCode];
+
+        // Add the time to the corresponding date in tempTimes
+        if (time) {
+          tempTimes[formattedDate].push(time);
+        }
+      }
+    }
+    // Update the state with the constructed tempTimes
+    console.log("tempTimes: ", tempTimes);
+    setOldTimesTemp(tempTimes);
+    return tempTimes;
+  };
+
   useEffect(() => {
     token = localStorage.getItem("jwt");
     if (!token) {
@@ -94,6 +151,7 @@ function TimeSlots() {
     } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
         mode: "cors",
+        method: "GET",
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -101,31 +159,37 @@ function TimeSlots() {
         .then((response) => response.json())
         .then((response) => setProfileData(() => response.formattedDoctor));
 
-      fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/availabilities`,
-        {
-          mode: "cors",
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/view`, {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
         .then((response) => response.json())
-        .then((response) => setOldTimesTemp(() => response.availabilities))
+        .then((response) => {
+          console.log("API Response: ", response); // Log the response to inspect it
+          setOldCodedTimes(() => response.timeslots || []); // Use an empty array as a fallback
+        })
         .finally(() => setLoading(false));
     }
   }, []);
+  useEffect(() => {
+    if (Array.isArray(oldCodedTimes) && oldCodedTimes.length > 0) {
+      handleCodedOldTimes();
+    }
+  }, [oldCodedTimes]);
 
   useEffect(() => {
     setTimesChosen(() =>
       Object.fromEntries(
-        datesList.map((date) => [date.toDateString(), new Set<String>()])
+        datesList.map((date) => [date.toDateString(), new Set<string>()])
       )
     );
 
     setOldTimes(() =>
       Object.fromEntries(
-        datesList.map((date) => [date.toDateString(), new Set<String>()])
+        datesList.map((date) => [date.toDateString(), new Set<string>()])
       )
     );
 
@@ -244,7 +308,7 @@ function TimeSlots() {
     // Reset selection when toggling between add and delete mode
     setTimesChosen(() =>
       Object.fromEntries(
-        datesList.map((date) => [date.toDateString(), new Set<String>()])
+        datesList.map((date) => [date.toDateString(), new Set<string>()])
       )
     );
     setToggleChecked(() => !toggleChecked); // Toggle between modes
@@ -262,7 +326,7 @@ function TimeSlots() {
     };
 
     const timeSlotCodes: Record<string, string> = {
-      "09:00:00": "01",
+      "9:00:00": "01",
       "10:00:00": "02",
       "11:00:00": "03",
       "12:00:00": "04",
@@ -287,7 +351,6 @@ function TimeSlots() {
         codedSlots.push(`${dayCode}_${timeCode}_${typeCode}`);
       }
     }
-
     return codedSlots;
   };
 
@@ -298,12 +361,13 @@ function TimeSlots() {
       datesList.map((date) => [date.toDateString(), [] as string[]])
     );
 
-    // for (const [key, value] of Object.entries(timesChosen)) {
-    //   sentObj[key] = Array.from(value); // Convert set to array
-    // }
+    for (const [key, value] of Object.entries(timesChosen)) {
+      sentObj[key] = Array.from(value); // Convert set to array
+    }
 
+    console.log("sentObj: ", sentObj);
     const codedSlots = handleCoddedSlots(sentObj);
-
+    console.log("codedSlots: ", codedSlots);
     if (!toggleChecked) {
       // Add time slots
       try {
@@ -326,7 +390,7 @@ function TimeSlots() {
           throw new Error("Failed to add time slots");
         }
 
-        window.location.href = "/doctorProfile/timeSlots";
+        // window.location.href = "/doctorProfile/timeSlots";
       } catch (error) {
         console.error("Error while adding time slots:", error);
       }
@@ -382,7 +446,7 @@ function TimeSlots() {
           <div className="flex flex-col gap-4">
             <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
               {userImage}
-              <p className="text-blue-500 mb-1 font-semibold">
+              <p className="text-blue-500 my-1 font-semibold">
                 Dr. {profileData?.firstName} {profileData?.lastName}
               </p>
             </div>

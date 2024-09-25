@@ -60,6 +60,15 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          // body = {
+          //   "doctor_id":13,
+          //   "complaint": "I have a headache",
+          //   "duration": 30,
+          //   "appointment_type": "Followup",
+          // "appointment_date":2024-09-26 14:00,
+          //   "appointment_parent_reference": null,
+          //   "time_slot_code":"1_01_S"
+          // }
           body: JSON.stringify({
             // patient_id: patientId,
             // complain: complaint,
