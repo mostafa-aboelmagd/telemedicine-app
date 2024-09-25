@@ -51,7 +51,7 @@ FROM
 JOIN users p ON a.appointment_patient_id = p.user_id
 JOIN users d ON a.appointment_doctor_id = d.user_id
 JOIN doctor doc ON a.appointment_doctor_id = doc.doctor_user_id_reference
-JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
+JOIN doctor_availability da ON a.appointment_id = da.doctor_availability_id
 WHERE
     a.appointment_id = $1`,
     [appointmentId]
@@ -74,7 +74,7 @@ const getAppointmentResults = async (appointmentId) => {
 const getTreatmentPlan = async (appointmentId) => {
   const result = await pool.query(
     `SELECT treatment_plan_operations, 
-    treatment_plan_speciality_referral,
+     treatment_plan_speciality_referral,
      treatment_plan_referral_notes, 
      treatment_plan_id
      FROM treatment_plan
