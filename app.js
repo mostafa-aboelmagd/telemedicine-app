@@ -19,8 +19,8 @@ const patientViewMedicalDocumentRoute = require('./Routes/Patient/Medical Docume
 const patientDeleteMedicalDocumentRoute = require('./Routes/Patient/Medical Document/Delete');
 const doctorProfileRoute = require('./Routes/Doctor/Profile');
 const doctorEditRoute = require('./Routes/Doctor/Edit');
-const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/add');
-const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Delete');
+// const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/add');
+// const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Delete');
 const doctorProfilePictureUploadRoute = require('./Routes/Doctor/Profile Picture/Upload');
 // const doctorPatientPrescriptionAddRoute = require('./Routes/Doctor/Patient Prescription/Add');
 const doctorAppointmentResponseAddRoute = require('./Routes/Doctor/AppointmentResponse');
@@ -28,6 +28,7 @@ const doctorAppointmentResultsAddRoute = require('./Routes/Doctor/AppointmentRes
 const doctorAppointmentHistoryRoute = require('./Routes/Doctor/AppointmentHistory');
 const doctorAppointmentDetailsRoute = require('./Routes/Doctor/AppointmentDetails');
 const doctorPatientsummaryRoute = require('./Routes/Doctor/Patientsummary');
+const doctorAvailabilityRoute = require('./Routes/Doctor/Availability');
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -88,8 +89,8 @@ app.use('/patient/medical-document/view', patientViewMedicalDocumentRoute);
 app.use('/patient/medical-document/delete', patientDeleteMedicalDocumentRoute);
 app.use('/doctor/edit', doctorEditRoute);
 app.use('/doctor/profile', doctorProfileRoute);
-app.use('/doctor/availability/add', doctorAddAvailabilityRoute);
-app.use('/doctor/availability/delete', doctorDeleteAvailabilityRoute);
+app.use('/doctor/availability', doctorAvailabilityRoute);
+// app.use('/doctor/availability/delete', doctorDeleteAvailabilityRoute);
 app.use('/doctor/profile-picture/upload', doctorProfilePictureUploadRoute);
 // app.use('/doctor/patient-prescription/add', doctorPatientPrescriptionAddRoute);
 app.use('/doctor/AppointmentResponse', doctorAppointmentResponseAddRoute);

@@ -15,7 +15,7 @@
 7. **Patient Profile Edit:** `/patient/edit/info`(tested)
 8. **Patient Change Password:** `/patient/edit/password`(tested)
 9. **Patient Appointment Request:** `/patient/appointment/book`(tested)
-10. **Patient Get doctors availability:** `/patient/appointment/Availabilities/:doctorId`(tested)
+10. **Patient Get doctors availability:** `/patient/appointment/Availabilities/:doctorId`
 11. **Patient Get Appointment details:** `/patient/appointment/appointmentdetails/:appointmentId` (tested)
 12. **Patient Home (Dashboard retriev doctors data):** `/patient/home`(tested)
 13. **Patient Medical Document Upload:** `/patient/medical-document/upload`
@@ -26,13 +26,13 @@
 18. **Doctor Profile info:** `/doctor/profile/info`(tested)
 19. **Doctor View appointments** `Doctor/Profile/appointments`(Tested)
 20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`(Tested)
-21. **Doctor View Availability:** `/doctor/profile/availabilities`(Tested)
+21. **Doctor View Availability:** `/doctor/availability/view`(Tested)
 22. **Doctor View Experience:** `/doctor/profile/experience`
 23. **Doctor View Education:** `/doctor/profile/education`
 24. **Doctor View reviews:** `/doctor/profile/reviews`
 25. **Doctor View interests:** `/doctor/profile/interests`
-26. **Doctor Availability Addition:** `/doctor/availability/add`(Tested)
-27. **Doctor Availability Deletion:** `/doctor/availability/delete`(Tested)
+26. **Doctor Availability Addition:** `/doctor/availability/add`(tested)
+27. **Doctor Availability Deletion:** `/doctor/availability/delete`(tested)
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
 29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`(Canceled)
 30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`(Tested)
@@ -644,49 +644,25 @@
       ]
     ```
 ---
-21. **Doctor View Availability:** `/doctor/profile/availabilities`
+21. **Doctor View Availability:** `/doctor/availability/view`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
   * **Response Body:**
     ```json
     {
-    "message": "Doctor availabilities retrieved successfully",
-    "availabilities": {
-        "Wed Oct 2 2024": [
-            {
-                "time": "15:00:00",
-                "id": 2,
-                "type": "Onsite"
-            },
-            {
-                "time": "15:00:00",
-                "id": 8,
-                "type": "Onsite"
-            }
-        ],
-        "Wed Oct 9 2024": [
-            {
-                "time": "15:00:00",
-                "id": 5,
-                "type": "Onsite"
-            }
-        ],
-        "Fri Feb 2 2024": [
-            {
-                "time": "15:00:00",
-                "id": 11,
-                "type": "Onsite"
-            }
-        ],
-        "Tue Feb 13 2024": [
-            {
-                "time": "15:00:00",
-                "id": 14,
-                "type": "Onsite"
-            }
-        ]
-    }
+    "timeslots": [
+        "1_01_S",
+        "2_02_L",
+        "3_03_S",
+        "4_04_S",
+        "5_05_L",
+        "1_01_S",
+        "2_02_L",
+        "3_03_S",
+        "4_04_S",
+        "5_05_L"
+    ]
     }
     ```
 ---
