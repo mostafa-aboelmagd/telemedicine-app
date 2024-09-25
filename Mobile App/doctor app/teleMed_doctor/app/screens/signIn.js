@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, Pressable } from 'react-native';
-import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import Custombutton from '../components/button';
 import { StatusBar } from 'expo-status-bar';
@@ -14,7 +14,37 @@ export default function Login({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [userToken, setUserToken] = useState(null);
 
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        console.log("checkToken" , token);
+        if (token !== null) {
+          setUserToken(token);  // Token found, update state
+        }
+      } catch (e) {
+        console.log('Error retrieving token:', e);
+      } finally {
+        setIsLoading(false);  // Stop showing the loading spinner
+      }
+    };
+
+    checkToken();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <View>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+  if(userToken){
+    navigation.navigate('home page')
+  }
   const signIn = async () => {
     if (email && password) {
       try {
@@ -60,67 +90,67 @@ export default function Login({ navigation }) {
 
   return (
     <SafeArea>
-    <View style={styles.container}>
-      <View style={styles.container2}>
-        <CustomTitle>
-          Sign in
-        </CustomTitle>
-        <View style={[styles.container3, {marginTop: '50%'}]}>  
-          <TextInput
-            placeholder='example@gmai.com'
-            keyboardType='email-address'
-            inputType='email'
-            value={email}
-            onChangeText={setEmail}
-            style={styles.input} 
-          />
-        </View>
+      <View style={styles.container}>
+        <View style={styles.container2}>
+          <CustomTitle>
+            Sign in
+          </CustomTitle>
+          <View style={[styles.container3, { marginTop: '50%' }]}>
+            <TextInput
+              placeholder='example@gmai.com'
+              keyboardType='email-address'
+              inputType='email'
+              value={email}
+              onChangeText={setEmail}
+              style={styles.input}
+            />
+          </View>
 
-        <View style={styles.container3}>
-          <TextInput 
-            placeholder='Your Password' 
-            secureTextEntry={!showPassword}
-            value={password}
-            onChangeText={setPassword}
-            style={styles.input} 
-          />
-          <TouchableOpacity
-            style={styles.icon}
-            onPress={() => setShowPassword(!showPassword)}
-          >
-          <MaterialIcons
-            name={showPassword ? 'visibility' : 'visibility-off'}
-            size={20}
-            color="gray"
-          />
-          </TouchableOpacity>
-        </View>
-        <View  style={styles.row}>
-          <Text style={styles.text3}>
-            Don't have an account?
-          </Text> 
-          <Pressable style={styles.link} onPress={register}>
-            <Text style={styles.register}> Register here </Text>
-          </Pressable>
-        </View>
+          <View style={styles.container3}>
+            <TextInput
+              placeholder='Your Password'
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
+              style={styles.input}
+            />
+            <TouchableOpacity
+              style={styles.icon}
+              onPress={() => setShowPassword(!showPassword)}
+            >
+              <MaterialIcons
+                name={showPassword ? 'visibility' : 'visibility-off'}
+                size={20}
+                color="gray"
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.text3}>
+              Don't have an account?
+            </Text>
+            <Pressable style={styles.link} onPress={register}>
+              <Text style={styles.register}> Register here </Text>
+            </Pressable>
+          </View>
 
-        <View style={styles.container4}>
-          <Custombutton
-            onPress={signIn}>
-            <Text>Sign in</Text>
-          </Custombutton>
+          <View style={styles.container4}>
+            <Custombutton
+              onPress={signIn}>
+              <Text>Sign in</Text>
+            </Custombutton>
+          </View>
         </View>
-      </View>
-      <TouchableOpacity onPress={vsupport}
-        style={{alignItems:'center', marginTop: '10%'}}>
+        <TouchableOpacity onPress={vsupport}
+          style={{ alignItems: 'center', marginTop: '10%' }}>
           <AntDesign name="customerservice" size={40} color="black" />
-          <Text style={{fontWeight:'bold'}}>
-              Support
+          <Text style={{ fontWeight: 'bold' }}>
+            Support
           </Text>
-      </TouchableOpacity>
+        </TouchableOpacity>
 
-      <StatusBar style="auto" />
-    </View>
+        <StatusBar style="auto" />
+      </View>
     </SafeArea>
   );
 }
@@ -133,7 +163,7 @@ const styles = StyleSheet.create({
 
   container1: {
     marginTop: '5%',
-    alignItems:'center'
+    alignItems: 'center'
   },
 
   container2: {
@@ -176,7 +206,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize:17,
+    fontSize: 17,
     // fontFamily: 'PlayfairDisplay-Regular',
 
   },
@@ -191,7 +221,7 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
 
-  register:{
+  register: {
     color: 'blue',
   }
 });
