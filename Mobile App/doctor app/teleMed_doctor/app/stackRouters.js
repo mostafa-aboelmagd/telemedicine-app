@@ -20,6 +20,7 @@ import SubmitResults from './screens/submitResults';
 import SubmitMedications from './screens/submitMedications';
 import furtherDetails from './screens/furtherDetails';
 import FurtherDetails from './screens/furtherDetails';
+import PastAppointment from './screens/pastApp';
 
 const Stack = createStackNavigator();
 
@@ -45,6 +46,7 @@ export default function StackRouters() {
             <Stack.Screen name='submitResults' component={SubmitResults} options={{ headerShown : false}} />
             <Stack.Screen name='submitMedications' component={SubmitMedications} options={{ headerShown : false}} />
             <Stack.Screen name='furtherDetails' component={FurtherDetails} options={{ headerShown : false}} />
+            <Stack.Screen name='past appointments' component={PastAppointment} options={{ headerShown : false}} />
         </Stack.Navigator>
     </NavigationContainer>
   );

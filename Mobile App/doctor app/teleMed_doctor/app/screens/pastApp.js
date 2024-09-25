@@ -8,15 +8,15 @@ import Custombutton from '../components/button';
 import Entypo from '@expo/vector-icons/Entypo';
 import { getToken } from '../components/getToken';
 import {NEXT_PUBLIC_SERVER_NAME} from '@env'; 
-import Feather from '@expo/vector-icons/Feather';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function Appointment({ navigation }) {
+export default function PastAppointment({ navigation }) {
 
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  const pastApp = () => {
-    navigation.navigate('past appointments')
+  const upcoming = () => {
+    navigation.pop()
   }
 
   const history = (id, fname, lname) => {
@@ -26,13 +26,14 @@ export default function Appointment({ navigation }) {
       lname: lname
     })
   }
+
   const submitResults = (patientName) => {
     navigation.navigate('submitResults', { patientName })
   }
 
-  const acceptedAppointmetns = async () => {
+  const past = async () => {
     try {
-      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/Doctor/Profile/appointments`, {
+      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/appointmentHistory`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ export default function Appointment({ navigation }) {
       const result = await response.json();
       // console.log(result)
 
-      setData(result);
+      setData(result.appointments);
     } catch (error) {
       console.error('Error fetching doctor info:', error);
     } finally {
@@ -59,7 +60,7 @@ export default function Appointment({ navigation }) {
   };
 
   useEffect(() => {
-    acceptedAppointmetns();
+    past();
   }, []);
 
 
@@ -67,11 +68,11 @@ export default function Appointment({ navigation }) {
     <SafeArea>
       <CustomScroll>
       <View style={{margin: 10}}>   
-        <View style={{flexDirection: 'row', alignItems:'center', marginTop: '10%', justifyContent:'space-between'}}>   
-          <CustomTitle>Appointments</CustomTitle>
-          <TouchableOpacity onPress={pastApp}>
-            <Feather name="archive" size={24} color="black" />
-          </TouchableOpacity>
+        <View style={{marginTop: '5%', justifyContent:'space-between'}}>   
+            <TouchableOpacity onPress={upcoming}>
+              <Ionicons name="arrow-back" size={24} color="black" />
+            </TouchableOpacity>
+            <CustomTitle>Past appointments</CustomTitle>
         </View>
           {!loading ? ( data ? data.map((item, id) =>
           <View key={id}>
@@ -101,7 +102,7 @@ export default function Appointment({ navigation }) {
               Submit results
             </Custombutton>
           </View> ) 
-          : (<Text>No upcoming appointments</Text>) ) 
+          : (<Text>No past appointments</Text>) ) 
           : <Text>Loading</Text>}
         </View>
 
