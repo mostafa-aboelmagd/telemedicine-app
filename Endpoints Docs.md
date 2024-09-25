@@ -24,7 +24,7 @@
 16. **Doctor Profile Edit:** `/doctor/edit/info`(tested)
 17. **Doctor Password change:** `/doctor/edit/password`(tested)
 18. **Doctor Profile info:** `/doctor/profile/info`(tested)
-19. **Doctor View appointments** `/doctor/profile/appointments`(Tested)
+19. **Doctor View appointments** `Doctor/Profile/appointments`(Tested)
 20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`(Tested)
 21. **Doctor View Availability:** `/doctor/profile/availabilities`(Tested)
 22. **Doctor View Experience:** `/doctor/profile/experience`
@@ -39,6 +39,7 @@
 31. **Patient view appointments history:** `patient/appointment/appointmentsHistory`(Tested)
 32. **Doctor view appointments history:** `/doctor/appointmentHistory`(Tested)
 33. **Doctor view appointment details:** `/doctor/appointmentDetails/:appointmentId`(Tested)
+34. **Doctor view Patient appointments:** `/doctor/PatientSummary/:patientID`(Tested)
 
 ---
 ---
@@ -591,7 +592,7 @@
     ```
 ---
 
-19. **Doctor View Appointments:** `/doctor/profile/appointments`
+19. **Doctor View Appointments:** `Doctor/Profile/appointments`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
@@ -888,7 +889,7 @@
     ```
 ---
 
-33. **Doctor view appointment details:** `/doctor/appointmentDetails/:appointmentId`(Tested)
+33. **Doctor view appointment details:** `/doctor/appointmentDetails/:appointmentId`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
@@ -904,7 +905,7 @@
         "appointment_complaint": "Headache",
         "appointment_status": "Approved",
         "appointment_parent_reference": null,
-        "appointment_settings_type": null,
+        "appointment_settings_type": "Onsite",
         "patient_first_name": "yahya",
         "patient_last_name": "khalaf",
         "doctor_first_name": "Olivia",
@@ -945,5 +946,40 @@
   "message": "Appointment not found"
   }
   ```
+
+---
+34. **Doctor view Patient appointments:** `/doctor/PatientSummary/:patientID`
+
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+  * **Response Body:**
+    ```json
+    {
+    "appointments": [
+        {
+            "appointment_patient_id": 3,
+            "appointment_doctor_id": 14,
+            "appointment_availability_slot": 3,
+            "appointment_type": "Followup",
+            "appointment_duration": 30,
+            "appointment_complaint": "I have a headache",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": "Online",
+            "patient_first_name": "mohamed ",
+            "patient_last_name": "salem",
+            "doctor_first_name": "Ava",
+            "doctor_last_name": "Taylor",
+            "doctor_availability_day_hour": "2024-10-03T06:00:00.000Z"
+        }
+    ]
+    }
+    ```
+  with wrong appointmentId:
+    ```json
+    {
+      "message": "No Completed appointments found"
+    }
+    ```
 
 ---

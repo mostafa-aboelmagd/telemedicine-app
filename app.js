@@ -11,9 +11,9 @@ const patienProfileRoute = require('./Routes/Patient/Profile');
 const patientEditRoute = require('./Routes/Patient/Edit');
 const patientAppointmentBookRoute = require('./Routes/Patient/Appointment/book');
 const patientHomeRoute = require('./Routes/Patient/Home');
-const patientAddPrescriptionRoute = require('./Routes/Patient/MedicalHistory/addPrescription');
-const patientDeletePrescriptionRoute= require('./Routes/Patient/MedicalHistory/deletePrescription');
-const patientViewPrescriptionRoute= require('./Routes/Patient/MedicalHistory/viewPrescription');
+// const patientAddPrescriptionRoute = require('./Routes/Patient/MedicalHistory/addPrescription');
+// const patientDeletePrescriptionRoute= require('./Routes/Patient/MedicalHistory/deletePrescription');
+// const patientViewPrescriptionRoute= require('./Routes/Patient/MedicalHistory/viewPrescription');
 const patientUploadMedicalDocumentRoute = require('./Routes/Patient/Medical Document/Upload');
 const patientViewMedicalDocumentRoute = require('./Routes/Patient/Medical Document/View');
 const patientDeleteMedicalDocumentRoute = require('./Routes/Patient/Medical Document/Delete');
@@ -22,11 +22,12 @@ const doctorEditRoute = require('./Routes/Doctor/Edit');
 const doctorAddAvailabilityRoute = require('./Routes/Doctor/Availability/add');
 const doctorDeleteAvailabilityRoute = require('./Routes/Doctor/Availability/Delete');
 const doctorProfilePictureUploadRoute = require('./Routes/Doctor/Profile Picture/Upload');
-const doctorPatientPrescriptionAddRoute = require('./Routes/Doctor/Patient Prescription/Add');
+// const doctorPatientPrescriptionAddRoute = require('./Routes/Doctor/Patient Prescription/Add');
 const doctorAppointmentResponseAddRoute = require('./Routes/Doctor/AppointmentResponse');
 const doctorAppointmentResultsAddRoute = require('./Routes/Doctor/AppointmentResults');
 const doctorAppointmentHistoryRoute = require('./Routes/Doctor/AppointmentHistory');
 const doctorAppointmentDetailsRoute = require('./Routes/Doctor/AppointmentDetails');
+const doctorPatientsummaryRoute = require('./Routes/Doctor/Patientsummary');
 
 const port = process.env.PORT || 4000;
 const app = express();
@@ -90,11 +91,12 @@ app.use('/doctor/profile', doctorProfileRoute);
 app.use('/doctor/availability/add', doctorAddAvailabilityRoute);
 app.use('/doctor/availability/delete', doctorDeleteAvailabilityRoute);
 app.use('/doctor/profile-picture/upload', doctorProfilePictureUploadRoute);
-app.use('/doctor/patient-prescription/add', doctorPatientPrescriptionAddRoute);
+// app.use('/doctor/patient-prescription/add', doctorPatientPrescriptionAddRoute);
 app.use('/doctor/AppointmentResponse', doctorAppointmentResponseAddRoute);
 app.use('/doctor/AppointmentResults', doctorAppointmentResultsAddRoute);
 app.use('/doctor/appointmentHistory', doctorAppointmentHistoryRoute);
 app.use('/doctor/appointmentDetails', doctorAppointmentDetailsRoute);
+app.use('/doctor/PatientSummary', doctorPatientsummaryRoute);
 
 
 
