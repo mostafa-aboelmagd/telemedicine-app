@@ -35,10 +35,9 @@
 27. **Doctor Availability Deletion:** `/doctor/availability/delete`(Tested)
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
 29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
-30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
-(Tested)
-31. **Patient view appointments history:** `patient/appointment/appointmentsHistory`
-(Tested)
+30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`(Tested)
+31. **Patient view appointments history:** `patient/appointment/appointmentsHistory`(Tested)
+32. **Doctor view appointments history:** `/doctor/appointmentHistory`(Tested)
 
 ---
 ---
@@ -153,11 +152,8 @@
             "doctor_last_name": "ali",
             "doctor_specialization": "Cardiology",
             "doctor_availability_day_hour": "2024-10-02T12:00:00.000Z"
-        }
-    ]
-  }
-    ```
-    ---
+        }]}
+---
 
 6. **Patient Requests:** `/patient/profile/requests`
   * **Method:** GET
@@ -181,11 +177,8 @@
             "doctor_first_name": "samy",
             "doctor_last_name": "ali",
             "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
-        }
-    ]
-    }
-    ```
-    ---
+        }]}
+---
 
 7. **Patient Profile Edit:** `/patient/edit/info`
   * **Method:** PUT
@@ -222,8 +215,7 @@
            }
          ]
       }
-    ```
-    ---
+---
 
 8. **Patient Change Password:** `/patient/edit/password`
   * **Method:** PUT
@@ -258,8 +250,7 @@
         }
        ]
     }
-    ```
-    ---
+---
 
 9. **Patient Appointment Request:** `/patient/appointment/book`
   * **Method:** POST
@@ -282,8 +273,7 @@
     {
     "message": "Appointment scheduled successfully"
     }
-    ```
-    ---
+---
 
 10. **Patient Get Doctors Availability:** `/patient/appointment/Availabilities/:doctorId`
   * **Method:** GET
@@ -324,8 +314,7 @@
         ]
     }
     }
-    ```
-    ---
+---
 
 11. **Patient Get Appointment Details:** `/patient/appointment/appointmentdetails/:appointmentId`
   * **Method:** GET
@@ -447,7 +436,7 @@
       "files": ""
     }
     ```
-    ---
+---
 
 14. **Patient Medical Document Viewing:** `/patient/medical-document/view`
   * **Method:** GET
@@ -465,7 +454,7 @@
      
     }
     ```
-    ---
+---
 
 15. **Patient Medical Document Deletion:** `/patient/medical-document/delete`
   * **Method:** DELETE
@@ -530,7 +519,7 @@
     ]
     }
     ```
-    ---
+---
 
 17. **Doctor Password Change:** `/doctor/edit/password`
   * **Method:** PUT
@@ -593,7 +582,7 @@
     }
     }
     ```
-    ---
+---
 
 19. **Doctor View Appointments:** `/doctor/profile/appointments`
   * **Method:** GET
@@ -619,7 +608,7 @@
         }
         ]
     ```
-    ---
+---
 20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`
   * **Method:** GET
   * **Request Headers:**
@@ -646,6 +635,7 @@
     }
       ]
     ```
+---
 21. **Doctor View Availability:** `/doctor/profile/availabilities`
   * **Method:** GET
   * **Request Headers:**
@@ -691,31 +681,31 @@
     }
     }
     ```
-    ---
+---
 
 22. **Doctor View Experience:** `/doctor/profile/experience`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    ---
+---
 
 23. **Doctor View Education:** `/doctor/profile/education`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    ---
+---
 
 24. **Doctor View Reviews:** `/doctor/profile/reviews`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    ---
+---
 
 25. **Doctor View Interests:** `/doctor/profile/interests`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    ---
+---
 
 26. **Doctor Availability Addition:** `/doctor/availability/add`
   * **Method:** POST
@@ -744,7 +734,7 @@
     {
     "message": "Doctor availability added successfully"
     }
-    ---
+---
 
 27. **Doctor Availability Deletion:** `/doctor/availability/delete/{availabilityId}`
   * **Method:** DELETE
@@ -758,7 +748,8 @@
       1,2,3,4
       ]
       }
-    ```
+
+      
   * **Response Body:**
     ```json
         {
@@ -787,8 +778,8 @@
       "message": "File uploaded successfully",
       "file": ""
     }
-    ```
-    ---
+
+---
 
 29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add/:appointmentId`
   * **Method:** POST
@@ -805,7 +796,7 @@
       "endDate": "2023-10-25"
     }
     ```
-    ---
+---
 
 30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
   * **Method:** POST
@@ -823,7 +814,7 @@
     "message": "Appointment accepted successfully"
     }
     ```
-    ---
+---
 31. **Patient view appointments history:** `patient/appointment/appointmentsHistory`
   * **Method:** GET
   * **Request Headers:**
@@ -852,3 +843,40 @@
         ]
     }
     ```
+    If no appointments are available:
+    ```json
+       { "message": "No Completed appointments found" }
+    ```
+---
+
+  32. **Doctor view appointments history:** `/doctor/appointmentHistory`
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
+  * **Response Body:**
+    ```json
+      {
+      "appointments": [
+          {
+              "appointment_patient_id": 3,
+              "appointment_doctor_id": 13,
+              "appointment_availability_slot": 55,
+              "appointment_type": "Followup",
+              "appointment_duration": 30,
+              "appointment_complaint": "I have a headache",
+              "appointment_parent_reference": null,
+              "appointment_settings_type": "Onsite",
+              "patient_first_name": "mohamed ",
+              "patient_last_name": "salem",
+              "doctor_first_name": "samy",
+              "doctor_last_name": "ali",
+              "doctor_specialization": "Cardiology",
+              "doctor_availability_day_hour": "2024-11-17T07:00:00.000Z"
+          }]}
+    ```
+    If no appointments are available:
+    ```json
+       { "message": "No Completed appointments found" }
+    ```
+---

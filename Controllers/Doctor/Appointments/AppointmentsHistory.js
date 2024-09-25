@@ -1,12 +1,12 @@
-const  database  = require('../../../Database/Patient/Appointment/appointmentHistory');
+const  database  = require('../../../Database/Doctor/appointmentHistory');
 
 // not tested with new data model
 
 const appointmentsHistory = async (req, res) => {
-    const patientId = req.id; //  patient ID is retrieved from req.id
+    const doctorId = req.id; //  patient ID is retrieved from req.id
     const patientEmail = req.email;
     try {
-      const appointments = await database.retrievePatientAppointmentsHistory(patientId);
+      const appointments = await database.retrieveDoctorAppointmentsHistory(doctorId);
   
       if (!appointments.length) {
         return res.json({ message: 'No Completed appointments found' });
