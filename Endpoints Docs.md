@@ -34,9 +34,9 @@
 26. **Doctor Availability Addition:** `/doctor/availability/add`(Tested)
 27. **Doctor Availability Deletion:** `/doctor/availability/delete`(Tested)
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
-29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
+29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`(Canceled)
 30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`(Tested)
-31. **Patient view appointments history:** `patient/appointment/appointmentsHistory`(Tested)
+31. **Patient view appointments history:** `/patient/appointment/appointmentsHistory`(Tested)
 32. **Doctor view appointments history:** `/doctor/appointmentHistory`(Tested)
 33. **Doctor view appointment details:** `/doctor/appointmentDetails/:appointmentId`(Tested)
 34. **Doctor view Patient appointments:** `/doctor/PatientSummary/:patientID`(Tested)
@@ -823,7 +823,7 @@
     }
     ```
 ---
-31. **Patient view appointments history:** `patient/appointment/appointmentsHistory`
+31. **Patient view appointments history:** `/patient/appointment/appointmentsHistory`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
@@ -954,7 +954,7 @@
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
   * **Response Body:**
-    ```json
+  ```json
    {
     "appointments": [
         {
@@ -974,12 +974,12 @@
         }
     ]
     }
-    ```
+  ```
   with wrong appointmentId:
-    ```json
+  ```json
     {
       "message": "No Completed appointments found"
     }
-    ```
+  ```
 
 ---
