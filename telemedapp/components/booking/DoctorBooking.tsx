@@ -32,71 +32,67 @@ const DoctorBooking = () => {
     }
   }, [searchParams]);
 
+  // Fetch doctor availability
   useEffect(() => {
-    let token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("jwt");
 
     const fetchDoctorAvailability = async () => {
-      if (doctor && doctor.id) {
+      if (doctor?.id) {
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/${doctor.id}`,
             {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+              headers: { Authorization: `Bearer ${token}` },
             }
           );
-          if (!response.ok) {
-            throw new Error("Failed to fetch doctor availability");
-          }
+          if (!response.ok) throw new Error("Failed to fetch availability");
 
           const data = await response.json();
           const formattedDates = formatDoctorAvailabilities(data);
           setAvailableDates(formattedDates);
         } catch (error) {
-          console.error("Error fetching doctor availability", error);
+          console.error("Error fetching availability:", error);
         }
       }
     };
 
-    if (doctor) {
-      fetchDoctorAvailability();
-    }
+    if (doctor) fetchDoctorAvailability();
   }, [doctor]);
 
+  // Fetch patient appointments
   useEffect(() => {
-    let token = localStorage.getItem("jwt");
-    fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/appointments`,
-      {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((response) => setAppointments(() => response));
-    console.log(appointments);
-  }, [setAppointmentState, appointmentState]);
+    const token = localStorage.getItem("jwt");
 
-  const handleDurationChange = (duration: number) => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/appointments`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        setAppointments(data);
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+
+  const handleDurationChange = (duration: number) =>
     setSelectedDuration(duration);
-  };
 
   const handleDateSelect = (dateObj: {
     date: string;
-    slots: { time: string; id: number; type: string }[];
-  }) => {
-    setSelectedDate(dateObj);
-    // setSelectedSlot(null); // Reset the selected slot when the date changes
-  };
+    slots: { time: string; type: string }[];
+  }) => setSelectedDate(dateObj);
 
-  const handleSlotSelect = (slot: string) => {
-    setSelectedSlot(slot);
-  };
+  const handleSlotSelect = (slot: string) => setSelectedSlot(slot);
 
   if (!doctor) {
     return <div className="mx-10 text-xl">Loading doctor data...</div>;
@@ -111,7 +107,7 @@ const DoctorBooking = () => {
           handleDurationChange={handleDurationChange}
           appointmentState={appointmentState}
           setAppointmentState={setAppointmentState}
-          appointments={appointments} // Pass appointments here
+          appointments={appointments}
         />
         <BookingSummary
           selectedSlot={selectedSlot}

@@ -7,7 +7,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 function TimeSlots() {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
-  const [appointmentType, setAppointmentType] = useState("remote");
+  const [appointmentType, setAppointmentType] = useState("online");
 
   const today = new Date();
   let datesList = [];
@@ -26,6 +26,8 @@ function TimeSlots() {
     "friday",
     "saturday",
   ];
+  // 1_01_s : saturday, 9:00 AM : 10:00 AM, onsite
+  // 2_12_l : sunday, 9:00 PM : 10:00 PM, online
 
   const timesList = {
     "9:00 AM : 10:00 AM": "9:00:00",
@@ -83,14 +85,13 @@ function TimeSlots() {
     token = localStorage.getItem("jwt");
     if (!token) {
       window.location.href = "/auth/signin";
-    }
-
-    else if(Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
+    } else if (
+      Math.floor(new Date().getTime() / 1000) >
+      Number(localStorage.getItem("expiryDate"))
+    ) {
       localStorage.clear();
       window.location.href = "/auth/signin";
-    }
-
-    else {
+    } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
         mode: "cors",
         headers: {
@@ -191,35 +192,36 @@ function TimeSlots() {
   ].join(" ");
 
   function getTimeClass(time: string) {
+    // Check if the current day has the time already selected
     if (oldTimes[dayDate].has(time)) {
       if (toggleChecked) {
+        // If in deletion mode, allow selected times to be clicked
         if (timesChosen[dayDate].has(time)) {
           return clickedTimeClass;
         }
-        return timeButtonClass; // in the case of deletion we want the already selected times to be available for deletion
+        return timeButtonClass; // Available for deletion
       }
-      return disabledTimeClass;
+      return disabledTimeClass; // Disabled in normal mode (already selected)
     }
 
+    // If time is selected for adding
     if (timesChosen[dayDate].has(time)) {
       return clickedTimeClass;
     }
 
+    // If in deletion mode, disable unselected times
     if (toggleChecked) {
-      return disabledTimeClass; // in the case of deletion we want the non selected items and the not clicked on items to be disabled
+      return disabledTimeClass;
     }
 
+    // Available for selection in normal mode
     return timeButtonClass;
   }
 
   const handleDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const name = e.currentTarget.name;
-
-    if (dayDate === name) {
-      return;
-    }
-
+    if (dayDate === name) return; // Prevent unnecessary re-renders
     setDayDate(() => name);
   };
 
@@ -227,41 +229,85 @@ function TimeSlots() {
     e.preventDefault();
     let currSet = timesChosen[dayDate];
 
+    // Toggle selection/deselection
     if (e.currentTarget.className === clickedTimeClass) {
       e.currentTarget.className = timeButtonClass;
-      currSet.delete(e.currentTarget.name);
+      currSet.delete(e.currentTarget.name); // Remove selected time
     } else if (e.currentTarget.className === timeButtonClass) {
       e.currentTarget.className = clickedTimeClass;
-      currSet.add(e.currentTarget.name);
+      currSet.add(e.currentTarget.name); // Add selected time
     }
-    setTimesChosen((prevTimes: any) => ({ ...prevTimes, dayDate: currSet }));
+    setTimesChosen((prevTimes: any) => ({ ...prevTimes, [dayDate]: currSet }));
   };
 
   const handleChangeToggle = () => {
+    // Reset selection when toggling between add and delete mode
     setTimesChosen(() =>
       Object.fromEntries(
         datesList.map((date) => [date.toDateString(), new Set<String>()])
       )
     );
-
-    setToggleChecked(() => !toggleChecked);
+    setToggleChecked(() => !toggleChecked); // Toggle between modes
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCoddedSlots = (sentObj: Record<string, string[]>) => {
+    const dayCodes: Record<string, number> = {
+      Sun: 1,
+      Mon: 2,
+      Tue: 3,
+      Wed: 4,
+      Thu: 5,
+      Fri: 6,
+      Sat: 7,
+    };
+
+    const timeSlotCodes: Record<string, string> = {
+      "09:00:00": "01",
+      "10:00:00": "02",
+      "11:00:00": "03",
+      "12:00:00": "04",
+      "13:00:00": "05",
+      "14:00:00": "06",
+      "15:00:00": "07",
+      "16:00:00": "08",
+      "17:00:00": "09",
+      "18:00:00": "10",
+      "19:00:00": "11",
+      "20:00:00": "12",
+    };
+
+    let codedSlots: string[] = [];
+
+    for (const [day, timeSlots] of Object.entries(sentObj)) {
+      const dayCode = dayCodes[day.split(" ")[0]];
+
+      for (const time of timeSlots) {
+        const timeCode = timeSlotCodes[time];
+        const typeCode = appointmentType === "online" ? "L" : "S";
+        codedSlots.push(`${dayCode}_${timeCode}_${typeCode}`);
+      }
+    }
+
+    return codedSlots;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let sentObj = Object.fromEntries(
-      datesList.map((date) => [date.toDateString(), new Array()])
+    let sentObj: Record<string, string[]> = Object.fromEntries(
+      datesList.map((date) => [date.toDateString(), [] as string[]])
     );
 
-    for (const [key, value] of Object.entries(timesChosen)) {
-      sentObj[key] = Array.from(value);
-    }
-    delete sentObj["dayDate"];
+    // for (const [key, value] of Object.entries(timesChosen)) {
+    //   sentObj[key] = Array.from(value); // Convert set to array
+    // }
+
+    const codedSlots = handleCoddedSlots(sentObj);
 
     if (!toggleChecked) {
+      // Add time slots
       try {
-        token = localStorage.getItem("jwt");
+        const token = localStorage.getItem("jwt");
 
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/add`,
@@ -269,43 +315,45 @@ function TimeSlots() {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
+              Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(sentObj),
+            body: JSON.stringify(codedSlots),
             mode: "cors",
           }
         );
 
         if (!response.ok) {
-          throw new Error("Failed To Add Time Slots");
+          throw new Error("Failed to add time slots");
         }
 
         window.location.href = "/doctorProfile/timeSlots";
       } catch (error) {
-        console.error("Error While Adding Time Slots:", error);
+        console.error("Error while adding time slots:", error);
       }
     } else {
-      let sentTimesId = new Array();
+      // Delete time slots
+      let sentTimesId: string[] = [];
 
       for (const [key, value] of Object.entries(sentObj)) {
-        value.map((timeEntry) => {
+        value.forEach((timeEntry) => {
           let currObj = oldTimesId[key as keyof typeof oldTimesId];
           let currEntry = currObj[timeEntry as keyof typeof currObj];
           if (currEntry) {
-            sentTimesId.push(currEntry);
+            sentTimesId.push(currEntry); // Collect IDs for deletion
           }
         });
       }
 
       try {
-        token = localStorage.getItem("jwt");
+        const token = localStorage.getItem("jwt");
+
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/delete`,
           {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               slots_id: sentTimesId,
@@ -315,12 +363,12 @@ function TimeSlots() {
         );
 
         if (!response.ok) {
-          throw new Error("Failed To Delete Time Slots");
+          throw new Error("Failed to delete time slots");
         }
 
         window.location.href = "/doctorProfile/timeSlots";
       } catch (error) {
-        console.error("Error While Deleting Time Slots:", error);
+        console.error("Error while deleting time slots:", error);
       }
     }
   };
@@ -358,10 +406,7 @@ function TimeSlots() {
               >
                 Time Slots
               </Link>
-              <Link
-                href="/doctorProfile/requests"
-                className="font-bold mr-7"
-              >
+              <Link href="/doctorProfile/requests" className="font-bold mr-7">
                 Pending Requests
               </Link>
             </div>
@@ -418,12 +463,12 @@ function TimeSlots() {
                     <input
                       type="radio"
                       name="type"
-                      value="remote"
-                      checked={appointmentType === "remote"}
-                      onChange={() => setAppointmentType("remote")}
+                      value="online"
+                      checked={appointmentType === "online"}
+                      onChange={() => setAppointmentType("online")}
                     />
 
-                    <span className="ml-2">Remote</span>
+                    <span className="ml-2">Online</span>
                   </label>
                   <label className="flex items-center">
                     <input

@@ -1,25 +1,56 @@
-import { format } from "date-fns";
+const dayCodes: Record<string, string> = {
+  "1": "Saturday",
+  "2": "Sunday",
+  "3": "Monday",
+  "4": "Tuesday",
+  "5": "Wednesday",
+  "6": "Thursday",
+  "7": "Friday",
+};
 
-export const formatDoctorAvailabilities = (data: any) => {
-  return Object.entries(data.availabilities).map(([date, slots]) => {
-    // Format date to YYYY-MM-DD
-    const formattedDate = new Date(date).toISOString().split("T")[0];
+const timeSlotCodes: Record<string, string> = {
+  "01": "09:00 AM",
+  "02": "10:00 AM",
+  "03": "11:00 AM",
+  "04": "12:00 PM",
+  "05": "01:00 PM",
+  "06": "02:00 PM",
+  "07": "03:00 PM",
+  "08": "04:00 PM",
+  "09": "05:00 PM",
+  "10": "06:00 PM",
+  "11": "07:00 PM",
+  "12": "08:00 PM",
+};
 
-    // Cast slots to the expected type and format both time and id
-    const formattedSlots = (
-      slots as { time: string; id: number; type: string }[]
-    ).map((slot) => {
-      const slotTime = new Date(`1970-01-01T${slot.time}Z`); // Create a date object from the time
-      return {
-        time: format(slotTime, "hh:mm a"), // Format time to 12-hour AM/PM
-        id: slot.id, // Keep the id as is
-        type: slot.type || (Math.random() > 0.5 ? "Onsite" : "Remote"), // Add a random type if none exists
-      };
+const typeCodes: Record<string, string> = {
+  L: "Online",
+  S: "Onsite",
+};
+export const formatDoctorAvailabilities = (slots: string[]) => {
+  const availabilityMap: Record<
+    string,
+    { time: string; id: number; type: string }[]
+  > = {};
+
+  slots.forEach((slotId) => {
+    const [dayCode, timeCode, typeCode] = slotId.split("_");
+    const date = dayCodes[dayCode];
+
+    if (!availabilityMap[date]) {
+      availabilityMap[date] = [];
+    }
+
+    availabilityMap[date].push({
+      time: timeSlotCodes[timeCode],
+      id: parseInt(timeCode),
+      type: typeCodes[typeCode],
     });
-
-    return {
-      date: formattedDate,
-      slots: formattedSlots,
-    };
   });
+
+  // Convert the map to an array of dates with slots
+  return Object.keys(availabilityMap).map((date) => ({
+    date,
+    slots: availabilityMap[date],
+  }));
 };
