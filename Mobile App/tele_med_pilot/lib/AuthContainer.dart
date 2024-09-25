@@ -22,7 +22,6 @@ class _AuthContainerState extends State<AuthContainer> {
   // ignore: non_constant_identifier_names
   String? access_token; // Variable to store the access token
 
-
   @override
   void initState() {
     super.initState();
@@ -36,15 +35,12 @@ class _AuthContainerState extends State<AuthContainer> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     if (access_token == null) {
       return const MainScreen();
     } else {
       return const MainScreenLayout();
-      }
     }
+  }
 }
-
-

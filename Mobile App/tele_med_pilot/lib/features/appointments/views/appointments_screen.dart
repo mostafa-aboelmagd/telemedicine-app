@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tele_med_pilot/core/constant.dart';
 import 'package:tele_med_pilot/core/theme.dart';
-import 'package:tele_med_pilot/ui/components/button.dart';
+import 'package:tele_med_pilot/features/appointments/view_models/appointments_view_model.dart';
+import 'package:tele_med_pilot/ui/components/appointment_card.dart';
+import 'package:tele_med_pilot/ui/components/loading_screen.dart';
 
 class AppointmentsScreen extends ConsumerStatefulWidget {
   const AppointmentsScreen({super.key});
@@ -66,112 +68,61 @@ class OngoingAppointmentsView extends ConsumerStatefulWidget {
 }
 
 class _OngoingAppointmentsViewState
-    extends ConsumerState<ConsumerStatefulWidget> {
+    extends ConsumerState<OngoingAppointmentsView> {
+  bool isLoading = false;
+
+  void _getData() async {
+    setState(() {
+      isLoading = true;
+    });
+    await ref.read(appointmentsViewModelProvider.notifier).fetchAppointments();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    _getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-      child: Column(
-        children: [
-          Text(
-            "Upcoming Appointments",
-            style: AppTextStyles.bodyTextLargeBold
-                .copyWith(color: AppColors.blue100),
-          ),
-          Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.symmetric(vertical: 8.h),
-                padding: EdgeInsets.all(16.r),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
+    final appointmentState = ref.watch(appointmentsViewModelProvider);
+    final appointmentViewModel =
+        ref.watch(appointmentsViewModelProvider.notifier);
+
+    if (appointmentState.errorMessage != null) {
+      return Center(child: Text('Error: ${appointmentState.errorMessage}'));
+    }
+
+    if (appointmentState.appointments.isEmpty && !isLoading) {
+      return const Center(child: Text('No upcoming appointments.'));
+    }
+
+    return isLoading
+        ? const LoadingScreen()
+        : PopScope(
+            onPopInvoked: (didPop) => appointmentViewModel.resetState(),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              AppConstants.emptyProfile,
-                              height: 40.h,
-                              width: 40.h,
-                            ),
-                            SizedBox(width: 12.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Dr. Yahya",
-                                  style: AppTextStyles.bodyTextBold,
-                                ),
-                                Text(
-                                  "Specialist",
-                                  style: AppTextStyles.bodyTextSmallNormal,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 2.h, horizontal: 12.w),
-                              decoration: BoxDecoration(
-                                color: AppColors.gray60,
-                                borderRadius: BorderRadius.circular(10.r),
-                              ),
-                              child: Text(
-                                "Online",
-                                style: AppTextStyles.bodyTextSmallBold
-                                    .copyWith(color: AppColors.black),
-                              ),
-                            ),
-                            SizedBox(width: 18.w),
-                            const Icon(Icons.more_horiz),
-                          ],
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 12.h),
                     Text(
-                      "Stating complaints: I've been experiencing severe chest pain for the past two days.",
-                      style: AppTextStyles.bodyTextMedium
-                          .copyWith(color: AppColors.black),
-                      softWrap: true,
+                      "Upcoming Appointments",
+                      style: AppTextStyles.bodyTextLargeBold
+                          .copyWith(color: AppColors.blue100),
                     ),
-                    SizedBox(height: 12.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("September 9, 2024"),
-                        SizedBox(
-                          width: 140.h,
-                          child: Button(
-                            label: "View Details",
-                            labelColor: AppColors.white,
-                            isValid: true,
-                            onTap: () {},
-                          ),
-                        )
-                      ],
-                    )
+                    ...appointmentState.appointments.map((appointment) {
+                      return AppointmentCard(appointment: appointment);
+                    }),
                   ],
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
-    );
+            ),
+          );
   }
 }
 
@@ -182,20 +133,62 @@ class PastAppointmentsView extends ConsumerStatefulWidget {
       _PastAppointmentsViewState();
 }
 
-class _PastAppointmentsViewState extends ConsumerState<ConsumerStatefulWidget> {
+class _PastAppointmentsViewState extends ConsumerState<PastAppointmentsView> {
+  bool isLoading = false;
+
+  void _getData() async {
+    setState(() {
+      isLoading = true;
+    });
+    await ref
+        .read(appointmentsViewModelProvider.notifier)
+        .fetchHistoryAppointments();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    _getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-      child: Column(
-        children: [
-          Text(
-            "Past Appointments",
-            style: AppTextStyles.bodyTextLargeBold
-                .copyWith(color: AppColors.blue100),
-          ),
-        ],
-      ),
-    );
+    final appointmentState = ref.watch(appointmentsViewModelProvider);
+    final appointmentViewModel =
+        ref.watch(appointmentsViewModelProvider.notifier);
+
+    if (appointmentState.errorMessage != null) {
+      return Center(child: Text('Error: ${appointmentState.errorMessage}'));
+    }
+
+    if (appointmentState.appointments.isEmpty && !isLoading) {
+      return const Center(child: Text('No upcoming appointments.'));
+    }
+
+    return isLoading
+        ? const LoadingScreen()
+        : PopScope(
+            onPopInvoked: (didPop) => appointmentViewModel.resetState(),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+                child: Column(
+                  children: [
+                    Text(
+                      "Upcoming Appointments",
+                      style: AppTextStyles.bodyTextLargeBold
+                          .copyWith(color: AppColors.blue100),
+                    ),
+                    ...appointmentState.appointments.map((appointment) {
+                      return AppointmentCard(appointment: appointment);
+                    }),
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:tele_med_pilot/core/constant.dart';
 import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
@@ -26,6 +27,42 @@ class _SignUpStep1ScreenState extends ConsumerState<SignUpStep1Screen> {
   final _confirmPasswordController = TextEditingController();
   final _birthYearController = TextEditingController();
   String? _selectedGender;
+
+  Future<String> _selectDate(
+      BuildContext context, TextEditingController controller) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1000),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 100)),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: AppColors.blue100,
+              onPrimary: AppColors.white,
+              onSurface: AppColors.black,
+              primaryContainer: AppColors.blue100,
+              onPrimaryContainer: AppColors.white,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.blue100,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      setState(() {
+        controller.text = formattedDate;
+      });
+    }
+    return controller.text;
+  }
 
   @override
   void dispose() {
@@ -127,8 +164,9 @@ class _SignUpStep1ScreenState extends ConsumerState<SignUpStep1Screen> {
                     ),
                     SizedBox(height: 16.h),
                     AppTextField(
+                      textInputType: TextInputType.number,
                       controller: _phoneController,
-                      hintText: "+20 xxxx xxxx xxx",
+                      hintText: "Enter your Phone Number",
                       labelText: "Phone*",
                       isPassword: false,
                       onChanged: (value) => viewModelNotifier.setPhone(value),
@@ -154,13 +192,17 @@ class _SignUpStep1ScreenState extends ConsumerState<SignUpStep1Screen> {
                           viewModelNotifier.setConfirmPassword(value),
                     ),
                     SizedBox(height: 16.h),
-                    AppTextField(
-                      controller: _birthYearController,
-                      hintText: "Enter your Birth Year",
-                      labelText: "Birth Year*",
-                      isPassword: false,
-                      onChanged: (value) =>
-                          viewModelNotifier.setBirthYear(value),
+                    GestureDetector(
+                      onTap: () async => viewModelNotifier.setBirthYear(
+                          await _selectDate(context, _birthYearController)),
+                      child: AbsorbPointer(
+                        child: AppTextField(
+                          controller: _birthYearController,
+                          hintText: "Enter your Birth Date",
+                          labelText: "Birth Date",
+                          isPassword: false,
+                        ),
+                      ),
                     ),
                     SizedBox(height: 16.h),
                     Text(
@@ -218,17 +260,28 @@ class _SignUpStep1ScreenState extends ConsumerState<SignUpStep1Screen> {
                             .copyWith(color: AppColors.gray900),
                         children: [
                           TextSpan(
-                            text: 'Sign In',
-                            style: AppTextStyles.bodyTextMediumNormal.copyWith(
-                              color: AppColors.teal0,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.pushReplacementNamed(
-                                  context, RouteClass.signInRoute),
-                          ),
+                              text: 'Sign In',
+                              style:
+                                  AppTextStyles.bodyTextMediumNormal.copyWith(
+                                color: AppColors.teal0,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  viewModelNotifier.resetState();
+
+                                  Navigator.pushReplacementNamed(
+                                      context, RouteClass.signInRoute);
+                                }),
                         ],
                       ),
                     ),
+                    SizedBox(height: 16.h),
+                    if (viewModel.errorMessage != null)
+                      Text(
+                        viewModel.errorMessage!,
+                        style: AppTextStyles.bodyTextMedium
+                            .copyWith(color: AppColors.red100),
+                      ),
                     SizedBox(height: 16.h),
                     Button(
                       label: "Register",
@@ -247,14 +300,6 @@ class _SignUpStep1ScreenState extends ConsumerState<SignUpStep1Screen> {
                             viewModelNotifier.resetState();
                             Navigator.pushReplacementNamed(
                                 context, RouteClass.signInRoute);
-                          } else {
-                            print(viewModel.errorMessage);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("${viewModel.errorMessage}"),
-                                backgroundColor: AppColors.red100,
-                              ),
-                            );
                           }
                         }
                       },

@@ -8,27 +8,56 @@ import CustomTitle from '../components/title';
 export default function Availability ({ navigation }) {
 
     const slots = Object.entries(doctorAv)
-    const [add, setAdd] = useState(true); // State to control the switch
+    const [isOnline, setIsonline] = useState('online')
+    const online = () => {
+        isOnline == 'online' ? setIsonline('on-site')
+        : setIsonline('online')
+    }
 
+    // add or remove slots switch
+    const [add, setAdd] = useState(true); 
     const toggleSwitch = () => setAdd((previousState) => !previousState);
 
-    const [selectedTime, setSelectedTime] = useState(''); // Store selected time to compare
+    const [days, setDays] = useState({
+        'sat': false,
+        'sun': false,
+        'mon': false,
+        'tue': false,
+        'wed': false,
+        'thu': false,
+        'fri': false,
+    });
+    const checkDay = (day) => {
+        // Create a new object based on the current days state
+        const newDays = Object.keys(days).reduce((acc, key) => {
+            acc[key] = key === day; // Set the selected day to true, others to false
+            return acc;
+        }, {});
+        setDays(newDays); // Update the state    
+    };
 
     // Time slots array
-    const timeSlots = [
-        '09:00 am - 10:00 am',
-        '10:00 am - 11:00 am',
-        '11:00 am - 12:00 pm',
-        '12:00 pm - 01:00 pm',
-        '01:00 pm - 02:00 pm',
-        '02:00 pm - 03:00 pm',
-        '03:00 pm - 04:00 pm',
-        '04:00 pm - 05:00 pm',
-        '05:00 pm - 06:00 pm',
-        '06:00 pm - 07:00 pm',
-        '07:00 pm - 08:00 pm',
-        '08:00 pm - 09:00 pm',
-    ];
+    const timeSlots = {
+        '09:00 am' : false,
+        '10:00 am' : false,
+        '11:00 am' : false,
+        '12:00 pm' : false,
+        '01:00 pm' : false,
+        '02:00 pm' : false,
+        '03:00 pm' : false,
+        '04:00 pm' : false,
+        '05:00 pm' : false,
+        '06:00 pm' : false,
+        '07:00 pm' : false,
+        '08:00 pm' : false,
+    };
+    const checkTime = (slot, time, day, state) => {
+        if (time == slot && days[day] && state == isOnline) {
+            timeSlots[slot] = true
+        } else {
+            timeSlots[slot] = false
+        }
+    }
 
 return (
     <SafeArea>
@@ -37,15 +66,18 @@ return (
 
         <View style={{margin: 10}}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                <Text style={styles.item}>Sat</Text>
-                <Text style={styles.item}>Sun</Text>
-                <Text style={styles.item}>Mon</Text>
-                <Text style={styles.item}>Tue</Text>
-                <Text style={styles.item}>Wed</Text>
-                <Text style={styles.item}>Thu</Text>
-                <Text style={styles.item}>Fri</Text>
+            {Object.keys(days).map((day) => (
+                    <TouchableOpacity key={day} onPress={() => checkDay(day)}>
+                        <Text style={days[day] ? 
+                            [styles.item, { color: 'white', backgroundColor: '#1565c0' }] 
+                            : [styles.item]}>
+                            {day.charAt(0).toUpperCase() + day.slice(1)}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
             </ScrollView>
         </View>
+
         <View style={{flexDirection:'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10}}>
             <Text style={add ? styles.switchTextAdd : styles.switchTextRemove}>
                 {add ? 'Add slots' : 'Remove slots'}
@@ -58,132 +90,197 @@ return (
         </View>
         
         <CustomScroll>
-            {/* {slots.map(([id, data]) =>
-                <View key={id}> 
-                    <Text>{data[0]}</Text>
-                    <Text>{data[1]}</Text>
-                    <Text>{data[2]}</Text>
-                </View>
-            )} */}
-
-            {/* <View style={styles.row}>
-                {slots.map(([id, time]) => ( 
-                    <Text key={id} 
-                    style={add ? 
-                        (time === timeSlots[1] ?
-                              [styles.slot] 
-                            : [styles.slot, {backgroundColor: 'green'}])
-                        : (time === timeSlots[1] ?
-                              [styles.slot, {backgroundColor: 'red'}] 
-                            : [styles.slot]
-                        )}
+            <View style={styles.row}>
+                <TouchableOpacity>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['09:00 am']) return;
+                        checkTime('09:00 am', time[1], time[0], time[2])
+                    })}    
+                    <Text style={add ? 
+                    (timeSlots['09:00 am'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['09:00 am'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
                     >
                         09:00 am - 10:00 am
                     </Text>
-                ))} */}
-                
-            <View style={styles.row}>
-                <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    09:00 am - 10:00 am
-                </Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    10:00 am - 11:00 am
-                </Text>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['10:00 am']) return;
+                        checkTime('10:00 am', time[1], time[0], time[2])
+                    })}    
+                    <Text style={add ? 
+                    (timeSlots['10:00 am'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['10:00 am'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        10:00 am - 11:00 am
+                    </Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                <Text
-                style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    11:00 am - 12:00 pm
-                </Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.row}>
-                <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    12:00 pm - 01:00 pm
-                </Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    01:00 pm - 02:00 pm
-                </Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    02:00 pm - 03:00 pm
-                </Text>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['11:00 am']) return;
+                        checkTime('11:00 am', time[1], time[0], time[2])
+                    })}    
+                    <Text style={add ? 
+                    (timeSlots['11:00 am'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['11:00 am'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        11:00 am - 12:00 pm
+                    </Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.row}>
                 <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    03:00 pm - 04:00 pm
-                </Text>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['12:00 pm']) return;
+                        checkTime('12:00 pm', time[1], time[0], time[2])
+                    })}    
+                    <Text style={add ? 
+                    (timeSlots['12:00 pm'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['12:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        12:00 pm - 01:00 pm
+                    </Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    04:00 pm - 05:00 pm
-                </Text>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['01:00 pm']) return;
+                        checkTime('01:00 pm', time[1], time[0], time[2])
+                    })}
+                    <Text style={add ? 
+                    (timeSlots['01:00 pm'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['01:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        01:00 pm - 02:00 pm
+                    </Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    05:00 pm - 06:00 pm
-                </Text>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['02:00 pm']) return;
+                        checkTime('02:00 pm', time[1], time[0], time[2])
+                    })}    
+                    <Text style={add ? 
+                    (timeSlots['02:00 pm'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['02:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        02:00 pm - 03:00 pm
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.row}>
+                <TouchableOpacity>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['03:00 pm']) return;
+                        checkTime('03:00 pm', time[1], time[0], time[2])
+                    })}
+                    <Text style={add ? 
+                    (timeSlots['03:00 pm'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['03:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        03:00 pm - 04:00 pm
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['04:00 pm']) return;
+                        checkTime('04:00 pm', time[1], time[0], time[2])
+                    })}
+                    <Text style={add ? 
+                    (timeSlots['04:00 pm'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['04:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        04:00 pm - 05:00 pm
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['05:00 pm']) return;
+                        checkTime('05:00 pm', time[1], time[0], time[2])
+                    })}                    
+                    <Text style={add ? 
+                    (timeSlots['05:00 pm'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['05:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        05:00 pm - 06:00 pm
+                    </Text>
                 </TouchableOpacity>
             </View>
             
             <View style={styles.row}>
                 <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    06:00 pm - 07:00 pm
-                </Text>
+                    {slots.forEach(([it, time]) => {
+                        if (timeSlots['06:00 pm']) return;
+                        checkTime('06:00 pm', time[1], time[0], time[2])
+                    })}
+                    <Text style={add ? 
+                    (timeSlots['06:00 pm'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['06:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        06:00 pm - 07:00 pm
+                    </Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    07:00 pm - 08:00 pm
-                </Text>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['07:00 pm']) return; // Skip further iterations
+                        checkTime('07:00 pm', time[1], time[0], time[2])
+                    })}                    
+                    <Text style={add ? 
+                    (timeSlots['07:00 pm'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['07:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        07:00 pm - 08:00 pm
+                    </Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                <Text style={add ? [styles.slot, {backgroundColor: 'green'}] 
-                : [styles.slot]}
-                >
-                    08:00 pm - 09:00 pm
-                </Text>
+                    {slots.forEach(([id, time]) => {
+                        if (timeSlots['08:00 pm']) return;
+                        checkTime('08:00 pm', time[1], time[0], time[2])
+                    })}
+                    <Text style={add ? 
+                    (timeSlots['08:00 pm'] ? styles.slot
+                        : [styles.slot, {backgroundColor: 'green'}]) 
+                    : (timeSlots['08:00 pm'] ? [styles.slot, {backgroundColor: 'red'}] 
+                        : [styles.slot])}
+                    >
+                        08:00 pm - 09:00 pm
+                    </Text>
                 </TouchableOpacity>
             </View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <TouchableOpacity onPress={() => navigation.pop()}>
+                    {add ? <Text style={[styles.button, {color: 'green', borderColor: 'green'}]}>Add</Text>
+                    : <Text style={[styles.button, {color: 'red', borderColor: 'red'}]}>Remove</Text>}
+                </TouchableOpacity>
 
-            <TouchableOpacity>
-                {add ? <Text style={[styles.button, {color: 'green', borderColor: 'green'}]}>Add</Text>
-                : <Text style={[styles.button, {color: 'red', borderColor: 'red'}]}>Remove</Text>}
-            </TouchableOpacity>
-
+                <TouchableOpacity onPress={online}>
+                    <Text style={styles.button}>
+                        {isOnline == 'online' ? 'Online' : 'On-site'}
+                    </Text>
+                </TouchableOpacity>                
+            </View>
         </CustomScroll>
 
       </View>
@@ -242,6 +339,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     fontSize: 18,
     width: 100,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: '#1565c0',
+    borderColor: '#1565c0'
   }
 })

@@ -11,6 +11,7 @@ class AppTextField extends StatefulWidget {
   final VoidCallback? onSuffixIconPressed;
   final String? errorText;
   final ValueChanged<String>? onChanged;
+  final TextInputType? textInputType;
 
   const AppTextField({
     super.key,
@@ -20,6 +21,7 @@ class AppTextField extends StatefulWidget {
     required this.isPassword,
     this.suffixImage,
     this.onSuffixIconPressed,
+    this.textInputType,
     this.errorText,
     this.onChanged,
   });
@@ -42,6 +44,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
         SizedBox(height: 4.h),
         TextField(
+          keyboardType: widget.textInputType,
           cursorColor: AppColors.gray100,
           controller: widget.controller,
           obscureText: widget.isPassword,
