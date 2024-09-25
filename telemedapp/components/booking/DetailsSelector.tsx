@@ -50,20 +50,30 @@ const DetailsSelector: React.FC<DetailsSelectorProps> = ({
             <input
               type="radio"
               name="type"
-              value="first-time"
-              checked={appointmentState === "first-time"}
-              onChange={() => setAppointmentState("first-time")}
+              value="First_time"
+              checked={appointmentState === "First_time"}
+              onChange={() => setAppointmentState("First_time")}
             />
             <span className="ml-2">First time</span>
           </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="type"
+              value="Follow_up"
+              checked={appointmentState === "Follow_up"}
+              onChange={() => setAppointmentState("Follow_up")}
+            />
+            <span className="ml-2">Follow up</span>
+          </label>
 
-          <FollowUpAppointments
+          {/* <FollowUpAppointments
             appointments={appointments}
             selectedAppointment={selectedAppointment}
             setSelectedAppointment={setSelectedAppointment}
             setAppointmentState={setAppointmentState}
             appointmentState={appointmentState}
-          />
+          /> */}
         </div>
       </div>
     </div>

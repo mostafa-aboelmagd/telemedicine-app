@@ -13,6 +13,7 @@ interface BookingSummaryProps {
     date: string;
     slots: { id: number; time: string }[];
   };
+  appointmentState: string;
 }
 
 const BookingSummary: React.FC<BookingSummaryProps> = ({
@@ -20,6 +21,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   selectedDuration,
   doctor,
   selectedDate,
+  appointmentState,
 }) => {
   const [complaint, setComplaint] = React.useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -60,23 +62,20 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          // body = {
-          //   "doctor_id":13,
-          //   "complaint": "I have a headache",
-          //   "duration": 30,
-          //   "appointment_type": "Followup",
-          // "appointment_date":2024-09-26 14:00,
-          //   "appointment_parent_reference": null,
-          //   "time_slot_code":"1_01_S"
-          // }
           body: JSON.stringify({
-            // patient_id: patientId,
-            // complain: complaint,
-            appointmentDuration: selectedDuration,
-            availabilityId: selectedDate.slots.find(
-              (slot) => slot.time === selectedSlot
-            )?.id,
-            // online/onsite
+            // doctor_id: 14,
+            doctor_id: doctor.id,
+            complaint: complaint,
+            duration: 60,
+            // duration: selectedDuration,
+            // appointment_type: "First_time",
+            appointment_type: appointmentState,
+            appointment_date: "2024-09-26T14:00:00Z",
+            appointment_parent_reference: null,
+            time_slot_code: "1_03_S",
+            // availabilityId: selectedDate.slots.find(
+            //   (slot) => slot.time === selectedSlot
+            // )?.id,
           }),
         }
       );

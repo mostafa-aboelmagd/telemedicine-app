@@ -13,9 +13,9 @@ const DoctorBooking = () => {
   const [doctor, setDoctor] = useState<any>(null);
   const [selectedDuration, setSelectedDuration] = useState(60);
   const [selectedDate, setSelectedDate] = useState<any>(null);
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<string>("timeSlot test");
   const [availableDates, setAvailableDates] = useState<any[]>([]);
-  const [appointmentState, setAppointmentState] = useState("first-time");
+  const [appointmentState, setAppointmentState] = useState("First_time");
   const [appointments, setAppointments] = useState<any[]>([]);
 
   // Retrieve the doctor data from the query parameters
@@ -114,6 +114,7 @@ const DoctorBooking = () => {
           selectedDuration={selectedDuration}
           doctor={doctor}
           selectedDate={selectedDate}
+          appointmentState={appointmentState}
         />
       </div>
 
