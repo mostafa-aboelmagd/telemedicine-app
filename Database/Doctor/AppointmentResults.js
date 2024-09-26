@@ -72,39 +72,39 @@ const getTreatmentPlanIdByReference = async (appointmentReference) => {
     }
 };
   
-// const insertMedications = async (medications, appointmentId) => {
-//   try {
-//     const client = await pool.connect();
+const insertMedications = async (medications,TreatmentID) => {
+  try {
+      const client = await pool.connect();
+      
+      for (const med of medications) {
+          await client.query(
+              `INSERT INTO medications (
+                  medication_treatment_plan_reference,
+                  medication_name,
+                  medication_dosage,
+                  medication_note,
+                  medication_start_date,
+                  medication_end_date
+              ) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
+              [
+                  TreatmentID,
+                  med.medication_name,
+                  med.medication_dosage,
+                  med.medication_note,
+                  med.medication_start_date,
+                  med.medication_end_date
+              ]
+          );
+          
+      }
 
-//     await client.query('BEGIN');
+      client.release();
+  } catch (error) {
+      console.error('Error inserting medications:', error);
+      throw error;
+  }
+};
 
-//     const insertMedicationQuery = `
-//       INSERT INTO medications (
-//         medication.medication_name,
-//         medication.medication_dosage,
-//         medication.medication_note,
-//         medication.medication_start_date,
-//         medication.medication_end_date
-        
-//       ) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
-
-//     for (const medication of medications) {
-//        await client.query(insertMedicationQuery, [
-//         medication.medication_name,
-//         medication.medication_dosage,
-//         medication.medication_note,
-//         medication.medication_start_date,
-//         medication.medication_end_date
-//       ]);
-//     }
-
-//     await client.query('COMMIT');
-//     client.release();
-//   } catch (error) {
-//     console.error('Error inserting Medication plan:', error);
-//     throw error; 
-//   }
-// };
 
   const insertTreatmentPlan = async (TreatmentPlan) => {
     try {
@@ -154,4 +154,4 @@ const getTreatmentPlanIdByReference = async (appointmentReference) => {
     }
   };
   
-  module.exports = { ChangeAppointmentStatus, insertAppointmentResults, insertTreatmentPlan, getTreatmentPlanIdByReference};
+  module.exports = { ChangeAppointmentStatus, insertAppointmentResults, insertTreatmentPlan, getTreatmentPlanIdByReference,insertMedications};

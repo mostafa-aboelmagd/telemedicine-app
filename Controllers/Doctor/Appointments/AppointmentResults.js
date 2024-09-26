@@ -37,11 +37,12 @@ const AppointmentResultSubmission = async (req, res) => {
             treatment_plan_speciality_referral,
             treatment_plan_referral_notes
         };
+        for (const medication of medications) {
+            console.log(medication.medication_name)}
         const TreatmentPlanID = await database.getTreatmentPlanIdByReference(appointmentId);
-        console.log(appointmentId)
         await database.insertAppointmentResults(AppointmentResults);
         await database.insertTreatmentPlan(TreatmentPlan);
-        // await database.insertMedications(medications,TreatmentPlanID);
+        await database.insertMedications(medications,TreatmentPlanID);
         await database.ChangeAppointmentStatus(appointmentId,'Completed');
 
 
