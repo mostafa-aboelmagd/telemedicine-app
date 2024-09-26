@@ -4,6 +4,6 @@ const AppointmentResultSubmission  = require('../../Controllers/Doctor/Appointme
 //const { tokenAuthentication } = require('../../Middleware/User/Authentication');
 
 // Route for submitting appointment result and treatment plan
-router.post('/appointment/:appointmentId/submitresults', AppointmentResultSubmission.AppointmentResultSubmission);
+router.post('/:appointmentId/submitresults', AppointmentResultSubmission.AppointmentResultSubmission);
 
 module.exports = router;

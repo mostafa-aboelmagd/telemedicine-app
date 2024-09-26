@@ -40,7 +40,7 @@
 32. **Doctor view appointments history:** `/doctor/appointmentHistory`(Tested)
 33. **Doctor view appointment details:** `/doctor/appointmentDetails/:appointmentId`(Tested)
 34. **Doctor view Patient appointments:** `/doctor/PatientSummary/:patientID`(Tested)
-35. **Doctor submit appointment's results:** `doctor/AppointmentResults/appointment/:appointmentId/submitresults`(Tested)
+35. **Doctor submit appointment's results:** `doctor/AppointmentResults/:appointmentId/submitresults`(Tested)
 ---
 ---
 ---
@@ -922,34 +922,34 @@
   ```
 
 ---
-35. **Doctor submit appointment's results:** `doctor/AppointmentResults/appointment/:appointmentId/submitresults`
+35. **Doctor submit appointment's results:** `doctor/AppointmentResults/:appointmentId/submitresults`
   * **Method:** Post
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
   * **Request Body:**
     ```json
-  {
-  "appointment_diagnosis": "Flu",
-  "appointment_report": "Patient shows mild symptoms of flu.",
-  "treatment_plan_operations": "Rest and hydration.",
-  "treatment_plan_speciality_referral": "None",
-  "treatment_plan_referral_notes": "Follow-up in one week.",
-  "medications": [
-    {
-      "medication_name": "Tamiflu",
-      "medication_dosage": "75mg",
-      "medication_note": "5 times a day",
-      "medication_start_date":"2026-12-07",
-      "medication_end_date":"2027-12-09"    },
-    {
-      "medication_name": "Ibuprofen",
-      "medication_dosage": "200mg",
-      "medication_note": "As needed",
-      "medication_start_date":"2025-12-07",
-      "medication_end_date":"2023-12-09"
-    }
-  ]
-  }
+      {
+      "appointment_diagnosis": "Flu",
+      "appointment_report": "Patient shows mild symptoms of flu.",
+      "treatment_plan_operations": "Rest and hydration.",
+      "treatment_plan_speciality_referral": "None",
+      "treatment_plan_referral_notes": "Follow-up in one week.",
+      "medications": [
+        {
+          "medication_name": "Tamiflu",
+          "medication_dosage": "75mg",
+          "medication_note": "5 times a day",
+          "medication_start_date":"2026-12-07",
+          "medication_end_date":"2027-12-09"    },
+        {
+          "medication_name": "Ibuprofen",
+          "medication_dosage": "200mg",
+          "medication_note": "As needed",
+          "medication_start_date":"2025-12-07",
+          "medication_end_date":"2023-12-09"
+        }
+      ]
+      }
     ```
   * **Response Body:**
     ```json
