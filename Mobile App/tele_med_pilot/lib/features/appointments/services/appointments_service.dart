@@ -12,7 +12,7 @@ class AppointmentsService {
     try {
       final response =
           await _baseService.get(AppConstants.patientAppointmentsEndpoint);
-
+      print(response);
       if (response['appointments'] == null ||
           response['appointments'] is! List) {
         return [];
@@ -31,8 +31,6 @@ class AppointmentsService {
       final response = await _baseService
           .get(AppConstants.patientAppointmentsHistoryEndpoint);
 
-      print(response);
-
       if (response['appointments'] == null ||
           response['appointments'] is! List) {
         return [];
@@ -41,6 +39,21 @@ class AppointmentsService {
       return (response['appointments'] as List)
           .map((appointmentJson) => AppointmentModel.fromJson(appointmentJson))
           .toList();
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<AppointmentModel?> getAppointmentDetails(String id) async {
+    try {
+      final response = await _baseService
+          .get("${AppConstants.patientAppointmentDetailsEndpoint}/$id");
+      print(response);
+      if (response['appointment'] == null) {
+        return null;
+      }
+
+      return (AppointmentModel.fromJson(response['appointment']));
     } catch (error) {
       rethrow;
     }

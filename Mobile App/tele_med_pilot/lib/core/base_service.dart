@@ -9,8 +9,14 @@ class BaseService {
     return prefs.getString('token');
   }
 
+  Future<bool> _deleteToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.remove('token');
+  }
+
   Future<Map<String, dynamic>> get(String endpoint) async {
     final String? token = await _getToken();
+    print(token);
     final response = await http.get(
       Uri.parse(endpoint),
       headers: {
@@ -18,7 +24,6 @@ class BaseService {
         if (token != null) 'Authorization': 'Bearer $token',
       },
     );
-    print("BASE SERVICE${response.body}");
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
