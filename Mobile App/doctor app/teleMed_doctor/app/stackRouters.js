@@ -27,7 +27,7 @@ const Stack = createStackNavigator();
 export default function StackRouters() {
   return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="sign in">
+        <Stack.Navigator initialRouteName="profile">
             <Stack.Screen name='index' component={Index} options={{ headerShown : false}} />
             <Stack.Screen name='sign in' component={SignIn} options={{ headerShown : false}} />
             <Stack.Screen name='register' component={Register} options={{ headerShown : false}} />

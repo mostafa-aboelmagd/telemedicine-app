@@ -1,15 +1,27 @@
 // Dummy data for testing
 
 export const doctorAv ={
-    'app1': ['sat', '09:00 am', 'online'],
-    'app2': ['mon', '04:00 pm', 'on-site'],
-    'app3': ['mon', '05:00 pm', 'on-site'],
-    'app4': ['tue', '12:00 pm', 'on-site'],
-    'app5': ['tue', '01:00 pm', 'on-site'],
-    'app6': ['wed', '11:00 am', 'on-site'],
-    'app7': ['fri', '07:00 pm', 'online'],
-
-};
+    "timeslots":[
+    '1_01_L',
+    '2_01_S',
+    '2_03_S',
+    '3_02_L',
+    '3_03_L',
+    '4_04_S',
+    '4_05_S',
+    '4_06_S',
+    '4_07_S',
+    '5_01_L',
+    '5_04_S',
+    '5_05_S',
+    '6_10_L',
+    '6_11_L',
+    '6_12_L',
+    '7_01_S',
+    '7_02_S',
+    '7_04_S',
+    '7_05_S',
+]}
 
 export const patients ={
     'id1': 'Alaa',
