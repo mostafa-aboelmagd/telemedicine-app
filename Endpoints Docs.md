@@ -931,27 +931,25 @@
   * **Request Body:**
     ```json
       {
-      "appointment_diagnosis": "Flu",
-      "appointment_report": "Patient shows mild symptoms of flu.",
-      "treatment_plan_operations": "Rest and hydration.",
-      "treatment_plan_speciality_referral": "None",
-      "treatment_plan_referral_notes": "Follow-up in one week.",
-      "medications": [
-        {
-          "medication_name": "Tamiflu",
-          "medication_dosage": "75mg",
-          "medication_note": "5 times a day",
-          "medication_start_date":"2026-12-07",
-          "medication_end_date":"2027-12-09"    },
-        {
-          "medication_name": "Ibuprofen",
-          "medication_dosage": "200mg",
-          "medication_note": "As needed",
-          "medication_start_date":"2025-12-07",
-          "medication_end_date":"2023-12-09"
-        }
-      ]
-      }
+        "diagnosis": "Colonus",
+       "operations": "Endoscope ",
+        "report": "Endoscope",
+        "specialityReferral": "ENT ",
+        "specialityReferralNotes": "Take care",
+        "updatedInputs": [
+        {"dose": "500",
+        "drugName": "Pentasa",
+        "endDate": "2024-09-28",
+        "id": 1727294955165,
+        "note": "3 times",
+        "startDate": "2024-09-08"},
+        {"dose": "500",
+        "drugName": "Solepred",
+        "endDate": "2024-09-30",
+        "id": 1727294993688, 
+        "note": "2 times ",
+        "startDate": "2024-09-25"}
+                    ]}
     ```
   * **Response Body:**
     ```json
