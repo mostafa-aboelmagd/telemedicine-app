@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tele_med_pilot/core/constant.dart';
 import 'package:tele_med_pilot/core/theme.dart';
+import 'package:tele_med_pilot/features/appointments/view_models/appointments_view_model.dart';
 import 'package:tele_med_pilot/models/appointment_model.dart';
 import 'package:tele_med_pilot/ui/components/button.dart';
 import 'package:tele_med_pilot/core/route.dart';
 
-class AppointmentCard extends StatelessWidget {
+class AppointmentCard extends ConsumerWidget {
   final AppointmentModel appointment;
+  final int identifier;
 
-  const AppointmentCard({required this.appointment, super.key});
+  const AppointmentCard(
+      {required this.appointment, required this.identifier, super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appointmentViewModel =
+        ref.watch(appointmentsViewModelProvider.notifier);
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 8.h),
@@ -96,18 +102,23 @@ class AppointmentCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                width: 140.h,
-                child: Button(
-                  label: "View Details",
-                  labelColor: AppColors.white,
-                  isValid: true,
-                  onTap: () {
-                    Navigator.pushNamed(
-                        context, RouteClass.appointmentDetailsRoute);
-                  },
-                ),
-              )
+              if (identifier == 1)
+                SizedBox(
+                  width: 140.h,
+                  child: Button(
+                    label: "View Details",
+                    labelColor: AppColors.white,
+                    isValid: true,
+                    onTap: () {
+                      appointmentViewModel
+                          .setAppointment(appointment.appointmentId.toString());
+                      Navigator.pushNamed(
+                        context,
+                        RouteClass.appointmentDetailsRoute,
+                      );
+                    },
+                  ),
+                )
             ],
           )
         ],
