@@ -6,11 +6,13 @@ const patientGetAvailabilities = async (req, res) => {
         const doctorId = req.params.doctorId; // Assuming doctor ID is available in req.id
     
         const available_slots = await database.getDoctorTimeslots(doctorId);
+      
         const booked = await database.getDoctorAvailabilityDetails(doctorId);
-    
-        if (!available_slots.length && !booked.length) {
-          return res.status(404).json({ message: 'No timeslots or availability found for the doctor' });
-        }
+      
+        // if (timeslots.length > 0) {
+        // if (!available_slots.length && !booked.length) {
+        //   return res.status(404).json({ message: 'No timeslots or availability found for the doctor' });
+        // }
     
         res.status(200).json({ available_slots, booked });
       } catch (error) {
@@ -18,12 +20,6 @@ const patientGetAvailabilities = async (req, res) => {
         res.status(500).json({ message: 'Error retrieving availability' });
       }
     };
-
-
-
-
-
-
 
 
 
