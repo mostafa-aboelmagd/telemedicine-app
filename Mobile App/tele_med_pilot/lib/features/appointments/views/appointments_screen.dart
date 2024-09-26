@@ -116,7 +116,8 @@ class _OngoingAppointmentsViewState
                           .copyWith(color: AppColors.blue100),
                     ),
                     ...appointmentState.appointments.map((appointment) {
-                      return AppointmentCard(appointment: appointment);
+                      return AppointmentCard(
+                          appointment: appointment, identifier: 0);
                     }),
                   ],
                 ),
@@ -178,12 +179,15 @@ class _PastAppointmentsViewState extends ConsumerState<PastAppointmentsView> {
                 child: Column(
                   children: [
                     Text(
-                      "Upcoming Appointments",
+                      "Past Appointments",
                       style: AppTextStyles.bodyTextLargeBold
                           .copyWith(color: AppColors.blue100),
                     ),
                     ...appointmentState.appointments.map((appointment) {
-                      return AppointmentCard(appointment: appointment);
+                      return AppointmentCard(
+                        appointment: appointment,
+                        identifier: 1,
+                      );
                     }),
                   ],
                 ),

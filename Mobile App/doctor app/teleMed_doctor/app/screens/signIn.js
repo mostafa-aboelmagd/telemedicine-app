@@ -24,6 +24,7 @@ export default function Login({ navigation }) {
         console.log("checkToken" , token);
         if (token !== null) {
           setUserToken(token);  // Token found, update state
+          navigation.navigate('home page')
         }
       } catch (e) {
         console.log('Error retrieving token:', e);
@@ -41,9 +42,6 @@ export default function Login({ navigation }) {
         <ActivityIndicator size="large" />
       </View>
     );
-  }
-  if(userToken){
-    navigation.navigate('home page')
   }
   const signIn = async () => {
     if (email && password) {

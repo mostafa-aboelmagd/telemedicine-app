@@ -13,6 +13,10 @@ class AppointmentsViewModel extends StateNotifier<AppointmentState> {
     state = AppointmentState.initial();
   }
 
+  void setAppointment(String id) {
+    state = state.copyWith(appointmentID: id);
+  }
+
   Future<void> fetchAppointments() async {
     try {
       final appointments = await _appointmentsService.getAppointments();
@@ -40,6 +44,25 @@ class AppointmentsViewModel extends StateNotifier<AppointmentState> {
       state = state.copyWith(isLoading: false, errorMessage: error.toString());
     }
   }
+
+  Future<void> fetchAppointmentDetails() async {
+    final id = state.appointmentID;
+    try {
+      final appointment = await _appointmentsService.getAppointmentDetails(id!);
+      print("HERERE ERERER ERER E${appointment?.appointmentComplaint}");
+      if (appointment == null) {
+        state = state.copyWith(
+            errorMessage: "Cannot Fetch Details, Try again later",
+            isLoading: false);
+      } else {
+        state =
+            state.copyWith(appointmentDetails: appointment, isLoading: false);
+        print("3eeeeeeeeeeb ${state.appointmentDetails?.appointmentComplaint}");
+      }
+    } catch (error) {
+      state = state.copyWith(isLoading: false, errorMessage: error.toString());
+    }
+  }
 }
 
 final appointmentsViewModelProvider =
@@ -50,11 +73,15 @@ final appointmentsViewModelProvider =
 
 class AppointmentState {
   final bool isLoading;
+  final String? appointmentID;
+  final AppointmentModel? appointmentDetails;
   final List<AppointmentModel> appointments;
   final String? errorMessage;
 
   AppointmentState({
     required this.isLoading,
+    required this.appointmentDetails,
+    required this.appointmentID,
     required this.appointments,
     this.errorMessage,
   });
@@ -62,18 +89,23 @@ class AppointmentState {
   factory AppointmentState.initial() {
     return AppointmentState(
       isLoading: false,
+      appointmentDetails: null,
+      appointmentID: null,
       appointments: [],
       errorMessage: null,
     );
   }
-
   AppointmentState copyWith({
     bool? isLoading,
+    String? appointmentID,
+    AppointmentModel? appointmentDetails,
     List<AppointmentModel>? appointments,
     String? errorMessage,
   }) {
     return AppointmentState(
       isLoading: isLoading ?? this.isLoading,
+      appointmentDetails: appointmentDetails ?? this.appointmentDetails,
+      appointmentID: appointmentID ?? this.appointmentID,
       appointments: appointments ?? this.appointments,
       errorMessage: errorMessage ?? this.errorMessage,
     );

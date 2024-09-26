@@ -12,7 +12,7 @@ const { height } = Dimensions.get('window')
 
 const SubmitResults = ({ navigation }) => {
     const route = useRoute()
-    const { patientName } = route.params
+    const { patientFirstName , patientLastName ,appointment_id} = route.params
     const [diagnosis, setDiagnosis] = useState('')
     const [report, setReport] = useState('')
     const clearDiagnosisInput = () => {
@@ -22,14 +22,14 @@ const SubmitResults = ({ navigation }) => {
         setReport('')
     }
     const submitMedications = ()=>{
-        navigation.navigate('submitMedications')
+        navigation.navigate('submitMedications' , {report , diagnosis, appointment_id})
     }
     return (
         <SafeArea >
             <CustomScroll>
                 <View style={styles.container}>
                     <CustomTitle titleStyle={{ marginTop: "1%", textAlign: 'center' }}>
-                        Patient Name: {patientName}
+                        Patient Name: {patientFirstName} {patientLastName}
                     </CustomTitle>
                     <CustomTitle titleStyle={{ textAlign: 'center' }}>
                         Visit Date: 22-5-2024

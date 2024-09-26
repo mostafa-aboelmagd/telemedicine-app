@@ -6,10 +6,14 @@ import Footer from '../components/footer'
 import CustomTitle from '../components/title'
 import Custombutton from '../components/button'
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useRoute } from '@react-navigation/native'
 
 
 const SubmitMedications = ({ navigation }) => {
+    const route = useRoute()
+    const { report, diagnosis, appointment_id } = route.params
     const [inputs, setInputs] = useState([]);
+    const [updatedInputs , setUpdatedInputs] = useState([])
     const [showPicker, setShowPicker] = useState(false);
     const [currentPicker, setCurrentPicker] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(null);
@@ -24,7 +28,21 @@ const SubmitMedications = ({ navigation }) => {
     };
 
     const furtherDetails = () => {
-        navigation.navigate('furtherDetails');
+        const updatedInputs = inputs.map(inputset => {
+            return {
+                ...inputset, // Spread the current object
+                // Check if endDate and startDate are Date objects, if not convert them
+                endDate: inputset.endDate instanceof Date
+                    ? inputset.endDate.toISOString().split('T')[0]
+                    : new Date(inputset.endDate).toISOString().split('T')[0],
+                startDate: inputset.startDate instanceof Date
+                    ? inputset.startDate.toISOString().split('T')[0]
+                    : new Date(inputset.startDate).toISOString().split('T')[0],
+            };
+        });
+        setUpdatedInputs(updatedInputs);
+        console.log(updatedInputs);
+        navigation.navigate('furtherDetails', { report, diagnosis, updatedInputs , appointment_id });
     };
 
     const onDateChange = (event, selectedDate) => {
@@ -107,7 +125,7 @@ const SubmitMedications = ({ navigation }) => {
                                 <View style={styles.cell}>
                                     <Text style={styles.textProp}>Start Date:</Text>
                                     {inputSet.startDate ? (
-                                        <Text style={styles.inTextProp}>{inputSet.startDate.toDateString()}</Text>
+                                        <Text style={styles.inTextProp}>{new Date(inputSet.startDate).toDateString()}</Text>
                                     ) : (
                                         <Text style={styles.inTextProp}>No date selected</Text>
                                     )}
@@ -115,7 +133,8 @@ const SubmitMedications = ({ navigation }) => {
                                 <View style={styles.cell}>
                                     <Text style={styles.textProp}>End Date:</Text>
                                     {inputSet.endDate ? (
-                                        <Text style={styles.inTextProp}>{inputSet.endDate.toDateString()}</Text>
+                                        <Text style={styles.inTextProp}>{new Date(inputSet.endDate).toDateString()}</Text>
+
                                     ) : (
                                         <Text style={styles.inTextProp}>No date selected</Text>
                                     )}
