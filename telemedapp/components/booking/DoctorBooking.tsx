@@ -7,16 +7,25 @@ import BookingSummary from "@/components/booking/BookingSummary";
 import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
 import { formatDoctorAvailabilities } from "@/utils/formatDoctorAvailabilities";
-
 const DoctorBooking = () => {
   const searchParams = useSearchParams();
   const [doctor, setDoctor] = useState<any>(null);
   const [selectedDuration, setSelectedDuration] = useState(60);
   const [selectedDate, setSelectedDate] = useState<any>(null);
-  const [selectedSlot, setSelectedSlot] = useState<string>("timeSlot test");
+  const [selectedSlot, setSelectedSlot] = useState<string>("");
   const [availableDates, setAvailableDates] = useState<any[]>([]);
+  const [bookedDates, setBookedDates] = useState<string[]>([]);
+
   const [appointmentState, setAppointmentState] = useState("First_time");
   const [appointments, setAppointments] = useState<any[]>([]);
+  const formattedDatesFunc = (data: any) => {
+    const formattedDates = data.booked.map((date: string) => {
+      // Format the date and time components
+      const formattedDate = date.split("T");
+      return `${formattedDate[0]} ${formattedDate[1].slice(0, 8)}`; // Slice to get only HH:mm:ss
+    });
+    return formattedDates;
+  };
 
   // Retrieve the doctor data from the query parameters
   useEffect(() => {
@@ -48,8 +57,20 @@ const DoctorBooking = () => {
           if (!response.ok) throw new Error("Failed to fetch availability");
 
           const data = await response.json();
-          const formattedDates = formatDoctorAvailabilities(data);
+
+          if (!data || typeof data !== "object" || !data.available_slots) {
+            throw new Error("Invalid data structure");
+          }
+          console.log("data: ", data);
+
+          const formattedDates = formatDoctorAvailabilities(
+            data.available_slots
+          );
+
           setAvailableDates(formattedDates);
+          setBookedDates(formattedDatesFunc(data));
+          console.log("bookedAppointments: ", bookedDates);
+          // console.log("AvailableDates: ", availableDates);
         } catch (error) {
           console.error("Error fetching availability:", error);
         }
@@ -123,6 +144,7 @@ const DoctorBooking = () => {
           selectedDate={selectedDate}
           handleDateSelect={handleDateSelect}
           availableDates={availableDates}
+          bookedDates={bookedDates}
         />
         <SlotSelector
           selectedDate={selectedDate}

@@ -8,25 +8,29 @@ import {
 } from "date-fns";
 
 interface WeekCalendarProps {
-  availableDates: { date: string; slots: { time: string; type: string }[] }[];
+  availableDates: {
+    date: string;
+    slots: { time: string; id: number; type: string }[];
+  }[];
   handleDateSelect: (date: {
     date: string;
-    slots: { time: string; type: string }[];
+    slots: { time: string; id: number; type: string }[];
   }) => void;
   selectedDate: {
     date: string;
-    slots: { time: string; type: string }[];
+    slots: { time: string; id: number; type: string }[];
   } | null;
+  bookedDates: string[];
 }
-
 const WeekCalendar: React.FC<WeekCalendarProps> = ({
   availableDates,
   handleDateSelect,
   selectedDate,
+  bookedDates,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [datesWithSlots, setDatesWithSlots] = useState<
-    { date: string; slots: { time: string; type: string }[] }[]
+    { date: string; slots: { time: string; id: number; type: string }[] }[]
   >([]);
 
   useEffect(() => {
@@ -34,20 +38,42 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
     const end = endOfWeek(currentDate, { weekStartsOn: 0 });
     const days = eachDayOfInterval({ start, end });
 
+    // Create a set of booked dates for quick lookup
+    const bookedSet = new Set(bookedDates);
+
     const updatedDatesWithSlots = days.map((day) => {
       const dateStr = format(day, "yyyy-MM-dd");
-      const existingDate = availableDates.find((d) => d.date === dateStr);
+      const dayStr = format(day, "EEEE");
+      const existingDate = availableDates.find((d) => d.date === dayStr);
+      // console.log("existingDate: ", existingDate);
+
+      // If there are existing slots, filter duplicates based on the 'time' property
+      const uniqueSlots = existingDate
+        ? Array.from(
+            new Map(
+              existingDate.slots.map((slot) => [slot.time, slot])
+            ).values()
+          ).filter((slot) => {
+            // Check if the slot's time is booked
+            const slotDateTime = `${dateStr} ${slot.time}`;
+            return !bookedSet.has(slotDateTime); // Exclude booked slots
+          })
+        : [];
+      // console.log("uniqueSlots: ", uniqueSlots);
 
       return {
         date: dateStr,
-        slots: existingDate
-          ? existingDate.slots.map((slot) => ({ ...slot, id: slot.time }))
-          : [],
+        slots: uniqueSlots.map((slot) => ({
+          ...slot,
+          id: slot.id,
+          time: slot.time,
+          type: slot.type,
+        })),
       };
     });
 
     setDatesWithSlots(updatedDatesWithSlots);
-  }, [currentDate, availableDates]);
+  }, [currentDate, availableDates, bookedDates]);
 
   const handlePreviousWeek = () => setCurrentDate((prev) => addDays(prev, -7));
   const handleNextWeek = () => setCurrentDate((prev) => addDays(prev, 7));

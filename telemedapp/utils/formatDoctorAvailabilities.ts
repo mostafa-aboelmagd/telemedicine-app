@@ -1,4 +1,4 @@
-const dayCodes: Record<string, string> = {
+const dayCodes: { [key: string]: string } = {
   "1": "Saturday",
   "2": "Sunday",
   "3": "Monday",
@@ -8,30 +8,32 @@ const dayCodes: Record<string, string> = {
   "7": "Friday",
 };
 
-const timeSlotCodes: Record<string, string> = {
-  "01": "09:00 AM",
-  "02": "10:00 AM",
-  "03": "11:00 AM",
-  "04": "12:00 PM",
-  "05": "01:00 PM",
-  "06": "02:00 PM",
-  "07": "03:00 PM",
-  "08": "04:00 PM",
-  "09": "05:00 PM",
-  "10": "06:00 PM",
-  "11": "07:00 PM",
-  "12": "08:00 PM",
+const timeSlotCodes: { [key: string]: string } = {
+  "01": "09:00:00",
+  "02": "10:00:00",
+  "03": "11:00:00",
+  "04": "12:00:00",
+  "05": "13:00:00",
+  "06": "14:00:00",
+  "07": "15:00:00",
+  "08": "16:00:00",
+  "09": "17:00:00",
+  "10": "18:00:00",
+  "11": "19:00:00",
+  "12": "20:00:00",
 };
 
 const typeCodes: Record<string, string> = {
   L: "Online",
   S: "Onsite",
 };
-export const formatDoctorAvailabilities = (slots: string[]) => {
+export const formatDoctorAvailabilities = (slotsString: string) => {
   const availabilityMap: Record<
     string,
     { time: string; id: number; type: string }[]
   > = {};
+  // Split the incoming string into an array of slot IDs
+  const slots = slotsString.split(",");
 
   slots.forEach((slotId) => {
     const [dayCode, timeCode, typeCode] = slotId.split("_");

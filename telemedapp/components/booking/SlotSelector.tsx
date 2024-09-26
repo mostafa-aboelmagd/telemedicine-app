@@ -23,7 +23,7 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
       </div>
     </div>
 
-    <div className="overflow-y-hidden hover:overflow-y-auto h-56 py-4">
+    <div className="overflow-y-hidden hover:overflow-y-auto h-52 py-4">
       <div
         className={`${
           selectedDate && selectedDate.slots?.length > 0
@@ -57,7 +57,7 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
             </div>
           ))
         ) : (
-          <p className="text-red-500 mt-6 text-xs md:text-base italic">
+          <p className="text-red-500 text-center mt-6 text-xs md:text-base italic">
             No time slots available on this day, Try another day.
           </p>
         )}

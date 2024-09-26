@@ -65,7 +65,7 @@ function TimeSlots() {
   const [loading, setLoading] = useState(true);
 
   let token: string | null = "";
-  const handleCodedOldTimes = (codedTimes: string[]) => {
+  const convertCodedToDates = (codedTimes: string[]) => {
     const dayCodes: { [key: string]: string } = {
       "1": "saturday",
       "2": "sunday",
@@ -122,6 +122,45 @@ function TimeSlots() {
 
     return tempTimes;
   };
+  const createCodedSlots = (sentObj: Record<string, string[]>) => {
+    const dayCodes: Record<string, number> = {
+      saturday: 1,
+      sunday: 2,
+      monday: 3,
+      tuesday: 4,
+      wednesday: 5,
+      thursday: 6,
+      friday: 7,
+    };
+
+    const timeSlotCodes: Record<string, string> = {
+      "9:00:00": "01",
+      "10:00:00": "02",
+      "11:00:00": "03",
+      "12:00:00": "04",
+      "13:00:00": "05",
+      "14:00:00": "06",
+      "15:00:00": "07",
+      "16:00:00": "08",
+      "17:00:00": "09",
+      "18:00:00": "10",
+      "19:00:00": "11",
+      "20:00:00": "12",
+    };
+
+    let codedSlots: string[] = [];
+
+    for (const [day, timeSlots] of Object.entries(sentObj)) {
+      const dayCode = dayCodes[day.split(" ")[0]];
+
+      for (const time of timeSlots) {
+        const timeCode = timeSlotCodes[time];
+        const typeCode = appointmentType === "online" ? "L" : "S";
+        codedSlots.push(`${dayCode}_${timeCode}_${typeCode}`);
+      }
+    }
+    return codedSlots;
+  };
   useEffect(() => {
     token = localStorage.getItem("jwt");
     if (!token) {
@@ -157,11 +196,11 @@ function TimeSlots() {
           console.log("API view Response: ", timeslots); // Log the API response for inspection
 
           // Process the timeslots directly
-          handleCodedOldTimes(timeslots);
+          convertCodedToDates(timeslots);
         })
         .finally(() => setLoading(false));
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     setTimesChosen(() =>
@@ -292,46 +331,6 @@ function TimeSlots() {
     setToggleChecked(() => !toggleChecked); // Toggle between modes
   };
 
-  const handleCoddedSlots = (sentObj: Record<string, string[]>) => {
-    const dayCodes: Record<string, number> = {
-      saturday: 1,
-      sunday: 2,
-      monday: 3,
-      tuesday: 4,
-      wednesday: 5,
-      thursday: 6,
-      friday: 7,
-    };
-
-    const timeSlotCodes: Record<string, string> = {
-      "9:00:00": "01",
-      "10:00:00": "02",
-      "11:00:00": "03",
-      "12:00:00": "04",
-      "13:00:00": "05",
-      "14:00:00": "06",
-      "15:00:00": "07",
-      "16:00:00": "08",
-      "17:00:00": "09",
-      "18:00:00": "10",
-      "19:00:00": "11",
-      "20:00:00": "12",
-    };
-
-    let codedSlots: string[] = [];
-
-    for (const [day, timeSlots] of Object.entries(sentObj)) {
-      const dayCode = dayCodes[day.split(" ")[0]];
-
-      for (const time of timeSlots) {
-        const timeCode = timeSlotCodes[time];
-        const typeCode = appointmentType === "online" ? "L" : "S";
-        codedSlots.push(`${dayCode}_${timeCode}_${typeCode}`);
-      }
-    }
-    return codedSlots;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -343,7 +342,18 @@ function TimeSlots() {
       sentObj[key] = Array.from(value); // Convert set to array
     }
 
-    const codedSlots = handleCoddedSlots(sentObj);
+    const codedSlots = createCodedSlots(sentObj);
+
+    // Check for duplicates before sending the request
+    const filteredSlots = codedSlots.filter(
+      (slot) =>
+        !Object.values(oldTimesId).some((day) =>
+          Object.values(day).includes(slot)
+        )
+    );
+
+    console.log("All slots: ", codedSlots);
+    console.log("Filtered slots: ", filteredSlots);
     if (!toggleChecked) {
       // Add time slots
       try {
@@ -357,7 +367,7 @@ function TimeSlots() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(codedSlots),
+            body: JSON.stringify(filteredSlots),
             mode: "cors",
           }
         );
@@ -365,6 +375,8 @@ function TimeSlots() {
         if (!response.ok) {
           throw new Error("Failed to add time slots");
         }
+
+        console.log("Successfully added new time slots:", filteredSlots);
 
         // window.location.href = "/doctorProfile/timeSlots";
       } catch (error) {
