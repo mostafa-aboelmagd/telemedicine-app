@@ -28,24 +28,54 @@ const pool = new pg.Pool({
 
 
 
-const retrieveDoctorAvailabilities = async (doctorId) => {
+const getDoctorTimeslots = async (doctorId) => {
     try {
-        const result = await pool.query(
-            'SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_status = $2',
-            [doctorId, 'Available']
-        );
-        if (result.rows.length) {
-            console.log('Doctor availabilities retrieved successfully', result.rows);
-            return result.rows;
-        }
-        console.log('Could not retrieve doctor availabilities');
-        return false;
+      const result = await pool.query(
+        `SELECT timeslot_code, timeslot_type
+         FROM timeslots WHERE timeslot_doctor_id = $1`,
+        [doctorId]
+      );
+  
+      const timeslotCodes = result.rows.map(row => `${row.timeslot_code}_${row.timeslot_type}`);
+      return timeslotCodes.join(',');
     } catch (error) {
-        console.error(error.stack);
-        return false;
+      console.error(error);
+      return [];
     }
-};
+  };
+  
+  const getDoctorAvailabilityDetails = async (doctorId) => {
+    try {
+        // Retrieve doctor availability
+        const availabilityResult = await pool.query(
+          `SELECT doctor_availability_id, doctor_availability_day_hour
+           FROM doctor_availability
+           WHERE doctor_availability_doctor_id = $1`,
+          [doctorId]
+        );
+    
+        const doctorAvailability = availabilityResult.rows;
+    
+        // Filter appointments
+        const appointmentResult = await pool.query(
+          `SELECT appointment_availability_slot
+           FROM appointment
+           WHERE appointment_doctor_id = $1
+           AND appointment_status IN ('Pending', 'Approved')`,
+          [doctorId]
+        );
+    
+        const bookedSlots = appointmentResult.rows.map(row => row.appointment_availability_slot);
+    
+        // Filter availability based on booked slots and extract day_hour
+        const availableSlots = doctorAvailability.filter(slot => !bookedSlots.includes(slot.doctor_availability_id)).map(slot => slot.doctor_availability_day_hour);
+    
+        return availableSlots;
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+    };
+    
 
-
-
-module.exports = { retrieveDoctorAvailabilities};
+module.exports = { getDoctorAvailabilityDetails,getDoctorTimeslots};

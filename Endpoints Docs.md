@@ -15,7 +15,7 @@
 7. **Patient Profile Edit:** `/patient/edit/info`(tested)
 8. **Patient Change Password:** `/patient/edit/password`(tested)
 9. **Patient Appointment Request:** `/patient/appointment/book`(tested)
-10. **Patient Get doctors availability:** `/patient/appointment/Availabilities/:doctorId`(tested)
+10. **Patient Get doctors availability:** `/patient/appointment/Availabilities/:doctorId`
 11. **Patient Get Appointment details:** `/patient/appointment/appointmentdetails/:appointmentId` (tested)
 12. **Patient Home (Dashboard retriev doctors data):** `/patient/home`(tested)
 13. **Patient Medical Document Upload:** `/patient/medical-document/upload`
@@ -24,19 +24,22 @@
 16. **Doctor Profile Edit:** `/doctor/edit/info`(tested)
 17. **Doctor Password change:** `/doctor/edit/password`(tested)
 18. **Doctor Profile info:** `/doctor/profile/info`(tested)
-19. **Doctor View appointments** `/doctor/profile/appointments`(Tested)
+19. **Doctor View appointments** `Doctor/Profile/appointments`(Tested)
 20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`(Tested)
-21. **Doctor View Availability:** `/doctor/profile/availabilities`(Tested)
+21. **Doctor View Availability:** `/doctor/availability/view`(Tested)
 22. **Doctor View Experience:** `/doctor/profile/experience`
 23. **Doctor View Education:** `/doctor/profile/education`
 24. **Doctor View reviews:** `/doctor/profile/reviews`
 25. **Doctor View interests:** `/doctor/profile/interests`
-26. **Doctor Availability Addition:** `/doctor/availability/add`(Tested)
-27. **Doctor Availability Deletion:** `/doctor/availability/delete`(Tested)
+26. **Doctor Availability Addition:** `/doctor/availability/add`(tested)
+27. **Doctor Availability Deletion:** `/doctor/availability/delete`(tested)
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
-29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`
-30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
-(Tested)
+29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`(Canceled)
+30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`(Tested)
+31. **Patient view appointments history:** `/patient/appointment/appointmentsHistory`(Tested)
+32. **Doctor view appointments history:** `/doctor/appointmentHistory`(Tested)
+33. **Doctor view appointment details:** `/doctor/appointmentDetails/:appointmentId`(Tested)
+34. **Doctor view Patient appointments:** `/doctor/PatientSummary/:patientID`(Tested)
 
 ---
 ---
@@ -136,25 +139,24 @@
     ```json
     {
     "appointments": [
-        {
-            "appointment_patient_id": 6,
+       {
+            "appointment_patient_id": 3,
             "appointment_doctor_id": 13,
-            "appointment_availability_slot": 5,
-            "appointment_type": "First_time",
-            "appointment_duration": 30,
-            "appointment_complaint": "arm pain",
+            "appointment_availability_slot": 2,
+            "appointment_type": "Followup",
+            "appointment_id": 2,
+            "appointment_duration": 60,
+            "appointment_complaint": "ta3ban ",
             "appointment_parent_reference": null,
-            "appointment_settings_type": null,
-            "patient_first_name": "John",
-            "patient_last_name": "Doe",
+            "appointment_settings_type": "Onsite",
+            "patient_first_name": "mohamed ",
+            "patient_last_name": "salem",
             "doctor_first_name": "samy",
             "doctor_last_name": "ali",
-            "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
-        }
-    ]
-  }
-    ```
-    ---
+            "doctor_specialization": "Cardiology",
+            "doctor_availability_day_hour": "2024-10-02T12:00:00.000Z"
+        }]}
+---
 
 6. **Patient Requests:** `/patient/profile/requests`
   * **Method:** GET
@@ -178,11 +180,8 @@
             "doctor_first_name": "samy",
             "doctor_last_name": "ali",
             "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
-        }
-    ]
-    }
-    ```
-    ---
+        }]}
+---
 
 7. **Patient Profile Edit:** `/patient/edit/info`
   * **Method:** PUT
@@ -219,8 +218,7 @@
            }
          ]
       }
-    ```
-    ---
+---
 
 8. **Patient Change Password:** `/patient/edit/password`
   * **Method:** PUT
@@ -255,8 +253,7 @@
         }
        ]
     }
-    ```
-    ---
+---
 
 9. **Patient Appointment Request:** `/patient/appointment/book`
   * **Method:** POST
@@ -266,21 +263,21 @@
   * **Request Body:**
     ```json
       {
-      "appointment_availability_slot": 1, // Replace with actual slot ID
-      "complaint": "I have a headache",
-      "duration": 30,
-      "appointment_settings_type": "Online",
-      "appointment_type": "Followup",
-      "appointment_parent_reference": null
-        }
+    "doctor_id": 14,
+    "complaint": "Ta3baaan",
+    "duration": 60,
+    "appointment_type": "First_time",
+    "appointment_date": "2024-09-26T14:00:00Z",
+    "appointment_parent_reference":null,
+    "time_slot_code": "1_03_S"
+      }
     ```
   * **Response Body:**
     ```json
     {
-    "message": "Appointment scheduled successfully"
+    "message": "Appointment created successfully"
     }
-    ```
-    ---
+---
 
 10. **Patient Get Doctors Availability:** `/patient/appointment/Availabilities/:doctorId`
   * **Method:** GET
@@ -289,40 +286,17 @@
   * **Response Body:**
     ```json
     {
-    "message": "Doctor availabilities retrieved successfully",
-    "availabilities": {
-        "Wed Oct 9 2024": [
-            {
-                "time": "15:00:00",
-                "id": 5
-            }
-        ],
-        "Wed Oct 2 2024": [
-            {
-                "time": "15:00:00",
-                "id": 8
-            },
-            {
-                "time": "15:00:00",
-                "id": 2
-            }
-        ],
-        "Fri Feb 2 2024": [
-            {
-                "time": "15:00:00",
-                "id": 11
-            }
-        ],
-        "Tue Feb 13 2024": [
-            {
-                "time": "15:00:00",
-                "id": 14
-            }
-        ]
+    "available_slots": "2_01_L,7_10_L,7_11_L,7_12_L,7_09_L,7_08_L,7_07_L",
+    "booked": [
+        "2024-09-26T11:00:00.000Z",
+        "2024-09-26T11:00:00.000Z",
+        "2024-09-28T11:00:00.000Z",
+        "2024-09-27T11:00:00.000Z",
+        "2024-09-26T11:00:00.000Z",
+        "2024-09-26T11:00:00.000Z"
+    ]
     }
-    }
-    ```
-    ---
+---
 
 11. **Patient Get Appointment Details:** `/patient/appointment/appointmentdetails/:appointmentId`
   * **Method:** GET
@@ -375,6 +349,12 @@
     }
     }
     ```
+ with wrong appointmentId:
+  ```json
+    {
+    "message": "Appointment not found"
+    }
+  ```
 
 ---
 
@@ -444,7 +424,7 @@
       "files": ""
     }
     ```
-    ---
+---
 
 14. **Patient Medical Document Viewing:** `/patient/medical-document/view`
   * **Method:** GET
@@ -462,7 +442,7 @@
      
     }
     ```
-    ---
+---
 
 15. **Patient Medical Document Deletion:** `/patient/medical-document/delete`
   * **Method:** DELETE
@@ -527,7 +507,7 @@
     ]
     }
     ```
-    ---
+---
 
 17. **Doctor Password Change:** `/doctor/edit/password`
   * **Method:** PUT
@@ -590,9 +570,9 @@
     }
     }
     ```
-    ---
+---
 
-19. **Doctor View Appointments:** `/doctor/profile/appointments`
+19. **Doctor View Appointments:** `Doctor/Profile/appointments`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
@@ -600,23 +580,24 @@
     ```json
       [
         {
-            "appointment_patient_id": 6,
-            "appointment_doctor_id": 13,
-            "appointment_availability_slot": 5,
-            "appointment_type": "First_time",
-            "appointment_duration": 30,
-            "appointment_complaint": "arm pain",
-            "appointment_parent_reference": null,
-            "appointment_settings_type": null,
-            "patient_first_name": "John",
-            "patient_last_name": "Doe",
-            "doctor_first_name": "samy",
-            "doctor_last_name": "ali",
-            "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
-        }
+        "appointment_patient_id": 3,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 2,
+        "appointment_type": "Followup",
+        "appointment_id": 2,
+        "appointment_duration": 60,
+        "appointment_complaint": "ta3ban ",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": "Onsite",
+        "patient_first_name": "mohamed ",
+        "patient_last_name": "salem",
+        "doctor_first_name": "samy",
+        "doctor_last_name": "ali",
+        "doctor_availability_day_hour": "2024-10-02T12:00:00.000Z"
+    }
         ]
     ```
-    ---
+---
 20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`
   * **Method:** GET
   * **Request Headers:**
@@ -626,92 +607,70 @@
     ```json
       [
       {
-          "appointment_patient_id": 6,
-          "appointment_doctor_id": 13,
-          "appointment_availability_slot": 5,
-          "appointment_type": "Followup",
-          "appointment_duration": 60,
-          "appointment_complaint": "headache",
-          "appointment_parent_reference": null,
-          "appointment_settings_type": null,
-          "patient_first_name": "John",
-          "patient_last_name": "Doe",
-          "doctor_first_name": "samy",
-          "doctor_last_name": "ali",
-          "doctor_availability_day_hour": "2024-10-09T12:00:00.000Z"
-      }
+        "appointment_patient_id": 3,
+        "appointment_doctor_id": 13,
+        "appointment_availability_slot": 55,
+        "appointment_id": 72,
+        "appointment_type": "Followup",
+        "appointment_duration": 30,
+        "appointment_complaint": "I have a headache",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": "Onsite",
+        "patient_first_name": "mohamed ",
+        "patient_last_name": "salem",
+        "doctor_first_name": "samy",
+        "doctor_last_name": "ali",
+        "doctor_availability_day_hour": "2024-11-17T07:00:00.000Z"
+    }
       ]
     ```
-21. **Doctor View Availability:** `/doctor/profile/availabilities`
+---
+21. **Doctor View Availability:** `/doctor/availability/view`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
   * **Response Body:**
     ```json
     {
-    "message": "Doctor availabilities retrieved successfully",
-    "availabilities": {
-        "Wed Oct 2 2024": [
-            {
-                "time": "15:00:00",
-                "id": 2,
-                "type": "Onsite"
-            },
-            {
-                "time": "15:00:00",
-                "id": 8,
-                "type": "Onsite"
-            }
-        ],
-        "Wed Oct 9 2024": [
-            {
-                "time": "15:00:00",
-                "id": 5,
-                "type": "Onsite"
-            }
-        ],
-        "Fri Feb 2 2024": [
-            {
-                "time": "15:00:00",
-                "id": 11,
-                "type": "Onsite"
-            }
-        ],
-        "Tue Feb 13 2024": [
-            {
-                "time": "15:00:00",
-                "id": 14,
-                "type": "Onsite"
-            }
-        ]
-    }
+    "timeslots": [
+        "1_01_S",
+        "2_02_L",
+        "3_03_S",
+        "4_04_S",
+        "5_05_L",
+        "1_01_S",
+        "2_02_L",
+        "3_03_S",
+        "4_04_S",
+        "5_05_L"
+    ]
     }
     ```
-    ---
+---
 
 22. **Doctor View Experience:** `/doctor/profile/experience`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    ---
+---
 
 23. **Doctor View Education:** `/doctor/profile/education`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    ---
+---
 
 24. **Doctor View Reviews:** `/doctor/profile/reviews`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    ---
+---
 
 25. **Doctor View Interests:** `/doctor/profile/interests`
   * **Method:** GET
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
-    ---
+---
 
 26. **Doctor Availability Addition:** `/doctor/availability/add`
   * **Method:** POST
@@ -720,54 +679,36 @@
     * `Content-Type: application/json`
   * **Request Body:**
     ```json
-        [
-      {
-        "doctor_availability_type": "Online",
-        "doctor_availability_day_hour": "2024-10-25 11:00:00"
-      },
-      {
-        "doctor_availability_type": "Onsite",
-        "doctor_availability_day_hour": "2024-11-01 14:00:00"
-      },
-      {
-        "doctor_availability_type": "Online/Onsite",
-        "doctor_availability_day_hour": "2024-11-10 09:00:00"
-      }
-        ]
+      [
+    "1_01_S",
+    "2_02_L",
+    "3_03_M",
+    "4_04_S",
+    "5_05_L"
+      ]
     ```
   * **Response Body:**
     ```json
     {
     "message": "Doctor availability added successfully"
     }
-    ---
+---
 
-27. **Doctor Availability Deletion:** `/doctor/availability/delete/{availabilityId}`
+27. **Doctor Availability Deletion:** `/doctor/availability/delete`
   * **Method:** DELETE
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
     * `Content-Type: application/json`
   * **Request Body:**
     ```json
-        {
-    "appointmentIds": [
-      1,2,3,4
+       [
+    "1_01_S",
+    "2_02_L",
+    "3_03_S",
+    "4_04_S",
+    "5_05_L"
       ]
-      }
-    ```
-  * **Response Body:**
-    ```json
-        {
-        "deleted": [
-            4
-        ],
-        "failed": [
-          1,
-          2,
-          3
-      ],
-      "message": "Some appointments could not be deleted."
-      }     
+    ```  
 ---
 
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
@@ -783,8 +724,8 @@
       "message": "File uploaded successfully",
       "file": ""
     }
-    ```
-    ---
+
+---
 
 29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add/:appointmentId`
   * **Method:** POST
@@ -801,7 +742,7 @@
       "endDate": "2023-10-25"
     }
     ```
-    ---
+---
 
 30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
   * **Method:** POST
@@ -819,4 +760,165 @@
     "message": "Appointment accepted successfully"
     }
     ```
-    ---
+---
+31. **Patient view appointments history:** `/patient/appointment/appointmentsHistory`
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
+  * **Response Body:**
+    ```json
+    {
+        "appointments": [
+            {
+            "appointment_patient_id": 3,
+            "appointment_doctor_id": 13,
+            "appointment_availability_slot": 55,
+            "appointment_type": "Followup",
+            "appointment_id": 72,
+            "appointment_duration": 30,
+            "appointment_complaint": "I have a headache",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": "Onsite",
+            "patient_first_name": "mohamed ",
+            "patient_last_name": "salem",
+            "doctor_first_name": "samy",
+            "doctor_last_name": "ali",
+            "doctor_specialization": "Cardiology",
+            "doctor_availability_day_hour": "2024-11-17T07:00:00.000Z"
+        }
+        ]
+    }
+    ```
+    If no appointments are available:
+    ```json
+       { "message": "No Completed appointments found" }
+    ```
+---
+
+  32. **Doctor view appointments history:** `/doctor/appointmentHistory`
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+    * `Content-Type: application/json`
+  * **Response Body:**
+    ```json
+      {
+      "appointments": [
+          {
+              "appointment_patient_id": 3,
+              "appointment_doctor_id": 13,
+              "appointment_availability_slot": 55,
+              "appointment_type": "Followup",
+              "appointment_duration": 30,
+              "appointment_complaint": "I have a headache",
+              "appointment_parent_reference": null,
+              "appointment_settings_type": "Onsite",
+              "patient_first_name": "mohamed ",
+              "patient_last_name": "salem",
+              "doctor_first_name": "samy",
+              "doctor_last_name": "ali",
+              "doctor_specialization": "Cardiology",
+              "doctor_availability_day_hour": "2024-11-17T07:00:00.000Z"
+          }]}
+    ```
+    If no appointments are available:
+    ```json
+       { "message": "No Completed appointments found" }
+    ```
+---
+
+33. **Doctor view appointment details:** `/doctor/appointmentDetails/:appointmentId`
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+  * **Response Body:**
+    ```json
+    {
+    "appointment": {
+        "appointment_patient_id": 2,
+        "appointment_doctor_id": 12,
+        "appointment_availability_slot": 1,
+        "appointment_type": "First_time",
+        "appointment_duration": 30,
+        "appointment_complaint": "Headache",
+        "appointment_status": "Approved",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": "Onsite",
+        "patient_first_name": "yahya",
+        "patient_last_name": "khalaf",
+        "doctor_first_name": "Olivia",
+        "doctor_last_name": "Martinez",
+        "doctor_availability_day_hour": "2024-10-01T07:00:00.000Z",
+        "doctor_specialization": "Internal Medicine",
+        "doctor_clinic_location": "Maadi",
+        "appointmentResults": [
+            {
+                "appointment_diagnosis": "Migraine",
+                "appointment_report": "Patient will recover with rest and medication.",
+                "updated_at": "2024-09-23T10:13:15.984Z"
+            }
+        ],
+        "treatmentPlan": {
+            "treatment_plan_operations": "Rest, medication",
+            "treatment_plan_speciality_referral": null,
+            "treatment_plan_referral_notes": null,
+            "treatment_plan_id": 1
+        },
+        "medications": [
+            {
+                "medication_note": "For headache relief",
+                "medication_start_date": "2024-09-30T21:00:00.000Z",
+                "medication_end_date": "2024-10-06T21:00:00.000Z",
+                "medication_id": 1,
+                "medication_name": "Ibuprofen",
+                "medication_dosage": "400mg, 3 times daily"
+            }
+        ],
+        "medicalDocuments": []
+    }
+    }
+    ```
+  with wrong appointmentId:
+  ```json
+  {
+  "message": "Appointment not found"
+  }
+  ```
+
+---
+34. **Doctor view Patient appointments:** `/doctor/PatientSummary/:patientID`
+
+  * **Method:** GET
+  * **Request Headers:**
+    * `Authorization: Bearer your_access_token`
+  * **Response Body:**
+  ```json
+   {
+    "appointments": [
+        {
+            "appointment_patient_id": 3,
+            "appointment_doctor_id": 14,
+            "appointment_id": 71,
+            "appointment_type": "Followup",
+            "appointment_duration": 30,
+            "appointment_complaint": "I have a headache",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": "Online",
+            "patient_first_name": "mohamed ",
+            "patient_last_name": "salem",
+            "doctor_first_name": "Ava",
+            "doctor_last_name": "Taylor",
+            "doctor_availability_day_hour": "2024-10-03T06:00:00.000Z"
+        }
+    ]
+    }
+  ```
+  with wrong appointmentId:
+  ```json
+    {
+      "message": "No Completed appointments found"
+    }
+  ```
+
+---

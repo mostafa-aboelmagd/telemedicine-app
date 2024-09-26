@@ -95,6 +95,7 @@ const retrieveDoctorAppointments = async (doctorId) => {
                 a.appointment_doctor_id,
                 a.appointment_availability_slot,
                 a.appointment_type,
+                a.appointment_id,
                 a.appointment_duration,
                 a.appointment_complaint,
                 a.appointment_parent_reference,
@@ -154,24 +155,7 @@ const retrieveDoctorReviews = async (id, email) => {
     }
 };
 
-const retrieveDoctorAvailabilities = async (doctorId) => {
-    try {
-        const result = await pool.query(
-            'SELECT * FROM doctor_availability WHERE doctor_availability_doctor_id = $1 AND doctor_availability_status = $2',
-            
-            [doctorId, 'Available']
-        );
-        if (result.rows.length) {
-            console.log('Doctor availabilities retrieved successfully', result.rows);
-            return result.rows;
-        }
-        console.log('Could not retrieve doctor availabilities');
-        return false;
-    } catch (error) {
-        console.error(error.stack);
-        return false;
-    }
-};
+
 
 const retrieveDoctorExperience = async (id, email) => {
     try {
@@ -288,6 +272,7 @@ const retrievePendingAppointments = async (doctorId) => {
                 a.appointment_patient_id,
                 a.appointment_doctor_id,
                 a.appointment_availability_slot,
+                a.appointment_id,
                 a.appointment_type,
                 a.appointment_duration,
                 a.appointment_complaint,
@@ -324,4 +309,4 @@ const retrievePendingAppointments = async (doctorId) => {
 
 
 
-module.exports = {retrievePendingAppointments, retrieveDoctorInfo, retrieveDoctorAppointments, retrieveDoctorReviews, retrieveDoctorAvailabilities, retrieveDoctorExperience, retrieveDoctorInterests, retrieveDoctorLanguages, retrieveDoctorEducation };
+module.exports = {retrievePendingAppointments, retrieveDoctorInfo, retrieveDoctorAppointments, retrieveDoctorReviews, retrieveDoctorExperience, retrieveDoctorInterests, retrieveDoctorLanguages, retrieveDoctorEducation };

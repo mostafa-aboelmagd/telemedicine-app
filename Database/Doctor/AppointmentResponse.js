@@ -37,7 +37,7 @@ const acceptAppointment = async (appointmentId) => {
     await pool.query(
       `UPDATE appointment
        SET appointment_status = 'Approved'
-       WHERE appointment_availability_slot = $1`,
+       WHERE appointment_id = $1`,
       [appointmentId]
     );
   };
@@ -53,7 +53,7 @@ const acceptAppointment = async (appointmentId) => {
     await pool.query(
       `UPDATE appointment
        SET appointment_status = 'Declined'
-       WHERE appointment_availability_slot = $1`,
+       WHERE appointment_id = $1`,
       [appointmentId]
     );
   };
