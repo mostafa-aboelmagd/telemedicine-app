@@ -3,7 +3,6 @@ const database = require('../../../Database/Doctor/AppointmentResults');
 // Appointment result submission form
 const AppointmentResultSubmission = async (req, res) => {
     try {
-        const doctorId = req.id; 
         const appointmentId = req.params.appointmentId;
 
         const {

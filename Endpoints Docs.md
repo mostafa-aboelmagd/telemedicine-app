@@ -926,6 +926,8 @@
   * **Method:** Post
   * **Request Headers:**
     * `Authorization: Bearer your_access_token`
+  * **Parameters:**
+    * [`appointmentId`]The ID of the appointment
   * **Request Body:**
     ```json
       {

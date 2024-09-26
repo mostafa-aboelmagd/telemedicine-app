@@ -105,6 +105,30 @@ const doctorAppointments = async (req, res) => {
     return res.json(pendingAppointments);
 }
 
+// view doctors declined appointments.
+const doctorDeclinedRequests = async (req, res) => {
+    const doctorUserId = req.id;
+    const doctorEmail = req.email;
+    let message = '';
+
+    if (!doctorUserId) {
+        message = 'Doctor ID not found';
+        return res.status(404).json({ message });
+    }
+    if (!doctorEmail) {
+        message = 'Doctor email not found';
+        return res.status(404).json({ message });
+    }
+
+    const pendingAppointments = await database.retrieveDoctorDeclinedAppointments(doctorUserId);
+    if (!pendingAppointments) {
+        message = 'Could not retrieve pending appointments';
+        return res.status(400).json({ message });
+    }
+
+    return res.json(pendingAppointments);
+}
+
 const doctorReviews = async (req, res) => {
     const doctorUserId = req.id;
     const doctorEmail = req.email;
@@ -205,4 +229,4 @@ const doctorLanguages = async (req, res) => {
     return res.json(languages);
 }   
 
-module.exports = { doctorInfo, doctorPatients, doctorAppointments, doctorReviews, doctorExperience, doctorEducation, doctorInterests, doctorLanguages, doctorPendingRequests };
+module.exports = { doctorDeclinedRequests,doctorInfo, doctorPatients, doctorAppointments, doctorReviews, doctorExperience, doctorEducation, doctorInterests, doctorLanguages, doctorPendingRequests };
