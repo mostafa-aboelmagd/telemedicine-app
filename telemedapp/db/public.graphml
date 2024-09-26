@@ -1,0 +1,1216 @@
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:demostyle2="http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/2.0" xmlns:demostyle="http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/1.0" xmlns:icon-style="http://www.yworks.com/yed-live/icon-style/1.0" xmlns:bpmn="http://www.yworks.com/xml/yfiles-bpmn/2.0" xmlns:demotablestyle="http://www.yworks.com/yFilesHTML/demos/FlatDemoTableStyle/1.0" xmlns:uml="http://www.yworks.com/yFilesHTML/demos/UMLDemoStyle/1.0" xmlns:GraphvizNodeStyle="http://www.yworks.com/yFilesHTML/graphviz-node-style/1.0" xmlns:VuejsNodeStyle="http://www.yworks.com/demos/yfiles-vuejs-node-style/1.0" xmlns:explorer-style="http://www.yworks.com/data-explorer/1.0" xmlns:y="http://www.yworks.com/xml/yfiles-common/3.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/3.0" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:yjs="http://www.yworks.com/xml/yfiles-for-html/2.0/xaml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml.html/2.0/ygraphml.xsd ">
+  <key id="d0" for="node" attr.type="int" attr.name="zOrder" y:attr.uri="http://www.yworks.com/xml/yfiles-z-order/1.0/zOrder" />
+  <key id="d1" for="node" attr.type="boolean" attr.name="Expanded" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/Expanded">
+    <default>true</default>
+  </key>
+  <key id="d2" for="node" attr.type="string" attr.name="url" />
+  <key id="d3" for="node" attr.type="string" attr.name="description" />
+  <key id="d4" for="node" attr.name="NodeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeLabels" />
+  <key id="d5" for="node" attr.name="NodeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeGeometry" />
+  <key id="d6" for="all" attr.name="UserTags" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/UserTags" />
+  <key id="d7" for="node" attr.name="NodeStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeStyle" />
+  <key id="d8" for="node" attr.name="NodeViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/NodeViewState" />
+  <key id="d9" for="edge" attr.type="string" attr.name="url" />
+  <key id="d10" for="edge" attr.type="string" attr.name="description" />
+  <key id="d11" for="edge" attr.name="EdgeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeLabels" />
+  <key id="d12" for="edge" attr.name="EdgeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeGeometry" />
+  <key id="d13" for="edge" attr.name="EdgeStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeStyle" />
+  <key id="d14" for="edge" attr.name="EdgeViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/EdgeViewState" />
+  <key id="d15" for="port" attr.name="PortLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortLabels" />
+  <key id="d16" for="port" attr.name="PortLocationParameter" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortLocationParameter">
+    <default>
+      <x:Static Member="y:FreeNodePortLocationModel.NodeCenterAnchored" />
+    </default>
+  </key>
+  <key id="d17" for="port" attr.name="PortStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortStyle">
+    <default>
+      <x:Static Member="y:VoidPortStyle.Instance" />
+    </default>
+  </key>
+  <key id="d18" for="port" attr.name="PortViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/PortViewState" />
+  <key id="d19" attr.name="SharedData" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/SharedData" />
+  <data key="d19">
+    <y:SharedData>
+      <y:InteriorLabelModel x:Key="1" />
+      <y:CompositeLabelModelParameter x:Key="2">
+        <y:CompositeLabelModelParameter.Parameter>
+          <y:InteriorLabelModelParameter Position="Center" Model="{y:GraphMLReference 1}" />
+        </y:CompositeLabelModelParameter.Parameter>
+        <y:CompositeLabelModelParameter.Model>
+          <y:CompositeLabelModel>
+            <y:CompositeLabelModel.LabelModels>
+              <y:ExteriorLabelModel Insets="5" />
+              <y:GraphMLReference ResourceKey="1" />
+              <y:FreeNodeLabelModel />
+            </y:CompositeLabelModel.LabelModels>
+          </y:CompositeLabelModel>
+        </y:CompositeLabelModelParameter.Model>
+      </y:CompositeLabelModelParameter>
+      <y:SmartEdgeLabelModel x:Key="3" />
+    </y:SharedData>
+  </data>
+  <graph id="G" edgedefault="directed">
+    <data key="d6">
+      <y:Json>{&quot;version&quot;:&quot;2.0.0&quot;,&quot;theme&quot;:{&quot;name&quot;:&quot;light&quot;,&quot;version&quot;:&quot;1.0.0&quot;},&quot;bridge-style&quot;:&quot;ARC_SCALED&quot;}</y:Json>
+    </data>
+    <node id="node8">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="119" Y="1396" Width="281" Height="210" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="appointment" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>appointment_patient_id: integer</sys:String>
+                  <sys:String>appointment_doctor_id: integer</sys:String>
+                  <sys:String>appointment_availability_slot: integer</sys:String>
+                  <sys:String>appointment_type: varchar</sys:String>
+                  <sys:String>appointment_duration: integer</sys:String>
+                  <sys:String>appointment_complaint: text</sys:String>
+                  <sys:String>appointment_status: varchar</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>appointment_id: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object" />
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.1666666666666667,0.0" />
+        </data>
+      </port>
+      <port name="port1">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.8333333333333331,0.0" />
+        </data>
+      </port>
+      <port name="port2">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+      <port name="port3">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.625,1.0" />
+        </data>
+      </port>
+      <port name="port4">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.375,1.0" />
+        </data>
+      </port>
+      <port name="port5">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.125,1.0" />
+        </data>
+      </port>
+      <port name="port6">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.875,1.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node3">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="-167" Y="1817" Width="293" Height="135" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="appointment_results" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>appointment_diagnosis: text</sys:String>
+                  <sys:String>appointment_report: text</sys:String>
+                  <sys:String>results_appointment_reference: integer</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object" />
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node13">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="573" Y="1781" Width="412" Height="196" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="appointment_review" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>appointment_review_id: integer</sys:String>
+                  <sys:String>appointment_review_appointment_id: integer</sys:String>
+                  <sys:String>appointment_review_communication_rating: smallint</sys:String>
+                  <sys:String>appointment_review_understanding_rating: smallint</sys:String>
+                  <sys:String>appointment_review_providing_solutions_rating: smallint</sys:String>
+                  <sys:String>appointment_review_commitment_rating: smallint</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object" />
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node7">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="64" Y="220" Width="350" Height="264" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="doctor" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>doctor_country: varchar</sys:String>
+                  <sys:String>doctor_thirty_min_price: integer</sys:String>
+                  <sys:String>doctor_sixty_min_price: integer</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>doctor_image: bytea</sys:String>
+                  <sys:String>doctor_table_id: smallint</sys:String>
+                  <sys:String>doctor_nearest_appointment_reference: integer</sys:String>
+                  <sys:String>doctor_city: varchar</sys:String>
+                  <sys:String>doctor_clinic_location: varchar</sys:String>
+                  <sys:String>doctor_account_state: varchar</sys:String>
+                  <sys:String>doctor_user_id_reference: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object">
+                  <sys:String>doctor_specialization: varchar(255)</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+      <port name="port1">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5833333333333334,1.0" />
+        </data>
+      </port>
+      <port name="port2">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.75,1.0" />
+        </data>
+      </port>
+      <port name="port3">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.9166666666666666,1.0" />
+        </data>
+      </port>
+      <port name="port4">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.0833333333333333,1.0" />
+        </data>
+      </port>
+      <port name="port5">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.4166666666666667,1.0" />
+        </data>
+      </port>
+      <port name="port6">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.25,1.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node1">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="111" Y="1092" Width="297" Height="177" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="doctor_availability" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>doctor_availability_doctor_id: integer</sys:String>
+                  <sys:String>doctor_availability_day_hour: timestamp</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>doctor_availability_id: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object">
+                  <sys:String>doctor_availability_type: varchar(16)</sys:String>
+                  <sys:String>doctor_availability_status: varchar(16)</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+      <port name="port1">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,1.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node12">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="-195" Y="1080" Width="228" Height="197" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="doctor_education" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>education_doctor_id: integer</sys:String>
+                  <sys:String>education_certificate: varchar</sys:String>
+                  <sys:String>education_authority: varchar</sys:String>
+                  <sys:String>education_start_date: date</sys:String>
+                  <sys:String>education_end_data: date</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>doctor_education_id: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object" />
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node6">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="291" Y="788" Width="296" Height="192" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="doctor_experience" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>doctor_experience_doctor_id: integer</sys:String>
+                  <sys:String>doctor_experience_job_title: varchar</sys:String>
+                  <sys:String>doctor_experience_firm_name: varchar</sys:String>
+                  <sys:String>doctor_experience_department: varchar</sys:String>
+                  <sys:String>doctor_experience_start_date: date</sys:String>
+                  <sys:String>doctor_experience_end_date: date</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>doctor_experience_id: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object" />
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node11">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="-49" Y="824" Width="257" Height="156" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="doctor_interest" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>doctor_interest_doctor_id: integer</sys:String>
+                  <sys:String>doctor_interest_name: varchar</sys:String>
+                  <sys:String>doctor_interest_category: varchar</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>doctor_interest_id: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object" />
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node10">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="-143" Y="600" Width="165" Height="112" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="languages" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>lang_user_id: integer</sys:String>
+                  <sys:String>language: varchar</sys:String>
+                  <sys:String>language_id: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object" />
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node5">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="-15" Y="2108" Width="389" Height="192" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="medical_documents" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>medical_document_appointment_reference: integer</sys:String>
+                  <sys:String>medical_document_treatment_plan_reference: integer</sys:String>
+                  <sys:String>medical_document_data: bytea</sys:String>
+                  <sys:String>medical_document_request_note: varchar</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>medical_document_id: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object">
+                  <sys:String>medical_document_type: varchar(255)</sys:String>
+                  <sys:String>medical_document_name: varchar(255)</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.75,0.0" />
+        </data>
+      </port>
+      <port name="port1">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.25,0.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node2">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="410" Y="2108" Width="338" Height="192" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="medications" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>medication_treatment_plan_reference: integer</sys:String>
+                  <sys:String>medication_plan_note: text</sys:String>
+                  <sys:String>medication_plan_start_date: date</sys:String>
+                  <sys:String>medication_plan_end_date: date</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>medication_id: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object">
+                  <sys:String>medication_plan_name: varchar(255)</sys:String>
+                  <sys:String>medication_plan_dosage: varchar(255)</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node9">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="551" Y="1092" Width="257" Height="177" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="patient" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>patient_current_doctor_id: integer</sys:String>
+                  <sys:String>patient_wallet: integer</sys:String>
+                  <sys:String>patient_table_id: integer</sys:String>
+                  <sys:String>patient_account_state: varchar</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>patient_user_id_reference: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object" />
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.25,0.0" />
+        </data>
+      </port>
+      <port name="port1">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.75,0.0" />
+        </data>
+      </port>
+      <port name="port2">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,1.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node4">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="185" Y="1792" Width="349" Height="177" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="treatment_plan" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>treatment_plan_appointment_reference: integer</sys:String>
+                  <sys:String>treatment_plan_operations: text</sys:String>
+                  <sys:String>treatment_plan_speciality_referral: varchar</sys:String>
+                  <sys:String>treatment_plan_referral_notes: varchar</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>treatment_plan_id: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object" />
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,0.0" />
+        </data>
+      </port>
+      <port name="port1">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.25,1.0" />
+        </data>
+      </port>
+      <port name="port2">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.75,1.0" />
+        </data>
+      </port>
+    </node>
+    <node id="node0">
+      <data key="d0">0</data>
+      <data key="d5">
+        <y:RectD X="109" Y="-176" Width="260" Height="228" />
+      </data>
+      <data key="d7">
+        <uml:UMLNodeStyle fill="#FF607D8B" highlightFill="#FFA3F1BB">
+          <uml:UMLNodeStyle.model>
+            <uml:UMLClassModel stereotype="" constraint="" className="users" attributesOpen="true" operationsOpen="true">
+              <uml:UMLClassModel.attributes>
+                <x:Array Type="sys:Object">
+                  <sys:String>user_birth_date: date</sys:String>
+                  <sys:String>created_at: timestamp</sys:String>
+                  <sys:String>updated_at: timestamp</sys:String>
+                  <sys:String>user_id: integer</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.attributes>
+              <uml:UMLClassModel.operations>
+                <x:Array Type="sys:Object">
+                  <sys:String>user_email: varchar(255)</sys:String>
+                  <sys:String>user_password_hash: varchar(255)</sys:String>
+                  <sys:String>user_role: varchar(50)</sys:String>
+                  <sys:String>user_phone_number: varchar(20)</sys:String>
+                  <sys:String>user_gender: varchar(10)</sys:String>
+                  <sys:String>user_first_name: varchar(255)</sys:String>
+                  <sys:String>user_last_name: varchar(255)</sys:String>
+                </x:Array>
+              </uml:UMLClassModel.operations>
+            </uml:UMLClassModel>
+          </uml:UMLNodeStyle.model>
+        </uml:UMLNodeStyle>
+      </data>
+      <port name="port0">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.8333333333333331,1.0" />
+        </data>
+      </port>
+      <port name="port1">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.5,1.0" />
+        </data>
+      </port>
+      <port name="port2">
+        <data key="d16">
+          <y:FreeNodePortLocationModelParameter Ratio="0.1666666666666667,1.0" />
+        </data>
+      </port>
+    </node>
+    <edge id="edge4" source="node8" target="node7" sourceport="port0" targetport="port4">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>appointment_doctor_id:doctor_user_id_reference</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="165.33333333333337,1376.0" />
+          <y:Bend Location="-221.0,1376.0" />
+          <y:Bend Location="-221.0,756.0" />
+          <y:Bend Location="93.16666666666663,756.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge12" source="node8" target="node1" sourceport="port2" targetport="port1">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>appointment_availability_slot:doctor_availability_id</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List />
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge8" source="node8" target="node9" sourceport="port1" targetport="port2">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>appointment_patient_id:patient_user_id_reference</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="352.66666666666663,1376.0" />
+          <y:Bend Location="679.0,1376.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge15" source="node3" target="node8" sourceport="port0" targetport="port5">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>results_appointment_reference:appointment_id</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="-21.0,1756.0" />
+          <y:Bend Location="153.625,1756.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge16" source="node13" target="node8" sourceport="port0" targetport="port6">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>appointment_review_appointment_id:appointment_id</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="779.0,1736.0" />
+          <y:Bend Location="364.375,1736.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge13" source="node7" target="node0" sourceport="port0" targetport="port1">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>doctor_user_id_reference:user_id</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List />
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge0" source="node1" target="node7" sourceport="port0" targetport="port1">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>doctor_availability_doctor_id:doctor_user_id_reference</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="259.0,1056.0" />
+          <y:Bend Location="268.1666666666667,1056.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge11" source="node12" target="node7" sourceport="port0" targetport="port6">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>education_doctor_id:doctor_user_id_reference</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="-81.0,776.0" />
+          <y:Bend Location="151.5,776.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge2" source="node6" target="node7" sourceport="port0" targetport="port2">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>doctor_experience_doctor_id:doctor_user_id_reference</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="439.0,756.0" />
+          <y:Bend Location="326.5,756.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge5" source="node11" target="node7" sourceport="port0" targetport="port5">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>doctor_interest_doctor_id:doctor_user_id_reference</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="79.0,796.0" />
+          <y:Bend Location="209.83333333333337,796.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge14" source="node10" target="node0" sourceport="port0" targetport="port2">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>lang_user_id:user_id</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="-61.0,196.0" />
+          <y:Bend Location="152.33333333333337,196.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge10" source="node5" target="node8" sourceport="port1" targetport="port4">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>medical_document_appointment_reference:appointment_id</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="81.75,2076.0" />
+          <y:Bend Location="159.0,2076.0" />
+          <y:Bend Location="159.0,1776.0" />
+          <y:Bend Location="223.875,1776.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge1" source="node5" target="node4" sourceport="port0" targetport="port1">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>medical_document_treatment_plan_reference:treatment_plan_id</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="276.25,2076.0" />
+          <y:Bend Location="271.75,2076.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge7" source="node2" target="node4" sourceport="port0" targetport="port2">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>medication_treatment_plan_reference:treatment_plan_id</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="579.0,2076.0" />
+          <y:Bend Location="446.25,2076.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge3" source="node9" target="node7" sourceport="port0" targetport="port3">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>patient_current_doctor_id:doctor_user_id_reference</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="614.75,736.0" />
+          <y:Bend Location="384.83333333333326,736.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge6" source="node9" target="node0" sourceport="port1" targetport="port0">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>patient_user_id_reference:user_id</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="743.25,716.0" />
+          <y:Bend Location="439.0,716.0" />
+          <y:Bend Location="439.0,196.0" />
+          <y:Bend Location="325.66666666666663,196.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+    <edge id="edge9" source="node4" target="node8" sourceport="port0" targetport="port3">
+      <data key="d11">
+        <x:List>
+          <y:Label>
+            <y:Label.Text>treatment_plan_appointment_reference:appointment_id</y:Label.Text>
+            <y:Label.LayoutParameter>
+              <y:SmartEdgeLabelModelParameter Model="{y:GraphMLReference 3}" Distance="-6" />
+            </y:Label.LayoutParameter>
+            <y:Label.Style>
+              <yjs:DefaultLabelStyle backgroundFill="WHITE" horizontalTextAlignment="CENTER" wrapping="WORD" clipText="false" backgroundStroke="WHITE" font="'Arial'" autoFlip="false" textFill="BLACK" textSize="8" />
+            </y:Label.Style>
+          </y:Label>
+        </x:List>
+      </data>
+      <data key="d12">
+        <x:List>
+          <y:Bend Location="359.0,1756.0" />
+          <y:Bend Location="294.125,1756.0" />
+        </x:List>
+      </data>
+      <data key="d13">
+        <yjs:PolylineEdgeStyle smoothingLength="20">
+          <yjs:PolylineEdgeStyle.stroke>
+            <yjs:Stroke fill="#595959" />
+          </yjs:PolylineEdgeStyle.stroke>
+          <yjs:PolylineEdgeStyle.sourceArrow>
+            <yjs:Arrow type="NONE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.sourceArrow>
+          <yjs:PolylineEdgeStyle.targetArrow>
+            <yjs:Arrow type="TRIANGLE" stroke="#595959" fill="#595959" />
+          </yjs:PolylineEdgeStyle.targetArrow>
+        </yjs:PolylineEdgeStyle>
+      </data>
+    </edge>
+  </graph>
+</graphml>
