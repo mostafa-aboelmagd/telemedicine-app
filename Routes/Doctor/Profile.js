@@ -13,6 +13,7 @@ router.get('/education', tokenAuthentication, doctorProfileController.doctorEduc
 router.get('/reviews', tokenAuthentication, doctorProfileController.doctorReviews);
 router.get('/interests', tokenAuthentication, doctorProfileController.doctorInterests);
 router.get('/PendingRequests', tokenAuthentication, doctorProfileController.doctorPendingRequests);
+router.get('/DeclinedRequests', tokenAuthentication, doctorProfileController.doctorDeclinedRequests);
 
 
 module.exports = router;

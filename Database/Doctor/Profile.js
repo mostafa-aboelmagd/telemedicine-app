@@ -86,7 +86,46 @@ const retrieveDoctorInfo = async (id, email) => {
 //         return false;
 //     }
 // };
+const retrieveDoctorDeclinedAppointments = async (doctorId) => {
+    try {
+        const query = 
+       `SELECT
+                a.appointment_patient_id,
+                a.appointment_doctor_id,
+                a.appointment_availability_slot,
+                a.appointment_type,
+                a.appointment_id,
+                a.appointment_duration,
+                a.appointment_complaint,
+                a.appointment_parent_reference,
+                a.appointment_settings_type,
+                p.user_first_name AS patient_first_name,
+                p.user_last_name AS patient_last_name,
+                d.user_first_name AS doctor_first_name,
+                d.user_last_name AS doctor_last_name,
+                da.doctor_availability_day_hour
+            FROM
+                appointment a
+            JOIN users p ON a.appointment_patient_id = p.user_id
+            JOIN users d ON a.appointment_doctor_id = d.user_id
+            JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
+            WHERE
+                a.appointment_doctor_id = $1 AND
+                a.appointment_status = $2`;
 
+        const result = await pool.query(query, [doctorId, 'Declined']);
+        if (result.rows.length) {
+            console.log('Declined appointments found', result.rows);
+            return result.rows;
+        }
+
+        console.log('No Declined appointments found');
+        return false;
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
 const retrieveDoctorAppointments = async (doctorId) => {
     try {
         const query = 
@@ -127,6 +166,7 @@ const retrieveDoctorAppointments = async (doctorId) => {
         return false;
     }
 };
+
 
 const retrieveDoctorReviews = async (id, email) => {
     try {
@@ -309,4 +349,4 @@ const retrievePendingAppointments = async (doctorId) => {
 
 
 
-module.exports = {retrievePendingAppointments, retrieveDoctorInfo, retrieveDoctorAppointments, retrieveDoctorReviews, retrieveDoctorExperience, retrieveDoctorInterests, retrieveDoctorLanguages, retrieveDoctorEducation };
+module.exports = {retrievePendingAppointments, retrieveDoctorDeclinedAppointments, retrieveDoctorInfo, retrieveDoctorAppointments, retrieveDoctorReviews, retrieveDoctorExperience, retrieveDoctorInterests, retrieveDoctorLanguages, retrieveDoctorEducation };
