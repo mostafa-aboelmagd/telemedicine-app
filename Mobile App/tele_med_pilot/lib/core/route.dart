@@ -3,9 +3,11 @@ import 'package:tele_med_pilot/AuthContainer.dart';
 import 'package:tele_med_pilot/features/Booking/view/Bookingg_view.dart';
 import 'package:tele_med_pilot/features/appointments/views/appointments_screen.dart';
 import 'package:tele_med_pilot/features/book%20appointment/view/add_appointment_view.dart';
+import 'package:tele_med_pilot/features/chat/chat_page.dart';
 import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
 import 'package:tele_med_pilot/features/notification/views/notifications_screen.dart';
 import 'package:tele_med_pilot/features/profile/views/profile_screen.dart';
+import 'package:tele_med_pilot/features/requests/Request_page.dart';
 import 'package:tele_med_pilot/features/sign_in/views/signin_screen.dart';
 import 'package:tele_med_pilot/features/sign_up/views/sign_up_screen.dart';
 import 'package:tele_med_pilot/features/support/views/support_screen.dart';
@@ -30,7 +32,9 @@ class RouteClass {
 
   static const String doctorCards = "/Booking";
   static const String addAppointment = "/add_appointment_view";
-
+  static const String requestPage = "/request_page";
+  static const String chatPage = "/chat_page";
+ 
   // Method to generate route with optional transitions and speed
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Extract arguments (e.g., the transition type and duration)
@@ -38,6 +42,14 @@ class RouteClass {
 
     Widget page;
     switch (settings.name) {
+      case chatPage:
+        page = const ChatPage();
+        break;
+        
+      case requestPage:
+        page = const RequestPage();
+        break;
+
       case doctorCards:
         page = const BookingSession();
         break;
