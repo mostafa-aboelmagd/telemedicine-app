@@ -361,36 +361,36 @@
     prop-types "^15.8.1"
     react-is "^18.3.1"
 
-"@mui/x-date-pickers@^7.15.0":
-  version "7.16.0"
-  resolved "https://registry.npmjs.org/@mui/x-date-pickers/-/x-date-pickers-7.16.0.tgz"
-  integrity sha512-NjFAoI6NiJ/65LJf5A38Y+aA/zSIow+7i52QBcgryrdBlIu46nssqzohPRWNUFwnxNXhWstfcV3YAb2avCIY5A==
+"@mui/x-date-pickers@^7.18.0":
+  version "7.18.0"
+  resolved "https://registry.npmjs.org/@mui/x-date-pickers/-/x-date-pickers-7.18.0.tgz"
+  integrity sha512-12tXIoMj9vpS8fS/bS3kWPCoVrH38vNGCxgplI0vOnUrN9rJuYJz3agLPJe1S0xciTw+9W8ZSe3soaW+owoz1Q==
   dependencies:
     "@babel/runtime" "^7.25.6"
     "@mui/utils" "^5.16.6"
-    "@mui/x-internals" "7.16.0"
+    "@mui/x-internals" "7.18.0"
     "@types/react-transition-group" "^4.4.11"
     clsx "^2.1.1"
     prop-types "^15.8.1"
     react-transition-group "^4.4.5"
 
-"@mui/x-internals@7.16.0":
-  version "7.16.0"
-  resolved "https://registry.npmjs.org/@mui/x-internals/-/x-internals-7.16.0.tgz"
-  integrity sha512-ijer5XYmWlJqWaTmF6TGH1odG7EAupv8iDWYmDm2yVR9IQ+L2nQSuhiFClI+wmGx40KS2VKOlzDMPpF0t7/HCg==
+"@mui/x-internals@7.18.0":
+  version "7.18.0"
+  resolved "https://registry.npmjs.org/@mui/x-internals/-/x-internals-7.18.0.tgz"
+  integrity sha512-lzCHOWIR0cAIY1bGrWSprYerahbnH5C31ql/2OWCEjcngL2NAV1M6oKI2Vp4HheqzJ822c60UyWyapvyjSzY/A==
   dependencies:
     "@babel/runtime" "^7.25.6"
     "@mui/utils" "^5.16.6"
 
-"@next/env@14.2.9":
-  version "14.2.9"
-  resolved "https://registry.npmjs.org/@next/env/-/env-14.2.9.tgz"
-  integrity sha512-hnDAoDPMii31V0ivibI8p6b023jOF1XblWTVjsDUoZKwnZlaBtJFZKDwFqi22R8r9i6W08dThUWU7Bsh2Rg8Ww==
+"@next/env@14.2.11":
+  version "14.2.11"
+  resolved "https://registry.npmjs.org/@next/env/-/env-14.2.11.tgz"
+  integrity sha512-HYsQRSIXwiNqvzzYThrBwq6RhXo3E0n8j8nQnAs8i4fCEo2Zf/3eS0IiRA8XnRg9Ha0YnpkyJZIZg1qEwemrHw==
 
-"@next/swc-win32-x64-msvc@14.2.9":
-  version "14.2.9"
-  resolved "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.2.9.tgz"
-  integrity sha512-gcbpoXyWZdVOBgNa5BRzynrL5UR1nb2ZT38yKgnphYU9UHjeecnylMHntrQiMg/QtONDcJPFC/PmsS47xIRYoA==
+"@next/swc-win32-x64-msvc@14.2.11":
+  version "14.2.11"
+  resolved "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.2.11.tgz"
+  integrity sha512-gQpS7mcgovWoaTG1FbS5/ojF7CGfql1Q0ZLsMrhcsi2Sr9HEqsUZ70MPJyaYBXbk6iEAP7UXMD9HC8KY1qNwvA==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -536,7 +536,7 @@
   dependencies:
     react-icons "*"
 
-"@types/react-transition-group@^4.4.0", "@types/react-transition-group@^4.4.11":
+"@types/react-transition-group@^4.4.0", "@types/react-transition-group@^4.4.1", "@types/react-transition-group@^4.4.11":
   version "4.4.11"
   resolved "https://registry.npmjs.org/@types/react-transition-group/-/react-transition-group-4.4.11.tgz"
   integrity sha512-RM05tAniPZ5DZPzzNFP+DmrcOdD0efDUxMy3145oljWSl3x9ZV5vhme98gTxFrj2lhXvmGNnUiuDyJgY9IKkNA==
@@ -796,7 +796,7 @@ csstype@^3.0.2, csstype@^3.1.3:
   resolved "https://registry.npmjs.org/csstype/-/csstype-3.1.3.tgz"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
-"date-fns@^2.25.0 || ^3.2.0", date-fns@^3.6.0:
+"date-fns@^2.25.0 || ^3.2.0 || ^4.0.0", date-fns@^3.6.0:
   version "3.6.0"
   resolved "https://registry.npmjs.org/date-fns/-/date-fns-3.6.0.tgz"
   integrity sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==
@@ -1229,12 +1229,12 @@ nanoid@^3.3.6, nanoid@^3.3.7:
   resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.7.tgz"
   integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
 
-next@^14.2.6:
-  version "14.2.9"
-  resolved "https://registry.npmjs.org/next/-/next-14.2.9.tgz"
-  integrity sha512-3CzBNo6BuJnRjcQvRw+irnU1WiuJNZEp+dkzkt91y4jeIDN/Emg95F+takSYiLpJ/HkxClVQRyqiTwYce5IVqw==
+next@^14.2.11:
+  version "14.2.11"
+  resolved "https://registry.npmjs.org/next/-/next-14.2.11.tgz"
+  integrity sha512-8MDFqHBhdmR2wdfaWc8+lW3A/hppFe1ggQ9vgIu/g2/2QEMYJrPoQP6b+VNk56gIug/bStysAmrpUKtj3XN8Bw==
   dependencies:
-    "@next/env" "14.2.9"
+    "@next/env" "14.2.11"
     "@swc/helpers" "0.5.5"
     busboy "1.6.0"
     caniuse-lite "^1.0.30001579"
@@ -1242,15 +1242,15 @@ next@^14.2.6:
     postcss "8.4.31"
     styled-jsx "5.1.1"
   optionalDependencies:
-    "@next/swc-darwin-arm64" "14.2.9"
-    "@next/swc-darwin-x64" "14.2.9"
-    "@next/swc-linux-arm64-gnu" "14.2.9"
-    "@next/swc-linux-arm64-musl" "14.2.9"
-    "@next/swc-linux-x64-gnu" "14.2.9"
-    "@next/swc-linux-x64-musl" "14.2.9"
-    "@next/swc-win32-arm64-msvc" "14.2.9"
-    "@next/swc-win32-ia32-msvc" "14.2.9"
-    "@next/swc-win32-x64-msvc" "14.2.9"
+    "@next/swc-darwin-arm64" "14.2.11"
+    "@next/swc-darwin-x64" "14.2.11"
+    "@next/swc-linux-arm64-gnu" "14.2.11"
+    "@next/swc-linux-arm64-musl" "14.2.11"
+    "@next/swc-linux-x64-gnu" "14.2.11"
+    "@next/swc-linux-x64-musl" "14.2.11"
+    "@next/swc-win32-arm64-msvc" "14.2.11"
+    "@next/swc-win32-ia32-msvc" "14.2.11"
+    "@next/swc-win32-x64-msvc" "14.2.11"
 
 normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"
@@ -1399,6 +1399,19 @@ postcss@8.4.31:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+primeicons@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.npmjs.org/primeicons/-/primeicons-7.0.0.tgz"
+  integrity sha512-jK3Et9UzwzTsd6tzl2RmwrVY/b8raJ3QZLzoDACj+oTJ0oX7L9Hy+XnVwgo4QVKlKpnP/Ur13SXV/pVh4LzaDw==
+
+primereact@^10.8.3:
+  version "10.8.3"
+  resolved "https://registry.npmjs.org/primereact/-/primereact-10.8.3.tgz"
+  integrity sha512-LYa7DL1TDmWWrPCeh3CMsx89LXgcf4+rYhJ6YiA7z164WsdzJK388Bp1Qdv5cfpyL/Nm0eIWxIApxwWBv8kwuA==
+  dependencies:
+    "@types/react-transition-group" "^4.4.1"
+    react-transition-group "^4.4.1"
+
 prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
@@ -1466,7 +1479,7 @@ react-select@^5.8.0:
     react-transition-group "^4.3.0"
     use-isomorphic-layout-effect "^1.1.2"
 
-react-transition-group@^4.3.0, react-transition-group@^4.4.5:
+react-transition-group@^4.3.0, react-transition-group@^4.4.1, react-transition-group@^4.4.5:
   version "4.4.5"
   resolved "https://registry.npmjs.org/react-transition-group/-/react-transition-group-4.4.5.tgz"
   integrity sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==

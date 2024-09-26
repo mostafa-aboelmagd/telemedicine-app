@@ -2,57 +2,58 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import userImage from "@/images/user.png";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
+import { FaUserCircle } from "react-icons/fa";
 
+interface TimeIdMapping {
+  [key: string]: { [time: string]: string };
+}
 function TimeSlots() {
-  const today = new Date();
-  let datesList = [];
-  for(let i = 0; i < 7; i++) {
-    let newDate = new Date();
-    newDate.setDate(today.getDate() + i + 1);
-    datesList.push(newDate);
-  }
-  
-  const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+  const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
+  const [appointmentType, setAppointmentType] = useState("online");
+
+  const days = [
+    "saturday",
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+  ];
 
   const timesList = {
-    "9:00 AM : 10:00 AM" : "9:00:00",
-    "10:00 AM : 11:00 AM" : "10:00:00",
-    "11:00 AM : 12:00 PM" : "11:00:00",
-    "12:00 PM : 1:00 PM" : "12:00:00",
+    "9:00 AM : 10:00 AM": "9:00:00",
+    "10:00 AM : 11:00 AM": "10:00:00",
+    "11:00 AM : 12:00 PM": "11:00:00",
+    "12:00 PM : 1:00 PM": "12:00:00",
     "1:00 PM : 2:00 PM": "13:00:00",
-    "2:00 PM : 3:00 PM" : "14:00:00",
-    "3:00 PM : 4:00 PM" : "15:00:00",
-    "4:00 PM : 5:00 PM" : "16:00:00",
-    "5:00 PM : 6:00 PM" : "17:00:00",
-    "6:00 PM : 7:00 PM" : "18:00:00",
-    "7:00 PM : 8:00 PM" : "19:00:00",
-    "8:00 PM : 9:00 PM" : "20:00:00",
-  }
+    "2:00 PM : 3:00 PM": "14:00:00",
+    "3:00 PM : 4:00 PM": "15:00:00",
+    "4:00 PM : 5:00 PM": "16:00:00",
+    "5:00 PM : 6:00 PM": "17:00:00",
+    "6:00 PM : 7:00 PM": "18:00:00",
+    "7:00 PM : 8:00 PM": "19:00:00",
+    "8:00 PM : 9:00 PM": "20:00:00",
+  };
 
-  const [dayDate, setDayDate] = useState(datesList[0].toDateString());
+  const [dayDate, setDayDate] = useState(days[0]);
 
   const [timesChosen, setTimesChosen] = useState(
-    Object.fromEntries(datesList.map(date => [
-    date.toDateString(), new Set<String>()
-  ])));
+    Object.fromEntries(days.map((day) => [day, new Set<string>()]))
+  );
 
-  const [oldTimes, setOldTimes] = useState(
-    Object.fromEntries(datesList.map(date => [
-    date.toDateString(), new Set<String>()
-  ])));
+  const [oldTimesId, setOldTimesId] = useState<TimeIdMapping>(
+    Object.fromEntries(days.map((day) => [day, { "": "" }]))
+  );
 
-  const [oldTimesTemp, setOldTimesTemp] = useState(
-    Object.fromEntries(datesList.map(date => [
-    date.toDateString(), new Array()
-  ])));
+  const [oldTimes, setOldTimes] = useState<{ [key: string]: Set<string> }>(
+    Object.fromEntries(days.map((day) => [day, new Set<string>()]))
+  );
 
-  const [oldTimesId, setOldTimesId] = useState(
-    Object.fromEntries(datesList.map(date => [
-    date.toDateString(), {"" : ""}
-  ])));
+  const [oldTimesTemp, setOldTimesTemp] = useState<{
+    [key: string]: { time: string; id: string }[];
+  }>(Object.fromEntries(days.map((day) => [day, []])));
 
   const [toggleChecked, setToggleChecked] = useState(false);
 
@@ -63,257 +64,480 @@ function TimeSlots() {
 
   const [loading, setLoading] = useState(true);
 
-  useEffect (() => {
-    const token = sessionStorage.getItem("jwt");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-          mode: "cors",
-          headers: {
-            "Authorization": "Bearer " + token 
-          }})
-          .then(response => response.json())
-          .then(response => (setProfileData(() => (response.formattedDoctor))));
+  let token: string | null = "";
+  const handleCodedOldTimes = (codedTimes: string[]) => {
+    const dayCodes: { [key: string]: string } = {
+      "1": "saturday",
+      "2": "sunday",
+      "3": "monday",
+      "4": "tuesday",
+      "5": "wednesday",
+      "6": "thursday",
+      "7": "friday",
+    };
 
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/availabilities`,{
-      mode: "cors", headers: {
-        "Authorization": "Bearer " + token 
-        }})
-        .then(response => response.json())
-        .then(response => (setOldTimesTemp(() => response.availabilities)))
+    const timeSlotCodes: { [key: string]: string } = {
+      "01": "09:00:00",
+      "02": "10:00:00",
+      "03": "11:00:00",
+      "04": "12:00:00",
+      "05": "13:00:00",
+      "06": "14:00:00",
+      "07": "15:00:00",
+      "08": "16:00:00",
+      "09": "17:00:00",
+      "10": "18:00:00",
+      "11": "19:00:00",
+      "12": "20:00:00",
+    };
+
+    const tempTimes: { [key: string]: { time: string; id: string }[] } =
+      Object.fromEntries(days.map((day) => [day, []]));
+
+    for (const codedTime of codedTimes) {
+      const [dayCode, timeSlotCode, state] = codedTime.split("_");
+      const dayName = dayCodes[dayCode];
+
+      if (dayName) {
+        const time = timeSlotCodes[timeSlotCode];
+        const id = codedTime; // Assuming state is the ID
+
+        if (time) {
+          tempTimes[dayName].push({ time, id });
+        }
+      }
+    }
+
+    // You can set old times here as needed
+    setOldTimesTemp(() => tempTimes);
+
+    const tempTimesForSet: { [key: string]: Set<string> } = Object.fromEntries(
+      Object.entries(tempTimes).map(([day, times]) => [
+        day,
+        new Set(times.map(({ time }) => time)),
+      ])
+    );
+
+    setOldTimes(() => tempTimesForSet);
+
+    return tempTimes;
+  };
+  useEffect(() => {
+    token = localStorage.getItem("jwt");
+    if (!token) {
+      window.location.href = "/auth/signin";
+    } else if (
+      Math.floor(new Date().getTime() / 1000) >
+      Number(localStorage.getItem("expiryDate"))
+    ) {
+      localStorage.clear();
+      window.location.href = "/auth/signin";
+    } else {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => setProfileData(() => response.formattedDoctor));
+
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/view`, {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          const timeslots = response.timeslots || []; // Ensure there's a fallback for timeslots
+
+          console.log("API view Response: ", timeslots); // Log the API response for inspection
+
+          // Process the timeslots directly
+          handleCodedOldTimes(timeslots);
+        })
         .finally(() => setLoading(false));
+    }
   }, []);
 
-  useEffect (() => {
-    setTimesChosen(() => (
-      Object.fromEntries(datesList.map(date => [
-        date.toDateString(), new Set<String>()
-    ]))));
+  useEffect(() => {
+    setTimesChosen(() =>
+      Object.fromEntries(days.map((day) => [day, new Set<string>()]))
+    );
 
-    setOldTimes(() => (
-      Object.fromEntries(datesList.map(date => [
-        date.toDateString(), new Set<String>()
-    ]))));
+    setOldTimes(() =>
+      Object.fromEntries(days.map((day) => [day, new Set<string>()]))
+    );
 
-    setOldTimesId(() => (
-      Object.fromEntries(datesList.map(date => [
-        date.toDateString(), {"" : ""}
-    ]))));
-    if(oldTimesTemp) {
-      for(const [key, value] of Object.entries(oldTimesTemp)) {
-        value.map((entry) => {
-            let currSet = oldTimes[key];
-            currSet?.add(entry.time);
-            setOldTimes((prevTimes: any) => ({...prevTimes, [key] : currSet}));
+    setOldTimesId(() =>
+      Object.fromEntries(days.map((day) => [day, { "": "" }]))
+    );
 
-            let currObj = oldTimesId[key as keyof typeof oldTimesId];
-            if(currObj) {
-              currObj[entry.time as keyof typeof currObj] = entry.id;
-              setOldTimesId((prevTimes: any) => ({...prevTimes, [key]: currObj}));
-            }
-        })   
-      } 
+    if (oldTimesTemp) {
+      // Loop through oldTimesTemp and update oldTimes and oldTimesId immutably
+      Object.entries(oldTimesTemp).forEach(([key, value]) => {
+        // Create a new set from the current times
+        const newSet = new Set(oldTimes[key]);
+
+        // Create a new object for the IDs
+        const newIdObj = { ...oldTimesId[key] };
+
+        // Update the times and IDs for the current day
+        value.forEach((time: any) => {
+          newSet.add(time.time);
+          newIdObj[time.time] = time.id;
+        });
+
+        // Set the new values in state
+        setOldTimes((prevTimes) => ({
+          ...prevTimes,
+          [key]: newSet,
+        }));
+        setOldTimesId((prevTimes) => ({
+          ...prevTimes,
+          [key]: newIdObj,
+        }));
+      });
     }
   }, [oldTimesTemp]);
 
-  const baseButtonClass = "text-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2";
+  function getTimeClass(time: string) {
+    if (oldTimes[dayDate].has(time)) {
+      if (toggleChecked) {
+        if (timesChosen[dayDate].has(time)) {
+          return clickedTimeClass;
+        }
+        return timeButtonClass; // Available for deletion
+      }
+      return disabledTimeClass; // Disabled in normal mode (already selected)
+    }
+
+    if (timesChosen[dayDate].has(time)) {
+      return clickedTimeClass;
+    }
+
+    if (toggleChecked) {
+      return disabledTimeClass;
+    }
+
+    return timeButtonClass;
+  }
+  const baseButtonClass =
+    "text-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2";
   const baseDayClass = "w-40 " + baseButtonClass;
   const dayButtonClass = "bg-blue-500 hover:bg-blue-800 " + baseDayClass;
   const clickedDayClass = "bg-blue-800 ring-1 ring-black " + baseDayClass;
   const baseTimeClass = "w-fit " + baseButtonClass;
-  const timeButtonClass = `${toggleChecked ? "bg-red-500 hover:bg-red-800 " : "bg-emerald-500 hover:bg-emerald-800 "} ` + baseTimeClass;
-  const clickedTimeClass = `${toggleChecked ? "bg-red-800 " : "bg-emerald-800 "} ring-1 ring-black ` + baseTimeClass;
+  const timeButtonClass =
+    `${
+      toggleChecked
+        ? "bg-red-500 hover:bg-red-800 "
+        : "bg-emerald-500 hover:bg-emerald-800 "
+    } ` + baseTimeClass;
+  const clickedTimeClass =
+    `${toggleChecked ? "bg-red-800 " : "bg-emerald-800 "} ring-1 ring-black ` +
+    baseTimeClass;
   const disabledTimeClass = "bg-slate-500 cursor-not-allowed " + baseTimeClass;
 
   const submitButtonClass = [
-    `${toggleChecked ? "text-red-600 border-red-600 " : "text-teal-600 border-teal-600 "} bg-white border border-solid`,
-    "font-medium rounded-full text-base px-5 py-2.5 text-center me-2 mt-8 mb-2 w-40 h-12"
+    `${
+      toggleChecked
+        ? "text-red-600 border-red-600 "
+        : "text-teal-600 border-teal-600 "
+    } bg-white border border-solid`,
+    "font-medium rounded-full text-base px-5 py-2.5 text-center me-2 mt-8 mb-2 w-40 h-12",
   ].join(" ");
 
   const toggleLabelClass = [
     "inline-flex items-center cursor-pointer absolute top-[95.5%] min-[430px]:top-[94%] right-[15%] min-[470px]:top-[92%] min-[550px]:top-[1%]",
-    "min-[550px]:right-[10%]"
+    "min-[550px]:right-[10%]",
   ].join(" ");
 
   const toggleClass = [
     "relative w-11 h-6 bg-emerald-500 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full",
     "peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white",
-    "after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
+    "after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600",
   ].join(" ");
-
-  function getTimeClass(time: string) {
-    if(oldTimes[dayDate].has(time)) {
-      if(toggleChecked) {
-        if(timesChosen[dayDate].has(time)) {
-          return clickedTimeClass;
-        }
-        return timeButtonClass; // in the case of deletion we want the already selected times to be available for deletion
-      }
-      return disabledTimeClass;
-    }
-
-    if(timesChosen[dayDate].has(time)) {
-      return clickedTimeClass;
-    }
-
-    if(toggleChecked) {
-      return disabledTimeClass; // in the case of deletion we want the non selected items and the not clicked on items to be disabled
-    }
-
-    return timeButtonClass;
-  };
 
   const handleDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const name = e.currentTarget.name;
-
-    if(dayDate === name) {
-      return;
-    }
-
-    setDayDate(() => (name));
+    if (dayDate === name) return; // Prevent unnecessary re-renders
+    setDayDate(() => name);
   };
 
   const handleTimeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let currSet = timesChosen[dayDate];
 
-    if(e.currentTarget.className === clickedTimeClass) {
+    // Toggle selection/deselection
+    if (e.currentTarget.className === clickedTimeClass) {
       e.currentTarget.className = timeButtonClass;
-      currSet.delete(e.currentTarget.name);
-    }
-    else if(e.currentTarget.className === timeButtonClass) {
+      currSet.delete(e.currentTarget.name); // Remove selected time
+    } else if (e.currentTarget.className === timeButtonClass) {
       e.currentTarget.className = clickedTimeClass;
-      currSet.add(e.currentTarget.name);
+      currSet.add(e.currentTarget.name); // Add selected time
     }
-    setTimesChosen((prevTimes: any) => ({...prevTimes, dayDate: currSet,}));
+    setTimesChosen((prevTimes: any) => ({ ...prevTimes, [dayDate]: currSet }));
   };
 
   const handleChangeToggle = () => {
-    setTimesChosen(() => (
-      Object.fromEntries(datesList.map(date => [
-        date.toDateString(), new Set<String>()
-    ]))));
-
-    setToggleChecked(() => (!toggleChecked));
+    // Reset selection when toggling between add and delete mode
+    setTimesChosen(() =>
+      Object.fromEntries(days.map((day) => [day, new Set<string>()]))
+    );
+    setToggleChecked(() => !toggleChecked); // Toggle between modes
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCoddedSlots = (sentObj: Record<string, string[]>) => {
+    const dayCodes: Record<string, number> = {
+      saturday: 1,
+      sunday: 2,
+      monday: 3,
+      tuesday: 4,
+      wednesday: 5,
+      thursday: 6,
+      friday: 7,
+    };
+
+    const timeSlotCodes: Record<string, string> = {
+      "9:00:00": "01",
+      "10:00:00": "02",
+      "11:00:00": "03",
+      "12:00:00": "04",
+      "13:00:00": "05",
+      "14:00:00": "06",
+      "15:00:00": "07",
+      "16:00:00": "08",
+      "17:00:00": "09",
+      "18:00:00": "10",
+      "19:00:00": "11",
+      "20:00:00": "12",
+    };
+
+    let codedSlots: string[] = [];
+
+    for (const [day, timeSlots] of Object.entries(sentObj)) {
+      const dayCode = dayCodes[day.split(" ")[0]];
+
+      for (const time of timeSlots) {
+        const timeCode = timeSlotCodes[time];
+        const typeCode = appointmentType === "online" ? "L" : "S";
+        codedSlots.push(`${dayCode}_${timeCode}_${typeCode}`);
+      }
+    }
+    return codedSlots;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let sentObj = Object.fromEntries(datesList.map(date => [
-      date.toDateString(), new Array()
-    ]));
+    let sentObj: Record<string, string[]> = Object.fromEntries(
+      days.map((day) => [day, [] as string[]])
+    );
 
-    for(const [key, value] of Object.entries(timesChosen)) {
-      sentObj[key] = Array.from(value);
+    for (const [key, value] of Object.entries(timesChosen)) {
+      sentObj[key] = Array.from(value); // Convert set to array
     }
-    delete sentObj["dayDate"];
 
-    if(!toggleChecked) {
+    const codedSlots = handleCoddedSlots(sentObj);
+    if (!toggleChecked) {
+      // Add time slots
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/add`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(sentObj),
-          mode: "cors",
-        });
+        const token = localStorage.getItem("jwt");
 
-        if (!response.ok) {
-          throw new Error("Failed To Add Time Slots");
-        }
-
-        window.location.href = "/doctorProfile/timeSlots";
-
-      } catch (error) {
-        console.error("Error While Adding Time Slots:", error);
-      }
-    }
-    else {
-      let sentTimesId = new Array();
-
-      for(const [key, value] of Object.entries(sentObj)) {
-        value.map(timeEntry => {
-          let currObj = oldTimesId[key as keyof typeof oldTimesId]
-          let currEntry = currObj[timeEntry as keyof typeof currObj]
-          if(currEntry) {
-            sentTimesId.push(currEntry);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/add`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(codedSlots),
+            mode: "cors",
           }
-        })
-      }
-
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/delete`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            slots_id: sentTimesId
-          }),
-          mode: "cors",
-        });
+        );
 
         if (!response.ok) {
-          throw new Error("Failed To Delete Time Slots");
+          throw new Error("Failed to add time slots");
+        }
+
+        // window.location.href = "/doctorProfile/timeSlots";
+      } catch (error) {
+        console.error("Error while adding time slots:", error);
+      }
+    } else {
+      // Delete time slots
+      let sentTimesId: string[] = [];
+
+      for (const [key, value] of Object.entries(sentObj)) {
+        value.forEach((timeEntry) => {
+          let currObj = oldTimesId[key as keyof typeof oldTimesId];
+          let currEntry = currObj[timeEntry as keyof typeof currObj];
+          if (currEntry) {
+            sentTimesId.push(currEntry); // Collect IDs for deletion
+          }
+        });
+      }
+      console.log("Time slots to delete:", sentTimesId);
+
+      try {
+        const token = localStorage.getItem("jwt");
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/delete`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(sentTimesId),
+            mode: "cors",
+          }
+        );
+
+        const result = await response.json();
+        console.log("Response from server:", result);
+
+        if (!response.ok) {
+          throw new Error("Failed to delete time slots");
         }
 
         window.location.href = "/doctorProfile/timeSlots";
-
       } catch (error) {
-        console.error("Error While Deleting Time Slots:", error);
+        console.error("Error while deleting time slots:", error);
       }
     }
   };
 
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 min-[980px]:flex-row min-[980px]:items-start">
-      {loading ? <CircularProgress className="absolute top-1/2" /> :
+      {loading ? (
+        <CircularProgress className="absolute top-1/2" />
+      ) : (
         <>
-          <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
-            <Image src={userImage} height={120} width={120} alt="User Icon" className="mb-1"></Image>
-            <p className="text-blue-500 mb-1 font-semibold">Dr. {profileData.firstName} {profileData.lastName}</p>
+          <div className="flex flex-col gap-4">
+            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
+              {userImage}
+              <p className="text-blue-500 my-1 font-semibold">
+                Dr. {profileData?.firstName} {profileData?.lastName}
+              </p>
+            </div>
+            <button
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+              onClick={() =>
+                (window.location.href = "/doctorProfile/appointments")
+              }
+            >
+              My Appointments
+            </button>
           </div>
-          <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[980px]:basis-7/12 min-[980px]:max-w-full">
-            <div className="flex pt-4 mb-3">
-              <Link href="/doctorProfile/view" className="font-bold ml-7 w-1/2">Personal Info</Link>
-              <Link href="/doctorProfile/timeSlots" className="text-blue-500 font-bold ml-7 mr-7 min-[980px]:mr-0 w-1/2">Time Slots</Link>
+          <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[880px]:basis-7/12 min-[880px]:max-w-full">
+            <div className="flex pt-4 mb-3 justify-between gap-2">
+              <Link href="/" className="font-bold ml-7">
+                Personal Info
+              </Link>
+              <Link
+                href="/doctorProfile/timeSlots"
+                className="text-blue-500 font-bold"
+              >
+                Time Slots
+              </Link>
+              <Link href="/doctorProfile/requests" className="font-bold mr-7">
+                Pending Requests
+              </Link>
             </div>
             <div className="flex">
-              <hr className="bg-neutral-800 border-none h-0.5 w-1/2"></hr>
-              <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+              <hr className="bg-blue-500 border-none h-0.5 w-1/3"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
             </div>
             <div className="p-7 relative">
-              <div className="flex gap-16 mt-3 min-[980px]:gap-28">
-                <div className="flex flex-col gap-40 min-[430px]:gap-24 min-[470px]:gap-12 min-[550px]:gap-5">
-                  {datesList.map((date) => {
-                    return <button
-                            key={days[date.getDay()]}
-                            name={date.toDateString()}
-                            onClick={handleDayClick}
-                            className={date.toDateString() === dayDate ? clickedDayClass : dayButtonClass}>
-                              {days[date.getDay()].toUpperCase()}<br></br>({date.getDate()} / {today.getMonth() + 1} / {today.getFullYear()})
-                            </button>;
-                  })}
-                </div>
-                <div className="grid grid-cols-1 gap-5 min-[470px]:grid-cols-2 min-[550px]:grid-cols-3">
-                  {Object.entries(timesList).map((timeEntry) => {
-                    return <button key={timeEntry[0]} name={timeEntry[1]} onClick={handleTimeClick} className={getTimeClass(timeEntry[1])}>
-                            {timeEntry[0]}
-                          </button>;
-                  })}
+              <div className="flex items-baseline flex-col justify-between ">
+                <div className="flex gap-16 mt-3 min-[980px]:gap-20">
+                  <div className="flex flex-col gap-40 min-[430px]:gap-24 min-[470px]:gap-12 min-[550px]:gap-5">
+                    {days.map((day, i) => {
+                      return (
+                        <button
+                          key={days[i]}
+                          name={day}
+                          onClick={handleDayClick}
+                          className={
+                            day === dayDate ? clickedDayClass : dayButtonClass
+                          }
+                        >
+                          {day.toUpperCase()}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className=" grid grid-cols-1 gap-5 min-[470px]:grid-cols-2 min-[550px]:grid-cols-3">
+                    {Object.entries(timesList).map((timeEntry) => {
+                      return (
+                        <button
+                          key={timeEntry[0]}
+                          name={timeEntry[1]}
+                          onClick={handleTimeClick}
+                          className={getTimeClass(timeEntry[1])}
+                        >
+                          {timeEntry[0]}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-              <button onClick={handleSubmit} className={submitButtonClass}>{toggleChecked ? "Delete" : "Add"}</button>
-              <label className={toggleLabelClass}>
-                <input type="checkbox" value="" className="sr-only peer" checked={toggleChecked} onChange={handleChangeToggle} />
-                <div className={toggleClass}></div>
-                <span className="ms-3 text-base font-bold text-black">{toggleChecked ? "DEL" : "ADD"}</span>
-              </label>
+              <div className=" flex sm:flex-row flex-col items-baseline md:gap-20 gap-4">
+                <button onClick={handleSubmit} className={submitButtonClass}>
+                  {toggleChecked ? "Delete" : "Add"}
+                </button>
+                <div className="flex items-center flex-row gap-4 justify-center">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="type"
+                      value="online"
+                      checked={appointmentType === "online"}
+                      onChange={() => setAppointmentType("online")}
+                    />
+
+                    <span className="ml-2">Online</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="type"
+                      value="onsite"
+                      checked={appointmentType === "onsite"}
+                      onChange={() => setAppointmentType("onsite")}
+                    />
+
+                    <span className="ml-2">Onsite</span>
+                  </label>
+                </div>
+              </div>
             </div>
+            <label className={toggleLabelClass}>
+              <input
+                type="checkbox"
+                value=""
+                className="sr-only peer"
+                checked={toggleChecked}
+                onChange={handleChangeToggle}
+              />
+              <div className={toggleClass}></div>
+              <span className="ms-3 text-base font-bold text-black">
+                {toggleChecked ? "DEL" : "ADD"}
+              </span>
+            </label>
           </div>
         </>
-      }
+      )}
     </div>
   );
 }

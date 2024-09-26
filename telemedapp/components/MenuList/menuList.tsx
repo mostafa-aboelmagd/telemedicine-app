@@ -18,13 +18,13 @@ const MenuList = ({ linkTo, linkName, text }: { linkTo: string[], linkName: stri
 
     let menuItems = linkName.map((name, index) => {
         return (
-            <Link href={linkTo[index]}>
-                <MenuItem onClick={handleClose}>{linkName[index]}</MenuItem>
+            <Link key={index} href={linkTo[index]}>
+                <MenuItem key={index} onClick={handleClose}>{linkName[index]}</MenuItem>
             </Link>
         )
     });
     return (
-        <div className='lg:hidden'>
+        <div>
             <Button
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}

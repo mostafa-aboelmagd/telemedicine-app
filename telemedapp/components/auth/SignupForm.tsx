@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import InputComponent from "./InputComponent";
+import { Calendar } from "primereact/calendar";
+import { format } from "date-fns"; // For formatting dates (optional)
 
 function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -12,7 +14,7 @@ function SignUpForm() {
     password: "",
     confirmPassword: "",
     phone: "",
-    birthYear: "",
+    birthDate: "",
     gender: "",
   });
 
@@ -23,13 +25,11 @@ function SignUpForm() {
     password: "",
     confirmPassword: "",
     phone: "",
-    birthYear: "",
+    birthDate: "",
   });
 
   const [changedField, setChangedField] = useState("");
-
   const [formValid, setFormValid] = useState(false);
-
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -40,10 +40,10 @@ function SignUpForm() {
     { name: "firstName", title: "First Name", type: "text" },
     { name: "lastName", title: "Last Name", type: "text" },
     { name: "email", title: "Email", type: "email" },
-    { name: "phone", title: "Phone Number", type: "tel" },
+    { name: "phone", title: "Phone Number", type: "number" },
     { name: "password", title: "Password", type: "password" },
     { name: "confirmPassword", title: "Confirm Password", type: "password" },
-    { name: "birthYear", title: "Birth Year", type: "number" },
+    { name: "birthDate", title: "Birth Date", type: "number" },
   ];
 
   const submitButtonClass = [
@@ -185,12 +185,9 @@ function SignUpForm() {
   };
 
   const validatePhone = () => {
-    const phonePattern = /^\+201(0|1|2|5)(\d{8})$/;
+    const phonePattern = /^-?\d+$/;
     let changedValidation = false;
-    if (
-      formData.phone &&
-      (!phonePattern.test(formData.phone) || formData.phone.length != 13)
-    ) {
+    if (formData.phone && !phonePattern.test(formData.phone)) {
       if (errorMessage.phone === "") {
         changedValidation = true;
       }
@@ -210,25 +207,49 @@ function SignUpForm() {
     }
   };
 
-  const validateBirthYear = () => {
+  const handleDateChange = (e: any) => {
+    const { value } = e.target;
+    setFormData((prevForm) => ({
+      ...prevForm,
+      birthDate: value,
+    }));
+    setChangedField(() => "birthDate");
+  };
+  const validateBirthDate = () => {
     let changedValidation = false;
 
-    if (
-      formData.birthYear &&
-      (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011)
-    ) {
-      if (errorMessage.birthYear === "") {
+    if (formData.birthDate) {
+      const selectedDate = new Date(formData.birthDate);
+      const today = new Date();
+      let age = today.getFullYear() - selectedDate.getFullYear();
+      const m = today.getMonth() - selectedDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < selectedDate.getDate())) {
+        age--;
+      }
+
+      if (age < 13) {
+        // Example: User must be at least 13 years old
+        if (errorMessage.birthDate === "") {
+          changedValidation = true;
+        }
+        setErrorMessage((prevError) => ({
+          ...prevError,
+          birthDate: "You must be at least 13 years old.",
+        }));
+      } else {
+        if (errorMessage.birthDate !== "") {
+          changedValidation = true;
+        }
+        setErrorMessage((prevError) => ({ ...prevError, birthDate: "" }));
+      }
+    } else {
+      if (errorMessage.birthDate === "") {
         changedValidation = true;
       }
       setErrorMessage((prevError) => ({
         ...prevError,
-        birthYear: "Age Is Not Valid",
+        birthDate: "Birth Date is required.",
       }));
-    } else {
-      if (errorMessage.birthYear !== "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({ ...prevError, birthYear: "" }));
     }
 
     if (changedValidation && validateFieldsChosen()) {
@@ -263,8 +284,8 @@ function SignUpForm() {
         validatePhone();
         break;
 
-      case "birthYear":
-        validateBirthYear();
+      case "birthDate":
+        validateBirthDate();
         break;
 
       default:
@@ -297,49 +318,38 @@ function SignUpForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const requestBody = {
-      fName: formData.firstName,
-      lName: formData.lastName,
-      email: formData.email,
-      password: formData.password,
-      phone: formData.phone,
-      birthYear: parseInt(formData.birthYear),
-      gender: formData.gender,
-      role: "Patient",
-    };
-
+    if (!formValid) return;
     try {
       const response = await fetch(
-        "https://telemedicine-pilot-d2anbuaxedbfdba9.southafricanorth-01.azurewebsites.net/patient/register",
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/register`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({
+            fName: formData.firstName,
+            lName: formData.lastName,
+            email: formData.email,
+            password: formData.password,
+            gender: formData.gender,
+            phone: formData.phone,
+            birthDate: formData.birthDate
+              ? format(new Date(formData.birthDate), "yyyy-MM-dd")
+              : null, // Formats date as YYYY-MM-DD
+          }),
           mode: "cors",
         }
       );
 
-      // Log the full response for debugging purposes
-      console.log("Full response:", response);
-
-      // If the response is not OK, log the error details
       if (!response.ok) {
-        const errorData = await response.json(); // Expecting the server to return JSON error details
-        console.error("Error response from server:", errorData);
-        throw new Error(errorData.message || "Failed to register");
+        setError(true);
+        throw new Error("Failed to register");
       }
 
-      // If the response is OK, handle the successful registration
-      const data = await response.json();
-      console.log("User registered successfully:", data);
-
-      // Redirect to home or login after successful registration
-      window.location.href = "/";
+      window.location.href = "/auth/signin";
     } catch (error) {
-      console.error("Error during signup:  ", error);
+      console.error("Error During Signup:", error);
     }
   };
 
@@ -351,26 +361,57 @@ function SignUpForm() {
       <form onSubmit={handleSubmit}>
         {formFields.map((field) => {
           return (
-            <InputComponent
-              key={field.name}
-              label={field.title}
-              type={field.type}
-              name={field.name}
-              placeholder={
-                field.name === "phone" && !formData.phone
-                  ? "+20 XXXX XXX XXX"
-                  : `Enter ${field.title}`
-              }
-              value={formData[field.name as keyof typeof formData]}
-              onChange={handleChange}
-              errorText={errorMessage[field.name as keyof typeof errorMessage]}
-              required
-              additionalText={
-                field.name === "phone" && !errorMessage.phone
-                  ? "Please Enter A Valid Phone Number"
-                  : ""
-              }
-            />
+            <>
+              {field.name === "birthDate" ? (
+                <>
+                  <label className="block text-base mb-1.5 font-semibold text-neutral-700">
+                    {field.title} *
+                  </label>
+                  <Calendar
+                    value={
+                      formData.birthDate ? new Date(formData.birthDate) : null
+                    }
+                    onChange={handleDateChange}
+                    showIcon
+                    dateFormat="yy-mm-dd"
+                    placeholder="Select your birth date (yyyy-mm-dd)"
+                    maxDate={new Date()}
+                    yearRange="1900:2023"
+                    className={`bg-neutral-100 w-full py-4 px-6 text-base rounded-lg border border-solid border-neutral-300 grey-100 outline-none transition-[border-color] focus:border-sky-500 focus:bg-neutral-50 ${
+                      errorMessage.birthDate ? "p-invalid" : ""
+                    }`}
+                  />
+                  {errorMessage.birthDate && (
+                    <small className="text-xs mt-1 text-red-700 font-semibold">
+                      {errorMessage.birthDate}
+                    </small>
+                  )}
+                </>
+              ) : (
+                <InputComponent
+                  key={field.name}
+                  label={field.title}
+                  type={field.type}
+                  name={field.name}
+                  placeholder={
+                    field.name === "phone" && !formData.phone
+                      ? "+20 XXXX XXX XXX"
+                      : `Enter ${field.title}`
+                  }
+                  value={formData[field.name as keyof typeof formData]}
+                  onChange={handleChange}
+                  errorText={
+                    errorMessage[field.name as keyof typeof errorMessage]
+                  }
+                  required
+                  additionalText={
+                    field.name === "phone" && !errorMessage.phone
+                      ? "Please Enter A Valid Phone Number"
+                      : ""
+                  }
+                />
+              )}
+            </>
           );
         })}
         <div className="mb-4">
@@ -412,9 +453,14 @@ function SignUpForm() {
             Sign in
           </Link>
         </p>
+        {error && (
+          <p className="font-semibold text-red-700 mt-4 mb-2">
+            This Email Is Already Registered!
+          </p>
+        )}
         <button
           type="submit"
-          className="bg-sky-500 text-neutral-50 text-lg	p-3.5	w-full border-none rounded-lg cursor-pointer transition-[background-color] disabled:bg-neutral-300 disabled:text-neutral-700 disabled:cursor-not-allowed enabled:bg-sky-500"
+          className={submitButtonClass}
           disabled={!formValid}
         >
           Register

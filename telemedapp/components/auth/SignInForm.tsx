@@ -22,6 +22,8 @@ function SignInForm() {
 
   const tokenAuthentication = (req: any) => {
     const token = req.token;
+    console.log("token:", token);
+
     let message = "";
     if (token) {
       jwt.verify(
@@ -31,19 +33,25 @@ function SignInForm() {
           if (err) {
             message = "Invalid token";
             console.log(message);
-            return;
+            return false;
           }
           console.log(decodedToken);
           req.id = decodedToken.id;
           req.email = decodedToken.email;
           req.userRole = decodedToken.role;
+          req.firstName = decodedToken.firstName;
+          req.lastName = decodedToken.lastName;
+          req.tokenExpiryDate = decodedToken.exp;
+
+          return true;
         }
       );
     } else {
       message = "No token found";
       console.log(message);
-      return;
+      return false;
     }
+    return true;
   };
 
   const submitButtonClass = [
@@ -68,25 +76,24 @@ function SignInForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const requestBody = {
-      email: formData.email,
-      password: formData.password,
-    };
+    if (!formValid) {
+      return;
+    }
 
     try {
+      const token = localStorage.getItem("jwt");
       const response = await fetch(
-        "https://telemedicine-pilot-d2anbuaxedbfdba9.southafricanorth-01.azurewebsites.net/patient/login",
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/login`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
           },
-          body: JSON.stringify(requestBody),
+          mode: "cors",
+          body: JSON.stringify(formData),
         }
       );
-
-      const textResponse = await response.text();
-      console.log("Response body:", textResponse);
 
       if (!response.ok) {
         console.log("error in response");
@@ -97,13 +104,17 @@ function SignInForm() {
       }
 
       const users = await response.json();
-      tokenAuthentication(users);
-      localStorage.setItem("jwt", users.token);
-      const redirect =
-        users.userRole === "Patient"
-          ? "/patientProfile/view"
-          : "/doctorProfile/view";
-      window.location.href = redirect;
+      if (tokenAuthentication(users)) {
+        localStorage.setItem("jwt", users.token);
+        localStorage.setItem("expiryDate", users.tokenExpiryDate);
+        localStorage.setItem("userRole", users.userRole);
+        localStorage.setItem("userId", users.id);
+        localStorage.setItem("firstName", users.firstName);
+        localStorage.setItem("lastName", users.lastName);
+        window.location.href = "/";
+      } else {
+        console.log("Error During Token Authentication");
+      }
     } catch (error) {
       console.error("Error During Sign In:", error);
     }
