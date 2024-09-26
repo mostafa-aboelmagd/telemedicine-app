@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import SafeArea from '../components/safeArea';
 import Footer from '../components/footer';
@@ -6,45 +6,106 @@ import CustomScroll from '../components/scroll';
 import CustomTitle from '../components/title';
 import Custombutton from '../components/button';
 import Entypo from '@expo/vector-icons/Entypo';
-import { patients } from '../test/data';
+import { getToken } from '../components/getToken';
+import {NEXT_PUBLIC_SERVER_NAME} from '@env'; 
+import Feather from '@expo/vector-icons/Feather';
 
-export default function Appointment ({ navigation }) {
+export default function Appointment({ navigation }) {
 
-  const patientList = Object.entries(patients);
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const history = () => {
-    navigation.navigate('history')
+  const pastApp = () => {
+    navigation.navigate('past appointments')
   }
 
-return (
-    <SafeArea safeStyle={{alignItems: 'center'}}>
+  const history = (id, fname, lname) => {
+    navigation.navigate('history', 
+      {id: id,
+      fname: fname,
+      lname: lname
+    })
+  }
+  const submitResults = (patientFirstName , patientLastName, appointment_id) => {
+    navigation.navigate('submitResults', { patientFirstName , patientLastName, appointment_id })
+  }
+
+  const acceptedAppointmetns = async () => {
+    try {
+      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/Doctor/Profile/appointments`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await getToken()}`,
+
+        },
+      });
+
+      if (!response.ok) {
+        console.log(response);
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log(result)
+
+      setData(result);
+    } catch (error) {
+      console.error('Error fetching doctor info:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    acceptedAppointmetns();
+  }, []);
+
+
+  return (
+    <SafeArea>
       <CustomScroll>
-        <View style={styles.container}>
-          <CustomTitle titleStyle={{marginTop: '10%'}}>Appointments</CustomTitle>
+      <View style={{margin: 10}}>   
+        <View style={{flexDirection: 'row', alignItems:'center', marginTop: '10%', justifyContent:'space-between'}}>   
+          <CustomTitle>Appointments</CustomTitle>
+          <TouchableOpacity onPress={pastApp}>
+            <Feather name="archive" size={24} color="black" />
+          </TouchableOpacity>
         </View>
-        {patientList.map(([id, name]) =>
-        <View>
-          <View style={[styles.card]}>
-          <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
-              <Text style={styles.state}>online / follow up</Text>
-              <View style={{justifyContent:'flex-end'}}>
-                <TouchableOpacity onPress={history}>
-                  <Entypo name="dots-three-horizontal" size={24} color="black" />
-                </TouchableOpacity>
+          {!loading ? ( data ? data.map((item, id) =>
+          <View key={id}>
+            <View style={[styles.card]}>
+              <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+                <Text style={styles.state}>{item.appointment_settings_type} / {item.appointment_type}</Text>
+                <View style={{justifyContent:'flex-end'}}>
+                  <TouchableOpacity onPress={() => history(item.appointment_patient_id, item.patient_first_name, item.patient_last_name)}>
+                    <Entypo name="dots-three-horizontal" size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
               </View>
+
+              <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+                <Text key={id} style={styles.name}>{item.patient_first_name} {item.patient_last_name}</Text>
+                <View style={{alignItems:'flex-end'}}>
+                  <Text>{item.doctor_availability_day_hour.slice(0,10)}</Text>
+                  <Text>{item.doctor_availability_day_hour.slice(11,19)}</Text>
+                </View>
+              </View>
+
+              <Text>Duration: {item.appointment_duration} mins</Text>
+              <Text>{item.appointment_complaint}</Text>
             </View>
-            <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
-              <Text key={id} style={styles.name}>{name}</Text>
-              <Text>03:00 pm</Text>
-            </View>
-            <Text>Stating complaints: I've been experiencing severe chest pain for the past two days.</Text>
-          </View>
-          <Custombutton textStyle={{fontSize: 15}} buttonStyle={{width: '35%'}}>
-          Submit results
-        </Custombutton>
-        </View>)}
+            
+            <Custombutton textStyle={{fontSize: 15}} buttonStyle={{width: '35%'}} onPress={()=>{submitResults(item.patient_first_name , item.patient_last_name, item.appointment_id)}}>
+              Submit results
+            </Custombutton>
+          </View> ) 
+          : (<Text>No upcoming appointments</Text>) ) 
+          : <Text>Loading</Text>}
+        </View>
+
       </CustomScroll>
-      <Footer navigation={navigation}/>
+      <Footer navigation={navigation} />
     </SafeArea>
   );
 };
@@ -56,8 +117,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: '3%',
     width: '100%',
-    height: 120,
-    padding: 5,
+    height: 130,
+    padding: 10,
     backgroundColor: 'white'
   },
   state: {
@@ -71,5 +132,5 @@ const styles = StyleSheet.create({
   },
   name:{
     marginBottom: '3%'
-  }
+  },
 })
