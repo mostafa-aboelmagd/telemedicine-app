@@ -936,7 +936,7 @@
         "report": "Endoscope",
         "specialityReferral": "ENT ",
         "specialityReferralNotes": "Take care",
-        "updatedInputs": [
+        "Medications": [
         {"dose": "500",
         "drugName": "Pentasa",
         "endDate": "2024-09-28",
