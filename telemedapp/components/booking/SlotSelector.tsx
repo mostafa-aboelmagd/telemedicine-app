@@ -22,13 +22,14 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
         {selectedDate?.slots.length} available time slots
       </div>
     </div>
+
     <div className="overflow-y-hidden hover:overflow-y-auto h-56 py-4">
       <div
         className={`${
           selectedDate && selectedDate.slots?.length > 0
             ? "grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             : "mx-auto text-center"
-        }`}
+        }max-w-[450px]`}
       >
         {selectedDate && selectedDate.slots?.length > 0 ? (
           selectedDate?.slots.map((slot) => (

@@ -53,8 +53,8 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
   const handleNextWeek = () => setCurrentDate((prev) => addDays(prev, 7));
 
   return (
-    <div className="flex flex-col gap-2 mb-4">
-      <div className="flex flex-row items-center mb-4">
+    <div className="flex flex-col gap-2 mb-4 ">
+      <div className="flex flex-row items-center mb-4 ">
         <h3 className="text-sm md:text-lg font-bold">Select date:</h3>
         <div className="mx-auto flex justify-evenly items-center">
           <button
@@ -63,7 +63,7 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
           >
             {"<"}
           </button>
-          <span className="mx-2 text-center font-semibold">
+          <span className="md:mx-2  mx-1 md:text-xl text-sm text-center font-semibold md:max-w-44 max-w-28 md:w-44 w-28">
             {format(startOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d")} -{" "}
             {format(endOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d")}
           </span>
@@ -76,14 +76,16 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-3 text-center">
+      <div className="grid lg:grid-cols-7 grid-cols-4 gap-2 md:text-sm text-xs min-w-[340px] lg:min-w-[650px]">
         {datesWithSlots.map((dateObj) => (
           <button
             key={dateObj.date}
             className={`p-3 rounded-lg ${
               selectedDate?.date === dateObj.date
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 hover:bg-blue-100"
+                ? "bg-green-500 hover:bg-green-600 text-white"
+                : dateObj.slots.length > 0
+                ? "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                : "bg-gray-50 hover:bg-gray-100 text-gray-500"
             }`}
             onClick={() => handleDateSelect(dateObj)}
           >
