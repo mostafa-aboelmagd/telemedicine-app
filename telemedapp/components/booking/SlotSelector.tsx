@@ -7,7 +7,7 @@ interface SlotSelectorProps {
   } | null;
   selectedSlot: string | null;
 
-  handleSlotSelect: (slot: string) => void;
+  handleSlotSelect: (slot: { time: string; type: string }) => void;
 }
 
 const SlotSelector: React.FC<SlotSelectorProps> = ({
@@ -36,7 +36,7 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
             <div className="flex flex-col gap-1">
               <button
                 key={slot.id}
-                onClick={() => handleSlotSelect(slot.time)}
+                onClick={() => handleSlotSelect(slot)}
                 className={`p-3 rounded-lg border   ${
                   selectedSlot === slot.time
                     ? "bg-green-600 hover:bg-green-700 text-white"

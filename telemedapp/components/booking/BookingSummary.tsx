@@ -1,9 +1,13 @@
 import React, { useState, useRef } from "react";
 import ConfirmDialog from "./ConfirmDialog";
 import { Toast } from "primereact/toast";
+import { convertDateToCode } from "@/utils/formatDoctorAvailabilities";
+
 interface BookingSummaryProps {
   selectedSlot: string | null;
   selectedDuration: number;
+  selectedType: string;
+
   doctor: {
     id: number;
     fees60min: number;
@@ -19,12 +23,14 @@ interface BookingSummaryProps {
 const BookingSummary: React.FC<BookingSummaryProps> = ({
   selectedSlot,
   selectedDuration,
+  selectedType,
   doctor,
   selectedDate,
   appointmentState,
 }) => {
   const [complaint, setComplaint] = React.useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [combinedDateTime, setCombinedDateTime] = useState<string | null>(null);
   const patientId = localStorage.getItem("userId");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [loading, setLoading] = useState(false); // Loading state
@@ -34,6 +40,30 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 
   const cancelCreate = () => {
     setShowConfirmDialog(false);
+  };
+  const getDateTime = () => {
+    if (!selectedDate || !selectedSlot) return null;
+
+    // Combine the date and time and format it correctly
+    const dateStr = new Date(selectedDate.date).toISOString().split("T")[0]; // Extract date in YYYY-MM-DD format
+    const timeStr = selectedSlot; // Already in HH:mm format (assumed)
+
+    // Construct the combined datetime string in the correct format
+    const combinedDateTime = `${dateStr}T${timeStr}Z`;
+    setCombinedDateTime(combinedDateTime);
+
+    console.log("combinedDateTime: ", combinedDateTime);
+    return combinedDateTime;
+  };
+
+  const getDay = (date: string) => {
+    const dateObj = new Date(date);
+
+    console.log(
+      "day: ",
+      dateObj.toLocaleDateString("en-US", { weekday: "long" })
+    );
+    return dateObj.toLocaleDateString("en-US", { weekday: "long" });
   };
 
   const bookAppointment = () => {
@@ -49,7 +79,20 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 
     setLoading(true);
     setErrorMessage(null);
-
+    const body = {
+      doctor_id: Number(doctor.id),
+      complaint: complaint,
+      duration: selectedDuration,
+      appointment_type: appointmentState,
+      appointment_date: getDateTime(),
+      appointment_parent_reference: null,
+      time_slot_code: convertDateToCode(
+        getDay(selectedDate.date),
+        selectedSlot,
+        selectedType
+      ),
+    };
+    console.log("body: ", body);
     try {
       const token = localStorage.getItem("jwt");
 
@@ -62,21 +105,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            // doctor_id: 14,
-            doctor_id: doctor.id,
-            complaint: complaint,
-            duration: 60,
-            // duration: selectedDuration,
-            // appointment_type: "First_time",
-            appointment_type: appointmentState,
-            appointment_date: "2024-09-26T14:00:00Z",
-            appointment_parent_reference: null,
-            time_slot_code: "1_03_S",
-            // availabilityId: selectedDate.slots.find(
-            //   (slot) => slot.time === selectedSlot
-            // )?.id,
-          }),
+
+          body: JSON.stringify(body),
         }
       );
 
