@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, Image, TextInput, Alert, TouchableOpacity, Pressable } from 'react-native';
 import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import SafeArea from '../components/safeArea';
-import Custombutton from '../components/button';
+import SafeArea from '../../components/safeArea';
+import Custombutton from '../../components/button';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import CustomTitle from '../components/title';
+import CustomTitle from '../../components/title';
 
 export default function Register({ navigation }){
 
@@ -51,7 +51,7 @@ export default function Register({ navigation }){
 
                 <View style={styles.container3}>  
                     <TextInput
-                    placeholder='example@gmai.com'
+                    placeholder='example@gmail.com'
                     keyboardType='email-address'
                     inputType='email'
                     value={email}

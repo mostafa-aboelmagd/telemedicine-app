@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import SafeArea from '../components/safeArea';
-import CustomTitle from '../components/title';
+import SafeArea from '../../components/safeArea';
+import CustomTitle from '../../components/title';
 
 export default function Documents ({ navigation }) {
 return (
@@ -9,7 +9,7 @@ return (
       <View style={styles.container}>
         <CustomTitle>Documents</CustomTitle>
         <View style={{alignItems: 'center', marginTop: '15%'}}>
-            <Image source={require('../../assets/images/radiology.jpeg')}
+            <Image source={require('../../../assets/images/radiology.jpeg')}
             style={styles.image}/>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: '20%'}}>

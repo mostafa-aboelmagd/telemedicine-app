@@ -1,12 +1,12 @@
 import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import SafeArea from '../components/safeArea'
-import CustomScroll from '../components/scroll'
-import Footer from '../components/footer'
-import CustomTitle from '../components/title'
+import SafeArea from '../../../components/safeArea'
+import CustomScroll from '../../../components/scroll'
+import Footer from '../../../components/footer'
+import CustomTitle from '../../../components/title'
 import { useRoute } from '@react-navigation/native'
 import Feather from 'react-native-vector-icons/Feather'
-import Custombutton from '../components/button'
+import Custombutton from '../../../components/button'
 
 const { height } = Dimensions.get('window')
 

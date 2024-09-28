@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import SafeArea from '../components/safeArea';
-import Custombutton from '../components/button';
-import Footer from '../components/footer';
-import CustomScroll from '../components/scroll';
+import SafeArea from '../../components/safeArea';
+import Custombutton from '../../components/button';
+import Footer from '../../components/footer';
+import CustomScroll from '../../components/scroll';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -111,7 +111,7 @@ export default function Profile({ navigation }) {
     return (
       <View style={styles.card}>
         <View style={styles.profileRow}>
-          <Image source={image ? { uri: image } : require('../../assets/images/pp.png')} style={styles.profileImage} />
+          <Image source={image ? { uri: image } : require('../../../assets/images/pp.png')} style={styles.profileImage} />
           <View style={styles.profileInfo}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.name}>

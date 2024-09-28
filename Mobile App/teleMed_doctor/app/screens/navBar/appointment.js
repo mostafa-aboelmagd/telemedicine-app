@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import SafeArea from '../components/safeArea';
-import Footer from '../components/footer';
-import CustomScroll from '../components/scroll';
-import CustomTitle from '../components/title';
-import Custombutton from '../components/button';
+import SafeArea from '../../components/safeArea';
+import Footer from '../../components/footer';
+import CustomScroll from '../../components/scroll';
+import CustomTitle from '../../components/title';
+import Custombutton from '../../components/button';
 import Entypo from '@expo/vector-icons/Entypo';
-import { getToken } from '../components/getToken';
+import { getToken } from '../../components/getToken';
 import {NEXT_PUBLIC_SERVER_NAME} from '@env'; 
 import Feather from '@expo/vector-icons/Feather';
 

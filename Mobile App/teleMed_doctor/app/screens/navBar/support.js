@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import SafeArea from '../components/safeArea';
-import Footer from '../components/footer';
+import SafeArea from '../../components/safeArea';
+import Footer from '../../components/footer';
 
-export default function HomePage ({ navigation }) {
-  return (
+export default function Support ({ navigation }) {
+return (
     <SafeArea>
       <View style={styles.container}>
-        <Text>Doctor home page</Text>
+        <Text>Support</Text>
       </View>
       <Footer navigation={navigation}/>
     </SafeArea>

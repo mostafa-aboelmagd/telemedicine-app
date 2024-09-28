@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import SafeArea from '../components/safeArea';
+import SafeArea from '../../components/safeArea';
 
 export default function VSupport () {
 return (

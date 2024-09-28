@@ -1,9 +1,9 @@
 import React, { useState, useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import SafeArea from '../components/safeArea';
-import CustomTitle from '../components/title';
+import SafeArea from '../../components/safeArea';
+import CustomTitle from '../../components/title';
 import Entypo from '@expo/vector-icons/Entypo';
-import { getToken } from '../components/getToken';
+import { getToken } from '../../components/getToken';
 import {NEXT_PUBLIC_SERVER_NAME} from '@env'; 
 
 export default function History ({ navigation, route }) {

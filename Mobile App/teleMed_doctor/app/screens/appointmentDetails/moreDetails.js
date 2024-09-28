@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
-import SafeArea from '../components/safeArea';
-import Footer from '../components/footer';
-import Custombutton from '../components/button';
-import CustomTitle from '../components/title';
+import SafeArea from '../../components/safeArea';
+import Footer from '../../components/footer';
+import Custombutton from '../../components/button';
+import CustomTitle from '../../components/title';
 
 export default function Details ({ navigation }) {
 

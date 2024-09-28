@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import SafeArea from '../components/safeArea';
-import Footer from '../components/footer';
-import CustomTitle from '../components/title';
-import Custombutton from '../components/button';
-import CustomScroll from '../components/scroll';
+import SafeArea from '../../components/safeArea';
+import Footer from '../../components/footer';
+import CustomTitle from '../../components/title';
+import Custombutton from '../../components/button';
+import CustomScroll from '../../components/scroll';
 import Entypo from '@expo/vector-icons/Entypo';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env'
-import { getToken } from '../components/getToken';
+import { getToken } from '../../components/getToken';
 
 
 export default function Request ({ navigation }) {

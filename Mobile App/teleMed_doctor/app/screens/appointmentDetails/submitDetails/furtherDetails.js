@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, TextInput, TouchableOpacity, StyleSheet, Dimensions, Text } from 'react-native';
 import { Feather } from '@expo/vector-icons'; // Ensure this is imported if you're using Feather icons
-import CustomScroll from '../components/scroll';
-import CustomTitle from '../components/title';
-import Footer from '../components/footer';
-import Custombutton from '../components/button';
+import CustomScroll from '../../../components/scroll';
+import CustomTitle from '../../../components/title';
+import Footer from '../../../components/footer';
+import Custombutton from '../../../components/button';
 import { useRoute } from '@react-navigation/native'
 
 const { height } = Dimensions.get('window'); // Get the window height

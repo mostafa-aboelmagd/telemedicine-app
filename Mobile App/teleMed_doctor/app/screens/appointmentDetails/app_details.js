@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import SafeArea from '../components/safeArea';
-import CustomTitle from '../components/title';
+import SafeArea from '../../components/safeArea';
+import CustomTitle from '../../components/title';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env';
-import { getToken } from '../components/getToken';
+import { getToken } from '../../components/getToken';
 
 const fetchAppointmentDetails = async () => {
     try {

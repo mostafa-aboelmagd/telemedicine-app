@@ -1,10 +1,10 @@
 import { Dimensions, StyleSheet, Text, TextInput, View, Platform, Button } from 'react-native'
 import React, { useState } from 'react'
-import SafeArea from '../components/safeArea'
-import CustomScroll from '../components/scroll'
-import Footer from '../components/footer'
-import CustomTitle from '../components/title'
-import Custombutton from '../components/button'
+import SafeArea from '../../../components/safeArea'
+import CustomScroll from '../../../components/scroll'
+import Footer from '../../../components/footer'
+import CustomTitle from '../../../components/title'
+import Custombutton from '../../../components/button'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRoute } from '@react-navigation/native'
 

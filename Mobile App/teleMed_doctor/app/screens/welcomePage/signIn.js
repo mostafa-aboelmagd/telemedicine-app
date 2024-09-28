@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import Custombutton from '../components/button';
+import Custombutton from '../../components/button';
 import { StatusBar } from 'expo-status-bar';
-import SafeArea from '../components/safeArea.js';
+import SafeArea from '../../components/safeArea.js';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import CustomTitle from '../components/title.js';
+import CustomTitle from '../../components/title.js';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

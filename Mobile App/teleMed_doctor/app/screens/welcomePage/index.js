@@ -1,8 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
-import Custombutton from '../components/button.js';
-import SafeArea from '../components/safeArea.js';
+import Custombutton from '../../components/button.js';
+import SafeArea from '../../components/safeArea.js';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function Index({ navigation }) {

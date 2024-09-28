@@ -5,7 +5,7 @@ export default function Pending ({ navigation }) {
 return (
       <View style={styles.container}>
         <Image
-            source={require('../../assets/images/logo.png')} // Path to your image in the project folder
+            source={require('../../../assets/images/logo.png')} // Path to your image in the project folder
             style={styles.image}
         />
         <Text style={styles.text}>We still confirming your registration,  youl will get an email once it is done.</Text>
