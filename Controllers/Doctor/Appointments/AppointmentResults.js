@@ -6,12 +6,12 @@ const AppointmentResultSubmission = async (req, res) => {
         const appointmentId = req.params.appointmentId;
 
         const {
-            appointment_diagnosis, 
-            appointment_report, 
-            treatment_plan_operations, 
-            treatment_plan_speciality_referral, 
-            treatment_plan_referral_notes, 
-            medications
+            diagnosis: appointment_diagnosis, 
+            operations: treatment_plan_operations, 
+            report: appointment_report, 
+            specialityReferral: treatment_plan_speciality_referral, 
+            specialityReferralNotes: treatment_plan_referral_notes, 
+            updatedInputs: medications
         } = req.body;
 
         if (
@@ -53,5 +53,5 @@ const AppointmentResultSubmission = async (req, res) => {
         console.error(error);
         return res.status(500).json({ message: 'Server error. Please try again later.' });
     }
-};
+};s
 module.exports = { AppointmentResultSubmission };
