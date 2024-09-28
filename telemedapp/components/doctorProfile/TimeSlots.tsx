@@ -197,6 +197,8 @@ function TimeSlots() {
 
           // Process the timeslots directly
           convertCodedToDates(timeslots);
+          console.log("Old Times Temp: ", oldTimesTemp);
+          console.log("Old Times: ", oldTimes);
         })
         .finally(() => setLoading(false));
     }
@@ -291,7 +293,7 @@ function TimeSlots() {
   ].join(" ");
 
   const toggleLabelClass = [
-    "inline-flex items-center cursor-pointer absolute top-[95.5%] min-[430px]:top-[94%] right-[15%] min-[470px]:top-[92%] min-[550px]:top-[1%]",
+    "inline-flex items-center cursor-pointer absolute top-[95.5%] min-[ 430px]:top-[94%] right-[15%] min-[470px]:top-[92%] min-[550px]:top-[1%]",
     "min-[550px]:right-[10%]",
   ].join(" ");
 
@@ -531,22 +533,24 @@ function TimeSlots() {
 
                     <span className="ml-2">Onsite</span>
                   </label>
+                  <label
+                  // className={toggleLabelClass}
+                  >
+                    <input
+                      type="checkbox"
+                      value=""
+                      className="sr-only peer"
+                      checked={toggleChecked}
+                      onChange={handleChangeToggle}
+                    />
+                    <div className={toggleClass}></div>
+                    <span className="ms-3 text-base font-bold text-black">
+                      {toggleChecked ? "DEL" : "ADD"}
+                    </span>
+                  </label>
                 </div>
               </div>
             </div>
-            <label className={toggleLabelClass}>
-              <input
-                type="checkbox"
-                value=""
-                className="sr-only peer"
-                checked={toggleChecked}
-                onChange={handleChangeToggle}
-              />
-              <div className={toggleClass}></div>
-              <span className="ms-3 text-base font-bold text-black">
-                {toggleChecked ? "DEL" : "ADD"}
-              </span>
-            </label>
           </div>
         </>
       )}
