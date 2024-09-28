@@ -87,7 +87,7 @@ function SignInForm() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
+            // Authorization: "Bearer " + token,
           },
           mode: "cors",
           body: JSON.stringify(formData),

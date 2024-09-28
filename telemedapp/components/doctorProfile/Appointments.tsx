@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
 import AppointmentsGrid from "./AppointmentsGrid";
+
 const Appointments = () => {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
   const [profileData, setProfileData] = useState({
@@ -19,24 +20,7 @@ const Appointments = () => {
     sixtyMinPrice: "",
   });
 
-  const [appointments, setAppointments] = useState([
-    {
-      appointment_patient_id: 3,
-      appointment_doctor_id: 13,
-      appointment_availability_slot: 2,
-      appointment_type: "Followup",
-      appointment_id: 2,
-      appointment_duration: 60,
-      appointment_complaint: "ta3ban ",
-      appointment_parent_reference: null,
-      appointment_settings_type: "Onsite",
-      patient_first_name: "mohamed ",
-      patient_last_name: "salem",
-      doctor_first_name: "samy",
-      doctor_last_name: "ali",
-      doctor_availability_day_hour: "2024-10-02T12:00:00.000Z",
-    },
-  ]);
+  const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -75,8 +59,15 @@ const Appointments = () => {
     )
       .then((response) => response.json())
       .then((response) => {
-        setAppointments(() => response);
-        console.log("response: ", response);
+        if (response.length > 0) {
+          setAppointments(response);
+        } else {
+          setAppointments([]); // Set to an empty array if there are no appointments
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching appointments: ", error);
+        setAppointments([]); // Handle error by setting an empty array
       });
   }, []);
 
@@ -87,9 +78,7 @@ const Appointments = () => {
           {userImage}
           <p className="text-blue-500 mb-1 font-semibold">{`${
             profileData && profileData?.firstName && profileData.firstName
-          } ${
-            profileData && profileData?.lastName && profileData.lastName
-          }`}</p>
+          } ${profileData?.lastName || ""}`}</p>
           <div className="flex gap-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +132,7 @@ const Appointments = () => {
               profileData={profileData}
             />
           ) : (
-            <div className="mx-10 text-xl">Loading...</div>
+            <div className="mx-10 text-xl">No appointments available</div>
           )}
         </div>
       </div>
