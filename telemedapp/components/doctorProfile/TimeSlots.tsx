@@ -11,6 +11,7 @@ interface TimeIdMapping {
 function TimeSlots() {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
   const [appointmentType, setAppointmentType] = useState("online");
+  const [loadingButton, setLoadingButton] = useState(false);
 
   const days = [
     "saturday",
@@ -119,6 +120,7 @@ function TimeSlots() {
     );
 
     setOldTimes(() => tempTimesForSet);
+    console.log("oldTimes: ", tempTimes);
 
     return tempTimes;
   };
@@ -215,7 +217,7 @@ function TimeSlots() {
       Object.fromEntries(days.map((day) => [day, { "": "" }]))
     );
 
-    if (oldTimesTemp) {
+    if (oldTimesTemp || oldTimes) {
       // Loop through oldTimesTemp and update oldTimes and oldTimesId immutably
       Object.entries(oldTimesTemp).forEach(([key, value]) => {
         // Create a new set from the current times
@@ -287,11 +289,12 @@ function TimeSlots() {
         ? "text-red-600 border-red-600 "
         : "text-teal-600 border-teal-600 "
     } bg-white border border-solid`,
+    `${loadingButton ? "opacity-50 cursor-not-allowed" : ""}`,
     "font-medium rounded-full text-base px-5 py-2.5 text-center me-2 mt-8 mb-2 w-40 h-12",
   ].join(" ");
 
   const toggleLabelClass = [
-    "inline-flex items-center cursor-pointer absolute top-[95.5%] min-[430px]:top-[94%] right-[15%] min-[470px]:top-[92%] min-[550px]:top-[1%]",
+    "inline-flex items-center cursor-pointer absolute  right-[15%] ",
     "min-[550px]:right-[10%]",
   ].join(" ");
 
@@ -343,6 +346,12 @@ function TimeSlots() {
     }
 
     const codedSlots = createCodedSlots(sentObj);
+    if (codedSlots.length > 0) {
+      setLoadingButton(true);
+    } else {
+      console.error("No time slots selected");
+      return;
+    }
 
     // Check for duplicates before sending the request
     const filteredSlots = codedSlots.filter(
@@ -377,10 +386,12 @@ function TimeSlots() {
         }
 
         console.log("Successfully added new time slots:", filteredSlots);
+        // setLoadingButton(false);
 
-        // window.location.href = "/doctorProfile/timeSlots";
+        window.location.href = "/doctorProfile/timeSlots";
       } catch (error) {
         console.error("Error while adding time slots:", error);
+        setLoadingButton(false);
       }
     } else {
       // Delete time slots
@@ -423,6 +434,7 @@ function TimeSlots() {
         window.location.href = "/doctorProfile/timeSlots";
       } catch (error) {
         console.error("Error while deleting time slots:", error);
+        setLoadingButton(false);
       }
     }
   };
@@ -506,7 +518,13 @@ function TimeSlots() {
               </div>
               <div className=" flex sm:flex-row flex-col items-baseline md:gap-20 gap-4">
                 <button onClick={handleSubmit} className={submitButtonClass}>
-                  {toggleChecked ? "Delete" : "Add"}
+                  {loadingButton
+                    ? toggleChecked
+                      ? "Deleting..."
+                      : "Adding..."
+                    : toggleChecked
+                    ? "Delete"
+                    : "Add"}
                 </button>
                 <div className="flex items-center flex-row gap-4 justify-center">
                   <label className="flex items-center">
@@ -531,22 +549,22 @@ function TimeSlots() {
 
                     <span className="ml-2">Onsite</span>
                   </label>
+                  <label className={toggleLabelClass}>
+                    <input
+                      type="checkbox"
+                      value=""
+                      className="sr-only peer"
+                      checked={toggleChecked}
+                      onChange={handleChangeToggle}
+                    />
+                    <div className={toggleClass}></div>
+                    <span className="ms-3 text-base font-bold text-black">
+                      {toggleChecked ? "DEL" : "ADD"}
+                    </span>
+                  </label>
                 </div>
               </div>
             </div>
-            <label className={toggleLabelClass}>
-              <input
-                type="checkbox"
-                value=""
-                className="sr-only peer"
-                checked={toggleChecked}
-                onChange={handleChangeToggle}
-              />
-              <div className={toggleClass}></div>
-              <span className="ms-3 text-base font-bold text-black">
-                {toggleChecked ? "DEL" : "ADD"}
-              </span>
-            </label>
           </div>
         </>
       )}
