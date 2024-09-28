@@ -13,17 +13,28 @@ const DoctorBooking = () => {
   const [selectedDuration, setSelectedDuration] = useState(60);
   const [selectedDate, setSelectedDate] = useState<any>(null);
   const [selectedSlot, setSelectedSlot] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>("L");
   const [availableDates, setAvailableDates] = useState<any[]>([]);
   const [bookedDates, setBookedDates] = useState<string[]>([]);
 
   const [appointmentState, setAppointmentState] = useState("First_time");
   const [appointments, setAppointments] = useState<any[]>([]);
+
   const formattedDatesFunc = (data: any) => {
+    if (!data.booked || !Array.isArray(data.booked)) {
+      throw new Error("Invalid data structure for booked dates");
+    }
+
     const formattedDates = data.booked.map((date: string) => {
-      // Format the date and time components
+      if (!date) {
+        console.error("Invalid date found in booked dates:", date);
+        return "Invalid date"; // Handle the invalid date case as needed
+      }
+
       const formattedDate = date.split("T");
-      return `${formattedDate[0]} ${formattedDate[1].slice(0, 8)}`; // Slice to get only HH:mm:ss
+      return `${formattedDate[0]} ${formattedDate[1]?.slice(0, 8)}`; // Slice to get only HH:mm:ss
     });
+
     return formattedDates;
   };
 
@@ -70,7 +81,6 @@ const DoctorBooking = () => {
           setAvailableDates(formattedDates);
           setBookedDates(formattedDatesFunc(data));
           console.log("bookedAppointments: ", bookedDates);
-          // console.log("AvailableDates: ", availableDates);
         } catch (error) {
           console.error("Error fetching availability:", error);
         }
@@ -111,9 +121,15 @@ const DoctorBooking = () => {
   const handleDateSelect = (dateObj: {
     date: string;
     slots: { time: string; type: string }[];
-  }) => setSelectedDate(dateObj);
+  }) => {
+    setSelectedSlot("");
+    setSelectedDate(dateObj);
+  };
 
-  const handleSlotSelect = (slot: string) => setSelectedSlot(slot);
+  const handleSlotSelect = (slot: { time: string; type: string }) => {
+    setSelectedSlot(slot.time);
+    setSelectedType(slot.type);
+  };
 
   if (!doctor) {
     return <div className="mx-10 text-xl">Loading doctor data...</div>;
@@ -133,6 +149,7 @@ const DoctorBooking = () => {
         <BookingSummary
           selectedSlot={selectedSlot}
           selectedDuration={selectedDuration}
+          selectedType={selectedType}
           doctor={doctor}
           selectedDate={selectedDate}
           appointmentState={appointmentState}

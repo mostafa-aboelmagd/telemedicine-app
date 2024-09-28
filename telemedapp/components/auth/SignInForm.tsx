@@ -104,10 +104,13 @@ function SignInForm() {
       }
 
       const users = await response.json();
+      console.log("users: ", users);
       if (tokenAuthentication(users)) {
+        console.log("users: ", users);
         localStorage.setItem("jwt", users.token);
         localStorage.setItem("expiryDate", users.tokenExpiryDate);
         localStorage.setItem("userRole", users.userRole);
+
         localStorage.setItem("userId", users.id);
         localStorage.setItem("firstName", users.firstName);
         localStorage.setItem("lastName", users.lastName);

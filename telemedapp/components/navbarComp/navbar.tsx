@@ -25,11 +25,17 @@ const Navbar = () => {
 
   useEffect(() => {
     const expiryDate = localStorage.getItem("expiryDate");
-    if(expiryDate && (Math.floor(new Date().getTime() / 1000) > Number(expiryDate))) {
+    if (
+      expiryDate &&
+      Math.floor(new Date().getTime() / 1000) > Number(expiryDate)
+    ) {
       localStorage.clear();
     }
     setToken(localStorage.getItem("jwt"));
     setUserRole(localStorage.getItem("userRole"));
+
+    console.log("token: ", localStorage.getItem("jwt"));
+    console.log("userRole: ", localStorage.getItem("userRole"));
   }, []);
 
   return (
@@ -43,10 +49,14 @@ const Navbar = () => {
         </Link>
         <div className="hidden min-[1130px]:inline-block justify-between space-x-4 text-[#4d4d4f] text-sm font-light">
           <Link href="/doctors">
-            <button className="font-semibold hover:text-[#035fe9]">Doctor List</button>
+            <button className="font-semibold hover:text-[#035fe9]">
+              Doctor List
+            </button>
           </Link>
           <button className="font-semibold hover:text-[#035fe9]">Tests</button>
-          <button className="font-semibold hover:text-[#035fe9]">Find A Doctor</button>
+          <button className="font-semibold hover:text-[#035fe9]">
+            Find A Doctor
+          </button>
           <button className="font-semibold hover:text-[#035fe9]">Blog</button>
         </div>
         <div className="flex justify-between items-center space-x-0 md:space-x-4 min-[1130px]:space-x-6">
@@ -85,12 +95,12 @@ const Navbar = () => {
                         "/patientProfile/prescriptions",
                         "/patientProfile/patientDocuments",
                         "/patientProfile/paymentInfo",
-                        "/auth/signout"
+                        "/auth/signout",
                       ]
                     : [
                         "/doctorProfile/view",
                         "/doctorProfile/timeSlots",
-                        "/auth/signout"
+                        "/auth/signout",
                       ]
                 }
                 linkName={
@@ -100,7 +110,7 @@ const Navbar = () => {
                         "My Prescriptions",
                         "My Documents",
                         "Wallet",
-                        "Sign Out"
+                        "Sign Out",
                       ]
                     : ["View Profile", "Set Time Slots", "Sign Out"]
                 }
