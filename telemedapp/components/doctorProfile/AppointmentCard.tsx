@@ -12,18 +12,11 @@ const AppointmentCard = ({
   profileData: any;
 }) => {
   const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
-  const [confirmed, setConfirmed] = useState(false);
-  const [deleted, setDeleted] = useState(false);
 
   const [userRole, setUserRole] = useState<any>();
   useEffect(() => {
     setUserRole(localStorage.getItem("userRole"));
   }, []);
-
-  if (deleted) {
-    // Don't render the component if it's deleted
-    return null;
-  }
 
   return (
     <div className="bg-white rounded-3xl md:p-6 p-4 shadow-lg flex flex-col md:space-y-3 space-y-2">
@@ -58,47 +51,25 @@ const AppointmentCard = ({
 
       {/* Action Buttons */}
       <div className="flex flex-row justify-between gap-4">
-        {!confirmed ? (
-          <>
-            {/* Confirm Button */}
-            <button
-              className="md:text-sm text-xs font-medium text-white bg-[#60A899] py-2 px-4 rounded-lg hover:bg-[#4b8377] w-full"
-              onClick={() => setConfirmed(true)}
-            >
-              Confirm
-            </button>
-            {/* Cancel Button */}
-            <button
-              className="md:text-sm text-xs font-medium text-white py-2 px-4 rounded-lg bg-red-600 hover:bg-red-800 w-full"
-              onClick={() => setDeleted(true)}
-            >
-              Cancel
-            </button>
-          </>
-        ) : (
-          <>
-            {/* My Documents Button */}
-            <Link
-              href={`/doctorProfile/documentsList/${appointment.appointment_id}`}
-              className="md:w-1/2"
-            >
-              <button className="md:text-sm text-xs font-medium text-white bg-[#60A899] py-2 px-4 rounded-lg hover:bg-[#4b8377] w-full">
-                My Documents
-              </button>
-            </Link>
-            {/* My Appointments Button */}
-            <Link
-              href={`/doctorProfile/prescriptions/${appointment.appointment_id}`}
-              className="md:w-1/2"
-            >
-              <button
-                className={`${stylesButton.gradient_button} md:text-sm text-xs font-medium text-white py-2 px-4 rounded-lg w-full`}
-              >
-                My Appointments
-              </button>
-            </Link>
-          </>
-        )}
+        <Link
+          href={`/doctorProfile/documentsList/${appointment.appointment_id}`}
+          className="w-1/2"
+        >
+          <button className="md:text-sm text-xs font-medium text-white bg-[#60A899] py-2 px-4 rounded-lg hover:bg-[#4b8377] w-full">
+            History
+          </button>
+        </Link>
+        {/* My Appointments Button */}
+        <Link
+          href={`/doctorProfile/prescriptions/${appointment.appointment_id}`}
+          className="w-1/2"
+        >
+          <button
+            className={`${stylesButton.gradient_button} md:text-sm text-xs font-medium text-white py-2 px-4 rounded-lg w-full`}
+          >
+            Submit Results
+          </button>
+        </Link>
       </div>
     </div>
   );

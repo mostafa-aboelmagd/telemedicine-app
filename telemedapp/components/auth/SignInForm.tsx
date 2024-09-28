@@ -22,7 +22,6 @@ function SignInForm() {
 
   const tokenAuthentication = (req: any) => {
     const token = req.token;
-    console.log("token:", token);
 
     let message = "";
     if (token) {
@@ -104,9 +103,7 @@ function SignInForm() {
       }
 
       const users = await response.json();
-      console.log("users: ", users);
       if (tokenAuthentication(users)) {
-        console.log("users: ", users);
         localStorage.setItem("jwt", users.token);
         localStorage.setItem("expiryDate", users.tokenExpiryDate);
         localStorage.setItem("userRole", users.userRole);

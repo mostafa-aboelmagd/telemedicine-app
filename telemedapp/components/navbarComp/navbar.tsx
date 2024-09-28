@@ -33,9 +33,6 @@ const Navbar = () => {
     }
     setToken(localStorage.getItem("jwt"));
     setUserRole(localStorage.getItem("userRole"));
-
-    console.log("token: ", localStorage.getItem("jwt"));
-    console.log("userRole: ", localStorage.getItem("userRole"));
   }, []);
 
   return (
