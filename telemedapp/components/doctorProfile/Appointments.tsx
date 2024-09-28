@@ -21,34 +21,20 @@ const Appointments = () => {
 
   const [appointments, setAppointments] = useState([
     {
-      appointment_availability_slot: 155,
-      appointment_doctor_id: 77,
-      appointment_duration: 30,
-      appointment_id: 56,
-      appointment_location: null,
-      appointment_patient_id: 78,
-      appointment_status: null,
-      appointment_type: "online",
-      created_at: "2024-09-19T12:45:49.112Z",
-      doctor_city: null,
-      doctor_clinic_location: null,
-      doctor_country: "Egypt",
-      doctor_image: null,
-      doctor_nearest_appointment_id: null,
-      doctor_sixty_min_price: 750,
-      doctor_specialization: "Cardiology",
-      doctor_table_id: 8,
-      doctor_thirty_min_price: 400,
-      doctor_user_id_reference: 77,
-      patient_first_name: "Mahmoud",
-      patient_last_name: "Mansy",
-      updated_at: "2024-09-19T12:45:49.112Z",
-      user_birth_year: 1999,
-      user_email: "doctor@test.com",
-      user_first_name: "yahya",
-      user_gender: "Male",
-      user_last_name: "ahmed",
-      user_phone_number: "+201009900000",
+      appointment_patient_id: 3,
+      appointment_doctor_id: 13,
+      appointment_availability_slot: 2,
+      appointment_type: "Followup",
+      appointment_id: 2,
+      appointment_duration: 60,
+      appointment_complaint: "ta3ban ",
+      appointment_parent_reference: null,
+      appointment_settings_type: "Onsite",
+      patient_first_name: "mohamed ",
+      patient_last_name: "salem",
+      doctor_first_name: "samy",
+      doctor_last_name: "ali",
+      doctor_availability_day_hour: "2024-10-02T12:00:00.000Z",
     },
   ]);
 
@@ -56,14 +42,13 @@ const Appointments = () => {
     const token = localStorage.getItem("jwt");
     if (!token) {
       window.location.href = "/auth/signin";
-    }
-
-    else if(Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
+    } else if (
+      Math.floor(new Date().getTime() / 1000) >
+      Number(localStorage.getItem("expiryDate"))
+    ) {
       localStorage.clear();
       window.location.href = "/auth/signin";
-    }
-
-    else {
+    } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
         mode: "cors",
         headers: {
@@ -89,9 +74,11 @@ const Appointments = () => {
       }
     )
       .then((response) => response.json())
-      .then((response) => setAppointments(() => response));
+      .then((response) => {
+        setAppointments(() => response);
+        console.log("response: ", response);
+      });
   }, []);
-  console.log(appointments);
 
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
@@ -132,28 +119,22 @@ const Appointments = () => {
 
       <div className="flex flex-col max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
         <div className="flex-initial m-5 bg-white rounded-xl relative ">
-        <div className="flex pt-4 mb-3 justify-between gap-2">
-          <Link href="/" className="font-bold ml-7">
-            Personal Info
-          </Link>
-          <Link
-            href="/doctorProfile/timeSlots"
-            className="font-bold"
-          >
-            Time Slots
-          </Link>
-          <Link
-            href="/doctorProfile/requests"
-            className="font-bold mr-7"
-          >
-            Pending Requests
-          </Link>
-        </div>
-        <div className="flex">
-          <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
-          <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
-          <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
-        </div>
+          <div className="flex pt-4 mb-3 justify-between gap-2">
+            <Link href="/" className="font-bold ml-7">
+              Personal Info
+            </Link>
+            <Link href="/doctorProfile/timeSlots" className="font-bold">
+              Time Slots
+            </Link>
+            <Link href="/doctorProfile/requests" className="font-bold mr-7">
+              Pending Requests
+            </Link>
+          </div>
+          <div className="flex">
+            <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+            <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+            <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+          </div>
         </div>
         <div className="flex flex-col m-4">
           {appointments?.length > 0 ? (

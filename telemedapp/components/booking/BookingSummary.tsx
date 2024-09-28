@@ -52,17 +52,12 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     const combinedDateTime = `${dateStr}T${timeStr}Z`;
     setCombinedDateTime(combinedDateTime);
 
-    console.log("combinedDateTime: ", combinedDateTime);
     return combinedDateTime;
   };
 
   const getDay = (date: string) => {
     const dateObj = new Date(date);
 
-    console.log(
-      "day: ",
-      dateObj.toLocaleDateString("en-US", { weekday: "long" })
-    );
     return dateObj.toLocaleDateString("en-US", { weekday: "long" });
   };
 
