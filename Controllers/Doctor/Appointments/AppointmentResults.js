@@ -53,5 +53,5 @@ const AppointmentResultSubmission = async (req, res) => {
         console.error(error);
         return res.status(500).json({ message: 'Server error. Please try again later.' });
     }
-};s
+};
 module.exports = { AppointmentResultSubmission };

@@ -27,21 +27,25 @@ const pool = new pg.Pool({
 })();
 
 const acceptAppointment = async (appointmentId) => {
+  try {
     await pool.query(
       `UPDATE doctor_availability
        SET doctor_availability_status = 'Booked'
        WHERE doctor_availability_id = $1`,
       [appointmentId]
     );
-  
+
     await pool.query(
       `UPDATE appointment
        SET appointment_status = 'Approved'
-       WHERE appointment_id = $1`,
+       WHERE appointment_availability_slot = $1`,
       [appointmentId]
     );
+  } catch (error) {
+    console.error("Error accepting appointment:", error);
+    throw error; // Re-throw the error for further handling
+  }
   };
-  
   const declineAppointment = async (appointmentId) => {
     await pool.query(
       `UPDATE doctor_availability
