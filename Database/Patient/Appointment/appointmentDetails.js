@@ -32,7 +32,6 @@ const getAppointmentDetails = async (appointmentId) => {
     `SELECT
     a.appointment_patient_id,
     a.appointment_doctor_id,
-    a.appointment_availability_slot,
     a.appointment_type,
     a.appointment_duration,
     a.appointment_complaint,

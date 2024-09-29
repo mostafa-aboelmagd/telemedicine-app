@@ -57,7 +57,6 @@ const getPatientRequests = async (patientId) => {
       `SELECT
     a.appointment_patient_id,
     a.appointment_doctor_id,
-    a.appointment_availability_slot,
     a.appointment_type,
     a.appointment_duration,
     a.appointment_complaint,
@@ -86,7 +85,6 @@ WHERE
           `SELECT
         a.appointment_patient_id,
         a.appointment_doctor_id,
-        a.appointment_availability_slot,
         a.appointment_type,
         a.appointment_id,
         a.appointment_duration,

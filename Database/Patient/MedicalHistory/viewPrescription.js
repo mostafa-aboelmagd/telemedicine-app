@@ -50,7 +50,6 @@ const retrievePrescription = async (patientId) => {
         u.user_first_name,
         u.user_last_name,
         d.doctor_specialization,
-        a.appointment_availability_slot,
         a.appointment_date AS doctor_availability_day_hour
       FROM 
         prescriptions p
