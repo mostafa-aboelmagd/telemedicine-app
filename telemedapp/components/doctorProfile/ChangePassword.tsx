@@ -12,19 +12,19 @@ function ChangePassword() {
     oldPassword: "",
     password: "",
     confirmPassword: "",
-    });
+  });
 
   const [errorMessage, setErrorMessage] = useState({
     oldPassword: "",
     password: "",
     confirmPassword: "",
-    });
+  });
 
   const [changedField, setChangedField] = useState("");
 
   const [formValid, setFormValid] = useState(false);
 
-  
+
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
@@ -57,12 +57,21 @@ function ChangePassword() {
 
   const [oldPasswordError, setOldPasswordError] = useState(false);
 
+<<<<<<< HEAD
   useEffect(() => {
     const token = sessionStorage.getItem("jwt");
+=======
+  let token: string | null = "";
+
+
+  useEffect(() => {
+    token = localStorage.getItem("jwt");
+>>>>>>> f5fc4e6 (.)
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
       mode: "cors", headers: {
-        "Authorization": "Bearer " + token 
-      }})
+        "Authorization": "Bearer " + token
+      }
+    })
       .then(response => response.json())
       .then(response => (setTempData(() => (response.formattedDoctor))))
       .finally(() => setLoading(false));
@@ -70,7 +79,7 @@ function ChangePassword() {
 
   useEffect(() => {
     let languagesString = tempData.languages.join(" ");
-    const tempObj = {...tempData, languages: languagesString};
+    const tempObj = { ...tempData, languages: languagesString };
     setProfileData(() => tempObj);
   }, [tempData]);
 
@@ -79,9 +88,9 @@ function ChangePassword() {
   }, [formData]);
 
   const formFields = [
-    {name : "oldPassword", type: "Old Password"},
-    {name : "password", type : "New Password"},
-    {name : "confirmPassword", type : "Confirm New Password"}
+    { name: "oldPassword", type: "Old Password" },
+    { name: "password", type: "New Password" },
+    { name: "confirmPassword", type: "Confirm New Password" }
   ];
 
   const submitButtonClass = [
@@ -91,8 +100,8 @@ function ChangePassword() {
   ].join(" ");
 
   const validateFieldsChosen = () => {
-    for(let key in formData) {
-      if(!(formData[key as keyof typeof formData])) {
+    for (let key in formData) {
+      if (!(formData[key as keyof typeof formData])) {
         return false;
       }
     }
@@ -102,49 +111,49 @@ function ChangePassword() {
   const validatePassword = () => {
     let passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
     let changedValidation = false;
-    if(!formData.password || (formData.password && passwordPattern.test(formData.password))) {
-      if(errorMessage.password !== "") {
+    if (!formData.password || (formData.password && passwordPattern.test(formData.password))) {
+      if (errorMessage.password !== "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, password: "",}));
-    }
-    
-    else {
-      if(errorMessage.password === "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({...prevError, password:"Password Must Contain 8+ Characters Including Atleast 1 Number, 1 Character, 1 Symbol",}));
+      setErrorMessage((prevError) => ({ ...prevError, password: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    else {
+      if (errorMessage.password === "") {
+        changedValidation = true;
+      }
+      setErrorMessage((prevError) => ({ ...prevError, password: "Password Must Contain 8+ Characters Including Atleast 1 Number, 1 Character, 1 Symbol", }));
+    }
+
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateConfirmPassword = () => {
     let changedValidation = false;
 
-    if(formData.confirmPassword && formData.confirmPassword !== formData.password) {
-      if(errorMessage.confirmPassword === "") {
+    if (formData.confirmPassword && formData.confirmPassword !== formData.password) {
+      if (errorMessage.confirmPassword === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, confirmPassword: "Passwords Don't Match",}));
-    } 
-
-    else {
-      if(errorMessage.confirmPassword !== "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({...prevError, confirmPassword: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, confirmPassword: "Passwords Don't Match", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    else {
+      if (errorMessage.confirmPassword !== "") {
+        changedValidation = true;
+      }
+      setErrorMessage((prevError) => ({ ...prevError, confirmPassword: "", }));
+    }
+
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateForm = () => {
-    switch(changedField) {
+    switch (changedField) {
       case "password":
         validatePassword();
         validateConfirmPassword();
@@ -160,9 +169,9 @@ function ChangePassword() {
 
     setChangedField(() => "");
 
-    if(validateFieldsChosen()) {
-      for(let key in errorMessage) {
-        if(errorMessage[key as keyof typeof errorMessage] !== "") {
+    if (validateFieldsChosen()) {
+      for (let key in errorMessage) {
+        if (errorMessage[key as keyof typeof errorMessage] !== "") {
           setFormValid(() => (false));
           return;
         }
@@ -176,7 +185,7 @@ function ChangePassword() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevForm) => ({...prevForm, [name]: value,}));
+    setFormData((prevForm) => ({ ...prevForm, [name]: value, }));
     setChangedField(() => (name));
   };
 
@@ -193,7 +202,7 @@ function ChangePassword() {
       });
 
       if (!response.ok) {
-        if(response.status === 400) {
+        if (response.status === 400) {
           setOldPasswordError(true);
         }
         throw new Error("Failed To Edit Password");
@@ -208,7 +217,7 @@ function ChangePassword() {
 
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
-      {loading ? <CircularProgress className="absolute top-1/2" /> : 
+      {loading ? <CircularProgress className="absolute top-1/2" /> :
         <>
           <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
             <Image src={userImage} height={120} width={120} alt="User Icon" className="mb-1"></Image>
@@ -217,8 +226,8 @@ function ChangePassword() {
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
             <form onSubmit={handleSubmit}>
               <div className="flex pt-4 mb-3">
-                  <Link href="/doctorProfile/view" className="text-blue-500 font-bold ml-7 w-1/2">Personal Info</Link>
-                  <Link href="/doctorProfile/timeSlots" className="font-bold ml-7 mr-7 w-1/2 min-[880px]:mr-0">Time Slots</Link>
+                <Link href="/doctorProfile/view" className="text-blue-500 font-bold ml-7 w-1/2">Personal Info</Link>
+                <Link href="/doctorProfile/timeSlots" className="font-bold ml-7 mr-7 w-1/2 min-[880px]:mr-0">Time Slots</Link>
               </div>
               <div className="flex">
                 <hr className="bg-blue-500 border-none h-0.5 w-1/2"></hr>

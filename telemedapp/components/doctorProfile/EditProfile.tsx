@@ -21,7 +21,7 @@ function EditProfile() {
     thirtyMinPrice: "",
     sixtyMinPrice: "",
   });
-  
+
   const [tempForm, setTempForm] = useState({
     firstName: "",
     lastName: "",
@@ -55,20 +55,31 @@ function EditProfile() {
 
   const [loading, setLoading] = useState(true);
 
+<<<<<<< HEAD
   useEffect(() => {
     const token = sessionStorage.getItem("jwt");
+=======
+  const [error, setError] = useState(false);
+
+  let token: string | null = "";
+
+
+  useEffect(() => {
+    token = localStorage.getItem("jwt");
+>>>>>>> f5fc4e6 (.)
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-            mode: "cors", headers: {
-              "Authorization": "Bearer " + token 
-            }})
-           .then(response => response.json())
-           .then(response => (setTempForm(() => (response.formattedDoctor))))
-           .finally(() => setLoading(false));
+      mode: "cors", headers: {
+        "Authorization": "Bearer " + token
+      }
+    })
+      .then(response => response.json())
+      .then(response => (setTempForm(() => (response.formattedDoctor))))
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
     let languagesString = tempForm.languages.join(" ");
-    const tempObj = {...tempForm, languages: languagesString};
+    const tempObj = { ...tempForm, languages: languagesString };
     setFormData(() => tempObj);
   }, [tempForm]);
 
@@ -77,16 +88,16 @@ function EditProfile() {
   }, [formData]);
 
   const formFields = [
-    {name : "firstName", title: "First Name", type:"text"},
-    {name : "lastName", title : "Last Name", type:"text"},
-    {name: "email", title: "Email", type: "email"},
-    {name : "phone", title : "Phone Number", type:"tel"},
-    {name: "birthYear", title:"Birth Year", type:"number"},
-    {name: "residenceCountry", title:"Residence Country", type:"text"},
-    {name: "specialization", title:"Specialization", type:"text"},
-    {name: "languages", title:"Languages (Space Between Each Language)", type:"text"},
-    {name: "thirtyMinPrice", title:"30 Minutes Price", type:"number"},
-    {name: "sixtyMinPrice", title:"60 Minutes Price", type:"number"}
+    { name: "firstName", title: "First Name", type: "text" },
+    { name: "lastName", title: "Last Name", type: "text" },
+    { name: "email", title: "Email", type: "email" },
+    { name: "phone", title: "Phone Number", type: "tel" },
+    { name: "birthYear", title: "Birth Year", type: "number" },
+    { name: "residenceCountry", title: "Residence Country", type: "text" },
+    { name: "specialization", title: "Specialization", type: "text" },
+    { name: "languages", title: "Languages (Space Between Each Language)", type: "text" },
+    { name: "thirtyMinPrice", title: "30 Minutes Price", type: "number" },
+    { name: "sixtyMinPrice", title: "60 Minutes Price", type: "number" }
   ];
 
   const submitButtonClass = [
@@ -96,8 +107,8 @@ function EditProfile() {
   ].join(" ");
 
   const validateFieldsChosen = () => {
-    for(let key in formData) {
-      if(!(formData[key as keyof typeof formData])) {
+    for (let key in formData) {
+      if (!(formData[key as keyof typeof formData])) {
         return false;
       }
     }
@@ -108,110 +119,110 @@ function EditProfile() {
     let regex = /^[a-zA-Z]+$/;
     let changedValidation = false;
 
-    if(formData.firstName && (!regex.test(formData.firstName))) {
-      if(errorMessage.firstName === "") {
+    if (formData.firstName && (!regex.test(formData.firstName))) {
+      if (errorMessage.firstName === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, firstName: "First Name Must Consist Of Only Characters",}));
+      setErrorMessage((prevError) => ({ ...prevError, firstName: "First Name Must Consist Of Only Characters", }));
     }
 
     else {
-      if(errorMessage.firstName !== "") {
-        changedValidation = true; 
+      if (errorMessage.firstName !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, firstName: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, firstName: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm}));  // Extra rerender needed to correct the current input error status
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));  // Extra rerender needed to correct the current input error status
     }
   };
 
   const validateLastName = () => {
     let regex = /^[a-zA-Z]+$/;
     let changedValidation = false;
-    if(formData.lastName && (!regex.test(formData.lastName))) {
-      if(errorMessage.lastName === "") {
+    if (formData.lastName && (!regex.test(formData.lastName))) {
+      if (errorMessage.lastName === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, lastName: "Last Name Must Consist Of Only Characters",}));
+      setErrorMessage((prevError) => ({ ...prevError, lastName: "Last Name Must Consist Of Only Characters", }));
     }
 
     else {
-      if(errorMessage.lastName !== "") {
+      if (errorMessage.lastName !== "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, lastName: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, lastName: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateEmail = () => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let changedValidation = false;
-    if(formData.email && (!emailPattern.test(formData.email))) {
-      if(errorMessage.email === "") {
+    if (formData.email && (!emailPattern.test(formData.email))) {
+      if (errorMessage.email === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, email: "Email Is Invalid",}));
+      setErrorMessage((prevError) => ({ ...prevError, email: "Email Is Invalid", }));
     }
 
     else {
-      if(errorMessage.email !== "") {
-          changedValidation = true;
+      if (errorMessage.email !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, email: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, email: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validatePhone = () => {
     const phonePattern = /^\+201(0|1|2|5)(\d{8})$/;
     let changedValidation = false;
-    if(formData.phone && ((!phonePattern.test(formData.phone)) || formData.phone.length != 13)) {
-      if(errorMessage.phone === "") {
+    if (formData.phone && ((!phonePattern.test(formData.phone)) || formData.phone.length != 13)) {
+      if (errorMessage.phone === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, phone: "Current Phone Number Is Not valid!",}));
+      setErrorMessage((prevError) => ({ ...prevError, phone: "Current Phone Number Is Not valid!", }));
     }
 
     else {
-      if(errorMessage.phone !== "") {
-          changedValidation = true;
+      if (errorMessage.phone !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, phone: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, phone: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
   const validateBirthYear = () => {
     let changedValidation = false;
 
-    if(formData.birthYear && (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011)) {
-      if(errorMessage.birthYear === "") {
+    if (formData.birthYear && (Number(formData.birthYear) < 1900 || Number(formData.birthYear) > 2011)) {
+      if (errorMessage.birthYear === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, birthYear: "Age Isn't Valid",}));
-    } 
-
-    else {
-      if(errorMessage.birthYear !== "") {
-        changedValidation = true;
-      }
-      setErrorMessage((prevError) => ({...prevError, birthYear: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, birthYear: "Age Isn't Valid", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm})); 
+    else {
+      if (errorMessage.birthYear !== "") {
+        changedValidation = true;
+      }
+      setErrorMessage((prevError) => ({ ...prevError, birthYear: "", }));
+    }
+
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));
     }
   };
 
@@ -219,22 +230,22 @@ function EditProfile() {
     let regex = /^[a-zA-Z]+$/;
     let changedValidation = false;
 
-    if(formData.residenceCountry && (!regex.test(formData.residenceCountry))) {
-      if(errorMessage.residenceCountry === "") {
+    if (formData.residenceCountry && (!regex.test(formData.residenceCountry))) {
+      if (errorMessage.residenceCountry === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, residenceCountry: "Country Must Consist Of Only Characters",}));
+      setErrorMessage((prevError) => ({ ...prevError, residenceCountry: "Country Must Consist Of Only Characters", }));
     }
 
     else {
-      if(errorMessage.residenceCountry !== "") {
-        changedValidation = true; 
+      if (errorMessage.residenceCountry !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, residenceCountry: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, residenceCountry: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm}));  // Extra rerender needed to correct the current input error status
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));  // Extra rerender needed to correct the current input error status
     }
   };
 
@@ -242,22 +253,22 @@ function EditProfile() {
     let regex = /^[a-zA-Z]+$/;
     let changedValidation = false;
 
-    if(formData.specialization && (!regex.test(formData.specialization))) {
-      if(errorMessage.specialization === "") {
+    if (formData.specialization && (!regex.test(formData.specialization))) {
+      if (errorMessage.specialization === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, specialization: "Specialization Must Consist Of Only Characters",}));
+      setErrorMessage((prevError) => ({ ...prevError, specialization: "Specialization Must Consist Of Only Characters", }));
     }
 
     else {
-      if(errorMessage.specialization !== "") {
-        changedValidation = true; 
+      if (errorMessage.specialization !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, specialization: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, specialization: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm}));  // Extra rerender needed to correct the current input error status
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));  // Extra rerender needed to correct the current input error status
     }
   };
 
@@ -265,22 +276,22 @@ function EditProfile() {
     let regex = /^[a-zA-Z\s]*$/;
     let changedValidation = false;
 
-    if(formData.languages && (!regex.test(formData.languages))) {
-      if(errorMessage.languages === "") {
+    if (formData.languages && (!regex.test(formData.languages))) {
+      if (errorMessage.languages === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, languages: "Languages Must Consist Of Only Characters",}));
+      setErrorMessage((prevError) => ({ ...prevError, languages: "Languages Must Consist Of Only Characters", }));
     }
 
     else {
-      if(errorMessage.languages !== "") {
-        changedValidation = true; 
+      if (errorMessage.languages !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, languages: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, languages: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm}));  // Extra rerender needed to correct the current input error status
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));  // Extra rerender needed to correct the current input error status
     }
   };
 
@@ -288,22 +299,22 @@ function EditProfile() {
     let regex = /^[0-9]+$/;
     let changedValidation = false;
 
-    if(formData.thirtyMinPrice && (!regex.test(formData.thirtyMinPrice))) {
-      if(errorMessage.thirtyMinPrice === "") {
+    if (formData.thirtyMinPrice && (!regex.test(formData.thirtyMinPrice))) {
+      if (errorMessage.thirtyMinPrice === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, thirtyMinPrice: "Price Must Be A Number",}));
+      setErrorMessage((prevError) => ({ ...prevError, thirtyMinPrice: "Price Must Be A Number", }));
     }
 
     else {
-      if(errorMessage.thirtyMinPrice !== "") {
-        changedValidation = true; 
+      if (errorMessage.thirtyMinPrice !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, thirtyMinPrice: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, thirtyMinPrice: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm}));  // Extra rerender needed to correct the current input error status
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));  // Extra rerender needed to correct the current input error status
     }
   };
 
@@ -311,27 +322,27 @@ function EditProfile() {
     let regex = /^[0-9]+$/;
     let changedValidation = false;
 
-    if(formData.sixtyMinPrice && (!regex.test(formData.sixtyMinPrice))) {
-      if(errorMessage.sixtyMinPrice === "") {
+    if (formData.sixtyMinPrice && (!regex.test(formData.sixtyMinPrice))) {
+      if (errorMessage.sixtyMinPrice === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, sixtyMinPrice: "Price Must Be A Number",}));
+      setErrorMessage((prevError) => ({ ...prevError, sixtyMinPrice: "Price Must Be A Number", }));
     }
 
     else {
-      if(errorMessage.sixtyMinPrice !== "") {
-        changedValidation = true; 
+      if (errorMessage.sixtyMinPrice !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, sixtyMinPrice: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, sixtyMinPrice: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm}));  // Extra rerender needed to correct the current input error status
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));  // Extra rerender needed to correct the current input error status
     }
   };
 
   const validateForm = () => {
-    switch(changedField) {
+    switch (changedField) {
       case "firstName":
         validateFirstName();
         break;
@@ -367,7 +378,7 @@ function EditProfile() {
       case "thirtyMinPrice":
         validateThirtyMinPrice();
         break;
-      
+
       case "sixtyMinPrice":
         validateSixtyMinPrice();
         break;
@@ -378,9 +389,9 @@ function EditProfile() {
 
     setChangedField(() => "");
 
-    if(validateFieldsChosen()) {
-      for(let key in errorMessage) {
-        if(errorMessage[key as keyof typeof errorMessage] !== "") {
+    if (validateFieldsChosen()) {
+      for (let key in errorMessage) {
+        if (errorMessage[key as keyof typeof errorMessage] !== "") {
           setFormValid(() => (false));
           return;
         }
@@ -394,19 +405,35 @@ function EditProfile() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevForm) => ({...prevForm, [name]: value,}));
+    setFormData((prevForm) => ({ ...prevForm, [name]: value, }));
     setChangedField(() => (name));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+<<<<<<< HEAD
     const languagesArr = formData.languages.split(" ");
     const sentObj = {...formData, "languages" : languagesArr};
+=======
+    const languagesArr = formData?.languages.split(" ");
+    const sentObj = { ...formData, "languages": languagesArr };
+
+    for (const [key, value] of Object.entries(tempForm)) {
+      if (value === sentObj[key as keyof typeof sentObj]) {
+        delete sentObj[key as keyof typeof sentObj];
+      }
+    }
+
+>>>>>>> f5fc4e6 (.)
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/edit/info`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+<<<<<<< HEAD
+=======
+          "Authorization": "Bearer " + token
+>>>>>>> f5fc4e6 (.)
         },
         body: JSON.stringify(sentObj),
         mode: "cors",

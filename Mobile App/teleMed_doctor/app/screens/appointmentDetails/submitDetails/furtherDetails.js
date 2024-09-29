@@ -6,12 +6,14 @@ import CustomTitle from '../../../components/title';
 import Footer from '../../../components/footer';
 import Custombutton from '../../../components/button';
 import { useRoute } from '@react-navigation/native'
+import {NEXT_PUBLIC_SERVER_NAME} from '@env'; 
+import { getToken } from '../../../components/getToken';
 
 const { height } = Dimensions.get('window'); // Get the window height
 
 const FurtherDetails = ({ navigation }) => {
     const route = useRoute()
-    const { report , diagnosis , updatedInputs, appointment_id } = route.params
+    const { report , diagnosis , medications, appointment_id } = route.params
     const [operations, setOperations] = useState('');
 
     const clearOperationsInput = () => {
@@ -27,10 +29,37 @@ const FurtherDetails = ({ navigation }) => {
     const clearSpecialityReferralNotes = () => {
         setSpecialityReferralNotes(''); // Clear the operations input
     };
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/AppointmentResults/${appointment_id}/submitresults`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${await getToken()}`,
+                },
+                body: JSON.stringify(toBeSent),
+            
+            });
+            console.log('toBeSent',toBeSent);
+            // console.log(response);
+
+            if (!response.ok) {
+                console.log(response);
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+
+            // Handle the successful response (e.g., show a message or navigate to another screen)
+            console.log(data);
+        } catch (error) {
+            console.error('Error submitting appointment results:', error);
+        }
+    };
     const toBeSent ={
         report,
         diagnosis,
-        updatedInputs,
+        medications,
         operations,
         specialityReferral,
         specialityReferralNotes,
@@ -101,7 +130,7 @@ const FurtherDetails = ({ navigation }) => {
                             </TouchableOpacity>
                         )}
                     </View>
-                    <Custombutton onPress={()=>{console.log(toBeSent);}}>
+                    <Custombutton onPress={() => handleSubmit()}>
                         Submit
                     </Custombutton>
                 </View>
