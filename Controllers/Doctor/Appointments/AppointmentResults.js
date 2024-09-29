@@ -3,55 +3,47 @@ const database = require('../../../Database/Doctor/AppointmentResults');
 // Appointment result submission form
 const AppointmentResultSubmission = async (req, res) => {
     try {
-        const appointmentId = req.params.appointmentId;
-
-        const {
-            diagnosis: appointment_diagnosis, 
-            operations: treatment_plan_operations, 
-            report: appointment_report, 
-            specialityReferral: treatment_plan_speciality_referral, 
-            specialityReferralNotes: treatment_plan_referral_notes, 
-            updatedInputs: medications
-        } = req.body;
-
-        if (
-            !appointment_diagnosis || 
-            !appointment_report || 
-            !treatment_plan_operations || 
-            !treatment_plan_speciality_referral || 
-            !treatment_plan_referral_notes 
-        ) {
-            return res.status(400).json({ message: 'Missing required fields in request body' });
-        }
-
-        const AppointmentResults = {
-            appointment_diagnosis,
-            appointment_report,
-            results_appointment_reference: appointmentId,
+        const { appointment_id, diagnosis, medications, operations, report, specialityReferral, specialityReferralNotes } = req.body;
+    
+        // Insert data into appointment_results table
+        const appointmentResultsData = {
+            diagnosis,
+            report,
+          results_appointment_reference: appointment_id
         };
-
-        const TreatmentPlan = {
-            treatment_plan_appointment_reference: appointmentId,
-            treatment_plan_operations,
-            treatment_plan_speciality_referral,
-            treatment_plan_referral_notes
+        const appointmentResultsId = await database.insertAppointmentResults(appointmentResultsData);
+    
+        // Insert data into treatment_plan table
+        const treatmentPlanData = {
+          treatment_plan_appointment_reference: appointment_id,
+          operations,
+          specialityReferral,
+          specialityReferralNotes
         };
-        for (const medication of medications) {
-            console.log(medication.medication_name)}
-        const TreatmentPlanID = await database.getTreatmentPlanIdByReference(appointmentId);
-        await database.insertAppointmentResults(AppointmentResults);
-        await database.insertTreatmentPlan(TreatmentPlan);
-        await database.insertMedications(medications,TreatmentPlanID);
-        await database.ChangeAppointmentStatus(appointmentId,'Completed');
-
-
-        return res.status(201).json({
-            message: 'Appointment result and treatment plan submitted successfully'
-        });
-
-    } catch (error) {
+        const treatmentPlanId = await database.insertTreatmentPlan(treatmentPlanData);
+    
+        // Insert data into medications table
+        const medicationsData = medications.map(medication => {
+            console.log("Original medication object:", medication);
+            return {
+              treatmentPlanId,
+              medication_name: medication.drugName,
+              medication_dosage: medication.dose,
+              medication_note: medication.note,
+              medication_start_date: medication.startDate,
+              medication_end_date: medication.endDate
+            };
+          });
+        console.log("Original medication medicationsData:", medicationsData);
+        await database.insertMedications(medicationsData);
+    
+        // Update appointment status to "Completed"
+        await database.updateAppointmentStatus(appointment_id, 'Completed');
+    
+        res.status(200).json({ message: 'Appointment results submitted successfully' });
+      } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Server error. Please try again later.' });
-    }
-};
+        res.status(500).json({ message: 'Server error' });
+      }
+    };
 module.exports = { AppointmentResultSubmission };

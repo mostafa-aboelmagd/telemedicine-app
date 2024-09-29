@@ -49,7 +49,7 @@ const doctorPatients = async (req, res) => {
     }
     const patients = await database.retrieveDoctorPatients(doctorUserId, doctorEmail);
     if (!patients) {
-        message = 'Could not retrieve patients';
+        message = 'No pending requests found ';
         return res.status(400).json(message);
     }
     return res.json(patients);
@@ -71,7 +71,7 @@ const doctorPendingRequests = async (req, res) => {
 
     const pendingAppointments = await database.retrievePendingAppointments(doctorUserId);
     if (!pendingAppointments) {
-        message = 'Could not retrieve pending appointments';
+        message = 'No pending requests found';
         return res.status(400).json({ message });
     }
 
@@ -98,7 +98,7 @@ const doctorAppointments = async (req, res) => {
 
     const pendingAppointments = await database.retrieveDoctorAppointments(doctorUserId);
     if (!pendingAppointments) {
-        message = 'Could not retrieve pending appointments';
+        message = 'No coming appointments found';
         return res.status(400).json({ message });
     }
 
@@ -122,7 +122,7 @@ const doctorDeclinedRequests = async (req, res) => {
 
     const pendingAppointments = await database.retrieveDoctorDeclinedAppointments(doctorUserId);
     if (!pendingAppointments) {
-        message = 'Could not retrieve pending appointments';
+        message = 'No declined requests found';
         return res.status(400).json({ message });
     }
 
@@ -143,7 +143,7 @@ const doctorReviews = async (req, res) => {
     }
     const reviews = await database.retrieveDoctorReviews(doctorUserId, doctorEmail);
     if (!reviews) {
-        message = 'Could not retrieve reviews';
+        message = 'No reviews found';
         return res.status(400).json(message);
     }
     return res.json(reviews);
@@ -163,7 +163,7 @@ const doctorExperience = async (req, res) => {
     }
     const experience = await database.retrieveDoctorExperience(doctorUserId, doctorEmail);
     if (!experience) {
-        message = 'Could not retrieve experience';
+        message = 'No experience found';
         return res.status(400).json(message);
     }
     return res.json(experience);
