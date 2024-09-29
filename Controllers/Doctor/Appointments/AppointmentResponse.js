@@ -19,6 +19,6 @@ const doctorAppointmentResponse = async (req, res) => {
     console.error('Error responding to appointment:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
-};
+}; 
 
 module.exports = { doctorAppointmentResponse };
