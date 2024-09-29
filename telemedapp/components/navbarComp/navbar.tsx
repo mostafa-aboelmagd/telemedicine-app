@@ -89,6 +89,7 @@ const Navbar = () => {
                   userRole === "Patient" || token.userRole === "Patient"
                     ? [
                         "/patientProfile/view",
+                        "/patientProfile/upcoming_appointments",
                         "/patientProfile/prescriptions",
                         "/patientProfile/patientDocuments",
                         "/patientProfile/paymentInfo",
@@ -97,6 +98,7 @@ const Navbar = () => {
                     : [
                         "/doctorProfile/view",
                         "/doctorProfile/timeSlots",
+                        "/doctorProfile/appointments",
                         "/auth/signout",
                       ]
                 }
@@ -104,12 +106,18 @@ const Navbar = () => {
                   userRole === "Patient" || token.userRole === "Patient"
                     ? [
                         "View Profile",
+                        "My Appointments",
                         "My Prescriptions",
                         "My Documents",
                         "Wallet",
                         "Sign Out",
                       ]
-                    : ["View Profile", "Set Time Slots", "Sign Out"]
+                    : [
+                        "View Profile",
+                        "Set Time Slots",
+                        "My Appointments",
+                        "Sign Out",
+                      ]
                 }
                 text={signedInIcon}
               />
