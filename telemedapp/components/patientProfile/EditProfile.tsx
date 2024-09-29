@@ -51,14 +51,13 @@ function EditProfile() {
     token = localStorage.getItem("jwt");
     if (!token) {
       window.location.href = "/auth/signin";
-    }
-
-    else if(Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
+    } else if (
+      Math.floor(new Date().getTime() / 1000) >
+      Number(localStorage.getItem("expiryDate"))
+    ) {
       localStorage.clear();
       window.location.href = "/auth/signin";
-    }
-
-    else {
+    } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
         mode: "cors",
         headers: {
@@ -369,7 +368,7 @@ function EditProfile() {
             <button
               className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
               onClick={() =>
-                (window.location.href = "/patientProfile/appointments")
+                (window.location.href = "/patientProfile/upcoming_appointments")
               }
             >
               My Appointments

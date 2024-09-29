@@ -36,14 +36,13 @@ const PatientDocuments = () => {
     let token = localStorage.getItem("jwt");
     if (!token) {
       window.location.href = "/auth/signin";
-    }
-
-    else if(Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
+    } else if (
+      Math.floor(new Date().getTime() / 1000) >
+      Number(localStorage.getItem("expiryDate"))
+    ) {
       localStorage.clear();
       window.location.href = "/auth/signin";
-    }
-
-    else {
+    } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
         method: "GET",
         mode: "cors",
@@ -130,7 +129,7 @@ const PatientDocuments = () => {
         <button
           className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
           onClick={() =>
-            (window.location.href = "/patientProfile/appointments")
+            (window.location.href = "/patientProfile/upcoming_appointments")
           }
         >
           My Appointments
@@ -139,22 +138,13 @@ const PatientDocuments = () => {
 
       <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
         <div className="flex pt-4 mb-3 justify-between gap-2">
-          <Link
-            href="/patientProfile/view"
-            className="font-bold ml-7"
-          >
+          <Link href="/patientProfile/view" className="font-bold ml-7">
             Personal Info
           </Link>
-          <Link
-            href="/patientProfile/paymentInfo"
-            className="font-bold"
-          >
+          <Link href="/patientProfile/paymentInfo" className="font-bold">
             Payment Info
           </Link>
-          <Link
-            href="/patientProfile/prescriptions"
-            className="font-bold"
-          >
+          <Link href="/patientProfile/prescriptions" className="font-bold">
             Prescriptions
           </Link>
           <Link

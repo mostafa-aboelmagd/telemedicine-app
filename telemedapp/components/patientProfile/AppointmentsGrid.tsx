@@ -12,7 +12,7 @@ const AppointmentsGrid = ({
     return (
       <AppointmentCard
         appointment={appointment}
-        key={appointment.id}
+        key={appointment.appointment_id}
         profileData={profileData}
       />
     );

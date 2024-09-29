@@ -64,10 +64,6 @@ const AppointmentCard = ({
       {/* Appointment Details */}
       <div className="flex flex-col space-y-2">
         <div className="text-sm text-gray-600">
-          {/* <strong>
-            Dr:
-            {` ${appointment.doctor_first_name} ${appointment.doctor_last_name}`}
-          </strong> */}
           <p className="flex flex-row justify-start gap-4 items-center ">
             <p>
               <strong>Duration:</strong>{" "}
@@ -81,8 +77,8 @@ const AppointmentCard = ({
           </p>
           <p>
             <strong>Date & Time:</strong>{" "}
-            {appointment.appointment_date_time &&
-              formatDate(appointment.appointment_date_time)}
+            {appointment.doctor_availability_day_hour &&
+              formatDate(appointment.doctor_availability_day_hour)}
           </p>
         </div>
       </div>
