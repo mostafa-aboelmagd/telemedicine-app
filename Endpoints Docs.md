@@ -142,7 +142,6 @@
        {
             "appointment_patient_id": 3,
             "appointment_doctor_id": 13,
-            "appointment_availability_slot": 2,
             "appointment_type": "Followup",
             "appointment_id": 2,
             "appointment_duration": 60,
@@ -169,7 +168,6 @@
         {
             "appointment_patient_id": 6,
             "appointment_doctor_id": 13,
-            "appointment_availability_slot": 5,
             "appointment_type": "First_time",
             "appointment_duration": 30,
             "appointment_complaint": "chest pain",
@@ -308,7 +306,6 @@
     "appointment": {
         "appointment_patient_id": 2,
         "appointment_doctor_id": 12,
-        "appointment_availability_slot": 1,
         "appointment_type": "First_time",
         "appointment_duration": 30,
         "appointment_complaint": "Headache",
@@ -582,7 +579,6 @@
         {
         "appointment_patient_id": 3,
         "appointment_doctor_id": 13,
-        "appointment_availability_slot": 2,
         "appointment_type": "Followup",
         "appointment_id": 2,
         "appointment_duration": 60,
@@ -609,7 +605,6 @@
       {
         "appointment_patient_id": 3,
         "appointment_doctor_id": 13,
-        "appointment_availability_slot": 55,
         "appointment_id": 72,
         "appointment_type": "Followup",
         "appointment_duration": 30,
@@ -773,7 +768,6 @@
             {
             "appointment_patient_id": 3,
             "appointment_doctor_id": 13,
-            "appointment_availability_slot": 55,
             "appointment_type": "Followup",
             "appointment_id": 72,
             "appointment_duration": 30,
@@ -808,7 +802,6 @@
           {
               "appointment_patient_id": 3,
               "appointment_doctor_id": 13,
-              "appointment_availability_slot": 55,
               "appointment_type": "Followup",
               "appointment_duration": 30,
               "appointment_complaint": "I have a headache",
@@ -838,7 +831,6 @@
     "appointment": {
         "appointment_patient_id": 2,
         "appointment_doctor_id": 12,
-        "appointment_availability_slot": 1,
         "appointment_type": "First_time",
         "appointment_duration": 30,
         "appointment_complaint": "Headache",
