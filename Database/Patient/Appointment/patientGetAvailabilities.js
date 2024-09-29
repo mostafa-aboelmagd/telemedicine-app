@@ -48,10 +48,12 @@ const getDoctorTimeslots = async (doctorId) => {
     try {
         // Retrieve doctor availability
         const availabilityResult = await pool.query(
-          `SELECT doctor_availability_id, doctor_availability_day_hour
-           FROM doctor_availability
-           WHERE doctor_availability_doctor_id = $1
-           AND doctor_availability_status IN ('Booked', 'Pending')`,
+          `SELECT 
+          appointment_id AS doctor_availability_id,
+          appointment_date AS doctor_availability_day_hour
+           FROM appointment
+           WHERE appointment_doctor_id = $1
+           AND appointment_status IN ('Approved', 'Pending')`,
           [doctorId]
         );
     

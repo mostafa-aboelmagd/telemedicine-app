@@ -60,58 +60,32 @@ const retrieveDoctorInfo = async (id, email) => {
     }
 };
 
-// const retrieveDoctorPatients = async (id, email) => {
-//     try {
-//         const query = 
-//         `SELECT 
-//         U.user_email, U.user_phone_number, U.user_gender, U.user_birth_year, U.user_first_name, U.user_last_name,
-//         D.*,
-//         P.*
-//         FROM doctor D
-//         LEFT JOIN users U ON D.doctor_user_id_reference = U.user_id
-//         LEFT JOIN patient P ON D.doctor_user_id_reference = P.patient_current_doctor_id
-//         WHERE D.doctor_user_id_reference = $1 AND U.user_role = $2 AND U.user_email = $3`;
 
-//         const result = await pool.query(query, [id, 'Doctor', email]);
-//         if (result.rows.length) {
-//             console.log('Doctor patients found', result.rows);
-//             return result.rows;
-//         }
-
-//         console.log('Doctor patients not found');
-//         return false;
-
-//     } catch (error) {
-//         console.error(error.stack);
-//         return false;
-//     }
-// };
 const retrieveDoctorDeclinedAppointments = async (doctorId) => {
     try {
         const query = 
-       `SELECT
-                a.appointment_patient_id,
-                a.appointment_doctor_id,
-                a.appointment_availability_slot,
-                a.appointment_type,
-                a.appointment_id,
-                a.appointment_duration,
-                a.appointment_complaint,
-                a.appointment_parent_reference,
-                a.appointment_settings_type,
-                p.user_first_name AS patient_first_name,
-                p.user_last_name AS patient_last_name,
-                d.user_first_name AS doctor_first_name,
-                d.user_last_name AS doctor_last_name,
-                da.doctor_availability_day_hour
-            FROM
-                appointment a
-            JOIN users p ON a.appointment_patient_id = p.user_id
-            JOIN users d ON a.appointment_doctor_id = d.user_id
-            JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
-            WHERE
-                a.appointment_doctor_id = $1 AND
-                a.appointment_status = $2`;
+            `SELECT
+            a.appointment_patient_id,
+            a.appointment_doctor_id,
+            a.appointment_type,
+            a.appointment_id,
+            a.appointment_duration,
+            a.appointment_complaint,
+            a.appointment_parent_reference,
+            a.appointment_settings_type,
+            a.appointment_date AS doctor_availability_day_hour,
+            a.time_slot_code,
+            p.user_first_name AS patient_first_name,
+            p.user_last_name AS patient_last_name,
+            d.user_first_name AS doctor_first_name,
+            d.user_last_name AS doctor_last_name
+        FROM
+            appointment a
+        JOIN users p ON a.appointment_patient_id = p.user_id
+        JOIN users d ON a.appointment_doctor_id = d.user_id
+        WHERE
+            a.appointment_doctor_id = $1 AND
+            a.appointment_status = $2`;
 
         const result = await pool.query(query, [doctorId, 'Declined']);
         if (result.rows.length) {
@@ -129,26 +103,25 @@ const retrieveDoctorDeclinedAppointments = async (doctorId) => {
 const retrieveDoctorAppointments = async (doctorId) => {
     try {
         const query = 
-       `SELECT
+            `SELECT
                 a.appointment_patient_id,
                 a.appointment_doctor_id,
-                a.appointment_availability_slot,
                 a.appointment_type,
                 a.appointment_id,
                 a.appointment_duration,
                 a.appointment_complaint,
                 a.appointment_parent_reference,
                 a.appointment_settings_type,
+                a.appointment_date AS doctor_availability_day_hour,
+                a.time_slot_code,
                 p.user_first_name AS patient_first_name,
                 p.user_last_name AS patient_last_name,
                 d.user_first_name AS doctor_first_name,
-                d.user_last_name AS doctor_last_name,
-                da.doctor_availability_day_hour
+                d.user_last_name AS doctor_last_name
             FROM
                 appointment a
             JOIN users p ON a.appointment_patient_id = p.user_id
             JOIN users d ON a.appointment_doctor_id = d.user_id
-            JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
             WHERE
                 a.appointment_doctor_id = $1 AND
                 a.appointment_status = $2`;
@@ -308,29 +281,28 @@ const retrieveDoctorEducation = async (id, email) => {
 const retrievePendingAppointments = async (doctorId) => {
     try {
         const query = 
-                `SELECT
-                a.appointment_patient_id,
-                a.appointment_doctor_id,
-                a.appointment_availability_slot,
-                a.appointment_id,
-                a.appointment_type,
-                a.appointment_duration,
-                a.appointment_complaint,
-                a.appointment_parent_reference,
-                a.appointment_settings_type,
-                p.user_first_name AS patient_first_name,
-                p.user_last_name AS patient_last_name,
-                d.user_first_name AS doctor_first_name,
-                d.user_last_name AS doctor_last_name,
-                da.doctor_availability_day_hour
-            FROM
-                appointment a
-            JOIN users p ON a.appointment_patient_id = p.user_id
-            JOIN users d ON a.appointment_doctor_id = d.user_id
-            JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
-            WHERE
-                a.appointment_doctor_id = $1 AND
-                a.appointment_status = $2`;
+        `SELECT
+    a.appointment_patient_id,
+    a.appointment_doctor_id,
+    a.appointment_id,
+    a.appointment_type,
+    a.appointment_duration,
+    a.appointment_complaint,
+    a.appointment_parent_reference,
+    a.appointment_settings_type,
+    p.user_first_name AS patient_first_name,
+    p.user_last_name AS patient_last_name,
+    d.user_first_name AS doctor_first_name,
+    d.user_last_name AS doctor_last_name,
+    a.appointment_date AS doctor_availability_day_hour,
+    a.time_slot_code
+FROM
+    appointment a
+JOIN users p ON a.appointment_patient_id = p.user_id
+JOIN users d ON a.appointment_doctor_id = d.user_id
+WHERE
+    a.appointment_doctor_id = $1 AND
+    a.appointment_status = $2;`;
 
         const result = await pool.query(query, [doctorId, 'Pending']);
         if (result.rows.length) {

@@ -30,56 +30,55 @@ const pool = new pg.Pool({
 
 
 
-const createDoctorAvailability = async (doctorId, timeSlotCode, appointmentDate) => {
-  try {
-    const availabilityType = timeSlotCode.endsWith('S') ? 'Onsite' : 'Online';
-    console.log(availabilityType);
-    const result = await pool.query(
-      `INSERT INTO doctor_availability (
-        doctor_availability_doctor_id,
-        time_slot_code,
-        doctor_availability_type,
-        doctor_availability_status,
-        doctor_availability_day_hour
-      ) VALUES ($1, $2, $3, $4, $5) RETURNING doctor_availability_id`,
-      [doctorId, timeSlotCode, availabilityType, 'Pending', appointmentDate]
-    );
+// const createDoctorAvailability = async (doctorId, timeSlotCode, appointmentDate) => {
+//   try {
+//     const availabilityType = timeSlotCode.endsWith('S') ? 'Onsite' : 'Online';
+//     console.log(availabilityType);
+//     const result = await pool.query(
+//       // `INSERT INTO doctor_availability (
+//       //   doctor_availability_doctor_id,
+//       //   time_slot_code,
+//       //   doctor_availability_type,
+//       //   doctor_availability_status,
+//       //   doctor_availability_day_hour
+//       // ) VALUES ($1, $2, $3, $4, $5) RETURNING doctor_availability_id`,
+//       [doctorId, timeSlotCode, availabilityType, 'Pending', appointmentDate]
+//     );
 
-    return result.rows[0].doctor_availability_id;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
+//     return result.rows[0].doctor_availability_id;
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// };
 
-const createAppointmentEntry = async (timeSlotCode,patientId, doctorId, doctorAvailabilityId, complaint, duration, appointmentType) => {
+const createAppointmentEntry = async (time_slot_code, patientId, doctor_id, complaint, duration, appointment_type, appointment_date) => {
   try {
-    const availabilityType = timeSlotCode.endsWith('S') ? 'Onsite' : 'Online';
-    console.log(availabilityType);
+    // Determine the appointment_settings_type based on the time_slot_code
+    const appointment_settings_type = time_slot_code.endsWith('S') ? 'Onsite' : 'Online';
+
+    // Insert the appointment into the database
     const result = await pool.query(
       `INSERT INTO appointment (
         appointment_patient_id,
         appointment_doctor_id,
-        appointment_availability_slot,
+        appointment_date,
+        time_slot_code,
         appointment_type,
         appointment_duration,
         appointment_complaint,
         appointment_settings_type,
         appointment_status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7,$8) RETURNING appointment_id`,
-      [patientId, doctorId, doctorAvailabilityId, appointmentType, duration, complaint,availabilityType, 'Pending']
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING appointment_id`,
+      [patientId, doctor_id, appointment_date, time_slot_code, appointment_type, duration, complaint, appointment_settings_type, 'Pending']
     );
 
     return result.rows[0].appointment_id;
   } catch (error) {
     console.error(error);
-    return null;
-  }
-};
-
-
-
-
+    throw error;
+    }
+  };
 
 
 // const createAppointment = async (patientId,doctor_id,complaint ,duration, appointment_type,appointment_date,time_slot_code) => {
@@ -109,4 +108,4 @@ const createAppointmentEntry = async (timeSlotCode,patientId, doctorId, doctorAv
 //   }
 // };
   
-  module.exports = { createAppointmentEntry,createDoctorAvailability };
+  module.exports = { createAppointmentEntry};

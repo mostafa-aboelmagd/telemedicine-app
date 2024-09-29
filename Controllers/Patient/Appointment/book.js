@@ -6,12 +6,12 @@ const bookAppointment = async (req, res) => {
     const patientId = req.id; // Assuming patient ID is available in req.id
     const time_slot_code = req.body.time_slot_code;
 
-    const doctorAvailabilityId = await database.createDoctorAvailability(doctor_id, time_slot_code, appointment_date);
-    if (!doctorAvailabilityId) {
-      return res.status(400).json({ message: 'Failed to create doctor availability' });
-    }
-
-    const appointment = await database.createAppointmentEntry(time_slot_code,patientId, doctor_id, doctorAvailabilityId, complaint, duration, appointment_type);
+    // const doctorAvailabilityId = await database.createDoctorAvailability(doctor_id, time_slot_code, appointment_date);
+    // if (!doctorAvailabilityId) {
+    //   return res.status(400).json({ message: 'Failed to create doctor availability' });
+    // }
+    
+    const appointment = await database.createAppointmentEntry(time_slot_code,patientId, doctor_id, complaint, duration, appointment_type,appointment_date);
     if (!appointment) {
       return res.status(400).json({ message: 'Failed to create appointment' });
     }

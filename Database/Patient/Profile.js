@@ -67,12 +67,11 @@ const getPatientRequests = async (patientId) => {
     p.user_last_name AS patient_last_name,
     d.user_first_name AS doctor_first_name,
     d.user_last_name AS doctor_last_name,
-    da.doctor_availability_day_hour
+    a.appointment_date AS doctor_availability_day_hour
 FROM
     appointment a
 JOIN users p ON a.appointment_patient_id = p.user_id
 JOIN users d ON a.appointment_doctor_id = d.user_id
-JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
 WHERE
     a.appointment_patient_id = $1
     AND a.appointment_status IN ('Pending', 'Declined')`,
@@ -99,12 +98,11 @@ WHERE
         d.user_first_name AS doctor_first_name,
         d.user_last_name AS doctor_last_name,
         doc.doctor_specialization,
-        da.doctor_availability_day_hour
+        a.appointment_date AS doctor_availability_day_hour
     FROM
         appointment a
     JOIN users p ON a.appointment_patient_id = p.user_id
     JOIN users d ON a.appointment_doctor_id = d.user_id
-    JOIN doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
     JOIN doctor doc ON a.appointment_doctor_id = doc.doctor_user_id_reference
 
     WHERE

@@ -27,28 +27,17 @@ const pool = new pg.Pool({
 })();
 
 const acceptAppointment = async (appointmentId) => {
-  await pool.query(
-    `UPDATE doctor_availability
-     SET doctor_availability_status = 'Booked'
-     WHERE doctor_availability_id = $1`,
-    [appointmentId]
-  );
-
-  await pool.query(
-    `UPDATE appointment
-     SET appointment_status = 'Approved'
-     WHERE appointment_id = $1`,
-    [appointmentId]
-  );
-};
-  const declineAppointment = async (appointmentId) => {
+ 
     await pool.query(
-      `UPDATE doctor_availability
-       SET doctor_availability_status = 'Available'
-       WHERE doctor_availability_id = $1`,
+      `UPDATE appointment
+       SET appointment_status = 'Approved'
+       WHERE appointment_id = $1`,
       [appointmentId]
     );
+  };
   
+  const declineAppointment = async (appointmentId) => {
+    
     await pool.query(
       `UPDATE appointment
        SET appointment_status = 'Declined'

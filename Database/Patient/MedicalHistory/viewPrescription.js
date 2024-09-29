@@ -51,7 +51,7 @@ const retrievePrescription = async (patientId) => {
         u.user_last_name,
         d.doctor_specialization,
         a.appointment_availability_slot,
-        da.doctor_availability_day_hour
+        a.appointment_date AS doctor_availability_day_hour
       FROM 
         prescriptions p
       JOIN 
@@ -62,8 +62,6 @@ const retrievePrescription = async (patientId) => {
         doctor d ON p.prescriptions_doctor_id = d.doctor_user_id_reference
       LEFT JOIN 
         appointment a ON p.prescriptions_appointment_id = a.appointment_id
-      LEFT JOIN 
-        doctor_availability da ON a.appointment_availability_slot = da.doctor_availability_id
       WHERE 
         p.prescription_patient_id = $1
     `;
