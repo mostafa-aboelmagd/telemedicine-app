@@ -9,7 +9,7 @@ const AppointmentDetails = async (req, res) => {
       const appointment = await database.getAppointmentDetails(appointmentId);
   
       if (!appointment) {
-        return res.status(404).json({ message: 'Appointment not found' });
+        return res.status(400).json({ message: 'Appointment not found' });
       }
   
       const appointmentResults = await database.getAppointmentResults(appointmentId);
