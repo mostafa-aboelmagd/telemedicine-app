@@ -1,17 +1,25 @@
+import { report } from 'process';
 import React, { useState } from 'react'
 import { FaPlus } from "react-icons/fa";
 import { FaUpload } from "react-icons/fa";
 
-const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
+const AddAppointmentResult = ({ appointmentId }: { appointmentId: number }) => {
     const [openModalAdd, setOpenModalAdd] = useState(false);
     const [formData, setFormData] = useState<any[]>([]);
     const [currentMedication, setCurrentMedication] = useState({
-        name: "",
         dose: "",
-        // frequency: "",
-        notes: "",
-        start: "",
-        end: ""
+        drugName: "",
+        endDate: "",
+        note: "",
+        startDate: "",
+        id: 12321
+    });
+    const [diagnosisData, setDiagnosisData] = useState({
+        diagnosis: "",
+        operations: "",
+        report: "",
+        specialityReferral: "",
+        specialityReferralNotes: ""
     });
     const handleUploadPrescription = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,11 +33,18 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
             'Authorization': `Bearer ${localStorage.getItem('jwt')}`
         };
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/patient-prescription/add/${appointmentId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/AppointmentResults/${appointmentId}/submitresults`, {
                 headers: headers,
                 method: 'POST',
                 mode: 'cors',
-                body: JSON.stringify({ medicationData: formData }),
+                body: JSON.stringify({
+                    diagnosis: diagnosisData.diagnosis,
+                    operations: diagnosisData.operations,
+                    report: diagnosisData.report,
+                    specialityReferral: diagnosisData.specialityReferral,
+                    specialityReferralNotes: diagnosisData.specialityReferralNotes,
+                    medications: formData
+                }),
             });
             if (!response.ok) {
                 throw new Error('Failed to upload prescription');
@@ -39,12 +54,13 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
             setOpenModalAdd(false);
             setFormData([]);
             setCurrentMedication({
-                name: "",
                 dose: "",
-                // frequency: "",
-                notes: "",
-                start: "",
-                end: "",
+                drugName: "",
+                endDate: "",
+                note: "",
+                startDate: "",
+                id: 12321
+
             });
         } catch (error) {
             console.error(error);
@@ -53,9 +69,9 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
 
     const handleAddMedication = (e: React.FormEvent) => {
         e.preventDefault();
-        const { name, dose, start, end, notes } = currentMedication;
+        const { drugName, dose, startDate, endDate, note } = currentMedication;
 
-        if (!name || !dose || !start || !end) {
+        if (!drugName || !dose || !startDate || !endDate) {
             alert("Please fill in all required fields (Name, Dose, Frequency, Start, End).");
             return;
         }
@@ -66,12 +82,13 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
         ]);
 
         setCurrentMedication({
-            name: "",
             dose: "",
-            // frequency: "",
-            start: "",
-            end: "",
-            notes: ""
+            drugName: "",
+            endDate: "",
+            note: "",
+            startDate: "",
+            id: 12321
+
         });
     };
 
@@ -79,6 +96,13 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
         const { name, value } = e.target;
         setCurrentMedication((prevMedication) => ({
             ...prevMedication,
+            [name]: value,
+        }));
+    };
+    const handleChangeDiagnosis = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setDiagnosisData((prevDiagnosis) => ({
+            ...prevDiagnosis,
             [name]: value,
         }));
     };
@@ -101,6 +125,69 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
                             </div>
                         </div>
                         <div className="grow flex flex-col space-y-4 px-4 overflow-x-auto">
+                            <form>
+                                <h4 className="font-semibold mb-2">Add Diagnosis</h4>
+                                <div className="mb-2">
+                                    <label htmlFor="diagnosis" className="block font-medium">Diagnosis<span className="text-red-500">*</span></label>
+                                    <input
+                                        id="diagnosis"
+                                        onChange={handleChangeDiagnosis}
+                                        name='diagnosis'
+                                        value={diagnosisData.diagnosis}
+                                        type="text"
+                                        className="w-full border p-2 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-2">
+                                    <label htmlFor="operations" className="block font-medium">Operations<span className="text-red-500">*</span></label>
+                                    <input
+                                        id="operations"
+                                        onChange={handleChangeDiagnosis}
+                                        name='operations'
+                                        value={diagnosisData.operations}
+                                        type="text"
+                                        className="w-full border p-2 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-2">
+                                    <label htmlFor="report" className="block font-medium">Report<span className="text-red-500">*</span></label>
+                                    <input
+                                        id="report"
+                                        onChange={handleChangeDiagnosis}
+                                        name='report'
+                                        value={diagnosisData.report}
+                                        type="text"
+                                        className="w-full border p-2 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-2">
+                                    <label htmlFor="specialityReferral" className="block font-medium">Speciality Referral<span className="text-red-500">*</span></label>
+                                    <input
+                                        id="specialityReferral"
+                                        onChange={handleChangeDiagnosis}
+                                        name='specialityReferral'
+                                        value={diagnosisData.specialityReferral}
+                                        type="text"
+                                        className="w-full border p-2 rounded"
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-2">
+                                    <label htmlFor="specialityReferralNotes" className="block font-medium">Speciality Referral Notes<span className="text-red-500">*</span></label>
+                                    <input
+                                        id="specialityReferralNotes"
+                                        onChange={handleChangeDiagnosis}
+                                        name='specialityReferralNotes'
+                                        value={diagnosisData.specialityReferralNotes}
+                                        type="text"
+                                        className="w-full border p-2 rounded"
+                                        required
+                                    />
+                                </div>
+                            </form>
                             <form onSubmit={handleAddMedication} className="flex flex-col space-y-4">
                                 <div className="border p-4 rounded-lg">
                                     <h4 className="font-semibold mb-2">Add Medication</h4>
@@ -109,8 +196,8 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
                                         <input
                                             id="name"
                                             onChange={handleChange}
-                                            name='name'
-                                            value={currentMedication.name}
+                                            name='drugName'
+                                            value={currentMedication.drugName}
                                             type="text"
                                             className="w-full border p-2 rounded"
                                             required
@@ -128,25 +215,13 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
                                             required
                                         />
                                     </div>
-                                    {/* <div className="mb-2">
-                                        <label htmlFor="frequency" className="block font-medium">Frequency<span className="text-red-500">*</span></label>
-                                        <input
-                                            id="frequency"
-                                            onChange={handleChange}
-                                            name='frequency'
-                                            value={currentMedication.frequency}
-                                            type="text"
-                                            className="w-full border p-2 rounded"
-                                            required
-                                        />
-                                    </div> */}
                                     <div className="mb-2">
                                         <label htmlFor="start" className="block font-medium">Start Date<span className="text-red-500">*</span></label>
                                         <input
                                             id="start"
                                             onChange={handleChange}
-                                            name='start'
-                                            value={currentMedication.start}
+                                            name='startDate'
+                                            value={currentMedication.startDate}
                                             type="date"
                                             className="w-full border p-2 rounded"
                                             required
@@ -157,8 +232,8 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
                                         <input
                                             id="end"
                                             onChange={handleChange}
-                                            name='end'
-                                            value={currentMedication.end}
+                                            name='endDate'
+                                            value={currentMedication.endDate}
                                             type="date"
                                             className="w-full border p-2 rounded"
                                             required
@@ -169,8 +244,8 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
                                         <textarea
                                             id="notes"
                                             onChange={handleChange}
-                                            name='notes'
-                                            value={currentMedication.notes}
+                                            name='note'
+                                            value={currentMedication.note}
                                             className="w-full border p-2 rounded"
                                             rows={3}
                                         />
@@ -186,15 +261,14 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
                                 </div>
                             </form>
 
-                            {/* List of Added Medications */}
                             {formData.length > 0 && (
                                 <div className="mt-4">
                                     <h4 className="font-semibold text-lg mb-2">Added Medications</h4>
                                     <ul className="list-disc list-inside space-y-4">
                                         {formData.map((med, index) => (
                                             <li key={index}>
-                                                <strong>{med.name}</strong> - {med.dose}{/*, {med.frequency}*/}, {med.start} to {med.end}
-                                                {med.notes && `, Notes: ${med.notes}`}
+                                                <strong>{med.drugName}</strong> - {med.dose}, {med.startDate} to {med.endDate}
+                                                {med.note && `, Notes: ${med.note}`}
                                             </li>
                                         ))}
                                     </ul>
@@ -214,12 +288,12 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
                                         setOpenModalAdd(false);
                                         setFormData([]);
                                         setCurrentMedication({
-                                            name: "",
                                             dose: "",
-                                            // frequency: "",
-                                            start: "",
-                                            end: "",
-                                            notes: ""
+                                            drugName: "",
+                                            endDate: "",
+                                            note: "",
+                                            startDate: "",
+                                            id: 12321
                                         });
                                     }
                                 }}
@@ -235,4 +309,4 @@ const AddPrescription = ({ appointmentId }: { appointmentId: number }) => {
     )
 }
 
-export default AddPrescription
+export default AddAppointmentResult
