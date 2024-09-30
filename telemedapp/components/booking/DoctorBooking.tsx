@@ -58,9 +58,10 @@ const DoctorBooking = () => {
 
     const fetchDoctorAvailability = async () => {
       if (doctor?.id) {
+        console.log("doctor.id: ", doctor.id);
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/appointmentdetails/${doctor.id}`,
+            `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/${doctor.id}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
