@@ -17,8 +17,8 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
 }) => (
   <div className="flex gap-4 flex-col">
     <div className="flex justify-between items-center mb-4">
-      <h3 className="text-sm md:text-xl font-semibold">Select time slots:</h3>
-      <div className="text-blue-600 font-bold text-xs md:text-base">
+      <h3 className="text-sm lg:text-xl font-semibold">Select time slots:</h3>
+      <div className="text-blue-600 font-bold text-xs lg:text-base">
         {selectedDate?.slots.length} available time slots
       </div>
     </div>

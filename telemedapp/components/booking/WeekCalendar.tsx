@@ -81,7 +81,9 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
   return (
     <div className="flex flex-col gap-2 mb-4 ">
       <div className="flex flex-row items-center mb-4 ">
-        <h3 className="text-sm md:text-lg font-bold">Select date:</h3>
+        <h3 className="text-xs md:text-sm lg:text-lg font-bold">
+          Select date:
+        </h3>
         <div className="mx-auto flex justify-evenly items-center">
           <button
             onClick={handlePreviousWeek}
@@ -89,7 +91,7 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
           >
             {"<"}
           </button>
-          <span className="md:mx-2  mx-1 md:text-xl text-sm text-center font-semibold md:max-w-44 max-w-28 md:w-44 w-28">
+          <span className="xl:mx-2 mx-1 xl:text-xl md:text-base text-sm md:text-center text-right font-semibold lg:max-w-44 max-w-28 lg:w-44 w-28">
             {format(startOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d")} -{" "}
             {format(endOfWeek(currentDate, { weekStartsOn: 0 }), "MMM d")}
           </span>
@@ -102,7 +104,7 @@ const WeekCalendar: React.FC<WeekCalendarProps> = ({
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-7 grid-cols-4 gap-2 md:text-sm text-xs min-w-[340px] lg:min-w-[650px]">
+      <div className="grid xl:grid-cols-7 grid-cols-4 gap-2 md:text-sm text-xs ">
         {datesWithSlots.map((dateObj) => (
           <button
             key={dateObj.date}
