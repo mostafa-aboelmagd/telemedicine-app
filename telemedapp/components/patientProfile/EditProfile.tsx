@@ -380,34 +380,27 @@ function EditProfile() {
               <div className="flex pt-4 mb-3">
                 <Link
                   href="/patientProfile/view"
-                  className="text-blue-500 font-bold ml-7 w-1/4"
+                  className="text-blue-500 font-bold ml-7 w-1/3"
                 >
                   Personal Information
                 </Link>
                 <Link
                   href="/patientProfile/paymentInfo"
-                  className="font-bold ml-7 mr-7 md:mr-0 w-1/4"
+                  className="font-bold ml-7 mr-7 md:mr-0 w-1/3"
                 >
                   Payment Information
                 </Link>
                 <Link
-                  href="/patientProfile/prescriptions"
-                  className="font-bold ml-7 w-1/4"
-                >
-                  Prescriptions
-                </Link>
-                <Link
                   href="/patientProfile/patientDocuments"
-                  className="font-bold ml-7 mr-7 md:mr-0 w-1/4"
+                  className="font-bold ml-7 mr-7 md:mr-0 w-1/3"
                 >
                   Documents
                 </Link>
               </div>
               <div className="flex">
-                <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
-                <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
-                <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
-                <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
+                <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+                <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+                <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
               </div>
               <div className="p-7">
                 {formFields.map((field) => {
