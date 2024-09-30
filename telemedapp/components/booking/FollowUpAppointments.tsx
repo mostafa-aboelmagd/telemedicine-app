@@ -41,7 +41,9 @@ const FollowUpAppointments: React.FC<FollowUpAppointmentsProps> = ({
           value="follow-up"
           checked={appointmentState === "follow-up"}
           onChange={() => {
-            setAppointmentState("follow-up");
+            setAppointmentState(
+              appointments.length > 0 ? "follow-up" : "First_time"
+            );
             handleFollowUpClick();
           }}
         />
@@ -57,59 +59,75 @@ const FollowUpAppointments: React.FC<FollowUpAppointmentsProps> = ({
           padding: "1rem",
           zIndex: 1000,
         }}
-        header="Select Appointment for Follow Up"
+        header={
+          appointments.length > 0 ? "Select Appointment for Follow Up" : ""
+        }
         visible={showDialog}
         onHide={() => setShowDialog(false)}
         footer={
-          <button
-            className="bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold disabled:opacity-50"
-            onClick={handleSaveAppointment}
-            disabled={!selectedAppointment}
-          >
-            Save
-          </button>
+          <div className="flex justify-between">
+            <button
+              className="bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold disabled:opacity-50"
+              onClick={handleSaveAppointment}
+              disabled={!selectedAppointment}
+            >
+              Save
+            </button>
+            <button
+              className="bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold disabled:opacity-50"
+              onClick={handleSaveAppointment}
+            >
+              back
+            </button>
+          </div>
         }
       >
         <ul className="p-0">
-          {appointments.map((appointment) => (
-            <li key={appointment.appointment_id} className="mb-3">
-              <Card
-                title={`Dr. ${appointment.doctor_first_name} ${appointment.doctor_last_name}`}
-              >
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p>
-                      <strong>Specialization:</strong>{" "}
-                      {appointment.doctor_specialization}
-                    </p>
-                    <p>
-                      <strong>Appointment Type:</strong>{" "}
-                      {appointment.appointment_type}
-                    </p>
-                    <p>
-                      <strong>Date & Time:</strong>{" "}
-                      {formatDate(appointment.appointment_day_hour)}
-                    </p>
-                    <p>
-                      <strong>Duration:</strong>{" "}
-                      {appointment.appointment_duration} min
-                    </p>
+          {Array.isArray(appointments) && appointments.length > 0 ? (
+            appointments.map((appointment) => (
+              <li key={appointment.appointment_id} className="mb-3">
+                <Card
+                  title={`Dr. ${appointment.doctor_first_name} ${appointment.doctor_last_name}`}
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p>
+                        <strong>Specialization:</strong>{" "}
+                        {appointment.doctor_specialization}
+                      </p>
+                      <p>
+                        <strong>Appointment Type:</strong>{" "}
+                        {appointment.appointment_type}
+                      </p>
+                      <p>
+                        <strong>Date & Time:</strong>{" "}
+                        {formatDate(appointment.appointment_day_hour)}
+                      </p>
+                      <p>
+                        <strong>Duration:</strong>{" "}
+                        {appointment.appointment_duration} min
+                      </p>
+                    </div>
+                    <button
+                      className={
+                        selectedAppointment?.appointment_id ===
+                        appointment.appointment_id
+                          ? "bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold"
+                          : "bg-blue-400 text-white py-2 px-4 rounded-lg font-semibold"
+                      }
+                      onClick={() => handleAppointmentSelect(appointment)}
+                    >
+                      Select
+                    </button>
                   </div>
-                  <button
-                    className={
-                      selectedAppointment?.appointment_id ===
-                      appointment.appointment_id
-                        ? "bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold"
-                        : "bg-blue-400 text-white py-2 px-4 rounded-lg font-semibold"
-                    }
-                    onClick={() => handleAppointmentSelect(appointment)}
-                  >
-                    Select
-                  </button>
-                </div>
-              </Card>
-            </li>
-          ))}
+                </Card>
+              </li>
+            ))
+          ) : (
+            <p className="mx-auto  text-red-500 text-center mt-6 text-xs md:text-base italic">
+              No appointments found
+            </p>
+          )}
         </ul>
       </Dialog>
     </div>

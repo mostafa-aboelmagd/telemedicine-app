@@ -128,9 +128,6 @@ function ViewProfile() {
               <Link href="/patientProfile/paymentInfo" className="font-bold">
                 Payment Info
               </Link>
-              <Link href="/patientProfile/prescriptions" className="font-bold">
-                Prescriptions
-              </Link>
               <Link
                 href="/patientProfile/patientDocuments"
                 className="font-bold mr-7"
@@ -139,10 +136,9 @@ function ViewProfile() {
               </Link>
             </div>
             <div className="flex">
-              <hr className="bg-blue-500 border-none h-0.5 w-1/4"></hr>
-              <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
-              <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
-              <hr className="bg-neutral-800 border-none h-0.5 w-1/4"></hr>
+              <hr className="bg-blue-500 border-none h-0.5 w-1/3"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
+              <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
             </div>
             <div className="p-7">
               {profileFields.map((field) => {

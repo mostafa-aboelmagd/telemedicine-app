@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
-import AppointmentsGrid from "../AppointmentsGrid";
+import AppointmentsGrid from "./AppointmentsGrid";
 
 const Appointments: React.FC = () => {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;

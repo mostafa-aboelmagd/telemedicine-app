@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { formatDate } from "../../utils/date";
 import FollowUpAppointments from "./FollowUpAppointments";
 interface DetailsSelectorProps {
   selectedDuration: number;
@@ -17,7 +16,8 @@ const DetailsSelector: React.FC<DetailsSelectorProps> = ({
   appointments,
 }) => {
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
-
+  // const [userRole, setUserRole] = useState<any>();
+  // setUserRole(localStorage.getItem("userRole"));
   return (
     <div className="bg-white rounded-3xl shadow-md p-6 w-full">
       <h3 className="text-xl font-semibold mb-4">Select session details:</h3>
@@ -56,24 +56,23 @@ const DetailsSelector: React.FC<DetailsSelectorProps> = ({
             />
             <span className="ml-2">First time</span>
           </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="type"
-              value="Follow_up"
-              checked={appointmentState === "Follow_up"}
-              onChange={() => setAppointmentState("Follow_up")}
-            />
-            <span className="ml-2">Follow up</span>
-          </label>
-
-          {/* <FollowUpAppointments
+          {/* {userRole == "Patient" ? ( */}
+          <FollowUpAppointments
             appointments={appointments}
             selectedAppointment={selectedAppointment}
             setSelectedAppointment={setSelectedAppointment}
             setAppointmentState={setAppointmentState}
             appointmentState={appointmentState}
-          /> */}
+          />
+          {/* ) : (
+             <FollowUpAppointments
+               appointments={appointments}
+               selectedAppointment={selectedAppointment}
+               setSelectedAppointment={setSelectedAppointment}
+               setAppointmentState={setAppointmentState}
+               appointmentState={appointmentState}
+             /> */}
+          {/* )} */}
         </div>
       </div>
     </div>

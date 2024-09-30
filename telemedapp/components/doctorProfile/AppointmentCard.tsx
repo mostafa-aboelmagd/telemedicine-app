@@ -61,7 +61,8 @@ const AppointmentCard = ({
         </Link>
         {/* My Appointments Button */}
         <Link
-          href={`/doctorProfile/prescriptions/${appointment.appointment_id}`}
+          href="#"
+          // href={`/doctorProfile/prescriptions/${appointment.appointment_id}`}
           className="w-1/2"
         >
           <button

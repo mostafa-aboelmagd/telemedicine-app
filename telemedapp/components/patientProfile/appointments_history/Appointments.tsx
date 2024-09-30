@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
-import AppointmentsGrid from "../AppointmentsGrid";
+import AppointmentsGrid from "./AppointmentsGrid";
 
 const Appointments: React.FC = () => {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
@@ -62,8 +62,8 @@ const Appointments: React.FC = () => {
       .then((response) =>
         setAppointments(response?.appointments || ["No Appointment History"])
       );
+    console.log("History Appointments: ", appointments);
   }, []);
-  console.log("Appointments: ", appointments);
 
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
@@ -91,13 +91,13 @@ const Appointments: React.FC = () => {
           <div className="flex pt-4 mb-3">
             <Link
               href="/patientProfile/upcoming_appointments"
-              className="font-bold ml-7 w-1/2"
+              className="lg:text-lg text-sm font-bold ml-7 w-1/2"
             >
               Upcoming Appointments
             </Link>
             <Link
               href="/patientProfile/appointments_history"
-              className="font-bold ml-7 mr-7 md:mr-0 w-1/2"
+              className="lg:text-lg text-sm font-bold ml-7 mr-7 md:mr-0 w-1/2"
             >
               Appointments History
             </Link>
