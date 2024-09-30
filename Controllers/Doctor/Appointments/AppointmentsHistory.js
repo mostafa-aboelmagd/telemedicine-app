@@ -4,7 +4,7 @@ const  database  = require('../../../Database/Doctor/appointmentHistory');
 
 const appointmentsHistory = async (req, res) => {
     const doctorId = req.id; //  patient ID is retrieved from req.id
-    const patientEmail = req.email;
+    // const patientEmail = req.email;
     try {
       const appointments = await database.retrieveDoctorAppointmentsHistory(doctorId);
   
