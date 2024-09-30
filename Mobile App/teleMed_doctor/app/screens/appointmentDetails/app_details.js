@@ -5,9 +5,9 @@ import CustomTitle from '../../components/title';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env';
 import { getToken } from '../../components/getToken';
 
-const fetchAppointmentDetails = async () => {
+const fetchAppointmentDetails = async (appointment_id) => {
     try {
-        const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/appointmentDetails/2`, {
+        const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/appointmentDetails/${appointment_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -15,7 +15,6 @@ const fetchAppointmentDetails = async () => {
 
             },
         });
-
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -28,13 +27,14 @@ const fetchAppointmentDetails = async () => {
 export default function App_Details({ navigation, route }) {
     const [appointmentDetails, setAppointmentDetails] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const {appId} = route.params; // Get appointment ID from navigation params
-
+    const {appointment_id} = route.params; // Get appointment ID from navigation params
+    console.log(appointment_id),
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setIsLoading(true); // Set loading state to true
-                const response = await fetchAppointmentDetails(appId); // Call API with appointment ID
+                const response = await fetchAppointmentDetails(appointment_id); // Call API with appointment ID
+                console.log(response);
                 setAppointmentDetails(response.appointment); // Extract appointment data
                 setIsLoading(false); // Set loading state to false after successful fetch
             } catch (error) {
@@ -43,7 +43,7 @@ export default function App_Details({ navigation, route }) {
         };
 
         fetchData();
-    }, [appId]); // Re-run useEffect when appointment ID changes
+    }, [appointment_id]); // Re-run useEffect when appointment ID changes
 
     const documents = () => {
         navigation.navigate('documents');
