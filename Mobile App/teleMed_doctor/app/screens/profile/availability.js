@@ -7,89 +7,136 @@ import CustomTitle from '../../components/title';
 import { getToken } from '../../components/getToken';
 import { NEXT_PUBLIC_SERVER_NAME} from '@env';
 
+let newSlots = []
+let removedSlots = []
 export default function Availability ({ navigation }) {
 
-    // const slots = Object.entries(doctorAv)
+    // const slots = Object.entries(doctorAv.timeslots)
     const [slots, setSlots] = useState(null)
     const [loading, setLoading] = useState(true)
     const [isOnline, setIsonline] = useState('L')
-    const [selectedDay, setSelectedDay] = useState('7') //edit
+    const [selectedDay, setSelectedDay] = useState('sat')
+    const [message, setMessage] = useState('')
+    const decodedSlots = {}
+
+    const days = {
+        '1': 'sat',
+        '2': 'sun',
+        '3': 'mon',
+        '4': 'tue',
+        '5': 'wed',
+        '6': 'thu',
+        '7': 'fri'
+    };
+
+    const [hours,setHours] = useState({
+        '01': false,
+        '02': false,
+        '03': false,
+        '04': false,
+        '05': false,
+        '06': false,
+        '07': false,
+        '08': false,
+        '09': false,
+        '10': false,
+        '11': false,
+        '12': false,
+    })
+ 
+    // Online / On-site switch
     const online = () => {
         isOnline == 'L' ? setIsonline('S')
         : setIsonline('L')
-    }
-
-    const [added, setAdded] = useState([])
-    const [editedslot, setEditedslot] = useState('')
-
-    const slotSrting = (day, hour, state) => {
-        setEditedslot(day + '_' + hour + '_' + state)
-        setAdded((prevAdded) => [...prevAdded, editedslot]);
-        console.log(added)
     }
 
     // add or remove slots switch
     const [add, setAdd] = useState(true); 
     const toggleSwitch = () => setAdd((previousState) => !previousState);
 
-    const days = {
-        '1': false,
-        '2': false,
-        '3': false,
-        '4': false,
-        '5': false,
-        '6': false,
-        '7': true,
-    }
-
     // Slicing data
     if(slots){
-    const slotSlice = (time) => {
-        slots[0][1].forEach((item) => {
-            if (timeSlots[time]) return;
-            checkTime(time, item.split('_')[1], item.split('_')[2], item.split('_')[0])
-        })
-    }
-    const checkTime = (slot, time, day, state) => {
-        if (time == slot && days[day] && state == isOnline) {
-            timeSlots[slot] = true
-        } else {
-            timeSlots[slot] = false
-        }
-    }
-
-}
-
-    const checkDay = (day) => {
-        // Create a new object based on the current days state
-        for(let key in Object.keys(days)){
-            if (key == day){
-                console.log(key, day)
-                days[key] = true
-                setSelectedDay(key)
-            } else {
-                days[day] = false
+        slots.forEach((timeslot) => {
+            const [day, slot, status] = timeslot.split('_'); // Split the timeslot string
+            const key = days[day]; // Use the day mapping if available
+            if (!decodedSlots[key]) {
+              decodedSlots[key] = []; // Create a new array for the key if it doesn't exist
             }
-            console.log(days[day])
-        }
-    };
+            decodedSlots[key].push([slot, status]); // Append the slot and status to the array
+            });        
+            // console.log(decodedSlots['sat'].filter(element => element[1] === 'L').map(element => element[0]));
+    }
 
-    // Time slots array
-    const timeSlots = {
-        '01' : false,
-        '02' : false,
-        '03' : false,
-        '04' : false,
-        '05' : false,
-        '06' : false,
-        '07' : false,
-        '08' : false,
-        '09' : false,
-        '10' : false,
-        '11' : false,
-        '12' : false,
-    };
-    
+    // Slots filtering
+    const filtered = (slot) => {
+        if(decodedSlots[selectedDay]){
+            return decodedSlots[selectedDay].filter(element => element[1] === isOnline).find(element => element[0] === slot);
+        }
+        return false
+    }
+
+    // creating the array if new slots
+    const chosenSlot = (day, hour, state) => {  
+        const key = Object.keys(days).find(key => days[key] === day);
+        const codedSlot = key + '_' + hour + '_' + state
+        if (add){
+            if (newSlots.includes(codedSlot) || slots.includes(codedSlot)) {
+                newSlots = newSlots.filter(slot => slot !== codedSlot);
+                setHours((prevDictionary) => ({
+                    ...prevDictionary,
+                    [hour]: false
+                  })); 
+            } else {
+                newSlots.push(codedSlot);
+                setHours((prevDictionary) => ({
+                    ...prevDictionary,
+                    [hour]: true
+                  })); 
+            }
+            console.log(newSlots)
+            console.log(hours['05'])
+        } else {
+            if (slots.includes(codedSlot)) {
+                if(removedSlots.includes(codedSlot)){
+                    removedSlots = removedSlots.filter(slot => slot !== codedSlot);
+                    setHours((prevDictionary) => ({
+                        ...prevDictionary,
+                        [hour]: false
+                      })); 
+                } else {
+                    removedSlots.push(codedSlot);
+                    setHours((prevDictionary) => ({
+                        ...prevDictionary,
+                        [hour]: true
+                      })); 
+                }
+            } else {
+                setHours((prevDictionary) => ({
+                    ...prevDictionary,
+                    [hour]: false
+                  }));            }
+            console.log(removedSlots)
+        }
+    }
+
+    const getStyle = (slotStyle) => {
+        console.log(hours[slotStyle])
+        if (add) {
+            if (filtered(slotStyle)) {
+                return styles.slot;
+            } else {
+                return [styles.slot, hours[slotStyle] ? { backgroundColor:'#002e07' } : { backgroundColor: 'green' }];
+            }
+        } else {
+            if (filtered(slotStyle)){
+                return hours[slotStyle] ? [styles.slot, { backgroundColor: '#2e0000' }] : [styles.slot, { backgroundColor: 'red' }];
+            } else {
+                return styles.slot;
+            }
+        }
+      };
+
+    // Fetching doctor availability    
     const getAvailability = async () => {
         try {
           const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/availability/view`, {
@@ -107,8 +154,9 @@ export default function Availability ({ navigation }) {
           }
     
           const result = await response.json();
-          console.log(result)
-          setSlots(result);
+        //   console.log(result.timeslots)
+          setSlots(result.timeslots);
+          
 
         } catch (error) {
           console.error('Error fetching doctor availability:', error);
@@ -122,7 +170,8 @@ export default function Availability ({ navigation }) {
       }, []);
     
 
-    const edit = async () => {
+    // adding doctor availability
+    const addingSlots = async () => {
             try {
                 const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/availability/add`, {
                 method: 'POST',
@@ -130,27 +179,60 @@ export default function Availability ({ navigation }) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${await getToken()}`,
                 },
-                body: JSON.stringify({
-                    added
-                }),
+                body: JSON.stringify(newSlots)
                 });
         
                 if (!response.ok) {
                 const errorMessage = await response.text();
-                throw new Error(`Login failed: ${errorMessage}`);
+                throw new Error(`Somthing went wrong: ${errorMessage}`);
                 }
         
                 const responseData = await response.json();
-                const token = responseData.token; // Assuming the server returns a token
                 console.log(responseData)
-                // Store the token (e.g., in AsyncStorage or localStorage)
-                await AsyncStorage.setItem('userToken', token);
-        
-                // Navigate to the home page
-                navigation.navigate('home page');
+                const message = responseData.message
+                setMessage(message)
+
+                const newDictionary = Object.keys(hours).reduce((acc, key) => ({
+                ...acc,
+                [key]: false
+                }), {});
+                setHours(newDictionary);
+
             } catch (error) {
-                console.error('Login error:', error);
-                Alert.alert('Login failed', error.message);
+                console.error('Could set new slots:', error);
+            }
+        }
+
+        // removing doctor availability
+        const removingSlots = async () => {
+            try {
+                const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/availability/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${await getToken()}`,
+                },
+                body: JSON.stringify(removedSlots),
+                });
+        
+                if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Somthing went wrong: ${errorMessage}`);
+                }
+        
+                const responseData = await response.json();
+                console.log(responseData)
+                const message = responseData.message
+                setMessage(message)
+
+                const newDictionary = Object.keys(hours).reduce((acc, key) => ({
+                    ...acc,
+                    [key]: false
+                    }), {});
+                setHours(newDictionary);
+
+            } catch (error) {
+                console.error('Could remove slots:', error);
             }
         }
 
@@ -168,64 +250,44 @@ return (
 
         <View style={{margin: 10}}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                <TouchableOpacity onPress={() => checkDay('7')}>
-                    <Text style={days['7'] ? 
-                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
-                        : [styles.item]
-                    }>
+                <TouchableOpacity onPress={() => setSelectedDay('sat')}>
+                    <Text style={selectedDay == 'sat'? [styles.item, {backgroundColor: '#1565c0', color: 'white'}] : styles.item}>
                         Sat
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => checkDay('1')}>
-                    <Text style={days['1'] ? 
-                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
-                        : [styles.item]
-                    }>
+                <TouchableOpacity onPress={() => setSelectedDay('sun')}>
+                    <Text style={selectedDay == 'sun'? [styles.item, {backgroundColor: '#1565c0', color: 'white'}] : styles.item}>
                         Sun
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => checkDay('2')}>
-                    <Text style={days['2'] ? 
-                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
-                        : [styles.item]
-                    }>
+                <TouchableOpacity onPress={() => setSelectedDay('mon')}>
+                    <Text style={selectedDay == 'mon'? [styles.item, {backgroundColor: '#1565c0', color: 'white'}] : styles.item}>
                         Mon
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => checkDay('3')}>
-                    <Text style={days['3'] ? 
-                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
-                        : [styles.item]
-                    }>
+                <TouchableOpacity onPress={() => setSelectedDay('tue')}>
+                    <Text style={selectedDay == 'tue'? [styles.item, {backgroundColor: '#1565c0', color: 'white'}] : styles.item}>
                         Tue
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => checkDay('4')}>
-                    <Text style={days['4'] ? 
-                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
-                        : [styles.item]
-                    }>
+                <TouchableOpacity onPress={() => setSelectedDay('wed')}>
+                    <Text style={selectedDay == 'wed'? [styles.item, {backgroundColor: '#1565c0', color: 'white'}] : styles.item}>
                         Wed
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => checkDay('5')}>
-                    <Text style={days['5'] ? 
-                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
-                        : [styles.item]
-                    }>
+
+                <TouchableOpacity onPress={() => setSelectedDay('thu')}>
+                    <Text style={selectedDay == 'thu'? [styles.item, {backgroundColor: '#1565c0', color: 'white'}] : styles.item}>
                         Thu
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => checkDay('6')}>
-                    <Text style={days['6'] ? 
-                        [styles.item, {color: 'white', backgroundColor: '#1565c0'}]
-                        : [styles.item]
-                    }>
+                <TouchableOpacity onPress={() => setSelectedDay('fri')}>
+                    <Text style={selectedDay == 'fri'? [styles.item, {backgroundColor: '#1565c0', color: 'white'}] : styles.item}>
                         Fri
                     </Text>
                 </TouchableOpacity>
@@ -245,150 +307,78 @@ return (
         
         <CustomScroll>
             <View style={styles.row}>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '01', isOnline)}>
-                    {slotSlice('01')}    
-                    <Text style={add ? 
-                    (timeSlots['01'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['01'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+                <TouchableOpacity onPress={() => chosenSlot(selectedDay, '01', isOnline)}>
+                <Text style={getStyle('01')}>
                         09:00 am
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '02', isOnline)}>
-                    {slotSlice('02')}    
-                    <Text style={add ? 
-                    (timeSlots['02'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['02'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+                <TouchableOpacity onPress={() => chosenSlot(selectedDay, '02', isOnline)}>
+                <Text style={getStyle('02')}>
                         10:00 am
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '03', isOnline)}>
-                    {slotSlice('03')}        
-                    <Text style={add ? 
-                    (timeSlots['03'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['03'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+                <TouchableOpacity onPress={() => chosenSlot(selectedDay, '03', isOnline)}>
+                <Text style={getStyle('03')}>
                         11:00 am
                     </Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.row}>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '04', isOnline)}>
-                    {slotSlice('04')}    
-                    <Text style={add ? 
-                    (timeSlots['04'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['04'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+            <TouchableOpacity onPress={() => chosenSlot(selectedDay, '04', isOnline)}>
+            <Text style={getStyle('04')}>
                         12:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '05', isOnline)}>
-                    {slotSlice('05')}    
-                    <Text style={add ? 
-                    (timeSlots['05'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['05'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+                <TouchableOpacity onPress={() => chosenSlot(selectedDay, '05', isOnline)}>
+                <Text style={getStyle('05')}>
                         01:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '06', isOnline)}>
-                    {slotSlice('06')}    
-                    <Text style={add ? 
-                    (timeSlots['06'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['06'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+                <TouchableOpacity onPress={() => chosenSlot(selectedDay, '06', isOnline)}>
+                    <Text style={getStyle('06')}>
                         02:00 pm
                     </Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.row}>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '07', isOnline)}>
-                    {slotSlice('07')}    
-                    <Text style={add ? 
-                    (timeSlots['07'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['07'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+            <TouchableOpacity onPress={() => chosenSlot(selectedDay, '07', isOnline)}>
+            <Text style={getStyle('07')}>
                         03:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '08', isOnline)}>
-                    {slotSlice('08')}     
-                    <Text style={add ? 
-                    (timeSlots['08'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['08'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+                <TouchableOpacity onPress={() => chosenSlot(selectedDay, '08', isOnline)}>
+                    <Text style={getStyle('08')}>
                         04:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '09', isOnline)}>
-                    {slotSlice('09')}                 
-                    <Text style={add ? 
-                    (timeSlots['09'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['09'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+                <TouchableOpacity onPress={() => chosenSlot(selectedDay, '09', isOnline)}>
+                    <Text style={getStyle('09')}>
                         05:00 pm
                     </Text>
                 </TouchableOpacity>
             </View>
             
             <View style={styles.row}>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '10', isOnline)}>
-                    {slotSlice('10')}    
-                    <Text style={add ? 
-                    (timeSlots['10'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['10'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+            <TouchableOpacity onPress={() => chosenSlot(selectedDay, '10', isOnline)}>
+            <Text style={getStyle('10')}>                 
                         06:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '11', isOnline)}>
-                    {slotSlice('01')}    
-                    <Text style={add ? 
-                    (timeSlots['11'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['11'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+                <TouchableOpacity onPress={() => chosenSlot(selectedDay, '11', isOnline)}>
+                    <Text style={getStyle('11')}>
                         07:00 pm
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => slotSrting(selectedDay, '12', isOnline)}>
-                    {slotSlice('12')}
-                    <Text style={add ? 
-                    (timeSlots['12'] ? styles.slot
-                        : [styles.slot, {backgroundColor: 'green'}]) 
-                    : (timeSlots['12'] ? [styles.slot, {backgroundColor: 'red'}] 
-                        : [styles.slot])}
-                    >
+                <TouchableOpacity onPress={() => chosenSlot(selectedDay, '12', isOnline)}>
+                <Text style={getStyle('12')}>
                         08:00 pm
                     </Text>
                 </TouchableOpacity>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <TouchableOpacity onPress={() => navigation.pop()}>
+                <TouchableOpacity onPress={add ? addingSlots : removingSlots}>
                     {add ? <Text style={[styles.button, {color: 'green', borderColor: 'green'}]}>Add</Text>
                     : <Text style={[styles.button, {color: 'red', borderColor: 'red'}]}>Remove</Text>}
                 </TouchableOpacity>
@@ -397,9 +387,14 @@ return (
                     <Text style={styles.button}>
                         {isOnline == 'L' ? 'Online' : 'On-site'}
                     </Text>
-                </TouchableOpacity>                
+                </TouchableOpacity>   
+         
             </View>
         </CustomScroll>
+        <Text style={styles.message}>"{message}"</Text>
+        <TouchableOpacity onPress={() => navigation.pop()}>
+            <Text style={styles.done}>Done</Text>
+        </TouchableOpacity>    
 
       </View>
     </SafeArea>
@@ -462,5 +457,28 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#1565c0',
     borderColor: '#1565c0'
+  },
+  done: {
+    position: 'absolute',
+    bottom: 10, // Distance from the bottom of the page
+    left: '37%',  // Optional: Adjust the distance from the left/right
+    padding: 5,
+    borderRadius: 15,
+    fontSize: 20,
+    width: 100,
+    textAlign: 'center',
+    color: '#fff',
+    fontWeight: 'bold',
+    backgroundColor: '#1565c0',
+    borderWidth: 1,
+    borderColor: 'darkgray'
+  },
+  message: {
+    position: 'absolute',
+    bottom: 160, // Distance from the bottom of the page
+    left: '15%',  // Optional: Adjust the distance from the left/right
+    padding: 5,
+    fontSize: 18,
+    textAlign: 'center',
   }
 })

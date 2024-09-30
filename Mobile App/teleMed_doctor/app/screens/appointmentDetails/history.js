@@ -15,8 +15,10 @@ export default function History ({ navigation, route }) {
   const [data, setData] = useState(null)
 
   const details = (appId) => {
-    navigation.navigate('app details', {appId, appId})
+    navigation.navigate('app details', {appId})
+    console.log('app details',appId)
   }
+
 
   const patientData = async () => {
     try {

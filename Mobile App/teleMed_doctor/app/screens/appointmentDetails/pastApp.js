@@ -19,17 +19,15 @@ export default function PastAppointment({ navigation }) {
     navigation.pop()
   }
 
-  const history = (id, fname, lname) => {
+  const history = (appointment_id) => {
     navigation.navigate('app details', 
-      {id: id,
-      fname: fname,
-      lname: lname
+      {appointment_id: appointment_id
     })
   }
 
-  const submitResults = (patientName) => {
-    navigation.navigate('submitResults', { patientName })
-  }
+  // const submitResults = (patientName) => {
+  //   navigation.navigate('submitResults', { patientName })
+  // }
 
   const past = async () => {
     try {
@@ -92,7 +90,7 @@ export default function PastAppointment({ navigation }) {
             </View>
             
             <Custombutton textStyle={{fontSize: 15}} buttonStyle={{width: '35%'}}
-            onPress={() => history(item.appointment_patient_id, item.patient_first_name, item.patient_last_name)}>
+            onPress={() => history(item.appointment_id)}>
               View results
             </Custombutton>
           </View> ) 
