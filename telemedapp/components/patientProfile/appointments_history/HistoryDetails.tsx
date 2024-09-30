@@ -3,7 +3,7 @@ import { Dialog } from "primereact/dialog";
 import { Card } from "primereact/card";
 import { formatDate } from "../../../utils/date";
 import stylesButton from "../../navbarComp/navbar.module.css";
-
+import ReadMore from "../../common/ReadMore";
 interface HistoryDetailsProps {
   appointment: any;
 }
@@ -28,7 +28,7 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
       if (appointment?.appointment_id) {
         setLoading(true);
         setError(null); // Reset error state
-        const token = localStorage.getItem("jwt"); // Move token inside to avoid dependency issues
+        const token = localStorage.getItem("jwt");
 
         try {
           const response = await fetch(
@@ -46,15 +46,12 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
             throw new Error("Failed to fetch appointment details");
 
           const data = await response.json();
-          console.log("API Response:", data);
-
           if (data && data.appointment) {
             setAppointmentDetails(data.appointment);
           } else {
             throw new Error("Invalid data structure");
           }
         } catch (error) {
-          console.error("Error fetching appointment details:", error);
           setError("Error fetching appointment details");
         } finally {
           setLoading(false);
@@ -62,9 +59,8 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
       }
     };
     fetchAppointmentsDetails();
-    console.log("API Response:", appointmentDetails);
-    console.log("appointment.appointment_id:", appointment.appointment_id);
   }, [showDialog]);
+
   return (
     <>
       <button
@@ -122,13 +118,30 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
                 <strong>Duration:</strong>{" "}
                 {appointmentDetails.appointment_duration} min
               </div>
-              <div>
-                <strong>Complaint:</strong>{" "}
-                {appointmentDetails.appointment_complaint}
-              </div>
-              <div>
-                <strong>Status:</strong> {appointmentDetails.appointment_status}
-              </div>
+
+              {/* Treatment Plan */}
+              {appointmentDetails.treatmentPlan && (
+                <div className="flex gap-2 flex-col">
+                  <div>
+                    <strong>Treatment Plan:</strong>{" "}
+                    {appointmentDetails.treatmentPlan.treatment_plan_operations}
+                  </div>
+                  <div>
+                    <strong>Status:</strong>{" "}
+                    {appointmentDetails.appointment_status}
+                  </div>
+                  <div>
+                    <strong>Complaint:</strong>{" "}
+                    {appointmentDetails.appointment_complaint ? (
+                      <ReadMore
+                        text={appointmentDetails.appointment_complaint}
+                      />
+                    ) : (
+                      "N/A"
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Appointment Results */}
               {appointmentDetails.appointmentResults &&
@@ -140,7 +153,6 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
                         <p key={index}>
                           Diagnosis: {result.appointment_diagnosis} <br />
                           Report: {result.appointment_report} <br />
-                          Last Updated: {formatDate(result.updated_at)}
                         </p>
                       )
                     )}
@@ -148,6 +160,8 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
                 )}
 
               {/* Medications */}
+            </div>
+            <div className="my-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
               {appointmentDetails.medications &&
                 appointmentDetails.medications.length > 0 && (
                   <div>
@@ -164,13 +178,6 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
                     )}
                   </div>
                 )}
-              {/* Treatment Plan */}
-              {appointmentDetails.treatmentPlan && (
-                <div>
-                  <strong>Treatment Plan:</strong>{" "}
-                  {appointmentDetails.treatmentPlan.treatment_plan_operations}
-                </div>
-              )}
             </div>
           </Card>
         ) : (

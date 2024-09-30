@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { formatDate } from "../../../utils/date";
+import ReadMore from "../../common/ReadMore";
 
 const AppointmentCard = ({
   appointment,
@@ -63,18 +64,14 @@ const AppointmentCard = ({
             <strong>Appointment Type:</strong>{" "}
             {appointment.appointment_type || "N/A"}
           </p>
-          <p>
+          <div>
             <strong>Complaint:</strong>{" "}
-            {appointment.appointment_complaint.length > 100 ? (
-              <span>
-                {appointment.appointment_complaint.substring(0, 100)}...
-              </span>
-            ) : appointment.appointment_complaint?.length > 0 ? (
-              appointment.appointment_complaint
+            {appointment.appointment_complaint ? (
+              <ReadMore text={appointment.appointment_complaint} />
             ) : (
               "N/A"
             )}
-          </p>
+          </div>
           <p>
             <strong>Settings Type:</strong>{" "}
             {appointment.appointment_settings_type || "N/A"}
