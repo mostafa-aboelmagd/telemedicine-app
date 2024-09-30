@@ -94,27 +94,22 @@ const DoctorBooking = () => {
   // Fetch patient appointments
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-
-    const fetchAppointments = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/appointments`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        setAppointments(data);
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/appointmentsHistory`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       }
-      console.log("appointments: ", appointments);
-    };
-
-    fetchAppointments();
+    )
+      .then((response) => response.json())
+      .then((response) =>
+        setAppointments(response?.appointments || ["No Appointment History"])
+      );
+    console.log("History Appointments: ", appointments);
   }, []);
 
   const handleDurationChange = (duration: number) =>

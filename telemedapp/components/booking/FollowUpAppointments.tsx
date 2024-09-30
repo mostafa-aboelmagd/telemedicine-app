@@ -101,7 +101,7 @@ const FollowUpAppointments: React.FC<FollowUpAppointmentsProps> = ({
                       </p>
                       <p>
                         <strong>Date & Time:</strong>{" "}
-                        {formatDate(appointment.appointment_day_hour)}
+                        {formatDate(appointment.doctor_availability_day_hour)}
                       </p>
                       <p>
                         <strong>Duration:</strong>{" "}
