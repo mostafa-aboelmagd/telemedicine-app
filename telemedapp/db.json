@@ -614,5 +614,567 @@
         }
       ]
     }
+  ],
+  "patientHistory": [
+    {
+      "id": "1",
+      "patientName": "Omar Alaa",
+      "isFollowUp": true,
+      "currentComplaint": "Headache",
+      "requestTime": "2024-09-20T10:00:00Z",
+      "appointmentHistory": [
+        {
+          "appId": "1",
+          "doctorName": "Dr. Ahmed",
+          "doctorSpecialty": "Neurologist",
+          "oldComplaint": "Headache",
+          "oldTime": "2024-09-10T10:00:00Z",
+          "details": {
+            "diagnosis": "Migraine",
+            "report": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "panadol",
+                "dose": "500mg",
+                "frequency": "2 times a day",
+                "start": "2024-09-20",
+                "end": "2024-09-30",
+                "notes": "Once after breakfast and dinner"
+              },
+              {
+                "name": "Insulin",
+                "dose": "30mg",
+                "frequency": "1 time a day",
+                "start": "2024-09-03",
+                "end": "2024-09-18",
+                "notes": "After lunch"
+              }
+            ],
+            "checks": [
+              {
+                "name": "X-Ray",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              },
+              {
+                "name": "MRI Scan",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": [
+              {
+                "name": "Surgery",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ]
+          }
+        },
+        {
+          "appId": "2",
+          "doctorName": "Dr. Ahmed",
+          "doctorSpecialty": "Neurologist",
+          "oldComplaint": "Headache",
+          "oldTime": "2024-09-10T10:00:00Z",
+          "details": {
+            "diagnosis": "Migraine",
+            "report": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "panadol",
+                "dose": "500mg",
+                "frequency": "2 times a day",
+                "start": "2024-09-20",
+                "end": "2024-09-30",
+                "notes": "Once after breakfast and dinner"
+              },
+              {
+                "name": "Insulin",
+                "dose": "30mg",
+                "frequency": "1 time a day",
+                "start": "2024-09-03",
+                "end": "2024-09-18",
+                "notes": "After lunch"
+              }
+            ],
+            "checks": [
+              {
+                "name": "X-Ray",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              },
+              {
+                "name": "MRI Scan",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": [
+              {
+                "name": "Surgery",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ]
+          }
+        },
+        {
+          "appId": "3",
+          "doctorName": "Dr. Ahmed",
+          "doctorSpecialty": "Neurologist",
+          "oldComplaint": "Headache",
+          "oldTime": "2024-09-10T10:00:00Z",
+          "details": {
+            "diagnosis": "Migraine",
+            "report": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "panadol",
+                "dose": "500mg",
+                "frequency": "2 times a day",
+                "start": "2024-09-20",
+                "end": "2024-09-30",
+                "notes": "Once after breakfast and dinner"
+              },
+              {
+                "name": "Insulin",
+                "dose": "30mg",
+                "frequency": "1 time a day",
+                "start": "2024-09-03",
+                "end": "2024-09-18",
+                "notes": "After lunch"
+              }
+            ],
+            "checks": [
+              {
+                "name": "X-Ray",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              },
+              {
+                "name": "MRI Scan",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": [
+              {
+                "name": "Surgery",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ]
+          }
+        },
+        {
+          "appId": "4",
+          "doctorName": "Dr. Ahmed",
+          "doctorSpecialty": "Neurologist",
+          "oldComplaint": "Headache",
+          "oldTime": "2024-09-10T10:00:00Z",
+          "details": {
+            "diagnosis": "Migraine",
+            "report": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "panadol",
+                "dose": "500mg",
+                "frequency": "2 times a day",
+                "start": "2024-09-20",
+                "end": "2024-09-30",
+                "notes": "Once after breakfast and dinner"
+              },
+              {
+                "name": "Insulin",
+                "dose": "30mg",
+                "frequency": "1 time a day",
+                "start": "2024-09-03",
+                "end": "2024-09-18",
+                "notes": "After lunch"
+              }
+            ],
+            "checks": [
+              {
+                "name": "X-Ray",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              },
+              {
+                "name": "MRI Scan",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": [
+              {
+                "name": "Surgery",
+                "link": "https://drive.google.com/file/d/15ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "patientName": "Sara Ali",
+      "isFollowUp": false,
+      "currentComplaint": "Back Pain",
+      "requestTime": "2024-09-19T14:00:00Z",
+      "appointmentHistory": [
+        {
+          "appId": "1",
+          "doctorName": "Dr. Sameh",
+          "doctorSpecialty": "Orthopedic",
+          "oldComplaint": "Neck Pain",
+          "oldTime": "2024-08-25T09:00:00Z",
+          "details": {
+            "diagnosis": "Disc Degeneration",
+            "report": "https://drive.google.com/file/d/16ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Ibuprofen",
+                "dose": "400mg",
+                "frequency": "3 times a day",
+                "start": "2024-09-19",
+                "end": "2024-09-29",
+                "notes": "After meals"
+              }
+            ],
+            "checks": [
+              {
+                "name": "CT Scan",
+                "link": "https://drive.google.com/file/d/16ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": []
+          }
+        },
+        {
+          "appId": "2",
+          "doctorName": "Dr. Sameh",
+          "doctorSpecialty": "Orthopedic",
+          "oldComplaint": "Neck Pain",
+          "oldTime": "2024-08-25T09:00:00Z",
+          "details": {
+            "diagnosis": "Disc Degeneration",
+            "report": "https://drive.google.com/file/d/16ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Ibuprofen",
+                "dose": "400mg",
+                "frequency": "3 times a day",
+                "start": "2024-09-19",
+                "end": "2024-09-29",
+                "notes": "After meals"
+              }
+            ],
+            "checks": [
+              {
+                "name": "CT Scan",
+                "link": "https://drive.google.com/file/d/16ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": []
+          }
+        },
+        {
+          "appId": "3",
+          "doctorName": "Dr. Sameh",
+          "doctorSpecialty": "Orthopedic",
+          "oldComplaint": "Neck Pain",
+          "oldTime": "2024-08-25T09:00:00Z",
+          "details": {
+            "diagnosis": "Disc Degeneration",
+            "report": "https://drive.google.com/file/d/16ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Ibuprofen",
+                "dose": "400mg",
+                "frequency": "3 times a day",
+                "start": "2024-09-19",
+                "end": "2024-09-29",
+                "notes": "After meals"
+              }
+            ],
+            "checks": [
+              {
+                "name": "CT Scan",
+                "link": "https://drive.google.com/file/d/16ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": []
+          }
+        },
+        {
+          "appId": "4",
+          "doctorName": "Dr. Sameh",
+          "doctorSpecialty": "Orthopedic",
+          "oldComplaint": "Neck Pain",
+          "oldTime": "2024-08-25T09:00:00Z",
+          "details": {
+            "diagnosis": "Disc Degeneration",
+            "report": "https://drive.google.com/file/d/16ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Ibuprofen",
+                "dose": "400mg",
+                "frequency": "3 times a day",
+                "start": "2024-09-19",
+                "end": "2024-09-29",
+                "notes": "After meals"
+              }
+            ],
+            "checks": [
+              {
+                "name": "CT Scan",
+                "link": "https://drive.google.com/file/d/16ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": []
+          }
+        },
+        {
+          "appId": "5",
+          "doctorName": "Dr. Sameh",
+          "doctorSpecialty": "Orthopedic",
+          "oldComplaint": "Neck Pain",
+          "oldTime": "2024-08-25T09:00:00Z",
+          "details": {
+            "diagnosis": "Disc Degeneration",
+            "report": "https://drive.google.com/file/d/16ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Ibuprofen",
+                "dose": "400mg",
+                "frequency": "3 times a day",
+                "start": "2024-09-19",
+                "end": "2024-09-29",
+                "notes": "After meals"
+              }
+            ],
+            "checks": [
+              {
+                "name": "CT Scan",
+                "link": "https://drive.google.com/file/d/16ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "patientName": "Mohamed Ezz",
+      "isFollowUp": true,
+      "currentComplaint": "Chest Pain",
+      "requestTime": "2024-09-21T12:00:00Z",
+      "appointmentHistory": [
+        {
+          "appId": "1",
+          "doctorName": "Dr. Maha",
+          "doctorSpecialty": "Cardiologist",
+          "oldComplaint": "High Blood Pressure",
+          "oldTime": "2024-08-15T10:00:00Z",
+          "details": {
+            "diagnosis": "Hypertension",
+            "report": "https://drive.google.com/file/d/17ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Lisinopril",
+                "dose": "20mg",
+                "frequency": "1 time a day",
+                "start": "2024-09-21",
+                "end": "2024-10-21",
+                "notes": "After breakfast"
+              }
+            ],
+            "checks": [
+              {
+                "name": "ECG",
+                "link": "https://drive.google.com/file/d/17ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": []
+          }
+        },
+        {
+          "appId": "2",
+          "doctorName": "Dr. Maha",
+          "doctorSpecialty": "Cardiologist",
+          "oldComplaint": "High Blood Pressure",
+          "oldTime": "2024-08-15T10:00:00Z",
+          "details": {
+            "diagnosis": "Hypertension",
+            "report": "https://drive.google.com/file/d/17ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Lisinopril",
+                "dose": "20mg",
+                "frequency": "1 time a day",
+                "start": "2024-09-21",
+                "end": "2024-10-21",
+                "notes": "After breakfast"
+              }
+            ],
+            "checks": [
+              {
+                "name": "ECG",
+                "link": "https://drive.google.com/file/d/17ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": []
+          }
+        },
+        {
+          "appId": "3",
+          "doctorName": "Dr. Maha",
+          "doctorSpecialty": "Cardiologist",
+          "oldComplaint": "High Blood Pressure",
+          "oldTime": "2024-08-15T10:00:00Z",
+          "details": {
+            "diagnosis": "Hypertension",
+            "report": "https://drive.google.com/file/d/17ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Lisinopril",
+                "dose": "20mg",
+                "frequency": "1 time a day",
+                "start": "2024-09-21",
+                "end": "2024-10-21",
+                "notes": "After breakfast"
+              }
+            ],
+            "checks": [
+              {
+                "name": "ECG",
+                "link": "https://drive.google.com/file/d/17ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": []
+          }
+        },
+        {
+          "appId": "4",
+          "doctorName": "Dr. Maha",
+          "doctorSpecialty": "Cardiologist",
+          "oldComplaint": "High Blood Pressure",
+          "oldTime": "2024-08-15T10:00:00Z",
+          "details": {
+            "diagnosis": "Hypertension",
+            "report": "https://drive.google.com/file/d/17ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Lisinopril",
+                "dose": "20mg",
+                "frequency": "1 time a day",
+                "start": "2024-09-21",
+                "end": "2024-10-21",
+                "notes": "After breakfast"
+              }
+            ],
+            "checks": [
+              {
+                "name": "ECG",
+                "link": "https://drive.google.com/file/d/17ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "patientName": "Nour Hassan",
+      "isFollowUp": true,
+      "currentComplaint": "Fatigue",
+      "requestTime": "2024-09-22T16:00:00Z",
+      "appointmentHistory": [
+        {
+          "appId": "1",
+          "doctorName": "Dr. Hanan",
+          "doctorSpecialty": "Endocrinologist",
+          "oldComplaint": "Weight Loss",
+          "oldTime": "2024-07-30T11:00:00Z",
+          "details": {
+            "diagnosis": "Thyroid Disorder",
+            "report": "https://drive.google.com/file/d/18ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Levothyroxine",
+                "dose": "50mcg",
+                "frequency": "1 time a day",
+                "start": "2024-09-22",
+                "end": "2024-10-22",
+                "notes": "Before breakfast"
+              }
+            ],
+            "checks": [
+              {
+                "name": "Blood Test",
+                "link": "https://drive.google.com/file/d/18ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view"
+              }
+            ],
+            "operations": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "patientName": "Alaa Reda",
+      "isFollowUp": false,
+      "currentComplaint": "Abdominal Pain",
+      "requestTime": "2024-09-23T09:00:00Z",
+      "appointmentHistory": [
+        {
+          "appId": "1",
+          "doctorName": "Dr. Nabil",
+          "doctorSpecialty": "Gastroenterologist",
+          "oldComplaint": "Nausea",
+          "oldTime": "2024-08-10T14:00:00Z",
+          "details": {
+            "diagnosis": "Gastritis",
+            "report": "https://drive.google.com/file/d/19ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Omeprazole",
+                "dose": "20mg",
+                "frequency": "1 time a day",
+                "start": "2024-09-23",
+                "end": "2024-09-30",
+                "notes": "Before breakfast"
+              }
+            ],
+            "checks": [],
+            "operations": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "patientName": "Karim Adel",
+      "isFollowUp": false,
+      "currentComplaint": "Cough",
+      "requestTime": "2024-09-24T13:00:00Z",
+      "appointmentHistory": [
+        {
+          "appId": "1",
+          "doctorName": "Dr. Yasmine",
+          "doctorSpecialty": "Pulmonologist",
+          "oldComplaint": "Breathlessness",
+          "oldTime": "2024-09-05T15:00:00Z",
+          "details": {
+            "diagnosis": "Bronchitis",
+            "report": "https://drive.google.com/file/d/20ZBUIn4lg8im3fzsYh5gx_fWCTtQNevM/view",
+            "medications": [
+              {
+                "name": "Salbutamol",
+                "dose": "2mg",
+                "frequency": "3 times a day",
+                "start": "2024-09-24",
+                "end": "2024-09-30",
+                "notes": "After meals"
+              }
+            ],
+            "checks": [],
+            "operations": []
+          }
+        }
+      ]
+    }
   ]
 }

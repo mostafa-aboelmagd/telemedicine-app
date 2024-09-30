@@ -58,9 +58,10 @@ const DoctorBooking = () => {
 
     const fetchDoctorAvailability = async () => {
       if (doctor?.id) {
+        console.log("doctor.id: ", doctor.id);
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/appointmentdetails/${doctor.id}`,
+            `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/${doctor.id}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -110,6 +111,7 @@ const DoctorBooking = () => {
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }
+      console.log("appointments: ", appointments);
     };
 
     fetchAppointments();
@@ -156,7 +158,7 @@ const DoctorBooking = () => {
         />
       </div>
 
-      <div className="flex gap-8 flex-col bg-white rounded-3xl shadow-md p-6 min-w-[350px] lg:min-w-[650px] md:h-[450px]">
+      <div className="flex gap-8 flex-col bg-white rounded-3xl shadow-md p-6 min-w-[350px] lg:min-w-[650px] lg:h-[450px]">
         <WeekCalendar
           selectedDate={selectedDate}
           handleDateSelect={handleDateSelect}

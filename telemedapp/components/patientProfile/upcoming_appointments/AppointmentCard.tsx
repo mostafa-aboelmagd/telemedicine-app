@@ -65,7 +65,15 @@ const AppointmentCard = ({
           </p>
           <p>
             <strong>Complaint:</strong>{" "}
-            {appointment.appointment_complaint || "N/A"}
+            {appointment.appointment_complaint.length > 100 ? (
+              <span>
+                {appointment.appointment_complaint.substring(0, 100)}...
+              </span>
+            ) : appointment.appointment_complaint?.length > 0 ? (
+              appointment.appointment_complaint
+            ) : (
+              "N/A"
+            )}
           </p>
           <p>
             <strong>Settings Type:</strong>{" "}

@@ -2,7 +2,15 @@ const formatDate = (date: Date) => {
     const d = new Date(date);
     return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
-
+const formatDateString = (date: string) => {
+    const d = new Date(date);
+    return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+}
+const getTimeString = (date: string) => {
+    const d = new Date(date);
+    let time = d.toLocaleTimeString();
+    return time;
+};
 const unFormatDate = (date: string) => { 
     const d = new Date(date);
     return d;
@@ -22,4 +30,4 @@ const getWeekStartAndEnd = (today:Date) => {
     return week ;
 };
 
-export { formatDate, unFormatDate, getWeekStartAndEnd };
+export { formatDate, unFormatDate, getWeekStartAndEnd, getTimeString, formatDateString };
