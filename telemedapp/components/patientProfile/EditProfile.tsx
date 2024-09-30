@@ -38,26 +38,38 @@ function EditProfile() {
     birthYear: "",
   });
 
+  let token: string | null = "";
+
   const [changedField, setChangedField] = useState("");
 
   const [formValid, setFormValid] = useState(false);
 
   const [loading, setLoading] = useState(true);
 
+<<<<<<< HEAD
   useEffect(() => {
     const token = sessionStorage.getItem("jwt");
+=======
+  const [error, setError] = useState(false);
+
+
+
+  useEffect(() => {
+    token = localStorage.getItem("jwt");
+>>>>>>> f5fc4e6 (.)
     fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
       mode: "cors", headers: {
-        "Authorization": "Bearer " + token 
-      }})
-           .then(response => response.json())
-           .then(response => (setProfileData(() => (response.formattedPatient))))
-           .finally(() => setLoading(false));
+        "Authorization": "Bearer " + token
+      }
+    })
+      .then(response => response.json())
+      .then(response => (setProfileData(() => (response.formattedPatient))))
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
     let languagesString = profileData.languages.join(" ");
-    const tempObj = {...profileData, languages: languagesString};
+    const tempObj = { ...profileData, languages: languagesString };
     setFormData(() => tempObj);
   }, [profileData]);
 
@@ -65,13 +77,13 @@ function EditProfile() {
     validateForm();
   }, [formData]);
 
-	const formFields = [
-    {name : "firstName", title: "First Name", type:"text"},
-    {name : "lastName", title : "Last Name", type:"text"},
-    {name: "email", title: "Email", type: "email"},
-    {name : "phone", title : "Phone Number", type:"tel"},
-    {name: "languages", title:"Languages (Space Between Each Language)", type:"text"},
-    {name: "birthYear", title:"Birth Year", type:"number"},
+  const formFields = [
+    { name: "firstName", title: "First Name", type: "text" },
+    { name: "lastName", title: "Last Name", type: "text" },
+    { name: "email", title: "Email", type: "email" },
+    { name: "phone", title: "Phone Number", type: "tel" },
+    { name: "languages", title: "Languages (Space Between Each Language)", type: "text" },
+    { name: "birthYear", title: "Birth Year", type: "number" },
   ];
 
   const submitButtonClass = [
@@ -97,7 +109,7 @@ function EditProfile() {
       if(errorMessage.firstName === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, firstName: "First Name Must Consist Of Only Characters",}));
+      setErrorMessage((prevError) => ({ ...prevError, firstName: "First Name Must Consist Of Only Characters", }));
     }
 
     else {
@@ -119,7 +131,7 @@ function EditProfile() {
       if(errorMessage.lastName === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, lastName: "Last Name Must Consist Of Only Characters",}));
+      setErrorMessage((prevError) => ({ ...prevError, lastName: "Last Name Must Consist Of Only Characters", }));
     }
 
     else {
@@ -163,7 +175,7 @@ function EditProfile() {
       if(errorMessage.phone === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, phone: "Current Phone Number Is Not valid!",}));
+      setErrorMessage((prevError) => ({ ...prevError, phone: "Current Phone Number Is Not valid!", }));
     }
 
     else {
@@ -177,27 +189,27 @@ function EditProfile() {
       setFormData((prevForm) => ({...prevForm})); 
     }
   };
-  
+
   const validateLanguages = () => {
     let regex = /^[a-zA-Z\s]*$/;
     let changedValidation = false;
 
-    if(formData.languages && (!regex.test(formData.languages))) {
-      if(errorMessage.languages === "") {
+    if (formData.languages && (!regex.test(formData.languages))) {
+      if (errorMessage.languages === "") {
         changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, languages: "Languages Must Consist Of Only Characters",}));
+      setErrorMessage((prevError) => ({ ...prevError, languages: "Languages Must Consist Of Only Characters", }));
     }
 
     else {
-      if(errorMessage.languages !== "") {
-        changedValidation = true; 
+      if (errorMessage.languages !== "") {
+        changedValidation = true;
       }
-      setErrorMessage((prevError) => ({...prevError, languages: "",}));
+      setErrorMessage((prevError) => ({ ...prevError, languages: "", }));
     }
 
-    if(changedValidation && validateFieldsChosen()) {
-      setFormData((prevForm) => ({...prevForm}));  // Extra rerender needed to correct the current input error status
+    if (changedValidation && validateFieldsChosen()) {
+      setFormData((prevForm) => ({ ...prevForm }));  // Extra rerender needed to correct the current input error status
     }
   };
 
@@ -270,15 +282,27 @@ function EditProfile() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value} = e.target;
-    setFormData((prevForm) => ({...prevForm, [name]: value,}));
+    const { name, value } = e.target;
+    setFormData((prevForm) => ({ ...prevForm, [name]: value, }));
     setChangedField(() => (name));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const languagesArr = formData.languages.split(" ");
+<<<<<<< HEAD
     const sentObj = {...formData, "languages" : languagesArr};
+=======
+    const sentObj = { ...formData, "languages": languagesArr };
+
+    for (const [key, value] of Object.entries(profileData)) {
+      if (value === sentObj[key as keyof typeof sentObj]) {
+        delete sentObj[key as keyof typeof sentObj];
+      }
+    }
+    console.log(sentObj);
+
+>>>>>>> f5fc4e6 (.)
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/edit/info`, {
         method: "PUT",
@@ -302,7 +326,7 @@ function EditProfile() {
 
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
-      {loading ? <CircularProgress className="absolute top-1/2" /> : 
+      {loading ? <CircularProgress className="absolute top-1/2" /> :
         <>
           <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
             <Image src={userImage} height={120} width={120} alt="User Icon" className="mb-1"></Image>
@@ -343,31 +367,31 @@ function EditProfile() {
                   );
                 })}
                 <div className="mb-3">
-                    <p className="font-semibold">Gender</p>
-                    <div className="flex gap-8">
-                      <label>
-                        <input
-                          type="radio"
-                          name="gender"
-                          value="Male"
-                          onChange={handleChange}
-                          className="radio align-middle mb-[3px] mr-1"
-                          checked={formData.gender === "Male"}
-                        />
-                        Male
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="gender"
-                          value="Female"
-                          onChange={handleChange}
-                          className="radio align-middle mb-[3px] mr-1"
-                          checked={formData.gender === "Female"}
-                        />
-                        Female
-                      </label>
-                    </div>
+                  <p className="font-semibold">Gender</p>
+                  <div className="flex gap-8">
+                    <label>
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="Male"
+                        onChange={handleChange}
+                        className="radio align-middle mb-[3px] mr-1"
+                        checked={formData.gender === "Male"}
+                      />
+                      Male
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="Female"
+                        onChange={handleChange}
+                        className="radio align-middle mb-[3px] mr-1"
+                        checked={formData.gender === "Female"}
+                      />
+                      Female
+                    </label>
+                  </div>
                 </div>
                 <div className="mb-4">
                   <button type="submit" className={submitButtonClass} disabled={!formValid}>Save Changes</button>
