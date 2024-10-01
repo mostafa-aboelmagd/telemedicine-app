@@ -39,5 +39,35 @@ const retrieveUser = async (email) => {
         return false;
     }
 };
+const retrieveUserState = async (UserID, UserRole) => {
+    try {
+        if (UserRole === 'Doctor') {
+            console.log('User is a doctor');
+            const result = await pool.query('SELECT doctor_account_state FROM doctor WHERE doctor_user_id_reference = $1', [UserID]);
+            if (result.rows.length) {
+                const state = result.rows[0].doctor_account_state;
+                return state;
+            }
+            return 'Doctor state not found';
+        } else if (UserRole === 'Patient') {
+            console.log('User is a patient');
+            const result = await pool.query('SELECT patient_account_state FROM patient WHERE patient_user_id_reference = $1', [UserID]);
+            if (result.rows.length) {
+                const state = result.rows[0].patient_account_state;
+                return state;
+            }
+            return 'Patient state not found';
+        } else if (UserRole === 'Admin') {
+            console.log('User is an admin');
+            return 'Active'; // Assuming admin accounts are always active
+        } else {
+            console.log('User role not recognized');
+            return false;
+        }
+    } catch (error) {
+        console.error(error.stack);
+        return false;
+    }
+};
 
-module.exports = { retrieveUser };
+module.exports = { retrieveUser, retrieveUserState };
