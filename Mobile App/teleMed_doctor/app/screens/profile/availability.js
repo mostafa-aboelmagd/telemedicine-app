@@ -93,8 +93,8 @@ export default function Availability ({ navigation }) {
                     [hour]: true
                   })); 
             }
-            console.log(newSlots)
-            console.log(hours['05'])
+            // console.log(newSlots)
+            // console.log(hours['05'])
         } else {
             if (slots.includes(codedSlot)) {
                 if(removedSlots.includes(codedSlot)){
@@ -115,7 +115,7 @@ export default function Availability ({ navigation }) {
                     ...prevDictionary,
                     [hour]: false
                   }));            }
-            console.log(removedSlots)
+            // console.log(removedSlots)
         }
     }
 
@@ -156,7 +156,6 @@ export default function Availability ({ navigation }) {
           const result = await response.json();
         //   console.log(result.timeslots)
           setSlots(result.timeslots);
-          
 
         } catch (error) {
           console.error('Error fetching doctor availability:', error);
@@ -167,7 +166,7 @@ export default function Availability ({ navigation }) {
     
       useEffect(() => {
         getAvailability();
-      }, []);
+      }, [loading]);
     
 
     // adding doctor availability
@@ -197,6 +196,7 @@ export default function Availability ({ navigation }) {
                 [key]: false
                 }), {});
                 setHours(newDictionary);
+                setLoading(true);
 
             } catch (error) {
                 console.error('Could set new slots:', error);
@@ -230,6 +230,7 @@ export default function Availability ({ navigation }) {
                     [key]: false
                     }), {});
                 setHours(newDictionary);
+                setLoading(true);
 
             } catch (error) {
                 console.error('Could remove slots:', error);
