@@ -84,6 +84,9 @@ export default function Profile({ navigation }) {
   const availability = () => {
     navigation.navigate('availability');
   };
+  const changePassword = () => {
+    navigation.navigate('changePassword');
+  };
 
   const edit_info = (info) => {
     navigation.navigate('edit info', 
@@ -197,7 +200,9 @@ export default function Profile({ navigation }) {
 
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Password</Text>
-          <Text style={styles.passwordChangeText}>Change Password</Text>
+          <Custombutton onPress={()=>{changePassword()}}>
+            <Text style={styles.passwordChangeText}>Change Password</Text>
+          </Custombutton>
         </View>
 
         <TouchableOpacity

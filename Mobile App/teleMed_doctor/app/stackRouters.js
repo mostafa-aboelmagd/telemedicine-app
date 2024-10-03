@@ -5,6 +5,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Index from './screens/welcomePage/index';
 import SignIn from './screens/welcomePage/signIn';
 import Register from './screens/welcomePage/register'
+import Register1 from './screens/welcomePage/register1'
+import Register2 from './screens/welcomePage/register2'
+
 import VSupport from './screens/welcomePage/visitor_support';
 import Pending from './screens/welcomePage/pending';
 
@@ -25,6 +28,7 @@ import SubmitMedications from './screens/appointmentDetails/submitDetails/submit
 import FurtherDetails from './screens/appointmentDetails/submitDetails/furtherDetails';
 
 import Availability from './screens/profile/availability';
+import ChangePassword from './screens/profile/changePassword';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +42,10 @@ export default function StackRouters() {
             <Stack.Screen name='register' component={Register} options={{ headerShown : false}} />
             <Stack.Screen name='pending' component={Pending} options={{ headerShown : false}} />
             <Stack.Screen name='visitor support' component={VSupport} options={{ headerShown : false}} />
+            {/* welcome page */}
+            <Stack.Screen name='register1' component={Register1} options={{ headerShown : false}} />
+            <Stack.Screen name='register2' component={Register2} options={{ headerShown : false}} />
+
 
             {/* navigation bar */}
             <Stack.Screen name='home page' component={HomePage} options={{ headerShown : false}} />
@@ -60,6 +68,7 @@ export default function StackRouters() {
             
             {/* Doctor profile */}
             <Stack.Screen name='availability' component={Availability} options={{ headerShown : false}} />
+            <Stack.Screen name='changePassword' component={ChangePassword} options={{ headerShown : false}} />
         </Stack.Navigator>
     </NavigationContainer>
   );
