@@ -80,7 +80,7 @@ export default function Availability ({ navigation }) {
         const key = Object.keys(days).find(key => days[key] === day);
         const codedSlot = key + '_' + hour + '_' + state
         if (add){
-            if (newSlots.includes(codedSlot) || slots.includes(codedSlot)) {
+            if (newSlots.includes(codedSlot) || slots && slots.includes(codedSlot)) {
                 newSlots = newSlots.filter(slot => slot !== codedSlot);
                 setHours((prevDictionary) => ({
                     ...prevDictionary,
@@ -120,7 +120,7 @@ export default function Availability ({ navigation }) {
     }
 
     const getStyle = (slotStyle) => {
-        console.log(hours[slotStyle])
+        // console.log(hours[slotStyle])
         if (add) {
             if (filtered(slotStyle)) {
                 return styles.slot;

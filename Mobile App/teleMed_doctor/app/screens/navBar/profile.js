@@ -7,6 +7,7 @@ import Footer from '../../components/footer';
 import CustomScroll from '../../components/scroll';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 let sixtyMinPrice_
 let thirtyMinPrice_
@@ -41,6 +42,7 @@ export default function Profile({ navigation }) {
 
       if (!response.ok) {
         console.log(response);
+        navigation.navigate('sign in')
         throw new Error('Network response was not ok');
       }
 
@@ -49,22 +51,17 @@ export default function Profile({ navigation }) {
       setDoctorInfo(data.formattedDoctor);
     } catch (error) {
       console.error('Error fetching doctor info:', error);
+      navigation.navigate('sign in')
     } finally {
       setIsLoading(false);
     }
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchDoctorInfo();
+    }, []) // Empty dependency array
+  );
 
-  useEffect(() => {
-    fetchDoctorInfo();
-  }, []);
-
-  // const logOut = async () => {
-  //   await AsyncStorage.removeItem('userToken');
-  //   const token = await getToken()
-  //   if (!token) {
-  //     navigation.navigate('sign in');
-  //   }
-  // };
   const logOut = async () => {
     try {
       // Remove token from AsyncStorage
@@ -88,11 +85,12 @@ export default function Profile({ navigation }) {
     navigation.navigate('availability');
   };
 
-  const renderProfileInfo = () => {
-    if (isLoading) {
-      return <Text>Loading...</Text>;
-    }
+  const edit_info = (info) => {
+    navigation.navigate('edit info', 
+      {info: info})
+  }
 
+  const renderProfileInfo = () => {
     const {
       firstName,
       lastName,
@@ -108,22 +106,25 @@ export default function Profile({ navigation }) {
     } = doctorInfo;
     sixtyMinPrice_ = sixtyMinPrice
     thirtyMinPrice_ = thirtyMinPrice
+    // console.log(doctorInfo)
     return (
       <View style={styles.card}>
         <View style={styles.profileRow}>
-          <Image source={image ? { uri: image } : require('../../../assets/images/pp.png')} style={styles.profileImage} />
+          <View>
+            <Image source={image ? { uri: image } : require('../../../assets/images/pp.png')} style={styles.profileImage} />
+            <TouchableOpacity onPress={() => edit_info(doctorInfo)}>
+              <Text style={styles.editButtonText}>Edit Profile</Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.profileInfo}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Text style={styles.name}>
                 Dr. {firstName} {lastName}
               </Text>
-              <TouchableOpacity style={styles.editButton}>
-                <Text style={styles.editButtonText}>Edit Profile</Text>
-              </TouchableOpacity>
+              
             </View>
 
             <View style={styles.infoRow}>
-
               <MaterialIcons name="medical-services" size={20} />
               <Text style={styles.infoText}>Specialty: {specialization}</Text>
             </View>
@@ -141,14 +142,20 @@ export default function Profile({ navigation }) {
       </View>
     );
   };
+  
+  if (isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Loading...</Text>
+      </View>
+      );
+  }
+
 
   return (
     <SafeArea>
       <CustomScroll>
         <View style={[styles.headerRow]}>
-          {/* <TouchableOpacity>
-            <Ionicons name="arrow-back" size={35} style={styles.backIcon} />
-          </TouchableOpacity> */}
           <Text style={styles.title}>Doctor Profile</Text>
           <View style={{ width: 48 }} />
         </View>
@@ -240,6 +247,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
+    marginBottom: 20
   },
   profileInfo: {
     marginLeft: 12,
@@ -249,13 +257,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  editButton: {
-    alignSelf: 'flex-end',
-  },
+  // editButton: {
+  //   alignSelf: 'flex-end',
+  // },
   editButtonText: {
     color: '#1565c0',
     fontSize: 14,
-    marginLeft: '30%',
+    borderWidth: 1,
+    borderColor: '#1565c0',
+    width: 80,
+    textAlign: 'center',
+    borderRadius: 5,
   },
   infoRow: {
     flexDirection: 'row',
