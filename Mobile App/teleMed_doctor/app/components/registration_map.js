@@ -30,7 +30,7 @@ const map = async (finalData) => {
       category: interest.category,
       name: interest.name,
     })),
-    selectedLanguages: finalData.selectedLanguages,
+    Languages: finalData.selectedLanguages,
   };
  
   return mappedData;
