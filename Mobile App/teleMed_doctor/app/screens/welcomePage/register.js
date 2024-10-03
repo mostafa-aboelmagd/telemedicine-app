@@ -6,18 +6,18 @@ import {
   Alert,
   TouchableOpacity,
   Pressable,
-  ScrollView,
 } from "react-native";
 import { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import SafeArea from "../../components/safeArea";
 import Scroll from "../../components/scroll";
 import Custombutton from "../../components/button";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import CustomTitle from "../../components/title";
 import DropdownMenu from "../../components/dropdown";
+import LocalStorage from "../../components/LocalStorage";
 import countries from "../../components/DropDownOptions";
-
 
 export default function Register({ navigation }) {
   const [Fname, setFName] = useState("");
@@ -33,26 +33,43 @@ export default function Register({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [speciality, setSpeciality] = useState("");
   const [birthdate, setBirthdate] = useState("");
+
   const screen2 = () => {
-    if (true
-      // Fname &&
-      // Lname &&
-      // email &&
-      // password &&
-      // conf &&
-      // phone &&
-      // gender &&
-      // country &&
-      // city &&
-      // location &&
-      // speciality
+    if (
+      Fname &&
+      Lname &&
+      email &&
+      password &&
+      conf &&
+      phone &&
+      gender &&
+      country &&
+      city &&
+      location &&
+      speciality
     ) {
+      const personalInfo = {
+        Fname,
+        Lname,
+        email,
+        password,
+        phone,
+        gender:gender.label,
+        country:country.label,
+        city:city.label,
+        location,
+        speciality,
+        birthdate,
+      };
+      console.log(personalInfo);
+      console.log(JSON.stringify(personalInfo));
+      LocalStorage.setItem('personalInfo', personalInfo);
       navigation.navigate("register1");
     } else {
       Alert.alert("All fields are required!");
     }
   };
-// set gender options.
+  // set gender options.
   const genderOptions = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
@@ -120,15 +137,15 @@ export default function Register({ navigation }) {
       ],
     },
   ];
-// navigate to login page
+  // navigate to login page
   const login = () => {
     navigation.navigate("sign in");
   };
-// navigate to support page
+  // navigate to support page
   const vsupport = () => {
     navigation.navigate("visitor support");
   };
-  // handle selections of country from the array 
+  // handle selections of country from the array
   const handleCountrySelect = (country) => {
     setCountry(country);
     setCity(null);
@@ -141,148 +158,148 @@ export default function Register({ navigation }) {
     // input fields are
     <SafeArea>
       <Scroll>
-          <View style={styles.container}>
+        <View style={styles.container}>
+          <View>
+            <CustomTitle>Register</CustomTitle>
+            <View style={[styles.container3, { marginTop: "20%" }]}>
+              <TextInput
+                placeholder="First Name"
+                value={Fname}
+                onChangeText={setFName}
+                style={styles.input}
+              />
+            </View>
+            <View style={[styles.container3]}>
+              <TextInput
+                placeholder="Last Name"
+                value={Lname}
+                onChangeText={setLName}
+                style={styles.input}
+              />
+            </View>
+            <View style={styles.container3}>
+              <TextInput
+                placeholder="example@gmail.com"
+                keyboardType="email-address"
+                inputType="email"
+                value={email}
+                onChangeText={setEmail}
+                style={styles.input}
+              />
+            </View>
+            <View style={styles.container3}>
+              <TextInput
+                placeholder="phone number"
+                keyboardType="phone"
+                inputType="phone"
+                value={phone}
+                onChangeText={setPhone}
+                style={styles.input}
+              />
+            </View>
+            <View style={styles.container3}>
+              <TextInput
+                placeholder="Birth Date"
+                keyboardType="Birth Date"
+                inputType="Birth Date"
+                value={birthdate}
+                onChangeText={setBirthdate}
+                style={styles.input}
+              />
+            </View>
             <View>
-              <CustomTitle>Register</CustomTitle>
-              <View style={[styles.container3, { marginTop: "20%" }]}>
-                <TextInput
-                  placeholder="First Name"
-                  value={Fname}
-                  onChange={setFName}
-                  style={styles.input}
-                />
-              </View>
-              <View style={[styles.container3]}>
-                <TextInput
-                  placeholder="Last Name"
-                  value={Lname}
-                  onChange={setLName}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.container3}>
-                <TextInput
-                  placeholder="example@gmail.com"
-                  keyboardType="email-address"
-                  inputType="email"
-                  value={email}
-                  onChange={setEmail}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.container3}>
-                <TextInput
-                  placeholder="phone number"
-                  keyboardType="phone"
-                  inputType="phone"
-                  value={phone}
-                  onChange={setPhone}
-                  style={styles.input}
-                />
-              </View>
-              <View style={styles.container3}>
-                <TextInput
-                  placeholder="Birth Date"
-                  keyboardType="Birth Date"
-                  inputType="Birth Date"
-                  value={birthdate}
-                  onChange={setBirthdate}
-                  style={styles.input}
-                />
-              </View>
-              <View>
+              <DropdownMenu
+                options={genderOptions}
+                onSelect={setGender}
+                placeholder="Select gender"
+              />
+            </View>
+            <View>
+              <DropdownMenu
+                options={countries}
+                onSelect={handleCountrySelect}
+                placeholder="Select a country"
+              />
+              {country && (
                 <DropdownMenu
-                  options={genderOptions}
-                  onSelect={setGender}
-                  placeholder="Select gender"
+                  options={country ? country.cities : []}
+                  onSelect={handleCitySelect}
+                  placeholder="Select a city"
+                  renderItem={({ item }) => <Text>{item.label}</Text>}
                 />
-              </View>
-              <View>
-                <DropdownMenu
-                  options={countries}
-                  onSelect={handleCountrySelect}
-                  placeholder="Select a country"
-                />
-                {country && (
-                  <DropdownMenu
-                    options={country ? country.cities : []}
-                    onSelect={handleCitySelect}
-                    placeholder="Select a city"
-                    renderItem={({ item }) => <Text>{item.label}</Text>}
-                  />
-                )}
-              </View>
-              <View style={styles.container3}>
-                <TextInput
-                  placeholder="location"
-                  keyboardType="location"
-                  inputType="location"
-                  value={location}
-                  onChange={setLocation}
-                  style={styles.input}
-                />
-              </View>
-
-              <View style={styles.container3}>
-                <TextInput
-                  placeholder="Your Password"
-                  secureTextEntry={!showPassword}
-                  value={password}
-                  onChange={setPassword}
-                  style={styles.input}
-                />
-              </View>
-
-              <View style={styles.container3}>
-                <TextInput
-                  placeholder="Confirm your Password"
-                  secureTextEntry={!showPassword}
-                  value={conf}
-                  onChange={setConf}
-                  style={styles.input}
-                />
-                <TouchableOpacity
-                  style={styles.icon}
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  <MaterialIcons
-                    name={showPassword ? "visibility" : "visibility-off"}
-                    size={20}
-                    color="gray"
-                  />
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.container3}>
-                <TextInput
-                  placeholder="Speciality"
-                  value={speciality}
-                  onChange={setSpeciality}
-                  style={styles.input}
-                />
-              </View>
-
-              <View style={styles.row}>
-                <Text style={styles.text3}>Already have an account?</Text>
-                <Pressable style={styles.link} onPress={login}>
-                  <Text style={styles.sign}> Sign in </Text>
-                </Pressable>
-              </View>
+              )}
+            </View>
+            <View style={styles.container3}>
+              <TextInput
+                placeholder="location"
+                keyboardType="location"
+                inputType="location"
+                value={location}
+                onChangeText={setLocation}
+                style={styles.input}
+              />
             </View>
 
-            <View style={{ width: "90%" }}>
-              <Custombutton onPress={screen2}>
-                <Text>Next </Text>
-              </Custombutton>
+            <View style={styles.container3}>
+              <TextInput
+                placeholder="Your Password"
+                secureTextEntry={!showPassword}
+                value={password}
+                onChangeText={setPassword}
+                style={styles.input}
+              />
             </View>
-            <TouchableOpacity
-              onPress={vsupport}
-              style={{ alignItems: "center", marginTop: "10%" }}
-            >
-              <AntDesign name="customerservice" size={40} color="black" />
-              <Text style={{ fontWeight: "bold" }}>Support</Text>
-            </TouchableOpacity>
+
+            <View style={styles.container3}>
+              <TextInput
+                placeholder="Confirm your Password"
+                secureTextEntry={!showPassword}
+                value={conf}
+                onChangeText={setConf}
+                style={styles.input}
+              />
+              <TouchableOpacity
+                style={styles.icon}
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <MaterialIcons
+                  name={showPassword ? "visibility" : "visibility-off"}
+                  size={20}
+                  color="gray"
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.container3}>
+              <TextInput
+                placeholder="Speciality"
+                value={speciality}
+                onChangeText={setSpeciality}
+                style={styles.input}
+              />
+            </View>
+
+            <View style={styles.row}>
+              <Text style={styles.text3}>Already have an account?</Text>
+              <Pressable style={styles.link} onPress={login}>
+                <Text style={styles.sign}> Sign in </Text>
+              </Pressable>
+            </View>
           </View>
+
+          <View style={{ width: "90%" }}>
+            <Custombutton onPress={screen2}>
+              <Text>Next </Text>
+            </Custombutton>
+          </View>
+          <TouchableOpacity
+            onPress={vsupport}
+            style={{ alignItems: "center", marginTop: "10%" }}
+          >
+            <AntDesign name="customerservice" size={40} color="black" />
+            <Text style={{ fontWeight: "bold" }}>Support</Text>
+          </TouchableOpacity>
+        </View>
       </Scroll>
     </SafeArea>
   );
@@ -304,7 +321,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "lightgray",
     borderWidth: 1,
-    textAlign: 'center', // Centers the placeholder text
+    textAlign: "center", // Centers the placeholder text
     margin: 10,
     backgroundColor: "white",
   },

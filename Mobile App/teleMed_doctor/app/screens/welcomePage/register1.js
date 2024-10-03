@@ -4,9 +4,7 @@ import {
   Text,
   View,
   TextInput,
-  Alert,
-  TouchableOpacity,
-  Pressable,
+  TouchableOpacity
 } from "react-native";
 import { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -16,12 +14,36 @@ import Custombutton from "../../components/button";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import CustomTitle from "../../components/title";
 import DatePicker from "react-native-date-picker";
+import LocalStorage from "../../components/LocalStorage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Register1({ navigation }) {
   const [certificates, setCertificates] = useState([]);
   const [experiences, setExperiences] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date()); // Store selected date
+
+  const screen3 = () => {
+    if (
+      certificates &&
+      experiences
+    ) {
+      LocalStorage.setItem("certificates", certificates);
+      LocalStorage.setItem("experiences", experiences);
+      LocalStorage.getItem("personalInfo").then((value) => {
+        console.log("Retrieved personalInfo11:", value);
+      });
+      LocalStorage.getItem("certificates").then((value) => {
+        console.log("Retrieved certificates11:", value);
+      });
+      LocalStorage.getItem("experiences").then((value) => {
+        console.log("Retrieved experiences11:", value);
+      });
+      navigation.navigate("register2");
+    } else {
+      Alert.alert("All fields are required!");
+    }
+  };
 
   const addCertificate = () => {
     setCertificates([
@@ -77,7 +99,6 @@ export default function Register1({ navigation }) {
       handleExperienceChange(index, field, newDate);
     }
   };
-
 
   return (
     <SafeArea>
@@ -191,7 +212,7 @@ export default function Register1({ navigation }) {
           </Custombutton>
         </View>
         <View style={{ width: "90%" }}>
-          <Custombutton onPress={() => navigation.navigate("register2")}>
+          <Custombutton onPress={screen3}>
             <Text>Next</Text>
           </Custombutton>
         </View>
@@ -217,7 +238,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "lightgray",
     borderWidth: 1,
-    textAlign: 'center', // Centers the placeholder text
+    textAlign: "center", // Centers the placeholder text
     margin: 10,
     backgroundColor: "white",
   },

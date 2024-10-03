@@ -15,9 +15,9 @@ import Scroll from "../../components/scroll";
 import Custombutton from "../../components/button";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import CustomTitle from "../../components/title";
-import DatePicker from "react-native-date-picker";
-import { Picker } from "@react-native-picker/picker"; // Import Picker for dropdown
 import DropdownMenu from "../../components/dropdown";
+import LocalStorage from "../../components/LocalStorage";
+import map from '../../components/registration_map';
 
 export default function Register2({ navigation }) {
   // const { userData, handleSetUserData } = useContext(RegistrationContext);
@@ -54,19 +54,26 @@ export default function Register2({ navigation }) {
   };
 
   const submitRegistration = async () => {
-    // Combine data from all pages (assuming userData is accessible)
-    const finalData = {
-      ...userData,
-      certificates,
-      experiences,
-      interests,
-      selectedLanguages,
-    };
-  
-    console.log(JSON.stringify(finalData));
-  
+    if (interests && selectedLanguages) {
+      Alert.alert("Registration successful!");
+    } else {
+      Alert.alert("All fields are required!");
+    }
     // Send data to backend
     try {
+      const personalInfo = await LocalStorage.getItem("personalInfo");
+      const certificates = await LocalStorage.getItem("certificates");
+      const experiences = await LocalStorage.getItem("experiences");
+      const finalData = {
+        personalInfo,
+        certificates,
+        experiences,
+        interests,
+        selectedLanguages,
+      };
+      map(finalData).then(mappedData=>{
+        console.log('mappedData',mappedData);
+      })
       const response = await fetch("/api/register", {
         method: "POST",
         headers: {
@@ -74,13 +81,12 @@ export default function Register2({ navigation }) {
         },
         body: JSON.stringify(finalData),
       });
-  
       if (!response.ok) {
         const error = await response.text();
         Alert.alert("Registration failed:", error);
         return;
       }
-  
+
       // Handle successful registration (e.g., navigate to home)
       navigation.navigate("");
     } catch (error) {
