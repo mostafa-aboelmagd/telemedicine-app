@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbarComp/navbar";
+import { ProfileProvider } from "@/context/ProfileContext"; // Ensure correct import path
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,10 +18,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Navbar />
-        {children}
-      </body>
+      <ProfileProvider>
+        <body className={inter.className}>
+          <Navbar />
+          {children}
+        </body>
+      </ProfileProvider>
     </html>
   );
 }

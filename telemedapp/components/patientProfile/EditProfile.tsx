@@ -6,19 +6,17 @@ import InputComponent from "@/components/auth/InputComponent";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
 import { Calendar } from "primereact/calendar";
-import { format } from "date-fns"; // For formatting dates (optional)
+import { useProfile } from "@/context/ProfileContext"; // Ensure correct import path
 
 function EditProfile() {
-  const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
+  const { profileData, loading } = useProfile();
+  if (loading) {
+    return <div>Loading profile data...</div>;
+  }
 
-  const [profileData, setProfileData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    languages: [],
-    gender: "",
-    birthDate: "",
-  });
+  if (!profileData) {
+    return <div>No profile data available.</div>;
+  }
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -37,8 +35,6 @@ function EditProfile() {
     birthDate: "",
   });
 
-  const [loading, setLoading] = useState(true);
-
   const [changedField, setChangedField] = useState("");
 
   const [formValid, setFormValid] = useState(false);
@@ -48,30 +44,7 @@ function EditProfile() {
   let token: string | null = "";
 
   useEffect(() => {
-    token = localStorage.getItem("jwt");
-    if (!token) {
-      window.location.href = "/auth/signin";
-    } else if (
-      Math.floor(new Date().getTime() / 1000) >
-      Number(localStorage.getItem("expiryDate"))
-    ) {
-      localStorage.clear();
-      window.location.href = "/auth/signin";
-    } else {
-      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
-        mode: "cors",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => setProfileData(() => response.formattedPatient))
-        .finally(() => setLoading(false));
-    }
-  }, []);
-
-  useEffect(() => {
-    let languagesString = profileData.languages.join(" ");
+    let languagesString = profileData?.languages;
     const tempObj = { ...profileData, languages: languagesString };
     setFormData(() => tempObj);
   }, [profileData]);
@@ -335,169 +308,93 @@ function EditProfile() {
   };
 
   return (
-    <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
-      {loading ? (
-        <CircularProgress className="absolute top-1/2" />
-      ) : (
-        <>
-          <div>
-            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
-              {userImage}
-              <p className="text-blue-500 mb-1 font-semibold">
-                {profileData.firstName} {profileData.lastName}
-              </p>
-              <div className="flex gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6 fill-black"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3"
+    <form onSubmit={handleSubmit}>
+      <div className="p-7">
+        {formFields.map((field) => {
+          return (
+            <div key={field.title} className="mb-3 max-w-80">
+              <p className="font-semibold">{field.title}</p>
+              {field.name === "birthDate" ? (
+                <>
+                  <Calendar
+                    value={
+                      formData.birthDate ? new Date(formData.birthDate) : null
+                    }
+                    onChange={handleDateChange}
+                    showIcon
+                    dateFormat="yy-mm-dd"
+                    placeholder="yyyy-mm-dd"
+                    maxDate={new Date()}
+                    yearRange="1900:2023"
+                    className={`bg-neutral-100 w-full py-4 px-6 text-base rounded-lg border border-solid border-neutral-300 grey-100 outline-none transition-[border-color] focus:border-sky-500 focus:bg-neutral-50 ${
+                      errorMessage.birthDate ? "p-invalid" : ""
+                    }`}
                   />
-                </svg>
-                <p>Wallet</p>
-                <p className="text-green-500">(0)</p>
-              </div>
-            </div>
-            <button
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
-              onClick={() =>
-                (window.location.href = "/patientProfile/upcoming_appointments")
-              }
-            >
-              My Appointments
-            </button>
-          </div>
-
-          <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
-            <form onSubmit={handleSubmit}>
-              <div className="flex pt-4 mb-3">
-                <Link
-                  href="/patientProfile/view"
-                  className="text-blue-500 font-bold ml-7 w-1/3"
-                >
-                  Personal Information
-                </Link>
-                <Link
-                  href="/patientProfile/paymentInfo"
-                  className="font-bold ml-7 mr-7 md:mr-0 w-1/3"
-                >
-                  Payment Information
-                </Link>
-                <Link
-                  href="/patientProfile/patientDocuments"
-                  className="font-bold ml-7 mr-7 md:mr-0 w-1/3"
-                >
-                  Documents
-                </Link>
-              </div>
-              <div className="flex">
-                <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
-                <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
-                <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
-              </div>
-              <div className="p-7">
-                {formFields.map((field) => {
-                  return (
-                    <div key={field.title} className="mb-3 max-w-80">
-                      <p className="font-semibold">{field.title}</p>
-                      {field.name === "birthDate" ? (
-                        <>
-                          <Calendar
-                            value={
-                              formData.birthDate
-                                ? new Date(formData.birthDate)
-                                : null
-                            }
-                            onChange={handleDateChange}
-                            showIcon
-                            dateFormat="yy-mm-dd"
-                            placeholder="yyyy-mm-dd"
-                            maxDate={new Date()}
-                            yearRange="1900:2023"
-                            className={`bg-neutral-100 w-full py-4 px-6 text-base rounded-lg border border-solid border-neutral-300 grey-100 outline-none transition-[border-color] focus:border-sky-500 focus:bg-neutral-50 ${
-                              errorMessage.birthDate ? "p-invalid" : ""
-                            }`}
-                          />
-                          {errorMessage.birthDate && (
-                            <small className="text-xs mt-1 text-red-700 font-semibold">
-                              {errorMessage.birthDate}
-                            </small>
-                          )}
-                        </>
-                      ) : (
-                        <InputComponent
-                          label=""
-                          type={field.type}
-                          name={field.name}
-                          placeholder={`Enter ${field.title}`}
-                          value={
-                            formData[field.name as keyof typeof formData] ?? ""
-                          }
-                          onChange={handleChange}
-                          errorText={
-                            errorMessage[
-                              field.name as keyof typeof errorMessage
-                            ]
-                          }
-                        />
-                      )}
-                    </div>
-                  );
-                })}
-                <div className="mb-3">
-                  <p className="font-semibold">Gender</p>
-                  <div className="flex gap-8">
-                    <label>
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="Male"
-                        onChange={handleChange}
-                        className="radio align-middle mb-[3px] mr-1"
-                        checked={formData.gender === "Male"}
-                      />
-                      Male
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="Female"
-                        onChange={handleChange}
-                        className="radio align-middle mb-[3px] mr-1"
-                        checked={formData.gender === "Female"}
-                      />
-                      Female
-                    </label>
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <button
-                    type="submit"
-                    className={submitButtonClass}
-                    disabled={!formValid}
-                  >
-                    Save Changes
-                  </button>
-                  {error && (
-                    <p className="font-semibold text-red-700 mt-4">
-                      Couldn't Edit Profile Info!
-                    </p>
+                  {errorMessage.birthDate && (
+                    <small className="text-xs mt-1 text-red-700 font-semibold">
+                      {errorMessage.birthDate}
+                    </small>
                   )}
-                </div>
-              </div>
-            </form>
+                </>
+              ) : (
+                <InputComponent
+                  label=""
+                  type={field.type}
+                  name={field.name}
+                  placeholder={`Enter ${field.title}`}
+                  value={formData[field.name as keyof typeof formData] ?? ""}
+                  onChange={handleChange}
+                  errorText={
+                    errorMessage[field.name as keyof typeof errorMessage]
+                  }
+                />
+              )}
+            </div>
+          );
+        })}
+        <div className="mb-3">
+          <p className="font-semibold">Gender</p>
+          <div className="flex gap-8">
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Male"
+                onChange={handleChange}
+                className="radio align-middle mb-[3px] mr-1"
+                checked={formData.gender === "Male"}
+              />
+              Male
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Female"
+                onChange={handleChange}
+                className="radio align-middle mb-[3px] mr-1"
+                checked={formData.gender === "Female"}
+              />
+              Female
+            </label>
           </div>
-        </>
-      )}
-    </div>
+        </div>
+        <div className="mb-4">
+          <button
+            type="submit"
+            className={submitButtonClass}
+            disabled={!formValid}
+          >
+            Save Changes
+          </button>
+          {error && (
+            <p className="font-semibold text-red-700 mt-4">
+              Couldn't Edit Profile Info!
+            </p>
+          )}
+        </div>
+      </div>
+    </form>
   );
 }
 
