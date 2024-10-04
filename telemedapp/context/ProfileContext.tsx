@@ -2,6 +2,7 @@
 "use client"; // This is crucial for using hooks in Next.js
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation"; // Import the hooks
 
 interface ProfileData {
   firstName: string;
@@ -33,19 +34,26 @@ export const ProfileProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const router = useRouter(); // Initialize the useRouter hook
+  const pathname = usePathname();
+
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (!token) {
-      window.location.href = "/auth/signin";
+      if (pathname !== "/auth/signin") {
+        router.push("/auth/signin");
+      }
     } else if (
       Math.floor(new Date().getTime() / 1000) >
       Number(localStorage.getItem("expiryDate"))
     ) {
       localStorage.clear();
-      window.location.href = "/auth/signin";
+      if (pathname !== "/auth/signin") {
+        router.push("/auth/signin");
+      }
     } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
         method: "GET",
