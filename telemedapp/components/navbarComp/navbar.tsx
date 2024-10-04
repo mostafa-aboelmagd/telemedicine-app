@@ -96,7 +96,7 @@ const Navbar = () => {
                         "/auth/signout",
                       ]
                     : [
-                        "/doctorProfile/view",
+                        "/doctorProfile",
                         "/doctorProfile/timeSlots",
                         "/doctorProfile/appointments",
                         "/auth/signout",
