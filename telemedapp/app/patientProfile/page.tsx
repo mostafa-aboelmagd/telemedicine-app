@@ -1,9 +1,8 @@
+// telemedapp/app/patientProfile/page.tsx
 import ViewProfile from "@/components/patientProfile/ViewProfile";
 
 function ViewProfilePage() {
-  return (
-    <ViewProfile />
-  );
+  return <ViewProfile />;
 }
 
 export default ViewProfilePage;
