@@ -9,6 +9,7 @@ import { NEXT_PUBLIC_SERVER_NAME} from '@env';
 
 let newSlots = []
 let removedSlots = []
+let selectedSlotsOfDays = {}
 export default function Availability ({ navigation }) {
 
     // const slots = Object.entries(doctorAv.timeslots)
