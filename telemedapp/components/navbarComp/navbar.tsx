@@ -88,7 +88,7 @@ const Navbar = () => {
                 linkTo={
                   userRole === "Patient" || token.userRole === "Patient"
                     ? [
-                        "/patientProfile/view",
+                        "/patientProfile",
                         "/patientProfile/upcoming_appointments",
                         // "/patientProfile/prescriptions",
                         "/patientProfile/patientDocuments",
@@ -96,7 +96,7 @@ const Navbar = () => {
                         "/auth/signout",
                       ]
                     : [
-                        "/doctorProfile",
+                        "/doctorProfile/view",
                         "/doctorProfile/timeSlots",
                         "/doctorProfile/appointments",
                         "/auth/signout",
