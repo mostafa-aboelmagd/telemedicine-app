@@ -1,47 +1,83 @@
-![icon](https://tele-med-pilot.vercel.app/assets/logo.png)
+
+<div style="display: flex;flex-direction: row; align-items: center; justify-content: center;">
+  <img src="https://tele-med-pilot.vercel.app/assets/logo.png" alt="TeleMedPilot Icon" width="100" />
+</div>
+
+# TeleMedPilot
+
+## **Your Virtual Healthcare Companion**
+
+TeleMedPilot provides a comprehensive platform to connect patients with certified doctors through secure online consultations. From booking appointments to managing medical records, our goal is to make healthcare accessible and convenient for everyone.
 
 
-# **TeleMedPilot**
-
-#### **Your Virtual Healthcare Companion**
 
 
-**Experience the convenience and accessibility of healthcare at your fingertips with TeleMedPilot. Our innovative platform connects you with qualified doctors for personalized consultations, diagnoses, and treatment recommendations.**
+## **Why Choose TeleMedPilot?**
 
----
-
-### Why TeleMedPilot?
-
-* **Flexible Appointment Scheduling:** 
-Schedule online or in-person appointments at your convenience.
-* **Doctor Search and Filtering:** 
-Find the right doctor based on specialty, experience, and availability.
-* **Personalized Treatment Plans:** 
-Receive tailored treatment plans and prescriptions.
-* **Secure Messaging:** 
-Communicate securely with your doctor for questions, updates, and follow-ups.
-* **Medical Records Management:** 
-Access and manage your medical records, including prescriptions and test results.
+- **Flexible Appointments:** Book online or in-person consultations at your convenience.
+- **Doctor Search & Filters:** Find the right doctor based on specialty, experience, and availability.
+- **Personalized Care:** Get customized treatment plans and prescriptions.
+- **Secure Communication:** Send messages securely to your doctor for follow-ups or additional questions.
+- **Medical Record Management:** Easily access and manage your prescriptions, test results, and visit history.
 
 ---
 
-### **How TeleMedPilot Works?**
+## **How TeleMedPilot Works**
 
-* 1. **Create an Account:** Sign up for a TeleMedPilot account to get started.
-* 2. **Schedule an Appointment:** Choose a doctor and schedule a convenient appointment time.
-* 3. **Consult with a Doctor:** Connect with your doctor via video call or phone for your consultation.
-* 4. **Receive Treatment:** Discuss your symptoms, receive a diagnosis, and get personalized treatment recommendations.
-* 5. **Access Medical Records:** View and manage your medical records securely.
+1. **Create an Account:** Sign up and set up your profile.
+2. **Book an Appointment:** Search for doctors and choose a time that works for you.
+3. **Consult Online:** Meet with your doctor via video or phone.
+4. **Receive Treatment:** Get a diagnosis and personalized treatment plan.
+5. **Access Medical Records:** Safely manage your prescriptions and visit history online.
 
 ---
 
-### **Technology Stack**
+## **Live Demo**
 
-* **Frontend:** Example Technology
-* **Backend:** Example Technology
-* **Database:** Example Technology
-* **Cloud Platform:** Example Technology
-* **Video Conferencing:** Example Technology
+Visit the live website: [TeleMedPilot](https://telemed-mansy.vercel.app)
+
+---
+
+## **Technology Stack**
+
+- **Frontend:** Next.js (with TypeScript)
+- **Backend:** Node.js, Express
+- **Mobile:** Flutter
+- **Database:** MongoDB
+- **Cloud Services:** AWS for hosting and data storage
+- **Video Conferencing:** WebRTC for seamless online consultations
+
+---
+## **Technologies Used (Frontend)**
+
+- **Next.js (TypeScript):** For building user interfaces.
+- **Tailwind CSS:** For styling and responsive design.
+- **Custom Hooks:** For efficient state management.
+- **Git:** Version control.
+- **Responsive Design:** Optimized for mobile and desktop experiences.
+
+---
+
+## **Learnings from This Project**
+
+In this project, I learned how to effectively manage:
+
+1. **Team Communication:**
+   Working in an Agile team with daily standups and sprints helped keep the project on track and enabled quick problem resolution.
+
+2. **API Integration:**
+   I handled intensive API integrations, debugging common issues like CORS and authentication, and ensuring real-time data sync between frontend and backend.
+
+---
+
+## **Acknowledgements**
+
+Special thanks to the TeleMedPilot team for their dedication to building this platform. The project wouldn't have been possible without contributions from:
+
+- **Frontend Team:** UI/UX development and responsive design.
+- **Backend Team:** API integrations and data security.
+- **Cloud Engineers:** Ensuring smooth deployment and scalability.
+- **Mobile App Team:** Flutter and Figma Design
 
 ---
 
