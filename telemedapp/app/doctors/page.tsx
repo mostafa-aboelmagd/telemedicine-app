@@ -7,6 +7,7 @@ import SortDropDown from "@/components/SortDropDown/sortdropdown";
 import React, { useEffect, useState } from "react";
 import { unFormatDate } from "@/utils/date";
 import { IoFilter } from "react-icons/io5";
+import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 
 const Doctors = () => {
   const [minMaxFees, setMinMaxFees] = useState({ min: 0, max: 1000 });
@@ -262,7 +263,9 @@ const Doctors = () => {
         {filteredDoctors.length > 0 ? (
           <DoctorGrid doctors={filteredDoctors} />
         ) : (
-          <div className="mx-10 text-xl">Loading...</div>
+          <div className="mx-10 text-xl">
+            <CircularProgress className="absolute top-1/2 md:right-1/3 md:top-3/4" />
+          </div>
         )}
       </section>
     </main>

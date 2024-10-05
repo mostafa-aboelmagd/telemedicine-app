@@ -23,7 +23,7 @@ function TimeSlots() {
     "friday",
   ];
 
-  const timesList = {
+  const timesList = {disable
     "9:00 AM : 10:00 AM": "9:00:00",
     "10:00 AM : 11:00 AM": "10:00:00",
     "11:00 AM : 12:00 PM": "11:00:00",
@@ -446,7 +446,7 @@ function TimeSlots() {
       ) : (
         <>
           <div className="flex flex-col gap-4">
-            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
+            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-4 rounded-xl">
               {userImage}
               <p className="text-blue-500 my-1 font-semibold">
                 Dr. {profileData?.firstName} {profileData?.lastName}
@@ -481,7 +481,7 @@ function TimeSlots() {
               <hr className="bg-blue-500 border-none h-0.5 w-1/3"></hr>
               <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
             </div>
-            <div className="p-7 relative">
+            <div className="m-4 relative">
               <div className="flex items-baseline flex-col justify-between ">
                 <div className="flex gap-16 mt-3 min-[980px]:gap-20">
                   <div className="flex flex-col gap-40 min-[430px]:gap-24 min-[470px]:gap-12 min-[550px]:gap-5">

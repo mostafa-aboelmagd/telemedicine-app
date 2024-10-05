@@ -35,7 +35,7 @@ const PatientDocuments = () => {
     fetchDocuments();
   }, []);
   return (
-    <div className="p-7">
+    <div className="m-4 ">
       {documents.length > 0 ? (
         <div className="flex flex-col space-y-4 overflow-y-auto">
           <SearchBar placeholder="Document name" />

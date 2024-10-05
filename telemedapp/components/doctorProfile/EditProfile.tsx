@@ -63,14 +63,13 @@ function EditProfile() {
     token = localStorage.getItem("jwt");
     if (!token) {
       window.location.href = "/auth/signin";
-    }
-
-    else if(Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
+    } else if (
+      Math.floor(new Date().getTime() / 1000) >
+      Number(localStorage.getItem("expiryDate"))
+    ) {
       localStorage.clear();
       window.location.href = "/auth/signin";
-    }
-    
-    else {
+    } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
         mode: "cors",
         headers: {
@@ -470,7 +469,7 @@ function EditProfile() {
       ) : (
         <>
           <div className="flex flex-col gap-4">
-            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
+            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-4  rounded-xl">
               {userImage}
               <p className="text-blue-500 mb-1 font-semibold">
                 Dr. {tempForm?.firstName} {tempForm?.lastName}
@@ -491,16 +490,10 @@ function EditProfile() {
                 <Link href="/" className="text-blue-500 font-bold ml-7">
                   Personal Info
                 </Link>
-                <Link
-                  href="/doctorProfile/timeSlots"
-                  className="font-bold"
-                >
+                <Link href="/doctorProfile/timeSlots" className="font-bold">
                   Time Slots
                 </Link>
-                <Link
-                  href="/doctorProfile/requests"
-                  className="font-bold mr-7"
-                >
+                <Link href="/doctorProfile/requests" className="font-bold mr-7">
                   Pending Requests
                 </Link>
               </div>
@@ -509,7 +502,7 @@ function EditProfile() {
                 <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
                 <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
               </div>
-              <div className="p-7">
+              <div className="m-4">
                 {formFields.map((field) => {
                   return (
                     <div key={field.title} className="mb-3 max-w-80">

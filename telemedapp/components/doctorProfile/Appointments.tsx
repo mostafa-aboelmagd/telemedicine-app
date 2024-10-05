@@ -74,7 +74,7 @@ const Appointments = () => {
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 md:flex-row md:items-start">
       <div className="flex flex-col gap-4">
-        <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
+        <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-4 rounded-xl">
           {userImage}
           <p className="text-blue-500 mb-1 font-semibold">{`${
             profileData && profileData?.firstName && profileData.firstName

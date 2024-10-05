@@ -117,7 +117,7 @@ const Requests = () => {
       ) : (
         <>
           <div className="flex flex-col gap-4">
-            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-7 rounded-xl">
+            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-4 rounded-xl">
               {userProfileImage}
               <p className="text-blue-500 mb-1 font-semibold">
                 Dr. {profileData.firstName} {profileData.lastName}
@@ -152,7 +152,7 @@ const Requests = () => {
               <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
               <hr className="bg-blue-500 border-none h-0.5 w-1/3"></hr>
             </div>
-            <div className="p-7">
+            <div className="m-4">
               <div className="grid grid-cols-1 min-[1350px]:grid-cols-2 p-3 gap-y-10 justify-items-center">
                 {requests.length > 0 ? (
                   requests.map((request) => {
