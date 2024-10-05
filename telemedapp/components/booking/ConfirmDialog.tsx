@@ -59,13 +59,13 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             <button
               onClick={handleConfirm}
               disabled={loading || complaint === ""}
-              className="bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
+              className="bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? "Sending..." : "Request"}
             </button>
             <button
               onClick={onCancel}
-              disabled={loading || complaint === ""}
+              disabled={loading}
               className=" py-3 px-6 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-800 disabled:opacity-50"
             >
               Cancel

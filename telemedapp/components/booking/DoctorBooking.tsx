@@ -7,6 +7,8 @@ import BookingSummary from "@/components/booking/BookingSummary";
 import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
 import { formatDoctorAvailabilities } from "@/utils/formatDoctorAvailabilities";
+import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
+
 const DoctorBooking = () => {
   const searchParams = useSearchParams();
   const [doctor, setDoctor] = useState<any>(null);
@@ -107,10 +109,10 @@ const DoctorBooking = () => {
     )
       .then((response) => response.json())
       .then((response) =>
-        setAppointments(response?.appointments || ["No Appointment History"])
+        setAppointments(response ? response.appointments : response)
       );
     console.log("History Appointments: ", appointments);
-  }, []);
+  }, [appointmentState]);
 
   const handleDurationChange = (duration: number) =>
     setSelectedDuration(duration);
@@ -128,8 +130,8 @@ const DoctorBooking = () => {
     setSelectedType(slot.type);
   };
 
-  if (!doctor) {
-    return <div className="mx-10 text-xl">Loading doctor data...</div>;
+  if (!doctor || !searchParams || !searchParams.get("doctor")) {
+    return <CircularProgress className="absolute top-1/2 left-1/2" />;
   }
 
   return (
