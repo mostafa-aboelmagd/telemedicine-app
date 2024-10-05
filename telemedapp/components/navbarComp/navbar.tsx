@@ -90,7 +90,6 @@ const Navbar = () => {
                     ? [
                         "/patientProfile",
                         "/patientProfile/upcoming_appointments",
-                        // "/patientProfile/prescriptions",
                         "/patientProfile/patientDocuments",
                         "/patientProfile/paymentInfo",
                         "/auth/signout",
@@ -107,7 +106,6 @@ const Navbar = () => {
                     ? [
                         "View Profile",
                         "My Appointments",
-                        // "My Prescriptions",
                         "My Documents",
                         "Wallet",
                         "Sign Out",

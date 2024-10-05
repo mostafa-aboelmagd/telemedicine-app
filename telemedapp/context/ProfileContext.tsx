@@ -43,7 +43,12 @@ export const ProfileProvider = ({
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (!token) {
-      if (pathname !== "/auth/signin") {
+      if (
+        pathname !== "/auth/signin" &&
+        pathname !== "/auth/signup" &&
+        pathname !== "/doctors" &&
+        pathname !== "/"
+      ) {
         router.push("/auth/signin");
       }
     } else if (
@@ -51,9 +56,7 @@ export const ProfileProvider = ({
       Number(localStorage.getItem("expiryDate"))
     ) {
       localStorage.clear();
-      if (pathname !== "/auth/signin") {
-        router.push("/auth/signin");
-      }
+      router.push("/auth/signin");
     } else {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
         method: "GET",
