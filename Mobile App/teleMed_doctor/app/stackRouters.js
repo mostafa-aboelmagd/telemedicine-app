@@ -29,6 +29,7 @@ import FurtherDetails from './screens/appointmentDetails/submitDetails/furtherDe
 
 import Availability from './screens/profile/availability';
 import ChangePassword from './screens/profile/changePassword';
+import EditInfo from './screens/profile/edit_info';
 
 const Stack = createStackNavigator();
 
@@ -69,6 +70,7 @@ export default function StackRouters() {
             {/* Doctor profile */}
             <Stack.Screen name='availability' component={Availability} options={{ headerShown : false}} />
             <Stack.Screen name='changePassword' component={ChangePassword} options={{ headerShown : false}} />
+            <Stack.Screen name='edit info' component={EditInfo} options={{ headerShown : false}} />
         </Stack.Navigator>
     </NavigationContainer>
   );
