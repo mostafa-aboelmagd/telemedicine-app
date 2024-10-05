@@ -39,51 +39,43 @@ export default function Register({ navigation }) {
 
   // const birthdate1 = formatBirthdate(birth_day, birth_month, birth_year);
   const showDatePickerHandler = () => {
-    setShowDatePicker(true); // Set to true to show the date picker
+    setShowDatePicker(!showDatePicker); // Set to true to show the date picker
   };
-  const handleBirthDateChange = (text) => {
-    // Regex for valid date format YYYY-MM-DD
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!text) {
-      // Set birthDate to null or some default value
-      setBirthDate(null);
-      return;
+  const handleBirthDateChange = (selectedDate) => {
+    if (selectedDate) {
+      // Check if a date is actually selected
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+      setBirthDate(formattedDate);
+    } else {
+      setBirthDate(null); // Clear the birth date if no selection made
     }
-    if (!dateRegex.test(text)) {
-      // Show an error message or highlight the input
-      return;
-    }
-
-    // Create a Date object from the validated string
-    const newDate = new Date(text);
-    setBirthDate(newDate);
-    // setShowDatePicker(false);
+    setShowDatePicker(false); // Hide the date picker after selection
   };
   const screen2 = () => {
-    if (
-      Fname &&
-      Lname &&
-      email &&
-      password &&
-      confirmPassword &&
-      phone &&
-      gender &&
-      country &&
-      city &&
-      location &&
-      speciality
+    if (true
+      // Fname &&
+      // Lname &&
+      // email &&
+      // password &&
+      // confirmPassword &&
+      // phone &&
+      // gender &&
+      // country &&
+      // city &&
+      // location &&
+      // speciality
     ) {
-      if (password !== confirmPassword) {
-        Alert.alert("Error", "Confirm passwords do not match.");
-        return;
-      }
+      // if (password !== confirmPassword) {
+      //   Alert.alert("Error", "Confirm passwords do not match.");
+      //   return;
+      // }
       const passwordRegex = /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      if (!passwordRegex.test(password)) {
-        Alert.alert(
-          "Invalid password. Password must be at least 8 characters, contain one number, and one special character."
-        );
-        return;
-      }
+      // if (!passwordRegex.test(password)) {
+      //   Alert.alert(
+      //     "Invalid password. Password must be at least 8 characters, contain one number, and one special character."
+      //   );
+      //   return;
+      // }
       const personalInfo = {
         Fname,
         Lname,
@@ -170,49 +162,27 @@ export default function Register({ navigation }) {
               />
             </View>
             <Text>Birth date</Text>
-            <View style={styles.dateRow}>
-              <View style={styles.cell}>
-                <Text style={styles.textProp}>Start Date:</Text>
-                {inputSet.startDate ? (
-                  <Text style={styles.inTextProp}>
-                    {new Date(inputSet.startDate).toDateString()}
-                  </Text>
-                ) : (
-                  <Text style={styles.inTextProp}>No date selected</Text>
-                )}
-              </View>
-              <View style={styles.cell}>
-                <Text style={styles.textProp}>End Date:</Text>
-                {inputSet.endDate ? (
-                  <Text style={styles.inTextProp}>
-                    {new Date(inputSet.endDate).toDateString()}
-                  </Text>
-                ) : (
-                  <Text style={styles.inTextProp}>No date selected</Text>
-                )}
-              </View>
-            </View>
-            {/* <View style={styles.container3}>
-              <TextInput
-                placeholder="birthdate"
-                value={format(birth_date, "yyyy-MM-dd")} // Format the date as yyyy-MM-dd
-                onChange={handleBirthDateChange(new Date(text))}
-                style={styles.input}
-                onFocus={showDatePickerHandler}
-              />
-              <TouchableOpacity onPress={showDatePickerHandler}>
-                <MaterialIcons name="calendar-today" size={24} color="gray" />
+            <View style={styles.container3}>
+              <TouchableOpacity
+                style={styles.dateInput}
+                onPress={showDatePickerHandler}
+              >
+                <Text style={styles.container3}>
+                  {birth_date
+                    ? format(new Date(birth_date), "yyyy-MM-dd")
+                    : "Select Birth Date"}
+                </Text>
               </TouchableOpacity>
-              {showDatePicker && ( // Render only when showDatePicker is true
+              {showDatePicker && ( // Only render the date picker when showDatePicker is true
                 <DateTimePicker
                   mode="date"
-                  value={birth_date}
+                  value={birth_date ? new Date(birth_date) : null} // Set initial value based on birth_date
                   onChange={handleBirthDateChange}
                   visible={showDatePicker}
-                  onDismiss={showDatePickerHandler} // Hide the date picker when dismissed
+                  onDismiss={showDatePickerHandler}
                 />
               )}
-            </View> */}
+            </View>
             <View>
               <DropdownMenu
                 options={genderOptions}
