@@ -17,14 +17,14 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import CustomTitle from "../../components/title";
 import DropdownMenu from "../../components/dropdown";
 import LocalStorage from "../../components/LocalStorage";
-import countries from "../../components/DropDownOptions";
+import dropdownlist from "../../components/DropDownOptions";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { format } from "date-fns";
 
 export default function Register({ navigation }) {
   const [Fname, setFName] = useState("");
   const [Lname, setLName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [conf, setConf] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
   const [country, setCountry] = useState("");
@@ -32,15 +32,40 @@ export default function Register({ navigation }) {
   const [location, setLocation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [speciality, setSpeciality] = useState("");
-  const [birthdate, setBirthdate] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setconfirmPassword] = useState("");
+  const [birth_date, setBirthDate] = useState(new Date()); // Initialize as a Date object
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
+  // const birthdate1 = formatBirthdate(birth_day, birth_month, birth_year);
+  const showDatePickerHandler = () => {
+    setShowDatePicker(true); // Set to true to show the date picker
+  };
+  const handleBirthDateChange = (text) => {
+    // Regex for valid date format YYYY-MM-DD
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!text) {
+      // Set birthDate to null or some default value
+      setBirthDate(null);
+      return;
+    }
+    if (!dateRegex.test(text)) {
+      // Show an error message or highlight the input
+      return;
+    }
+
+    // Create a Date object from the validated string
+    const newDate = new Date(text);
+    setBirthDate(newDate);
+    // setShowDatePicker(false);
+  };
   const screen2 = () => {
     if (
       Fname &&
       Lname &&
       email &&
       password &&
-      conf &&
+      confirmPassword &&
       phone &&
       gender &&
       country &&
@@ -48,95 +73,41 @@ export default function Register({ navigation }) {
       location &&
       speciality
     ) {
+      if (password !== confirmPassword) {
+        Alert.alert("Error", "Confirm passwords do not match.");
+        return;
+      }
+      const passwordRegex = /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      if (!passwordRegex.test(password)) {
+        Alert.alert(
+          "Invalid password. Password must be at least 8 characters, contain one number, and one special character."
+        );
+        return;
+      }
       const personalInfo = {
         Fname,
         Lname,
         email,
         password,
         phone,
-        gender:gender.label,
-        country:country.label,
-        city:city.label,
+        gender: gender.label,
+        country: country.label,
+        city: city.label,
         location,
         speciality,
-        birthdate,
+        birthdate: birth_date,
       };
       console.log(personalInfo);
       console.log(JSON.stringify(personalInfo));
-      LocalStorage.setItem('personalInfo', personalInfo);
+      LocalStorage.setItem("personalInfo", personalInfo);
       navigation.navigate("register1");
     } else {
       Alert.alert("All fields are required!");
     }
   };
-  // set gender options.
-  const genderOptions = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-  ];
-  // set country &city options
-  const countries = [
-    {
-      label: "Egypt",
-      cities: [
-        { label: "Cairo" },
-        { label: "Alexandria" },
-        { label: "Giza" },
-        { label: "Luxor" },
-        { label: "Aswan" },
-        { label: "Sharm El Sheikh" },
-        { label: "Hurghada" },
-        { label: "Dahab" },
-        { label: "Marsa Alam" },
-        { label: "El Alamein" },
-      ],
-    },
-    {
-      label: "Saudi Arabia",
-      cities: [
-        { label: "Riyadh" },
-        { label: "Jeddah" },
-        { label: "Mecca" },
-        { label: "Medina" },
-        { label: "Dammam" },
-        { label: "Taif" },
-        { label: "Al Khobar" },
-        { label: "Yanbu" },
-        { label: "Jubail" },
-        { label: "Hail" },
-      ],
-    },
-    {
-      label: "Jordan",
-      cities: [
-        { label: "Amman" },
-        { label: "Aqaba" },
-        { label: "Irbid" },
-        { label: "Zarqa" },
-        { label: "Balqa" },
-        { label: "Madaba" },
-        { label: "Ajloun" },
-        { label: "Jerash" },
-        { label: "Mafraq" },
-        { label: "Karak" },
-      ],
-    },
-    {
-      label: "Emirates",
-      cities: [
-        { label: "Dubai" },
-        { label: "Abu Dhabi" },
-        { label: "Sharjah" },
-        { label: "Ajman" },
-        { label: "Fujairah" },
-        { label: "Ras Al Khaimah" },
-        { label: "Umm Al Quwain" },
-        { label: "Al Ain" },
-        { label: "Hatta" },
-        { label: "Khor Fakkan" },
-      ],
-    },
-  ];
+  // call arrays from DropDownMinue file
+  const genderOptions = dropdownlist("gender");
+  const countries = dropdownlist("countries");
   // navigate to login page
   const login = () => {
     navigation.navigate("sign in");
@@ -154,6 +125,7 @@ export default function Register({ navigation }) {
   const handleCitySelect = (city) => {
     setCity(city);
   };
+
   return (
     // input fields are
     <SafeArea>
@@ -197,16 +169,50 @@ export default function Register({ navigation }) {
                 style={styles.input}
               />
             </View>
-            <View style={styles.container3}>
-              <TextInput
-                placeholder="Birth Date"
-                keyboardType="Birth Date"
-                inputType="Birth Date"
-                value={birthdate}
-                onChangeText={setBirthdate}
-                style={styles.input}
-              />
+            <Text>Birth date</Text>
+            <View style={styles.dateRow}>
+              <View style={styles.cell}>
+                <Text style={styles.textProp}>Start Date:</Text>
+                {inputSet.startDate ? (
+                  <Text style={styles.inTextProp}>
+                    {new Date(inputSet.startDate).toDateString()}
+                  </Text>
+                ) : (
+                  <Text style={styles.inTextProp}>No date selected</Text>
+                )}
+              </View>
+              <View style={styles.cell}>
+                <Text style={styles.textProp}>End Date:</Text>
+                {inputSet.endDate ? (
+                  <Text style={styles.inTextProp}>
+                    {new Date(inputSet.endDate).toDateString()}
+                  </Text>
+                ) : (
+                  <Text style={styles.inTextProp}>No date selected</Text>
+                )}
+              </View>
             </View>
+            {/* <View style={styles.container3}>
+              <TextInput
+                placeholder="birthdate"
+                value={format(birth_date, "yyyy-MM-dd")} // Format the date as yyyy-MM-dd
+                onChange={handleBirthDateChange(new Date(text))}
+                style={styles.input}
+                onFocus={showDatePickerHandler}
+              />
+              <TouchableOpacity onPress={showDatePickerHandler}>
+                <MaterialIcons name="calendar-today" size={24} color="gray" />
+              </TouchableOpacity>
+              {showDatePicker && ( // Render only when showDatePicker is true
+                <DateTimePicker
+                  mode="date"
+                  value={birth_date}
+                  onChange={handleBirthDateChange}
+                  visible={showDatePicker}
+                  onDismiss={showDatePickerHandler} // Hide the date picker when dismissed
+                />
+              )}
+            </View> */}
             <View>
               <DropdownMenu
                 options={genderOptions}
@@ -254,8 +260,8 @@ export default function Register({ navigation }) {
               <TextInput
                 placeholder="Confirm your Password"
                 secureTextEntry={!showPassword}
-                value={conf}
-                onChangeText={setConf}
+                value={confirmPassword}
+                onChangeText={setconfirmPassword}
                 style={styles.input}
               />
               <TouchableOpacity
