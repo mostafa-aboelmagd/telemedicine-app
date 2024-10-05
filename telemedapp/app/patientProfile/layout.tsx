@@ -31,7 +31,7 @@ export default function ProfileLayout({
               <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-4 rounded-xl">
                 {userImage}
                 <p className="text-blue-500 mb-1 font-semibold">
-                  {profileData?.firstName} {profileData?.lastName}
+                  {`${profileData?.firstName.toUpperCase()} ${profileData?.lastName.toUpperCase()}`}
                 </p>
               </div>
               <div className="flex flex-col gap-3 font-semibold text-sm">
@@ -54,14 +54,14 @@ export default function ProfileLayout({
               </div>
             </div>
             <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
-              <div className="flex pt-4 mb-3 justify-around md:text-base text-sm">
+              <div className="flex pt-4 mb-3 justify-around gap-2 px-2  md:text-base text-sm">
                 <Link
                   href="/patientProfile"
                   className={`${
                     pathname === "/patientProfile"
                       ? "text-blue-500 font-bold "
                       : "font-bold"
-                  } w-1/3`}
+                  } `}
                 >
                   Personal Info
                 </Link>
@@ -71,7 +71,7 @@ export default function ProfileLayout({
                     pathname === "/patientProfile/paymentInfo"
                       ? "text-blue-500 font-bold "
                       : "font-bold"
-                  }w-1/3`}
+                  }`}
                 >
                   Payment Info
                 </Link>
@@ -81,7 +81,7 @@ export default function ProfileLayout({
                     pathname === "/patientProfile/patientDocuments"
                       ? "text-blue-500 font-bold "
                       : "font-bold"
-                  }w-1/3 `}
+                  } `}
                 >
                   Documents
                 </Link>
