@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Head from "next/head"; // Import the Head component
 import "./globals.css";
 import Navbar from "@/components/navbarComp/navbar";
 import { ProfileProvider } from "@/context/ProfileContext"; // Ensure correct import path
@@ -22,6 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="icon" href="/logo.png" type="image/png" />
+      </Head>
       <body className={inter.className}>
         <ProfileProvider>
           <Navbar />

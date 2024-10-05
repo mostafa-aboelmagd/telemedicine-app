@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Card } from "primereact/card";
-import { Button } from "primereact/button";
 import { formatDate } from "../../utils/date";
 interface FollowUpAppointmentsProps {
   appointments: any[];
@@ -105,7 +104,7 @@ const FollowUpAppointments: React.FC<FollowUpAppointmentsProps> = ({
                       </p>
                       <p>
                         <strong>Duration:</strong>{" "}
-                        {appointment.appointment_duration} min
+                        {appointment?.appointment_duration} min
                       </p>
                     </div>
                     <button
