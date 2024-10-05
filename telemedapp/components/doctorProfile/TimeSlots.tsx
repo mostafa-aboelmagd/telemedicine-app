@@ -23,7 +23,7 @@ function TimeSlots() {
     "friday",
   ];
 
-  const timesList = {disable
+  const timesList = {
     "9:00 AM : 10:00 AM": "9:00:00",
     "10:00 AM : 11:00 AM": "10:00:00",
     "11:00 AM : 12:00 PM": "11:00:00",
