@@ -26,7 +26,6 @@ function ViewProfile() {
     { name: "birthDate", title: "Date Of Birth" },
     { name: "gender", title: "Gender" },
   ];
-  console.log(profileData);
 
   if (loading) {
     return <div>Loading profile data...</div>;

@@ -78,7 +78,7 @@ export const ProfileProvider = ({
         })
         .finally(() => setLoading(false));
     }
-  }, [pathname, router]); // Include dependencies
+  }, [pathname, router]);
 
   return (
     <ProfileContext.Provider value={{ profileData, loading }}>
