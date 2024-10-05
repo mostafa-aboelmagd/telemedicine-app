@@ -55,7 +55,7 @@ export const ProfileProvider = ({
     ) {
       localStorage.clear();
       router.push("/auth/signin");
-    } else if (pathname === "/patientProfile") {
+    } else if (pathname.includes("patientProfile")) {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
         method: "GET",
         mode: "cors",
