@@ -171,7 +171,7 @@ function ChangePassword() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="p-7">
+      <div className="m-4">
         {formFields.map((field) => {
           return (
             <div key={field.name} className="mb-3 max-w-80">

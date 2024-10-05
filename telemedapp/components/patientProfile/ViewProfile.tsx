@@ -26,6 +26,7 @@ function ViewProfile() {
     { name: "birthDate", title: "Date Of Birth" },
     { name: "gender", title: "Gender" },
   ];
+  console.log(profileData);
 
   if (loading) {
     return <div>Loading profile data...</div>;
@@ -36,7 +37,7 @@ function ViewProfile() {
   }
 
   return (
-    <div className="p-7">
+    <div className="m-4">
       {profileFields.map((field) => (
         <div key={field?.name} className="mb-3">
           <p className="font-extrabold">{field.title}</p>
@@ -64,7 +65,7 @@ function ViewProfile() {
       </div>
       <Link
         href="/patientProfile/edit"
-        className="flex gap-1 justify-center items-center font-medium absolute top-[10%] right-[5%] min-[450px]:top-[5%]"
+        className="flex gap-1 justify-center items-center font-medium absolute top-[20%] right-[5%] min-[450px]:top-[15%]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

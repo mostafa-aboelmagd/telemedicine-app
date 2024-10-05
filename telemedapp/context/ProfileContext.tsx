@@ -1,8 +1,7 @@
-// context/ProfileContext.tsx
-"use client"; // This is crucial for using hooks in Next.js
+"use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation"; // Import the hooks
+import { usePathname, useRouter } from "next/navigation";
 
 interface ProfileData {
   firstName: string;
@@ -34,9 +33,8 @@ export const ProfileProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const router = useRouter(); // Initialize the useRouter hook
+  const router = useRouter();
   const pathname = usePathname();
-
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -57,7 +55,7 @@ export const ProfileProvider = ({
     ) {
       localStorage.clear();
       router.push("/auth/signin");
-    } else {
+    } else if (pathname === "/patientProfile") {
       fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/profile/info`, {
         method: "GET",
         mode: "cors",
@@ -80,7 +78,7 @@ export const ProfileProvider = ({
         })
         .finally(() => setLoading(false));
     }
-  }, []);
+  }, [pathname, router]); // Include dependencies
 
   return (
     <ProfileContext.Provider value={{ profileData, loading }}>

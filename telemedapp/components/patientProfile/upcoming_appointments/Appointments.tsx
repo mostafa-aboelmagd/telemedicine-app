@@ -26,7 +26,7 @@ const Appointments: React.FC = () => {
   console.log("Appointments: ", appointments);
 
   return (
-    <div className=" flex flex-col m-4 ">
+    <div className="m-4  flex flex-col  ">
       {appointments?.length > 0 ? (
         <AppointmentsGrid
           appointments={appointments}

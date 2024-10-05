@@ -8,6 +8,7 @@ import { BsPersonFillAdd } from "react-icons/bs";
 import MenuList from "../MenuList/menuList";
 import { IoMenu } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
+import { useRouter } from "next/navigation"; // Import the hooks
 
 const menuIcon = (
   <div>
@@ -22,7 +23,7 @@ const signedInIcon = (
 const Navbar = () => {
   const [token, setToken] = useState<any>();
   const [userRole, setUserRole] = useState<any>();
-
+  const router = useRouter();
   useEffect(() => {
     const expiryDate = localStorage.getItem("expiryDate");
     if (
@@ -45,16 +46,30 @@ const Navbar = () => {
           </div>
         </Link>
         <div className="hidden min-[1130px]:inline-block justify-between space-x-4 text-[#4d4d4f] text-sm font-light">
-          <Link href="/doctors">
-            <button className="font-semibold hover:text-[#035fe9]">
-              Doctor List
-            </button>
-          </Link>
-          <button className="font-semibold hover:text-[#035fe9]">Tests</button>
-          <button className="font-semibold hover:text-[#035fe9]">
+          <button
+            className="font-semibold hover:text-[#035fe9]"
+            onClick={() => router.push("/doctors")}
+          >
+            Doctor List
+          </button>
+          <button
+            disabled
+            className="font-semibold hover:disable hover:opacity-50"
+          >
+            Tests
+          </button>
+          <button
+            className="font-semibold hover:text-[#035fe9]"
+            onClick={() => router.push("/doctors")}
+          >
             Find A Doctor
           </button>
-          <button className="font-semibold hover:text-[#035fe9]">Blog</button>
+          <button
+            disabled
+            className="font-semibold hover:disable hover:opacity-50"
+          >
+            Blog
+          </button>
         </div>
         <div className="flex justify-between items-center space-x-0 md:space-x-4 min-[1130px]:space-x-6">
           <a className="cursor-pointer font-medium">العربيه</a>
