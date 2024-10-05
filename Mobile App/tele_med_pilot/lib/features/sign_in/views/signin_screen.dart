@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http; // For HTTP requests
-import 'package:shared_preferences/shared_preferences.dart'; // For storing token
-import 'package:tele_med_pilot/Utility/token_service.dart';
+import 'package:tele_med_pilot/utility/token_service.dart';
 import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
 import 'package:tele_med_pilot/features/sign_in/view_models/sign_in_view_model.dart';
@@ -54,7 +53,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
     try {
       final response = await http.post(url, headers: headers, body: body);
-      print(response.statusCode);
       if (response.statusCode == 200) {
         // Successful login
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -86,7 +84,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         );
       }
     } catch (e) {
-      print('Exception occurred during login: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('An error occurred. Please try again.'),

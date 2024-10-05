@@ -38,13 +38,21 @@ class DoctorModel {
   DoctorModel.fromJson(Map<String, dynamic> json) {
     id = json['id']?.toString();
     name = json['name'] ?? 'Unknown'; // Default to 'Unknown' if null
-    nearestApp = json['nearestApp'] != null ? DateTime.tryParse(json['nearestApp']) : null;
+    nearestApp = json['nearestApp'] != null
+        ? DateTime.tryParse(json['nearestApp'])
+        : null;
     title = json['title'] ?? 'No Title'; // Default to 'No Title' if null
-    rating = json['rating'] != null ? (json['rating'] as num).toDouble() : 0.0; // Default to 0.0 if null
+    rating = json['rating'] != null
+        ? (json['rating'] as num).toDouble()
+        : 0.0; // Default to 0.0 if null
     numSessions = json['numSessions'] ?? 0; // Default to 0 if null
     numReviews = json['numReviews'] ?? 0; // Default to 0 if null
-    fees60min = json['fees60min'] != null ? (json['fees60min'] as num).toDouble() : 0.0; // Default to 0.0 if null
-    fees30min = json['fees30min'] != null ? (json['fees30min'] as num).toDouble() : 0.0; // Default to 0.0 if null
+    fees60min = json['fees60min'] != null
+        ? (json['fees60min'] as num).toDouble()
+        : 0.0; // Default to 0.0 if null
+    fees30min = json['fees30min'] != null
+        ? (json['fees30min'] as num).toDouble()
+        : 0.0; // Default to 0.0 if null
 
     // Handle image field
     if (json['image'] != null && json['image'] is Map) {
@@ -58,17 +66,23 @@ class DoctorModel {
       image = null; // Handle null image
     }
 
+    // Adjust the interests mapping to exclude null or empty entries
     interests = (json['interests'] as List<dynamic>?)
-        ?.map((item) => item.toString())
-        .toList() ?? []; // Default to empty list if null
+            ?.map((item) => item.toString())
+            .where((item) => item.isNotEmpty) // Filter out empty strings
+            .toList() ??
+        []; // Default to empty list if null
 
     country = json['country'] ?? 'Unknown'; // Default to 'Unknown' if null
     language = (json['language'] as List<dynamic>?)
-        ?.map((item) => item.toString())
-        .toList() ?? []; // Default to empty list if null
+            ?.map((item) => item.toString())
+            .toList() ??
+        []; // Default to empty list if null
 
-    gender = json['gender'] ?? 'Not Specified'; // Default to 'Not Specified' if null
-    isOnline = json['isOnline'] == 'true'; // Convert 'true'/'false' strings to boolean
+    gender =
+        json['gender'] ?? 'Not Specified'; // Default to 'Not Specified' if null
+    isOnline =
+        json['isOnline'] == 'true'; // Convert 'true'/'false' strings to boolean
   }
 
   Map<String, dynamic> toJson() {

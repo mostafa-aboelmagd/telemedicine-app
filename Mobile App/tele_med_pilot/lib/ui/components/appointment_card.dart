@@ -40,7 +40,7 @@ class AppointmentCard extends ConsumerWidget {
                   Image.asset(
                     AppConstants.emptyProfile,
                     height: 40.h,
-                    width: 40.h,
+                    width: 40.w,
                   ),
                   SizedBox(width: 12.w),
                   Column(
@@ -61,24 +61,24 @@ class AppointmentCard extends ConsumerWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 12.w),
-                    decoration: BoxDecoration(
-                      color: AppColors.gray60,
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Text(
-                      "${appointment.appointmentSettingsType} / ${appointment.appointmentType}",
-                      style: AppTextStyles.bodyTextSmallBold
-                          .copyWith(color: AppColors.black),
-                    ),
-                  ),
                   SizedBox(width: 18.w),
                   const Icon(Icons.more_horiz),
                 ],
               )
             ],
+          ),
+          SizedBox(height: 12.h),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 12.w),
+            decoration: BoxDecoration(
+              color: AppColors.gray60,
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Text(
+              "${appointment.appointmentSettingsType} / ${appointment.appointmentType}",
+              style: AppTextStyles.bodyTextExtraSmallBold
+                  .copyWith(color: AppColors.black),
+            ),
           ),
           SizedBox(height: 12.h),
           Text(

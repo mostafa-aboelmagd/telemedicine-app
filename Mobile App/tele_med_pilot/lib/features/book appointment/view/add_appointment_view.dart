@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:tele_med_pilot/Utility/token_service.dart';
+import 'package:tele_med_pilot/utility/token_service.dart';
 import 'package:tele_med_pilot/core/constant.dart';
 import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
 import 'package:tele_med_pilot/features/book%20appointment/view/components/doctor_info.dart';
-import 'package:tele_med_pilot/features/book%20appointment/view/components/session_time.dart';
 import 'package:tele_med_pilot/features/book%20appointment/view/components/slots.dart';
-import 'package:tele_med_pilot/ui/components/mainBar.dart';
+import 'package:tele_med_pilot/ui/components/main_bar.dart';
 
 class AddAppointmentView extends StatefulWidget {
   final dynamic card;
@@ -55,7 +54,8 @@ class _AddAppointmentViewState extends State<AddAppointmentView> {
           ],
         ),
       ),
-      body: SingleChildScrollView( // Wrap in SingleChildScrollView
+      body: SingleChildScrollView(
+        // Wrap in SingleChildScrollView
         padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,12 +71,13 @@ class _AddAppointmentViewState extends State<AddAppointmentView> {
             DoctorInfo(card: widget.card),
             const SizedBox(height: 20),
 
-            token == null 
-            ? const Center(child: CircularProgressIndicator()) // Center the loader
-            : Slots(
-              doctorId: int.parse(widget.card.id),
-              authToken: token,
-            ),
+            token == null
+                ? const Center(
+                    child: CircularProgressIndicator()) // Center the loader
+                : Slots(
+                    doctorId: int.parse(widget.card.id),
+                    authToken: token,
+                  ),
           ],
         ),
       ),

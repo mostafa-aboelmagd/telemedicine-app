@@ -12,7 +12,6 @@ class AppointmentsService {
     try {
       final response =
           await _baseService.get(AppConstants.patientAppointmentsEndpoint);
-      print(response);
       if (response['appointments'] == null ||
           response['appointments'] is! List) {
         return [];
@@ -48,7 +47,6 @@ class AppointmentsService {
     try {
       final response = await _baseService
           .get("${AppConstants.patientAppointmentDetailsEndpoint}/$id");
-      print(response);
       if (response['appointment'] == null) {
         return null;
       }

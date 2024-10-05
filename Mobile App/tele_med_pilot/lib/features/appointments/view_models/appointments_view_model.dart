@@ -49,7 +49,6 @@ class AppointmentsViewModel extends StateNotifier<AppointmentState> {
     final id = state.appointmentID;
     try {
       final appointment = await _appointmentsService.getAppointmentDetails(id!);
-      print("HERERE ERERER ERER E${appointment?.appointmentComplaint}");
       if (appointment == null) {
         state = state.copyWith(
             errorMessage: "Cannot Fetch Details, Try again later",
@@ -57,7 +56,6 @@ class AppointmentsViewModel extends StateNotifier<AppointmentState> {
       } else {
         state =
             state.copyWith(appointmentDetails: appointment, isLoading: false);
-        print("3eeeeeeeeeeb ${state.appointmentDetails?.appointmentComplaint}");
       }
     } catch (error) {
       state = state.copyWith(isLoading: false, errorMessage: error.toString());

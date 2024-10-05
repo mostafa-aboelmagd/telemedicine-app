@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:tele_med_pilot/core/constant.dart';
 import 'package:tele_med_pilot/features/book%20appointment/repositories/book_appointment_repo.dart';
-import 'package:tele_med_pilot/models/Availability_model.dart';
+import 'package:tele_med_pilot/models/availability_model.dart';
 
 class BookingAppointmentBack extends BookAppointmentRepo {
   final String authToken; // Field to hold the auth token

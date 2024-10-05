@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tele_med_pilot/core/constant.dart';
 import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
-import 'package:tele_med_pilot/ui/components/mainBar.dart';
+import 'package:tele_med_pilot/ui/components/main_bar.dart';
 
 class AddAppointmentView extends StatefulWidget {
   final dynamic card;

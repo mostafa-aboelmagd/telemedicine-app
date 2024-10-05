@@ -12,7 +12,6 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
   Future<bool> getProfile() async {
     try {
       UserModel user = await _profileService.getProfile();
-      print(user.firstName);
 
       state = state.copyWith(user: user, isLoading: false);
       return true;

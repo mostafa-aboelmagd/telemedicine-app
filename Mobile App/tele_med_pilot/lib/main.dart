@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart'; // Import flutter_dotenv
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tele_med_pilot/core/global_keys.dart';
 import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
@@ -11,9 +11,8 @@ Future<void> main() async {
 
   try {
     await dotenv.load(fileName: "assets/.env");
-  } catch (e) {
-    print("Failed to load .env file: $e");
-  }
+    // ignore: empty_catches
+  } catch (e) {}
   runApp(const ProviderScope(child: App()));
 }
 

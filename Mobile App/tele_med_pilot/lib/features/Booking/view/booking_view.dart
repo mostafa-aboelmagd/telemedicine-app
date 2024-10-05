@@ -6,8 +6,8 @@ import 'package:tele_med_pilot/core/route.dart';
 import 'package:tele_med_pilot/core/theme.dart';
 import 'package:tele_med_pilot/features/Booking/repositories/data/doctors_list_back.dart';
 import 'package:tele_med_pilot/features/Booking/view/card_view.dart';
-import 'package:tele_med_pilot/features/Booking/view_models/Booking_view_model.dart';
-import 'package:tele_med_pilot/ui/components/mainBar.dart';
+import 'package:tele_med_pilot/features/Booking/view_models/booking_view_model.dart';
+import 'package:tele_med_pilot/ui/components/main_bar.dart';
 import 'dart:io' show Platform;
 
 class BookingSession extends StatefulWidget {

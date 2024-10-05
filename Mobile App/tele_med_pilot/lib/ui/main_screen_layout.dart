@@ -3,6 +3,7 @@ import 'package:tele_med_pilot/core/theme.dart';
 import 'package:tele_med_pilot/features/appointments/views/appointments_screen.dart';
 import 'package:tele_med_pilot/features/home_page/views/home_screen.dart';
 import 'package:tele_med_pilot/features/profile/views/profile_screen.dart';
+import 'package:tele_med_pilot/features/requests/views/request_screen.dart';
 import 'package:tele_med_pilot/features/support/views/support_screen.dart';
 
 class MainScreenLayout extends StatefulWidget {
@@ -19,6 +20,7 @@ class _MainScreenLayoutState extends State<MainScreenLayout> {
     const HomeScreen(),
     const AppointmentsScreen(),
     const ProfileScreen(),
+    const RequestScreen(),
     const SupportScreen(),
   ];
 

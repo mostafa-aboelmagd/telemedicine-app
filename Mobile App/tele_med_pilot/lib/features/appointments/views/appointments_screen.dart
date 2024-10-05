@@ -104,7 +104,8 @@ class _OngoingAppointmentsViewState
     return isLoading
         ? const LoadingScreen()
         : PopScope(
-            onPopInvoked: (didPop) => appointmentViewModel.resetState(),
+            onPopInvokedWithResult: (didPop, _) =>
+                appointmentViewModel.resetState(),
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
@@ -172,7 +173,8 @@ class _PastAppointmentsViewState extends ConsumerState<PastAppointmentsView> {
     return isLoading
         ? const LoadingScreen()
         : PopScope(
-            onPopInvoked: (didPop) => appointmentViewModel.resetState(),
+            onPopInvokedWithResult: (didPop, _) =>
+                appointmentViewModel.resetState(),
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),

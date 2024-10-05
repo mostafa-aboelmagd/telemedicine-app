@@ -9,6 +9,8 @@ class BookingSessionViewModel {
 
   Future<List<DoctorCardViewModel>> fetchDoctorList() async {
     List<DoctorModel> list = await doctorsRepo!.getDoctorsList();
-    return list.map((doctor) => DoctorCardViewModel(doctorModel: doctor)).toList();
+    return list
+        .map((doctor) => DoctorCardViewModel(doctorModel: doctor))
+        .toList();
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,8 +9,7 @@ class Slots extends StatefulWidget {
   final String? authToken;
   final int doctorId;
 
-  const Slots({Key? key, required this.authToken, required this.doctorId})
-      : super(key: key);
+  const Slots({super.key, required this.authToken, required this.doctorId});
 
   @override
   State<Slots> createState() => _SlotsState();
@@ -65,7 +63,6 @@ class _SlotsState extends State<Slots> {
         throw Exception('Failed to load availability: ${response.statusCode}');
       }
     } catch (e) {
-      print(e);
       return {};
     }
   }
@@ -173,7 +170,7 @@ class _SlotsState extends State<Slots> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 5,
             )
           ],
@@ -240,7 +237,7 @@ class _SlotsState extends State<Slots> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
                 controller: _textFieldController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Enter additional notes",
                   border: OutlineInputBorder(),
                 ),
@@ -250,7 +247,7 @@ class _SlotsState extends State<Slots> {
 
             // Book Now Button
             Center(
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
                 child: ElevatedButton(
                   onPressed: selectedSlotIndex != null &&
