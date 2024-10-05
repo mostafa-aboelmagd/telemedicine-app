@@ -38,7 +38,7 @@ TeleMedPilot provides a comprehensive platform to connect patients with certifie
 
 ## **Live Demo**
 
-Visit the live website: [TeleMedPilot](https://tele-med-pilot-mansy.vercel.app/)
+Visit the live website: [TeleMedPilot](https://telemed-mansy.vercel.app)
 
 ---
 
