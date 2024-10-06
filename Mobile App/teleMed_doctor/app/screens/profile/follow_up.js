@@ -183,7 +183,7 @@ export default function Follow_up({ navigation }) {
   const getAvailabilSlots = async () => {
     try {
       const response = await fetch(
-        `${NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/13`,
+        `${NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/00`,
         {
           method: "GET",
           headers: {
