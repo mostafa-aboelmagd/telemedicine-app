@@ -234,7 +234,7 @@ const Doctors = () => {
       <h1 className="text-[#035fe9] font-bold text-[40px] text-center">
         Our Doctors
       </h1>
-      <section className="max-w-full md:max-w-[90%] lg:max-w-[75%] mx-auto grid grid-cols-2 md:grid-cols-3 gap-4 h-lvh">
+      <section className="max-w-full md:max-w-[90%] lg:max-w-[85%] xl:max-w-[75%] mx-auto grid grid-cols-2 lg:grid-cols-3 gap-4 h-lvh">
         <SearchBar placeholder="Doctor name or title" />
         <SortDropDown
           handleChangeFilter={handleChangeFilterDrop}
@@ -243,7 +243,7 @@ const Doctors = () => {
           id="sort"
           isMulti={false}
         />
-        <div className="md:hidden ml-4 text-[#035fe9]">
+        <div className="lg:hidden ml-4 text-[#035fe9]">
           <button onClick={handleOpenModal} className="flex items-center">
             Filters <IoFilter className="w-4 h-4 ml-2" />
           </button>
@@ -263,9 +263,7 @@ const Doctors = () => {
         {filteredDoctors.length > 0 ? (
           <DoctorGrid doctors={filteredDoctors} />
         ) : (
-          <div className="mx-10 text-xl">
-            <CircularProgress className="absolute top-1/2 md:right-1/3 md:top-3/4" />
-          </div>
+          <CircularProgress className="mx-auto my-10" />
         )}
       </section>
     </main>

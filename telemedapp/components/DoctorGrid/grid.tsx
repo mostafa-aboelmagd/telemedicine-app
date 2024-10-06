@@ -7,7 +7,9 @@ const DoctorGrid = ({ doctors }: { doctors: any[] }) => {
   });
   return (
     <div className="col-span-2 overflow-y-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">{doctorList}</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ">
+        {doctorList}
+      </div>
     </div>
   );
 };

@@ -22,7 +22,7 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
     : ""; // Handle the case if no image is available
 
   return (
-    <div className="bg-white rounded-3xl p-4 flex flex-col space-y-8 hover:scale-105 transition shadow-lg">
+    <div className="bg-white rounded-3xl p-4 flex flex-col space-y-8 hover:scale-105 transition shadow-lg max-w-96 min-w-72 md:mx-2 mx-auto">
       <div className="flex flex-col space-y-4 md:space-y-0 items-center md:items-start md:flex-row space-x-2">
         <div>
           {base64Image ? (
