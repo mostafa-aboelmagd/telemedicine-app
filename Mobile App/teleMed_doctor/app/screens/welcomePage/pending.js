@@ -9,7 +9,11 @@ return (
             style={styles.image}
         />
         <Text style={styles.text}>We still confirming your registration,  youl will get an email once it is done.</Text>
+        <Custombutton>
+          Explore our services
+        </Custombutton>
       </View>
+      
   );
 };
 

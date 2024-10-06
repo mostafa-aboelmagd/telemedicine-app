@@ -17,7 +17,8 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import CustomTitle from "../../components/title";
 import DropdownMenu from "../../components/dropdown";
 import LocalStorage from "../../components/LocalStorage";
-import map from '../../components/registration_map';
+import map from "../../components/registration_map";
+import { NEXT_PUBLIC_SERVER_NAME } from "@env";
 
 export default function Register2({ navigation }) {
   // const { userData, handleSetUserData } = useContext(RegistrationContext);
@@ -55,7 +56,7 @@ export default function Register2({ navigation }) {
 
   const submitRegistration = async () => {
     if (interests && selectedLanguages) {
-      Alert.alert("Registration successful!");
+      Alert.alert("Sending Request...");
     } else {
       Alert.alert("All fields are required!");
     }
@@ -64,6 +65,7 @@ export default function Register2({ navigation }) {
       const personalInfo = await LocalStorage.getItem("personalInfo");
       const certificates = await LocalStorage.getItem("certificates");
       const experiences = await LocalStorage.getItem("experiences");
+      // console.log(personalInfo,certificates,experiences);
       const finalData = {
         personalInfo,
         certificates,
@@ -71,28 +73,71 @@ export default function Register2({ navigation }) {
         interests,
         selectedLanguages,
       };
-      map(finalData).then(mappedData=>{
-        console.log('mappedData',mappedData);
-      })
-      const response = await fetch("/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(finalData),
-      });
+      const mappedData = mapObjectToBackendFormat(finalData);
+      console.log("final", JSON.stringify(mappedData));
+      const response = await fetch(
+        `${NEXT_PUBLIC_SERVER_NAME}/doctor/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(mappedData),
+        }
+      );
       if (!response.ok) {
         const error = await response.text();
         Alert.alert("Registration failed:", error);
         return;
+      } else {
+        // Handle successful registration (e.g., navigate to home)
+        navigation.navigate("pending");
       }
-
-      // Handle successful registration (e.g., navigate to home)
-      navigation.navigate("");
     } catch (error) {
       console.error("Registration error:", error);
     }
   };
+  function mapObjectToBackendFormat(inputObject) {
+    // Parse the JSON strings for certificates and experiences
+    const certificates = JSON.parse(inputObject.certificates);
+    const experiences = JSON.parse(inputObject.experiences);
+
+    // Create the output object with the desired structure
+    const outputObject = {
+      personalInfo: {
+        firstName: inputObject.personalInfo.Fname,
+        lastName: inputObject.personalInfo.Lname,
+        birthdate: inputObject.personalInfo.birthdate.split("T")[0], // Extract date only
+        city: inputObject.personalInfo.city,
+        country: inputObject.personalInfo.country,
+        email: inputObject.personalInfo.email,
+        gender: inputObject.personalInfo.gender,
+        location: inputObject.personalInfo.location,
+        password: inputObject.personalInfo.password,
+        phone: inputObject.personalInfo.phone,
+        speciality: inputObject.personalInfo.speciality,
+      },
+      certificates: certificates.map((cert) => ({
+        authority: cert.firm, // Assuming 'firm' maps to 'authority'
+        endDate: cert.endDate.split("T")[0], // Extract date only
+        name: cert.title, // Assuming 'title' maps to 'name'
+        startDate: cert.startDate.split("T")[0], // Extract date only
+      })),
+      experiences: experiences.map((exp) => ({
+        department: exp.certificateName, // Assuming 'certificateName' maps to 'department'
+        endDate: exp.endDate.split("T")[0], // Extract date only
+        firm: exp.certificateAuthority, // Assuming 'certificateAuthority' maps to 'firm'
+        startDate: exp.startDate.split("T")[0], // Extract date only
+        title: exp.title, // Assuming 'title' is present in the experience object
+      })),
+      interests: inputObject.interests, // No changes needed for 'interests'
+      Languages: inputObject.selectedLanguages.map(
+        (lang) => lang.charAt(0).toUpperCase() + lang.slice(1)
+      ), // Capitalize languages
+    };
+
+    return outputObject;
+  }
 
   return (
     <SafeArea>
