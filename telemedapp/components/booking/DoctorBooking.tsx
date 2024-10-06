@@ -108,10 +108,7 @@ const DoctorBooking = () => {
       }
     )
       .then((response) => response.json())
-      .then((response) =>
-        setAppointments(response ? response.appointments : response)
-      );
-    console.log("History Appointments: ", appointments);
+      .then((response) => setAppointments(response?.appointments || []));
   }, [appointmentState]);
 
   const handleDurationChange = (duration: number) =>
@@ -166,6 +163,7 @@ const DoctorBooking = () => {
           selectedDate={selectedDate}
           selectedSlot={selectedSlot}
           handleSlotSelect={handleSlotSelect}
+          availableDates={availableDates}
         />
       </div>
     </div>

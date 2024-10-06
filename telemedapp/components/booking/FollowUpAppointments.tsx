@@ -59,7 +59,9 @@ const FollowUpAppointments: React.FC<FollowUpAppointmentsProps> = ({
           zIndex: 1000,
         }}
         header={
-          appointments.length > 0 ? "Select Appointment for Follow Up" : ""
+          appointments && appointments.length > 0
+            ? "Select Appointment for Follow Up"
+            : ""
         }
         visible={showDialog}
         onHide={() => setShowDialog(false)}
