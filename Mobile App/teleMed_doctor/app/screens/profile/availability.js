@@ -9,7 +9,6 @@ import { NEXT_PUBLIC_SERVER_NAME} from '@env';
 
 let newSlots = []
 let removedSlots = []
-let selectedSlotsOfDays = {}
 export default function Availability ({ navigation }) {
 
     // const slots = Object.entries(doctorAv.timeslots)
@@ -19,6 +18,16 @@ export default function Availability ({ navigation }) {
     const [selectedDay, setSelectedDay] = useState('sat')
     const [message, setMessage] = useState('')
     const decodedSlots = {}
+    const [selectedSlotsOfDay, setSelectedSlotsOfDay] = useState({
+        'sat': {},
+        'sun': {},
+        'mon': {},
+        'tue': {},
+        'wed': {},
+        'thu': {},
+        'fri': {},
+    })
+
 
     const days = {
         '1': 'sat',
@@ -83,16 +92,22 @@ export default function Availability ({ navigation }) {
         if (add){
             if (newSlots.includes(codedSlot) || slots && slots.includes(codedSlot)) {
                 newSlots = newSlots.filter(slot => slot !== codedSlot);
-                setHours((prevDictionary) => ({
-                    ...prevDictionary,
-                    [hour]: false
-                  })); 
+                setSelectedSlotsOfDay(prevSchedule => ({
+                    ...prevSchedule, // Spread the previous schedule
+                    [day]: {
+                    ...prevSchedule[day], // Spread the 'sun' object
+                        [hour]: false // Update the specific value
+                    }
+                })); 
             } else {
                 newSlots.push(codedSlot);
-                setHours((prevDictionary) => ({
-                    ...prevDictionary,
-                    [hour]: true
-                  })); 
+                setSelectedSlotsOfDay(prevSchedule => ({
+                    ...prevSchedule, // Spread the previous schedule
+                    [day]: {
+                        ...prevSchedule[day], // Spread the 'sun' object
+                        [hour]: true // Update the specific value
+                    }
+                })); 
             }
             // console.log(newSlots)
             // console.log(hours['05'])
@@ -100,42 +115,67 @@ export default function Availability ({ navigation }) {
             if (slots.includes(codedSlot)) {
                 if(removedSlots.includes(codedSlot)){
                     removedSlots = removedSlots.filter(slot => slot !== codedSlot);
-                    setHours((prevDictionary) => ({
-                        ...prevDictionary,
-                        [hour]: false
-                      })); 
+                    setSelectedSlotsOfDay(prevSchedule => ({
+                    ...prevSchedule, // Spread the previous schedule
+                    [day]: {
+                        ...prevSchedule[day], // Spread the 'sun' object
+                        [hour]: false // Update the specific value
+                    }
+                    })); 
                 } else {
                     removedSlots.push(codedSlot);
-                    setHours((prevDictionary) => ({
-                        ...prevDictionary,
-                        [hour]: true
-                      })); 
+                    setSelectedSlotsOfDay(prevSchedule => ({
+                        ...prevSchedule, // Spread the previous schedule
+                        [day]: {
+                            ...prevSchedule[day], // Spread the 'sun' object
+                            [hour]: true // Update the specific value
+                        }
+                    })); 
                 }
             } else {
-                setHours((prevDictionary) => ({
-                    ...prevDictionary,
-                    [hour]: false
-                  }));            }
-            // console.log(removedSlots)
+                setSelectedSlotsOfDay(prevSchedule => ({
+                    ...prevSchedule, // Spread the previous schedule
+                    [day]: {
+                        ...prevSchedule[day],
+                        [hour]: false // Update the specific value
+                    }
+                })); 
+            }
         }
+        console.log(selectedSlotsOfDay[selectedDay])
     }
 
+    // adding day to slots of each day
+    useEffect(() => {
+        // console.log(selectedDay)
+        if (! selectedDay in selectedSlotsOfDay) {
+        setSelectedSlotsOfDay((prevDictionary) => ({
+                ...prevDictionary,
+                [selectedDay]: hours
+            }))
+        }
+    }, [selectedDay]);
+
+    // useEffect(() => {
+    //     console.log("Updated selectedSlotsOfDay:", selectedSlotsOfDay);
+    // }, [selectedSlotsOfDay]);
+
+    //styling each slot
     const getStyle = (slotStyle) => {
-        // console.log(hours[slotStyle])
         if (add) {
             if (filtered(slotStyle)) {
                 return styles.slot;
             } else {
-                return [styles.slot, hours[slotStyle] ? { backgroundColor:'#002e07' } : { backgroundColor: 'green' }];
+                return [styles.slot, selectedSlotsOfDay[selectedDay][slotStyle] ? { backgroundColor:'#002e07' } : { backgroundColor: 'green' }];
             }
         } else {
             if (filtered(slotStyle)){
-                return hours[slotStyle] ? [styles.slot, { backgroundColor: '#2e0000' }] : [styles.slot, { backgroundColor: 'red' }];
+                return selectedSlotsOfDay[selectedDay][slotStyle] ? [styles.slot, { backgroundColor: '#2e0000' }] : [styles.slot, { backgroundColor: 'red' }];
             } else {
                 return styles.slot;
             }
         }
-      };
+    };
 
     // Fetching doctor availability    
     const getAvailability = async () => {
@@ -165,13 +205,14 @@ export default function Availability ({ navigation }) {
         }
       };
     
-      useEffect(() => {
+    useEffect(() => {
         getAvailability();
-      }, [loading]);
+    }, [loading]);
     
 
     // adding doctor availability
     const addingSlots = async () => {
+        setMessage('Just wait')
             try {
                 const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/availability/add`, {
                 method: 'POST',
@@ -192,11 +233,21 @@ export default function Availability ({ navigation }) {
                 const message = responseData.message
                 setMessage(message)
 
-                const newDictionary = Object.keys(hours).reduce((acc, key) => ({
-                ...acc,
-                [key]: false
-                }), {});
-                setHours(newDictionary);
+                // clearning the boolean objects
+                const resetValues = Object.keys(selectedSlotsOfDay).reduce((acc, day) => {
+                    acc[day] = Object.keys(selectedSlotsOfDay[day]).reduce((dayAcc, key) => {
+                        dayAcc[key] = false;  // Set each key's value to false
+                        return dayAcc;  // Return the updated dayAcc
+                    }, {});
+                    return acc;  // Return the updated acc
+                }, {});
+                
+                // Update the state
+                setSelectedSlotsOfDay((prevDictionary) => ({
+                    ...prevDictionary,
+                    ...resetValues, // Merge all updated days into the previous state
+                }));
+
                 setLoading(true);
 
             } catch (error) {
@@ -206,6 +257,7 @@ export default function Availability ({ navigation }) {
 
         // removing doctor availability
         const removingSlots = async () => {
+            setMessage('just wait')
             try {
                 const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/availability/delete`, {
                 method: 'DELETE',
@@ -226,11 +278,21 @@ export default function Availability ({ navigation }) {
                 const message = responseData.message
                 setMessage(message)
 
-                const newDictionary = Object.keys(hours).reduce((acc, key) => ({
-                    ...acc,
-                    [key]: false
-                    }), {});
-                setHours(newDictionary);
+                // clearning the boolean objects
+                const resetValues = Object.keys(selectedSlotsOfDay).reduce((acc, day) => {
+                    acc[day] = Object.keys(selectedSlotsOfDay[day]).reduce((dayAcc, key) => {
+                        dayAcc[key] = false;  // Set each key's value to false
+                        return dayAcc;  // Return the updated dayAcc
+                    }, {});
+                    return acc;  // Return the updated acc
+                }, {});
+                
+                // Update the state
+                setSelectedSlotsOfDay((prevDictionary) => ({
+                    ...prevDictionary,
+                    ...resetValues, // Merge all updated days into the previous state
+                }));
+
                 setLoading(true);
 
             } catch (error) {

@@ -36,7 +36,7 @@ const Stack = createStackNavigator();
 export default function StackRouters() {
   return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="Index">
+        <Stack.Navigator initialRouteName="profile">
             {/* welcome page */}
             <Stack.Screen name='index' component={Index} options={{ headerShown : false}} />
             <Stack.Screen name='sign in' component={SignIn} options={{ headerShown : false}} />
