@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { useState } from 'react';
 import SafeArea from '../../components/safeArea';
 import CustomTitle from '../../components/title';
 import { getToken } from '../../components/getToken';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env'
+import DateTimePicker from "@react-native-community/datetimepicker";
 // import { PullToRefreshView } from '@react-native-community/pull-to-refresh';
 
 export default function EditInfo ({ navigation, route }) {
 
     const { info } = route.params
     const [message, setMessage] = useState(null)
-    console.log(info.birthDate)
 
     const [newInfo, setNewInfo] = useState({
         'firstName': info.firstName,
@@ -24,7 +24,37 @@ export default function EditInfo ({ navigation, route }) {
         'specialization': info.specialization,
     })
     const [newlanguages, setNewlanguages] = useState(info.languages)
+
+    // Selecting date constants
+    const [birth_date, setBirthDate] = useState(false);
+    const [currentPicker, setCurrentPicker] = useState(null);
+    const [showPicker, setShowPicker] = useState(false);
+    const [isPickerVisible, setIsPickerVisible] = useState(false);
+    const showDatePicker = (pickerType) => {
+        setCurrentPicker(pickerType);
+    
+        setShowPicker(true);
+        setIsPickerVisible(Platform.OS === "android");
+      };
+
+      const onBirthDateChange = (event, selectedDate) => {
+        if (event.type === "set" && selectedDate) {
+          setBirthDate(selectedDate);
+          setNewInfo({ ...newInfo, phone: selectedDate })
+        }
+        // Handle date picker visibility based on platform (Android or iOS)
+    
+        if (Platform.OS === "android") {
+          setShowPicker(false);
+          setIsPickerVisible(false);
+        } else {
+          setShowPicker(false);
+        }
+        setCurrentPicker(null);
+    };
+    
     const setInfo = async () => {
+        console.log(newInfo)
         try {
           const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/edit/info`, {
             method: 'PUT',
@@ -96,16 +126,22 @@ export default function EditInfo ({ navigation, route }) {
                     />
                 </View>
 
-                <Text style={styles.title}>Birth Year</Text>  
-                <View style={styles.container3}>
-                <TextInput
-                    placeholder='Birth Year'
-                    value={newInfo.birthDate}
-                    onChangeText={value => setNewInfo({ ...newInfo, birthDate : String(value) })}
-                    style={styles.input}
-                    />
+                <Text style={styles.title}>Birth Date</Text>  
+                <View
+                style={[
+                    styles.container3,
+                    { flexDirection: "row", paddingHorizontal: 5 },
+                ]}
+                >
+                <TouchableOpacity onPress={() => showDatePicker("start")}>
+                    <Text style={[styles.container3, {paddingHorizontal: 5}]}>
+                    {birth_date
+                        ? new Date(birth_date).toDateString()
+                        : 'Birth Date'}
+                    </Text>
+                </TouchableOpacity>
                 </View>
-
+                
                 <Text style={styles.title}>Residence Country</Text>                
                 <View style={styles.container3}>  
                 <TextInput
@@ -157,6 +193,14 @@ export default function EditInfo ({ navigation, route }) {
                     style={styles.input} 
                     />
                 </View>
+                {(showPicker || isPickerVisible) && (
+                <DateTimePicker
+                    value={new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={onBirthDateChange}
+                />
+                )}
                 </ScrollView>
 
         </View>

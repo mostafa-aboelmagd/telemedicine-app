@@ -179,12 +179,12 @@ export default function Register({ navigation }) {
                 style={styles.input}
               />
             </View>
-            <View
+            {/* <View
               style={[
                 styles.cell,
                 { flexDirection: "row", paddingHorizontal: 5 },
               ]}
-            ></View>
+            ></View> */}
             <View
               style={[
                 styles.container3,
