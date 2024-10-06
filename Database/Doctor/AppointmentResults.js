@@ -1,36 +1,34 @@
-const pg = require('pg');
-require('dotenv').config();
+const pg = require("pg");
+require("dotenv").config();
 
 const { PGHOST, PGDATABASE, PGUSER, PGPORT } = process.env;
 let PGPASSWORD = process.env.PGPASSWORD;
 PGPASSWORD = decodeURIComponent(PGPASSWORD);
 
 const pool = new pg.Pool({
-    user: PGUSER,
-    host: PGHOST,
-    database: PGDATABASE,
-    password: PGPASSWORD,
-    port: PGPORT,
-    ssl: {
-        rejectUnauthorized: true,
-    },
+  user: PGUSER,
+  host: PGHOST,
+  database: PGDATABASE,
+  password: PGPASSWORD,
+  port: PGPORT,
+  ssl: {
+    rejectUnauthorized: true,
+  },
 });
 
 (async () => {
-    try {
-        const client = await pool.connect();
-        console.log('Connected to the database');
-        client.release();
-    } catch (error) {
-        console.error('Database connection error', error.stack);
-    }
+  try {
+    const client = await pool.connect();
+    console.log("Connected to the database");
+    client.release();
+  } catch (error) {
+    console.error("Database connection error", error.stack);
+  }
 })();
-
-
 
 const insertAppointmentResults = async (data) => {
   const result = await pool.query(
-    'INSERT INTO appointment_results (appointment_diagnosis, appointment_report, results_appointment_reference) VALUES ($1, $2, $3) RETURNING appointment_result_id',
+    "INSERT INTO appointment_results (appointment_diagnosis, appointment_report, results_appointment_reference) VALUES ($1, $2, $3) RETURNING appointment_result_id",
     [data.diagnosis, data.report, data.results_appointment_reference]
   );
   return result.rows[0].appointment_result_id;
@@ -38,8 +36,13 @@ const insertAppointmentResults = async (data) => {
 
 const insertTreatmentPlan = async (data) => {
   const result = await pool.query(
-    'INSERT INTO treatment_plan (treatment_plan_appointment_reference, treatment_plan_operations, treatment_plan_speciality_referral, treatment_plan_referral_notes) VALUES ($1, $2, $3, $4) RETURNING treatment_plan_id',
-    [data.treatment_plan_appointment_reference, data.operations, data.specialityReferral, data.specialityReferralNotes]
+    "INSERT INTO treatment_plan (treatment_plan_appointment_reference, treatment_plan_operations, treatment_plan_speciality_referral, treatment_plan_referral_notes) VALUES ($1, $2, $3, $4) RETURNING treatment_plan_id",
+    [
+      data.treatment_plan_appointment_reference,
+      data.operations,
+      data.specialityReferral,
+      data.specialityReferralNotes,
+    ]
   );
   return result.rows[0].treatment_plan_id;
 };
@@ -50,19 +53,30 @@ const insertMedications = async (medicationsData) => {
     console.log(data);
     const result = await pool.query(
       `INSERT INTO medications (medication_treatment_plan_reference, medication_name, medication_dosage, medication_note, medication_start_date, medication_end_date) VALUES ($1, $2, $3, $4, $5, $6)`,
-      [data.treatmentPlanId,data.medication_name,data.medication_dosage,data.medication_note,data.medication_start_date,data.medication_end_date]
-
-    );return result;
-  }    
-    // return result.rows;
-  };
+      [
+        data.treatmentPlanId,
+        data.medication_name,
+        data.medication_dosage,
+        data.medication_note,
+        data.medication_start_date,
+        data.medication_end_date,
+      ]
+    );
+  }
+  return result;
+  // return result.rows;
+};
 
 const updateAppointmentStatus = async (appointmentId, status) => {
   await pool.query(
-    'UPDATE appointment SET appointment_status = $2 WHERE appointment_id = $1',
+    "UPDATE appointment SET appointment_status = $2 WHERE appointment_id = $1",
     [appointmentId, status]
   );
 };
 
-  
-  module.exports = { updateAppointmentStatus, insertAppointmentResults, insertTreatmentPlan,insertMedications};
+module.exports = {
+  updateAppointmentStatus,
+  insertAppointmentResults,
+  insertTreatmentPlan,
+  insertMedications,
+};

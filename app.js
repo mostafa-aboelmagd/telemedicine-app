@@ -7,6 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 const userLoginRoute = require('./Routes/Login');
 const userLogoutRoute = require('./Routes/Logout');
 const patientRegisterRoute = require('./Routes/Patient/Register');
+const doctorRegisterRoute = require('./Routes/Doctor/Register');
 const patienProfileRoute = require('./Routes/Patient/Profile');
 const patientEditRoute = require('./Routes/Patient/Edit');
 const patientAppointmentBookRoute = require('./Routes/Patient/Appointment/book');
@@ -78,6 +79,7 @@ app.get('/', (req, res) => {
 app.use('/login', userLoginRoute);
 app.use('/logout', userLogoutRoute);
 app.use('/patient/register', patientRegisterRoute);
+app.use('/doctor/register', doctorRegisterRoute);
 app.use('/patient/profile', patienProfileRoute);
 app.use('/patient/edit', patientEditRoute);
 app.use('/patient/appointment', patientAppointmentBookRoute);
