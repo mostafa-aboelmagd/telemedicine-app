@@ -8,6 +8,7 @@ import styles from "./card.module.css";
 import { formatDate } from "@/utils/date";
 import BookingButton from "./BookingButton";
 import { FaUserCircle } from "react-icons/fa";
+
 const DoctorCard = ({ doctor }: { doctor: any }) => {
   const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
   const bufferToBase64 = (buffer: number[]) => {

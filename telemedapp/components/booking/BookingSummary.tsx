@@ -2,17 +2,13 @@ import React, { useState, useRef } from "react";
 import ConfirmDialog from "./ConfirmDialog";
 import { Toast } from "primereact/toast";
 import { convertDateToCode } from "@/utils/formatDoctorAvailabilities";
-
+import type { DoctorBooking } from "@/types";
 interface BookingSummaryProps {
   selectedSlot: string | null;
   selectedDuration: number;
   selectedType: string;
 
-  doctor: {
-    id: number;
-    fees60min: number;
-    fees30min: number;
-  };
+  doctor: DoctorBooking;
   selectedDate: {
     date: string;
     slots: { id: number; time: string }[];

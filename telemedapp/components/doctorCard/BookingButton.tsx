@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation"; // next/navigation for App Router
 import stylesButton from "../navbarComp/navbar.module.css";
-
+import { DoctorBooking } from "@/types";
 const BookingButton = ({ doctor }: { doctor: any }) => {
   const router = useRouter();
 
@@ -15,9 +15,16 @@ const BookingButton = ({ doctor }: { doctor: any }) => {
       localStorage.clear();
       window.location.href = "/auth/signin";
     } else {
-      const encodedDoctor = encodeURIComponent(JSON.stringify(doctor)); // Encode the doctor object
+      const doctorBooking: DoctorBooking = {
+        id: doctor.id,
+        name: doctor.name,
+        title: doctor.title,
+        fees60min: doctor.fees60min,
+        fees30min: doctor.fees30min,
+      };
+      const encodedDoctor = encodeURIComponent(JSON.stringify(doctorBooking)); // Encode the doctor object
       // router.push(`/booking?doctor=${encodedDoctor}`);
-      router.push(`doctors/${doctor.id}?doctor=${encodedDoctor}`);
+      router.push(`doctors/${doctorBooking.id}?doctorBooking=${encodedDoctor}`);
     }
   };
 

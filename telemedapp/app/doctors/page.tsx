@@ -1,61 +1,20 @@
+// pages/doctors.tsx
 "use client";
+import React, { useEffect, useState } from "react";
 import DoctorGrid from "@/components/DoctorGrid/grid";
 import FilterComponent from "@/components/FilterComponent/filter";
 import ReadyTherapist from "@/components/ReadyTherapistComp/readyTherapist";
 import SearchBar from "@/components/SearchBar/searchbar";
 import SortDropDown from "@/components/SortDropDown/sortdropdown";
-import React, { useEffect, useState } from "react";
-import { unFormatDate } from "@/utils/date";
+import CircularProgress from "@mui/material/CircularProgress";
 import { IoFilter } from "react-icons/io5";
-import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
+import { unFormatDate } from "@/utils/date";
+import { useDoctorContext } from "@/context/GetDoctorsContext";
 
 const Doctors = () => {
+  const { doctors, isLoading, error } = useDoctorContext();
   const [minMaxFees, setMinMaxFees] = useState({ min: 0, max: 1000 });
-  const [doctors, setDoctors] = useState<any>([]);
-
-  const [specializationOptions, setSpecializationOptions] = useState<any>([]);
-  const [countryOptions, setCountryOptions] = useState<any>([]);
-  const [languageOptions, setLanguageOptions] = useState<any>([]);
-
-  const handleFillOptions = (doctors: any[]) => {
-    let speciality: any = [];
-    let country: any = [];
-    let language: any = [];
-    doctors.forEach((doctor: any) => {
-      if (!speciality.includes(doctor.title)) {
-        speciality.push({ value: doctor.title, label: doctor.title });
-      }
-      if (!country.includes(doctor.country)) {
-        country.push({ value: doctor.country, label: doctor.country });
-      }
-      doctor.language.forEach((lang: string) => {
-        if (!language.includes(lang)) {
-          language.push({ value: lang, label: lang });
-        }
-      });
-    });
-    setSpecializationOptions(speciality);
-    setCountryOptions(country);
-    setLanguageOptions(language);
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-  };
-  const fetchDoctors = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/home`,
-      { headers }
-    );
-    if (!response.ok) {
-      console.log("Error: Request sent no data");
-    } else {
-      const data = await response.json();
-      handleFillOptions(data);
-      setDoctors(data);
-      // handleShownDoctors(filters);
-    }
-  };
+  const [filteredDoctors, setFilteredDoctors] = useState<any>([]);
   const [filters, setFilters] = useState({
     speciality: "",
     gender: "",
@@ -70,35 +29,61 @@ const Doctors = () => {
     sort: "",
     isOnline: "",
   });
-  const [filteredDoctors, setFilteredDoctors] = useState(doctors);
-
+  const [specializationOptions, setSpecializationOptions] = useState<any>([]);
+  const [countryOptions, setCountryOptions] = useState<any>([]);
+  const [languageOptions, setLanguageOptions] = useState<any>([]);
   const [openModal, setOpenModal] = useState(false);
+
   const handleOpenModal = () => {
     setOpenModal(!openModal);
   };
-  const handleShownDoctors = (filters: any) => {
-    let filtered = doctors;
 
+  const handleFillOptions = (doctors: any[]) => {
+    let speciality: any[] = [];
+    let country: any[] = [];
+    let language: any[] = [];
+
+    doctors.forEach((doctor: any) => {
+      if (!speciality.some((s) => s.value === doctor.title)) {
+        speciality.push({ value: doctor.title, label: doctor.title });
+      }
+      if (!country.some((c) => c.value === doctor.country)) {
+        country.push({ value: doctor.country, label: doctor.country });
+      }
+      doctor.language.forEach((lang: string) => {
+        if (!language.some((l) => l.value === lang)) {
+          language.push({ value: lang, label: lang });
+        }
+      });
+    });
+
+    setSpecializationOptions(speciality);
+    setCountryOptions(country);
+    setLanguageOptions(language);
+  };
+
+  const handleShownDoctors = (filters: any) => {
+    let filtered = [...doctors];
+
+    // Apply various filters to the doctors list
     if (filters.todayDate) {
-      let today = unFormatDate(filters.todayDate);
-      filtered = filtered.filter((doctor: any) => {
-        return (
+      const today = unFormatDate(filters.todayDate);
+      filtered = filtered.filter(
+        (doctor: any) =>
           unFormatDate(doctor.nearestApp).getFullYear() ===
             today.getFullYear() &&
           unFormatDate(doctor.nearestApp).getMonth() === today.getMonth() &&
           unFormatDate(doctor.nearestApp).getDate() === today.getDate()
-        );
-      });
+      );
     }
 
     if (filters.thisWeek) {
-      let thisWeek: any[] = filters.thisWeek.map((date: any) => date);
-      filtered = filtered.filter((doctor: any) => {
-        return (
-          unFormatDate(doctor.nearestApp) >= unFormatDate(thisWeek[0]) &&
-          unFormatDate(doctor.nearestApp) <= unFormatDate(thisWeek[1])
-        );
-      });
+      const [startDate, endDate] = filters.thisWeek;
+      filtered = filtered.filter(
+        (doctor: any) =>
+          unFormatDate(doctor.nearestApp) >= unFormatDate(startDate) &&
+          unFormatDate(doctor.nearestApp) <= unFormatDate(endDate)
+      );
     }
 
     if (filters.isOnline) {
@@ -112,11 +97,13 @@ const Doctors = () => {
         filters.speciality.includes(doctor.title)
       );
     }
+
     if (filters.gender) {
       filtered = filtered.filter(
         (doctor: any) => doctor.gender === filters.gender
       );
     }
+
     if (filters.rating) {
       const ratingValue = parseFloat(filters.rating);
       if (!isNaN(ratingValue)) {
@@ -125,6 +112,7 @@ const Doctors = () => {
         );
       }
     }
+
     if (filters.price.length > 0) {
       if (!isNaN(filters.price[0]) && !isNaN(filters.price[1])) {
         filtered = filtered.filter(
@@ -134,11 +122,13 @@ const Doctors = () => {
         );
       }
     }
+
     if (filters.country.length > 0) {
       filtered = filtered.filter((doctor: any) =>
         filters.country.includes(doctor.country)
       );
     }
+
     if (filters.language.length > 0) {
       filtered = filtered.filter((doctor: any) =>
         doctor.language.some((lang: string) => filters.language.includes(lang))
@@ -160,20 +150,16 @@ const Doctors = () => {
         case "rating":
           filtered = filtered.sort((a: any, b: any) => b.rating - a.rating);
           break;
-        case "reset":
-          setFilters({ ...filters, sort: "" });
-          break;
         default:
           break;
       }
     }
 
     setFilteredDoctors(filtered);
-    return filtered;
   };
+
   const handleResetFilters = () => {
     setFilters({
-      ...filters,
       speciality: "",
       gender: "",
       rating: "",
@@ -183,6 +169,7 @@ const Doctors = () => {
       country: [],
       language: [],
       isOnline: "",
+      sort: "",
     });
   };
 
@@ -195,39 +182,30 @@ const Doctors = () => {
       : [];
     setFilters({ ...filters, [name]: value });
   };
+
   const handleChangeOptions = (e: any) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
   };
 
-  const getMinMaxFees = () => {
-    let min = Number.MAX_VALUE;
-    let max = Number.MIN_VALUE;
-    doctors.forEach((doctor: any) => {
-      if (doctor.fees60min < min) {
-        min = doctor.fees60min;
-      }
-      if (doctor.fees60min > max) {
-        max = doctor.fees60min;
-      }
-    });
-    setMinMaxFees({ min, max });
-  };
-  const sortOptions = [
-    { value: "ascFees", label: "Fees Low to High" },
-    { value: "descFees", label: "Fees High to Low" },
-    { value: "rating", label: "Top Rated" },
-    { value: "reset", label: "Reset" },
-  ];
-  useEffect(() => {
-    fetchDoctors();
-    getMinMaxFees();
-  }, []);
   useEffect(() => {
     if (doctors.length > 0) {
+      handleFillOptions(doctors);
       handleShownDoctors(filters);
     }
   }, [doctors, filters]);
+
+  useEffect(() => {
+    if (doctors.length > 0) {
+      const min = Math.min(...doctors.map((doctor: any) => doctor.fees60min));
+      const max = Math.max(...doctors.map((doctor: any) => doctor.fees60min));
+      setMinMaxFees({ min, max });
+    }
+  }, [doctors]);
+
+  if (isLoading) return <CircularProgress className="mx-auto my-10" />;
+  if (error) return <p className="text-red-500">Error: {error}</p>;
+
   return (
     <main className="space-y-12">
       <ReadyTherapist />
@@ -238,7 +216,12 @@ const Doctors = () => {
         <SearchBar placeholder="Doctor name or title" />
         <SortDropDown
           handleChangeFilter={handleChangeFilterDrop}
-          options={sortOptions}
+          options={[
+            { value: "ascFees", label: "Fees Low to High" },
+            { value: "descFees", label: "Fees High to Low" },
+            { value: "rating", label: "Top Rated" },
+            { value: "reset", label: "Reset" },
+          ]}
           name="sort"
           id="sort"
           isMulti={false}

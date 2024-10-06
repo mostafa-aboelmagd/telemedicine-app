@@ -8,10 +8,10 @@ import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
 import { formatDoctorAvailabilities } from "@/utils/formatDoctorAvailabilities";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
-
+import type { DoctorBooking } from "@/types";
 const DoctorBooking = () => {
   const searchParams = useSearchParams();
-  const [doctor, setDoctor] = useState<any>(null);
+  const [doctor, setDoctor] = useState<DoctorBooking>();
   const [selectedDuration, setSelectedDuration] = useState(60);
   const [selectedDate, setSelectedDate] = useState<any>(null);
   const [selectedSlot, setSelectedSlot] = useState<string>("");
@@ -42,7 +42,7 @@ const DoctorBooking = () => {
 
   // Retrieve the doctor data from the query parameters
   useEffect(() => {
-    const doctorParam = searchParams.get("doctor");
+    const doctorParam = searchParams.get("doctorBooking");
 
     if (doctorParam) {
       try {
@@ -127,7 +127,7 @@ const DoctorBooking = () => {
     setSelectedType(slot.type);
   };
 
-  if (!doctor || !searchParams || !searchParams.get("doctor")) {
+  if (!doctor || !searchParams || !searchParams.get("doctorBooking")) {
     return <CircularProgress className="absolute top-1/2 left-1/2" />;
   }
 

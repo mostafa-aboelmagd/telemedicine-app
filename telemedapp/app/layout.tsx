@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import Head from "next/head"; // Import the Head component
 import "./globals.css";
 import Navbar from "@/components/navbarComp/navbar";
-import { ProfileProvider } from "@/context/ProfileContext"; // Ensure correct import path
+import { ProfileProvider } from "@/context/ProfileContext";
+import { DoctorProvider } from "@/context/GetDoctorsContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,10 +28,12 @@ export default function RootLayout({
         <link rel="icon" href="/logo.png" type="image/png" />
       </Head>
       <body className={inter.className}>
-        <ProfileProvider>
-          <Navbar />
-          {children}
-        </ProfileProvider>
+        <DoctorProvider>
+          <ProfileProvider>
+            <Navbar />
+            {children}
+          </ProfileProvider>
+        </DoctorProvider>
       </body>
     </html>
   );
