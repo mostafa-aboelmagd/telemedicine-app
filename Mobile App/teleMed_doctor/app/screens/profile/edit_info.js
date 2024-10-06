@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Platform } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SafeArea from '../../components/safeArea';
 import CustomTitle from '../../components/title';
 import { getToken } from '../../components/getToken';
@@ -40,7 +40,7 @@ export default function EditInfo ({ navigation, route }) {
       const onBirthDateChange = (event, selectedDate) => {
         if (event.type === "set" && selectedDate) {
           setBirthDate(selectedDate);
-          setNewInfo({ ...newInfo, phone: selectedDate })
+          setNewInfo({ ...newInfo, birthDate: selectedDate })
         }
         // Handle date picker visibility based on platform (Android or iOS)
     
@@ -53,6 +53,10 @@ export default function EditInfo ({ navigation, route }) {
         setCurrentPicker(null);
     };
     
+    // useEffect(() => {
+    //     console.log(newInfo.birthDate)
+    //   }, [newInfo.birthDate]);    
+
     const setInfo = async () => {
         console.log(newInfo)
         try {

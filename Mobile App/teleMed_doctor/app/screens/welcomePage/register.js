@@ -8,7 +8,7 @@ import {
   Pressable,
   Platform,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SafeArea from "../../components/safeArea";
@@ -84,12 +84,12 @@ export default function Register({ navigation }) {
       };
       // Store personal information in local storage
       LocalStorage.setItem("personalInfo", personalInfo);
-      // Navigate to the next registration screen (register1)
 
+      // Navigate to the next registration screen (register1)
       navigation.navigate("register1");
+
     } else {
       // Display an alert if any required fields are missing
-
       Alert.alert("All fields are required!");
     }
   };
@@ -107,6 +107,11 @@ export default function Register({ navigation }) {
     }
     setCurrentPicker(null);
   };
+
+  useEffect(() => {
+    console.log(birth_date)
+  }, [birth_date]);
+
   // Get gender and country options from the dropdownlist component
   const genderOptions = dropdownlist("gender");
   const countries = dropdownlist("countries");
