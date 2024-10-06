@@ -9,15 +9,11 @@ import {
   FlatList,
 } from "react-native";
 import { useState } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
 import SafeArea from "../../components/safeArea";
 import Scroll from "../../components/scroll";
 import Custombutton from "../../components/button";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import CustomTitle from "../../components/title";
-import DropdownMenu from "../../components/dropdown";
 import LocalStorage from "../../components/LocalStorage";
-import map from "../../components/registration_map";
 import { NEXT_PUBLIC_SERVER_NAME } from "@env";
 
 export default function Register2({ navigation }) {

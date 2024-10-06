@@ -9,6 +9,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { getToken } from '../../components/getToken';
 import {NEXT_PUBLIC_SERVER_NAME} from '@env'; 
 import Feather from '@expo/vector-icons/Feather';
+import LocalStorage from "../../components/LocalStorage";
 
 export default function Appointment({ navigation }) {
 
@@ -27,6 +28,7 @@ export default function Appointment({ navigation }) {
     })
   }
   const submitResults = (patientFirstName , patientLastName, appointment_id) => {
+    LocalStorage.setItem("appointment_id", appointment_id);
     navigation.navigate('submitResults', { patientFirstName , patientLastName, appointment_id })
   }
 

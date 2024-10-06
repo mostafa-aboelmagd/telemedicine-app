@@ -28,6 +28,7 @@ import SubmitMedications from './screens/appointmentDetails/submitDetails/submit
 import FurtherDetails from './screens/appointmentDetails/submitDetails/furtherDetails';
 
 import Availability from './screens/profile/availability';
+import follow_up from './screens/profile/follow_up';
 import ChangePassword from './screens/profile/changePassword';
 import EditInfo from './screens/profile/edit_info';
 
@@ -69,6 +70,7 @@ export default function StackRouters() {
             
             {/* Doctor profile */}
             <Stack.Screen name='availability' component={Availability} options={{ headerShown : false}} />
+            <Stack.Screen name='follow_up' component={follow_up} options={{ headerShown : false}} />
             <Stack.Screen name='changePassword' component={ChangePassword} options={{ headerShown : false}} />
             <Stack.Screen name='edit info' component={EditInfo} options={{ headerShown : false}} />
         </Stack.Navigator>
