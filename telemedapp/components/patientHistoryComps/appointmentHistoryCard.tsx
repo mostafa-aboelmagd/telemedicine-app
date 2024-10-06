@@ -1,7 +1,8 @@
-import { formatDateString } from "@/utils/date";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { formatDateString } from "@/utils/date";
 import ReadMore from "@/components/common/ReadMore";
+
 const AppointmentHistoryCard = ({ appointment }: { appointment: any }) => {
   const router = useRouter();
 
@@ -30,7 +31,7 @@ const AppointmentHistoryCard = ({ appointment }: { appointment: any }) => {
       <div>
         <strong>
           Complaint:
-          {appointment.appointment_complaint ? (
+          {" " + appointment.appointment_complaint ? (
             <ReadMore text={appointment.appointment_complaint} />
           ) : (
             "N/A"

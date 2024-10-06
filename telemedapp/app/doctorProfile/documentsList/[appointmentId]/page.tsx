@@ -1,7 +1,6 @@
 "use client";
 import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react'
-import { FaPlus } from "react-icons/fa";
 import { FaRegFilePdf } from "react-icons/fa6";
 import { FaRegImage } from "react-icons/fa";
 import { FaLink } from "react-icons/fa";

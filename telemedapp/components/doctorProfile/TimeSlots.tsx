@@ -463,7 +463,7 @@ function TimeSlots() {
           </div>
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[880px]:basis-7/12 min-[880px]:max-w-full">
             <div className="flex pt-4 mb-3 justify-between gap-2">
-              <Link href="/" className="font-bold ml-7">
+              <Link href="/doctorProfile/view" className="font-bold ml-7">
                 Personal Info
               </Link>
               <Link

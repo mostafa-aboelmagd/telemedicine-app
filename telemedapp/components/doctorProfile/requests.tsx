@@ -16,6 +16,7 @@ const Requests = () => {
   const [requests, setRequests] = useState([
     {
       appointment_id: "",
+      appointment_patient_id: "",
       patient_first_name: "",
       patient_last_name: "",
       doctor_availability_day_hour: "",
@@ -134,7 +135,7 @@ const Requests = () => {
           </div>
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[880px]:basis-7/12 min-[880px]:max-w-full">
             <div className="flex pt-4 mb-3 justify-between gap-2">
-              <Link href="/" className="font-bold ml-7">
+              <Link href="/doctorProfile/view" className="font-bold ml-7">
                 Personal Info
               </Link>
               <Link href="/doctorProfile/timeSlots" className="font-bold">
@@ -159,7 +160,7 @@ const Requests = () => {
                     return (
                       <>
                         <div
-                          className="min-w-80 max-w-[400px] h-fit flex flex-col p-2 gap-2 rounded-lg bg-stone-50 shadow-lg"
+                          className="min-w-80 max-w-[400px] h-fit flex flex-col p-2 gap-2 rounded-lg bg-neutral-50 shadow-lg"
                           key={request.appointment_id}
                         >
                           <div className="flex gap-3">
@@ -237,7 +238,12 @@ const Requests = () => {
                               </button>
                             </div>
                             <div className="flex justify-between gap-2">
-                              <button className="rounded-full border-none bg-indigo-400 text-white w-40 px-4 py-2 hover:scale-105 hover:cursor-pointer">
+                              <button 
+                                className="rounded-full border-none bg-indigo-400 text-white w-40 px-4 py-2 hover:scale-105 hover:cursor-pointer"
+                                onClick={() =>
+                                  (window.location.href = `/doctorProfile/patientHistory/${request.appointment_patient_id}`)
+                                }
+                              >
                                 Medical History
                               </button>
                               <button
@@ -256,7 +262,7 @@ const Requests = () => {
                   })
                 ) : (
                   <div>
-                    <p className="font-semibold text-2xl absolute left-[38%] top-[40%]">
+                    <p className="font-semibold text-2xl absolute left-[30%] top-[50%]">
                       There Are Currently No Requests
                     </p>
                   </div>
