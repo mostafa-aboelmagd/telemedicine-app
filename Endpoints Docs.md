@@ -48,6 +48,8 @@
 34. **Doctor view Patient appointments:** `/doctor/PatientSummary/:patientID`(Tested)
 35. **Doctor submit appointment's results:** `doctor/AppointmentResults/:appointmentId/submitresults`(Tested)
 36. **Doctor Registration:** `/doctor/register`(Tested)
+37. **Doctor Books Followup Appointment:** `/doctor/FollowupAppointment`(Tested)
+
 
 ---
 
@@ -1137,5 +1139,28 @@ with wrong appointmentId:
     "experiences": true,
     "interests": true,
     "Languages": true
+  }
+  ```
+37. **Doctor Books Followup Appointment:** `/doctor/FollowupAppointment`
+
+- **Method:** Post
+- **Request Headers:**
+- **Parameters:**
+- **Request Body:**
+  ````json
+  { "appointmentId":150,
+  "complaint": "Follow-up on prior diagnosis",
+  "duration": 30,
+  "appointment_date": "2025-12-01 19:00:00",
+  "time_slot_code": "4_11_L"
+  }
+      ```
+  ````
+- **Response Body:**
+
+  ```json
+  {
+    "message": "Followup Appointment created successfully"
+    
   }
   ```
