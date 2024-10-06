@@ -3,18 +3,6 @@ import { FaUserCircle } from "react-icons/fa";
 const DoctorInfo = ({ doctor }: { doctor: any }) => {
   const userImage = <FaUserCircle className="h-10 w-10 text-[#035fe9]" />;
 
-  // const bufferToBase64 = (buffer: number[]) => {
-  //   const binary = String.fromCharCode.apply(null, buffer);
-  //   return window.btoa(binary);
-  // };
-  // let base64Image = null;
-  // if (!doctor) {
-  //   return <div>Doctor not found</div>;
-  // } else {
-  //   base64Image = doctor.image
-  //     ? `data:image/jpeg;base64,${bufferToBase64(doctor.image.data)}`
-  //     : ""; // Handle the case if no image is available}
-  // }
   return (
     <div className="bg-white rounded-3xl shadow-md p-6 w-full">
       <div className="flex flex-row gap-10 items-center justify-between">

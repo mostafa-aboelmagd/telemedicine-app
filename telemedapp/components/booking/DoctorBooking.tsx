@@ -16,7 +16,7 @@ const DoctorBooking = () => {
   const [selectedDate, setSelectedDate] = useState<any>(null);
   const [selectedSlot, setSelectedSlot] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("L");
-  const [availableDates, setAvailableDates] = useState<any[]>([]);
+  const [availableDates, setAvailableDates] = useState<any[]>(["loading"]);
   const [bookedDates, setBookedDates] = useState<string[]>([]);
 
   const [appointmentState, setAppointmentState] = useState("First_time");
@@ -60,7 +60,6 @@ const DoctorBooking = () => {
 
     const fetchDoctorAvailability = async () => {
       if (doctor?.id) {
-        console.log("doctor.id: ", doctor.id);
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/${doctor.id}`,
@@ -73,6 +72,7 @@ const DoctorBooking = () => {
           const data = await response.json();
 
           if (!data || typeof data !== "object" || !data.available_slots) {
+            setAvailableDates([]);
             throw new Error("Invalid data structure");
           }
           console.log("data: ", data);

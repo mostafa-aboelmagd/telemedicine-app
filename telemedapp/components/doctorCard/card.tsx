@@ -9,8 +9,6 @@ import { formatDate } from "@/utils/date";
 import BookingButton from "./BookingButton";
 import { FaUserCircle } from "react-icons/fa";
 const DoctorCard = ({ doctor }: { doctor: any }) => {
-  // console.log("Doctor: ", doctor);
-
   const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
   const bufferToBase64 = (buffer: number[]) => {
     const binary = String.fromCharCode.apply(null, buffer);
