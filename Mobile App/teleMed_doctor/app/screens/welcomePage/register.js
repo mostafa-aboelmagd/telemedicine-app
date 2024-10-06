@@ -6,6 +6,7 @@ import {
   Alert,
   TouchableOpacity,
   Pressable,
+  Platform,
 } from "react-native";
 import { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -34,48 +35,40 @@ export default function Register({ navigation }) {
   const [speciality, setSpeciality] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
-  const [birth_date, setBirthDate] = useState(new Date()); // Initialize as a Date object
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  // const birthdate1 = formatBirthdate(birth_day, birth_month, birth_year);
-  const showDatePickerHandler = () => {
-    setShowDatePicker(!showDatePicker); // Set to true to show the date picker
-  };
-  const handleBirthDateChange = (selectedDate) => {
-    if (selectedDate) {
-      // Check if a date is actually selected
-      const formattedDate = format(selectedDate, "yyyy-MM-dd");
-      setBirthDate(formattedDate);
-    } else {
-      setBirthDate(null); // Clear the birth date if no selection made
-    }
-    setShowDatePicker(false); // Hide the date picker after selection
-  };
+  const [currentPicker, setCurrentPicker] = useState(null);
+  const [showPicker, setShowPicker] = useState(false);
+  const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const [birth_date, setBirthDate] = useState(false);
   const screen2 = () => {
-    if (true
-      // Fname &&
-      // Lname &&
-      // email &&
-      // password &&
-      // confirmPassword &&
-      // phone &&
-      // gender &&
-      // country &&
-      // city &&
-      // location &&
-      // speciality
+    if (
+      Fname &&
+      Lname &&
+      email &&
+      password &&
+      confirmPassword &&
+      phone &&
+      gender &&
+      country &&
+      city &&
+      location &&
+      speciality
     ) {
-      // if (password !== confirmPassword) {
-      //   Alert.alert("Error", "Confirm passwords do not match.");
-      //   return;
-      // }
+      // Validate if password and confirm password match
+
+      if (password !== confirmPassword) {
+        Alert.alert("Error", "Confirm passwords do not match.");
+        return;
+      }
+      // Validate password complexity (at least 8 characters, one number, and one special character)
+
       const passwordRegex = /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      // if (!passwordRegex.test(password)) {
-      //   Alert.alert(
-      //     "Invalid password. Password must be at least 8 characters, contain one number, and one special character."
-      //   );
-      //   return;
-      // }
+      if (!passwordRegex.test(password)) {
+        Alert.alert(
+          "Invalid password. Password must be at least 8 characters, contain one number, and one special character."
+        );
+        return;
+      }
+      // Create an object to store personal information
       const personalInfo = {
         Fname,
         Lname,
@@ -89,33 +82,56 @@ export default function Register({ navigation }) {
         speciality,
         birthdate: birth_date,
       };
-      console.log(personalInfo);
-      console.log(JSON.stringify(personalInfo));
+      // Store personal information in local storage
       LocalStorage.setItem("personalInfo", personalInfo);
+      // Navigate to the next registration screen (register1)
+
       navigation.navigate("register1");
     } else {
+      // Display an alert if any required fields are missing
+
       Alert.alert("All fields are required!");
     }
   };
-  // call arrays from DropDownMinue file
+  const onBirthDateChange = (event, selectedDate) => {
+    if (event.type === "set" && selectedDate) {
+      setBirthDate(selectedDate);
+    }
+    // Handle date picker visibility based on platform (Android or iOS)
+
+    if (Platform.OS === "android") {
+      setShowPicker(false);
+      setIsPickerVisible(false);
+    } else {
+      setShowPicker(false);
+    }
+    setCurrentPicker(null);
+  };
+  // Get gender and country options from the dropdownlist component
   const genderOptions = dropdownlist("gender");
   const countries = dropdownlist("countries");
-  // navigate to login page
+  // Navigate to the login page
   const login = () => {
     navigation.navigate("sign in");
   };
-  // navigate to support page
+  // Function to navigate to the visitor support page
   const vsupport = () => {
     navigation.navigate("visitor support");
   };
-  // handle selections of country from the array
+  // Function to handle country selection and reset city selection
   const handleCountrySelect = (country) => {
     setCountry(country);
     setCity(null);
   };
-  // handle the selection of citis for tha same country from the array
+  // Function to handle city selection
   const handleCitySelect = (city) => {
     setCity(city);
+  };
+  const showDatePicker = (pickerType) => {
+    setCurrentPicker(pickerType);
+
+    setShowPicker(true);
+    setIsPickerVisible(Platform.OS === "android");
   };
 
   return (
@@ -125,6 +141,8 @@ export default function Register({ navigation }) {
         <View style={styles.container}>
           <View>
             <CustomTitle>Register</CustomTitle>
+            {/* Input fields for user registration */}
+
             <View style={[styles.container3, { marginTop: "20%" }]}>
               <TextInput
                 placeholder="First Name"
@@ -161,27 +179,25 @@ export default function Register({ navigation }) {
                 style={styles.input}
               />
             </View>
-            <Text>Birth date</Text>
-            <View style={styles.container3}>
-              <TouchableOpacity
-                style={styles.dateInput}
-                onPress={showDatePickerHandler}
-              >
+            <View
+              style={[
+                styles.cell,
+                { flexDirection: "row", paddingHorizontal: 5 },
+              ]}
+            ></View>
+            <View
+              style={[
+                styles.container3,
+                { flexDirection: "row", paddingHorizontal: 5 },
+              ]}
+            >
+              <TouchableOpacity onPress={() => showDatePicker("start")}>
                 <Text style={styles.container3}>
                   {birth_date
-                    ? format(new Date(birth_date), "yyyy-MM-dd")
-                    : "Select Birth Date"}
+                    ? new Date(birth_date).toDateString()
+                    : "Birth Date"}
                 </Text>
               </TouchableOpacity>
-              {showDatePicker && ( // Only render the date picker when showDatePicker is true
-                <DateTimePicker
-                  mode="date"
-                  value={birth_date ? new Date(birth_date) : null} // Set initial value based on birth_date
-                  onChange={handleBirthDateChange}
-                  visible={showDatePicker}
-                  onDismiss={showDatePickerHandler}
-                />
-              )}
             </View>
             <View>
               <DropdownMenu
@@ -190,6 +206,8 @@ export default function Register({ navigation }) {
                 placeholder="Select gender"
               />
             </View>
+            {/* ... dropdown menus for country and city */}
+
             <View>
               <DropdownMenu
                 options={countries}
@@ -254,6 +272,7 @@ export default function Register({ navigation }) {
                 style={styles.input}
               />
             </View>
+            {/* Link to the login page */}
 
             <View style={styles.row}>
               <Text style={styles.text3}>Already have an account?</Text>
@@ -262,12 +281,15 @@ export default function Register({ navigation }) {
               </Pressable>
             </View>
           </View>
+          {/* Next button to proceed to the next registration screen */}
 
           <View style={{ width: "90%" }}>
             <Custombutton onPress={screen2}>
               <Text>Next </Text>
             </Custombutton>
           </View>
+          {/* Support button */}
+
           <TouchableOpacity
             onPress={vsupport}
             style={{ alignItems: "center", marginTop: "10%" }}
@@ -276,6 +298,16 @@ export default function Register({ navigation }) {
             <Text style={{ fontWeight: "bold" }}>Support</Text>
           </TouchableOpacity>
         </View>
+        {/* Date picker component (conditionally rendered) */}
+
+        {(showPicker || isPickerVisible) && (
+          <DateTimePicker
+            value={new Date()}
+            mode="date"
+            display="default"
+            onChange={onBirthDateChange}
+          />
+        )}
       </Scroll>
     </SafeArea>
   );

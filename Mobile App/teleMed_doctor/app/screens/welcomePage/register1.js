@@ -5,7 +5,9 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Platform,Button,Dimensions
+  Platform,
+  Button,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -17,384 +19,348 @@ import CustomTitle from "../../components/title";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import LocalStorage from "../../components/LocalStorage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import CustomScroll from '../../components/scroll'
-import { useRoute } from '@react-navigation/native'
-
-// export default function Register1({ navigation }) {
-//   const [certificates, setCertificates] = useState([]);
-//   const [experiences, setExperiences] = useState([]);
-//   const [showDatePicker, setShowDatePicker] = useState(false);
-//   const [selectedDate, setSelectedDate] = useState(new Date()); // Store selected date
-
-//   const screen3 = () => {
-//     if (
-//       certificates.every((cert) => cert.startDate && cert.endDate) &&
-//       experiences.every((exp) => exp.startDate && exp.endDate)
-//     ) {
-//       // Save data to AsyncStorage (replace with your preferred storage method)
-//       AsyncStorage.setItem("certificates", JSON.stringify(certificates));
-//       AsyncStorage.setItem("experiences", JSON.stringify(experiences));
-//       navigation.navigate("register2");
-//     } else {
-//       Alert.alert("All fields including start and end dates are required!");
-//     }
-//   };
-
-//   const addCertificate = () => {
-//     setCertificates([
-//       ...certificates,
-//       { name: "", authority: "", startDate: "", endDate: "" },
-//     ]);
-//   };
-
-//   const addExperience = () => {
-//     setExperiences([
-//       ...experiences,
-//       { title: "", firm: "", department: "", startDate: "", endDate: "" },
-//     ]);
-//   };
-//   const removeCertificate = (index) => {
-//     const updatedCertificates = [...certificates];
-//     updatedCertificates.splice(index, 1); // Remove the certificate at the given index
-//     setCertificates(updatedCertificates);
-//   };
-
-//   const removeExperience = (index) => {
-//     const updatedExperiences = [...experiences];
-//     updatedExperiences.splice(index, 1); // Remove the experience at the given index
-//     setExperiences(updatedExperiences);
-//   };
-//   const handleCertificateChange = (index, field, value) => {
-//     const updatedCertificates = [...certificates];
-//     updatedCertificates[index][field] = value;
-//     setCertificates(updatedCertificates);
-//   };
-
-//   const handleExperienceChange = (index, field, value) => {
-//     const updatedExperiences = [...experiences];
-//     updatedExperiences[index][field] = value;
-//     setExperiences(updatedExperiences);
-//   };
-//   const handleDateChange = (event, newDate) => {
-//     setSelectedDate(newDate); // Update selected date state
-//     setShowDatePicker(false); // Hide date picker
-//   };
-//   const formatDate = (date) => {
-//     const year = date.getFullYear();
-//     const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero for single-digit months
-//     const day = String(date.getDate()).padStart(2, "0"); // Add leading zero for single-digit days
-//     return `<span class="math-inline">\{year\}\-</span>{month}-${day}`;
-//     // Formatted date string (YYYY-MM-DD)
-//   };
-//   const handleSaveDate = (index, field) => {
-//     const newDate = formatDate(selectedDate); // Get formatted date string
-//     if (field === "startDate") {
-//       handleCertificateChange(index, field, newDate);
-//     } else {
-//       handleExperienceChange(index, field, newDate);
-//     }
-//   };
-
-//   return (
-//     <SafeArea>
-//       <Scroll>
-//         <CustomTitle>Doctor Registration - Certificates</CustomTitle>
-
-//         {certificates.map((certificate, index) => (
-//           <View key={index} style={[styles.container2]}>
-//             <TextInput
-//               style={styles.container3}
-//               placeholder="Certificate Name"
-//               value={certificate.name}
-//               onChangeText={(text) =>
-//                 handleCertificateChange(index, "name", text)
-//               }
-//             />
-
-//             <TextInput
-//               style={styles.container3}
-//               placeholder="Certificate Authority"
-//               value={certificate.authority}
-//               onChangeText={(text) =>
-//                 handleCertificateChange(index, "authority", text)
-//               }
-//             />
-//             <TouchableOpacity
-//               onPress={() => {
-//                 setShowDatePicker(true); // Show date picker for start date
-//                 setSelectedDate(
-//                   certificate.startDate
-//                     ? new Date(certificate.startDate)
-//                     : new Date()
-//                 ); // Set initial date if available
-//               }}
-//               style={styles.container3}
-//             >
-//               <Text>
-//                 {certificate.startDate
-//                   ? formatDate(new Date(certificate.startDate))
-//                   : "Select Start Date"}
-//               </Text>
-//             </TouchableOpacity>
-//             <TouchableOpacity
-//               onPress={() => {
-//                 setShowDatePicker(true); // Show date picker for end date
-//                 setSelectedDate(
-//                   certificate.endDate
-//                     ? new Date(certificate.endDate)
-//                     : new Date()
-//                 ); // Set initial date if available
-//               }}
-//               style={styles.container3}
-//             >
-//               <Text>
-//                 {certificate.endDate
-//                   ? formatDate(new Date(certificate.endDate))
-//                   : "Select End Date"}
-//               </Text>
-//             </TouchableOpacity>
-//             <TouchableOpacity
-//               onPress={() => removeCertificate(index)}
-//               style={{ alignItems: "flex-end", marginRight: "10%" }}
-//             >
-//               <MaterialIcons name="delete" size={40} color="red" />
-//             </TouchableOpacity>
-//           </View>
-//         ))}
-
-//         <View style={{ width: "90%" }}>
-//           <Custombutton onPress={addCertificate}>
-//             <Text>Add Certificate </Text>
-//           </Custombutton>
-//         </View>
-//         <CustomTitle>Doctor Registration - Experience</CustomTitle>
-//         {experiences.map((experience, index) => (
-//           <View key={index} style={[styles.container2]}>
-//             <TextInput
-//               placeholder="Job Title"
-//               style={styles.container3}
-//               value={experience.title}
-//               onChangeText={(text) =>
-//                 handleExperienceChange(index, "title", text)
-//               }
-//             />
-//             <TextInput
-//               placeholder="Firm Name"
-//               style={styles.container3}
-//               value={experience.firm}
-//               onChangeText={(text) =>
-//                 handleExperienceChange(index, "firm", text)
-//               }
-//             />
-//             <TextInput
-//               placeholder="Department"
-//               style={styles.container3}
-//               value={experience.department}
-//               onChangeText={(text) =>
-//                 handleExperienceChange(index, "department", text)
-//               }
-//             />
-//             <TextInput
-//               placeholder="Start Date"
-//               style={styles.container3}
-//               value={experience.startDate}
-//               onChangeText={(text) =>
-//                 handleExperienceChange(index, "startDate", text)
-//               }
-//             />
-//             <TextInput
-//               placeholder="End Date"
-//               style={styles.container3}
-//               value={experience.endDate}
-//               onChangeText={(text) =>
-//                 handleExperienceChange(index, "endDate", text)
-//               }
-//             />
-//             <TouchableOpacity
-//               onPress={() => removeExperience(index)}
-//               style={{ alignItems: "flex-end", marginRight: "10%" }}
-//             >
-//               <MaterialIcons name="delete" size={40} color="red" />
-//             </TouchableOpacity>
-//           </View>
-//         ))}
-
-//         <View style={{ width: "90%" }}>
-//           <Custombutton onPress={addExperience}>
-//             <Text>Add Experience</Text>
-//           </Custombutton>
-//         </View>
-//         <View style={{ width: "90%" }}>
-//           <Custombutton onPress={screen3}>
-//             <Text>Next</Text>
-//           </Custombutton>
-//         </View>
-//       </Scroll>
-//     </SafeArea>
-//   );
-// }
-
+import { useRoute } from "@react-navigation/native";
 export default function Register1({ navigation }) {
-  const route = useRoute()
-  // const { report, diagnosis, appointment_id } = route.params
-  const [inputs, setInputs] = useState([]);
-  const [certificates, setCertificates] = useState([])
-  const [showPicker, setShowPicker] = useState(false);
-  const [currentPicker, setCurrentPicker] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(null);
-  const [isPickerVisible, setIsPickerVisible] = useState(false);
+  // State variables to manage dynamic input fields for certificates and experiences
+  const [certificatesInputs, setCertificatesInputs] = useState([]);
+  const [experiencesInputs, setExperiencesInputs] = useState([]);
+  // State variables to control the experience date picker
+  const [showPickerexp, setShowPickerexp] = useState(false);
+  const [currentPickerexp, setCurrentPickerexp] = useState(null);
+  const [currentIndexexp, setCurrentIndexexp] = useState(null);
+  const [isPickerVisibleexp, setIsPickerVisibleexp] = useState(false);
+  // State variables to control the certificate date picker
+  const [showPickercert, setShowPickercert] = useState(false);
+  const [currentPickercert, setCurrentPickercert] = useState(null);
+  const [currentIndexcert, setCurrentIndexcert] = useState(null);
+  const [isPickerVisiblecert, setIsPickerVisiblecert] = useState(false);
+  // Function to handle navigation to the next screen (register2)
+
+  const screen3 = async () => {
+    // Check if all certificates and experiences have start and end dates
+
+    if (
+      certificatesInputs.every((cert) => cert.startDate && cert.endDate) &&
+      experiencesInputs.every((exp) => exp.startDate && exp.endDate)
+    ) {
+      // Store certificates and experiences data in local storage
+
+      LocalStorage.setItem("certificates", JSON.stringify(experiencesInputs));
+      LocalStorage.setItem("experiences", JSON.stringify(certificatesInputs));
+      // Navigate to the next registration screen (register2)
+
+      navigation.navigate("register2");
+      // Retrieve data from local storage (for debugging/demonstration)
+
+      const certificates = await LocalStorage.getItem("certificates");
+      const experiences = await LocalStorage.getItem("experiences");
+      console.log("Retrieved certificates:", certificates);
+      console.log("Retrieved experiences:", experiences);
+    } else {
+      // Display an alert if any required date fields are missing
+
+      Alert.alert("All fields including start and end dates are required!");
+    }
+  };
+  // Function to add a new set of certificate input fields
 
   const addCertificates = () => {
-    setInputs([...inputs, { id: Date.now(), certificateName: '', certificateAuthority: '', startDate: null, endDate: null }]);
+    setCertificatesInputs([
+      ...certificatesInputs,
+      {
+        id: Date.now(),
+        certificateName: "",
+        certificateAuthority: "",
+        startDate: null,
+        endDate: null,
+      },
+    ]);
   };
+  // Function to add a new set of experience input fields
+
+  const addExperiences = () => {
+    setExperiencesInputs([
+      ...experiencesInputs,
+      {
+        id: Date.now(),
+        department: "",
+        firm: "",
+        title: "",
+        startDate: null,
+        endDate: null,
+      },
+    ]);
+  };
+  // Function to delete a set of certificate input fields by ID
 
   const deleteCertificates = (id) => {
-    setInputs(inputs.filter(inputSet => inputSet.id !== id));
+    setCertificatesInputs(
+      certificatesInputs.filter((certificateSet) => certificateSet.id !== id)
+    );
   };
+  // Function to delete a set of experience input fields by ID
 
-  const furtherDetails = () => {
-    const certificates = inputs.map(inputset => {
-      return {
-        ...inputset, // Spread the current object
-        // Check if endDate and startDate are Date objects, if not convert them
-        endDate: inputset.endDate instanceof Date
-          ? inputset.endDate.toISOString().split('T')[0]
-          : new Date(inputset.endDate).toISOString().split('T')[0],
-        startDate: inputset.startDate instanceof Date
-          ? inputset.startDate.toISOString().split('T')[0]
-          : new Date(inputset.startDate).toISOString().split('T')[0],
-      };
-    });
-    setCertificates(certificates);
-    console.log(certificates);
-    // navigation.navigate('furtherDetails', { report, diagnosis, certificates, appointment_id });
+  const deleteExperiences = (id) => {
+    setExperiencesInputs(
+      experiencesInputs.filter((experienceSet) => experienceSet.id !== id)
+    );
   };
+  // Function to handle changes in the certificate date picker
 
-  const onDateChange = (event, selectedDate) => {
-    if (event.type === 'set' && selectedDate) {
-      const certificates = inputs.map((inputSet, index) => {
-        if (index === currentIndex) {
-          if (currentPicker === 'start') {
-            return { ...inputSet, startDate: selectedDate };
-          } else if (currentPicker === 'end') {
-            return { ...inputSet, endDate: selectedDate };
+  const onCertificatesDateChange = (event, selectedDate) => {
+    if (event.type === "set" && selectedDate) {
+      // Update the startDate or endDate of the selected certificate
+
+      const certificates = certificatesInputs.map((certificateSet, index) => {
+        if (index === currentIndexcert) {
+          if (currentPickercert === "start") {
+            return { ...certificateSet, startDate: selectedDate };
+          } else if (currentPickercert === "end") {
+            return { ...certificateSet, endDate: selectedDate };
           }
         }
-        return inputSet;
+        return certificateSet;
       });
-      setInputs(certificates);
+      setCertificatesInputs(certificates);
     }
+    // Handle date picker visibility based on platform (Android or iOS)
 
-    if (Platform.OS === 'android') {
-      setShowPicker(false);
-      setIsPickerVisible(false);
+    if (Platform.OS === "android") {
+      setShowPickercert(false);
+      setIsPickerVisiblecert(false);
     } else {
-      setShowPicker(false);
+      setShowPickercert(false);
     }
-    setCurrentPicker(null);
-    setCurrentIndex(null);
+    setCurrentPickercert(null);
+    setCurrentIndexcert(null);
   };
+  // Function to handle changes in the experience date picker
+  // ... similar logic to onCertificatesDateChange but for experiences
 
-  const showDatePicker = (pickerType, index) => {
-    setCurrentPicker(pickerType);
-    setCurrentIndex(index);
+  const onExperiencesDateChange = (event, selectedDate) => {
+    if (event.type === "set" && selectedDate) {
+      const experiences = experiencesInputs.map((experienceSet, index) => {
+        if (index === currentIndexexp) {
+          if (currentPickerexp === "start") {
+            return { ...experienceSet, startDate: selectedDate };
+          } else if (currentPickerexp === "end") {
+            return { ...experienceSet, endDate: selectedDate };
+          }
+        }
+        return experienceSet;
+      });
+      setExperiencesInputs(experiences);
+    }
 
-    setShowPicker(true);
-    setIsPickerVisible(Platform.OS === 'android');
+    if (Platform.OS === "android") {
+      setShowPickerexp(false);
+      setIsPickerVisibleexp(false);
+    } else {
+      setShowPickerexp(false);
+    }
+    setCurrentPickerexp(null);
+    setCurrentIndexexp(null);
   };
+  // Function to show the experience date picker
 
+  const showDatePickerExp = (pickerType, index) => {
+    setCurrentPickerexp(pickerType);
+    setCurrentIndexexp(index);
+
+    setShowPickerexp(true);
+    setIsPickerVisibleexp(Platform.OS === "android");
+  };
+  // Function to show the certificate date picker
+
+  const showDatePickerCert = (pickerType, index) => {
+    setCurrentPickercert(pickerType);
+    setCurrentIndexcert(index);
+
+    setShowPickercert(true);
+    setIsPickerVisiblecert(Platform.OS === "android");
+  };
   return (
-    <SafeArea safeStyle={{ backgroundColor: 'lightgrey' }}>
-      <CustomScroll>
-        <View style={styles.container}>
-          <CustomTitle style={styles.titleProp}>Complaint</CustomTitle>
-          <Text style={styles.textProp}>lorem lorem</Text>
-          <View style={styles.titleRow}>
-            <CustomTitle style={styles.titleProp}>Certificates</CustomTitle>
-          </View>
+    <SafeArea>
+      <Scroll>
+        <CustomTitle>Doctor Registration - Certificates</CustomTitle>
+        {/* Dynamically generated input fields for certificates */}
 
-          {inputs.map((inputSet, index) => (
-            <View key={inputSet.id} style={styles.inputSet}>
-              <TextInput
-                style={styles.input}
-                placeholder="Certificate name"
-                value={inputSet.certificateName}
-                onChangeText={(text) => {
-                  const certificates = inputs.map(item => item.id === inputSet.id ? { ...item, certificateName: text } : item);
-                  setInputs(certificates);
-                }}
-              />
+        {certificatesInputs.map((certificateSet, index) => (
+          <View key={certificateSet.id}>
+            <TextInput
+              style={styles.container3}
+              placeholder="Certificate name"
+              value={certificateSet.certificateName}
+              onChangeText={(text) => {
+                const certificates = certificatesInputs.map((item) =>
+                  item.id === certificateSet.id
+                    ? { ...item, certificateName: text }
+                    : item
+                );
+                setCertificatesInputs(certificates);
+              }}
+            />
 
-              <TextInput
-                style={styles.input}
-                placeholder="Certificate authority"
-                value={inputSet.certificateAuthority}
-                onChangeText={(text) => {
-                  const certificates = inputs.map(item => item.id === inputSet.id ? { ...item, certificateAuthority: text } : item);
-                  setInputs(certificates);
-                }}
-              />
+            <TextInput
+              style={styles.container3}
+              placeholder="Certificate authority"
+              value={certificateSet.certificateAuthority}
+              onChangeText={(text) => {
+                const certificates = certificatesInputs.map((item) =>
+                  item.id === certificateSet.id
+                    ? { ...item, certificateAuthority: text }
+                    : item
+                );
+                setCertificatesInputs(certificates);
+              }}
+            />
 
-              <View style={styles.dateRow}>
-                <View style={styles.cell}>
-                  <Text style={styles.textProp}>Start Date:</Text>
-                  {inputSet.startDate ? (
-                    <Text style={styles.inTextProp}>{new Date(inputSet.startDate).toDateString()}</Text>
-                  ) : (
-                    <Text style={styles.inTextProp}>No date selected</Text>
-                  )}
-                </View>
-                <View style={styles.cell}>
-                  <Text style={styles.textProp}>End Date:</Text>
-                  {inputSet.endDate ? (
-                    <Text style={styles.inTextProp}>{new Date(inputSet.endDate).toDateString()}</Text>
-                  ) : (
-                    <Text style={styles.inTextProp}>No date selected</Text>
-                  )}
-                </View>
+            <View style={styles.dateRow1}>
+              <View style={styles.dateRow1}>
+                <Text style={styles.textProp}>Start Date:</Text>
+                {certificateSet.startDate ? (
+                  <Text style={styles.inTextProp}>
+                    {new Date(certificateSet.startDate).toDateString()}
+                  </Text>
+                ) : (
+                  <Text style={styles.inTextProp}>No date selected</Text>
+                )}
+                <Button
+                  title="Select Start Date"
+                  onPress={() => showDatePickerCert("start", index)}
+                />
               </View>
-
-              <View style={styles.dateRow}>
-                <View style={styles.cell}>
-                  <Button
-                    title="Select Start Date"
-                    onPress={() => showDatePicker('start', index)}
-                  />
-                </View>
-                <View style={styles.cell}>
-                  <Button
-                    title="Select End Date"
-                    onPress={() => showDatePicker('end', index)}
-                  />
-                </View>
-              </View>
-
-              <Custombutton onPress={() => deleteCertificates(inputSet.id)}>
-                Delete current certificate
-              </Custombutton>
             </View>
-          ))}
+            <View style={styles.dateRow1}>
+              <Text style={styles.textProp}>End Date:</Text>
+              {certificateSet.endDate ? (
+                <Text style={styles.inTextProp}>
+                  {new Date(certificateSet.endDate).toDateString()}
+                </Text>
+              ) : (
+                <Text style={styles.inTextProp}>No date selected</Text>
+              )}
+              <Button
+                title="  Select End Date  "
+                onPress={() => showDatePickerCert("end", index)}
+              />
+            </View>
+            <Button
+              title="Delete certificate"
+              onPress={() => deleteCertificates(certificateSet.id)}
+            />
+          </View>
+        ))}
+        <Custombutton onPress={addCertificates}>Add certificate</Custombutton>
 
-          <Custombutton onPress={addCertificates}>
-            Add certificate
-          </Custombutton>
-        </View>
+        {/* Date picker component for certificates (conditionally rendered) */}
+        {(showPickercert || isPickerVisiblecert) && (
+          <DateTimePicker
+            value={
+              certificatesInputs[currentIndexcert]?.[
+                currentPickercert === "start" ? "startDate" : "endDate"
+              ] || new Date()
+            }
+            mode="date"
+            display="default"
+            onChange={onCertificatesDateChange}
+          />
+        )}
+        <CustomTitle>Doctor Registration - Experience</CustomTitle>
+        {/*input fields and logic for experiences */}
 
-        <Custombutton onPress={furtherDetails}>
-          Next
-        </Custombutton>
-      </CustomScroll>
-      {(showPicker || isPickerVisible) && (
-        <DateTimePicker
-          value={inputs[currentIndex]?.[currentPicker === 'start' ? 'startDate' : 'endDate'] || new Date()}
-          mode="date"
-          display="default"
-          onChange={onDateChange}
-        />
-      )}
+        {experiencesInputs.map((experienceSet, index) => (
+          <View key={experienceSet.id}>
+            <TextInput
+              style={styles.container3}
+              placeholder="Department"
+              value={experienceSet.department}
+              onChangeText={(text) => {
+                const experiences = experiencesInputs.map((item) =>
+                  item.id === experienceSet.id
+                    ? { ...item, department: text }
+                    : item
+                );
+                setExperiencesInputs(experiences);
+              }}
+            />
+            <TextInput
+              style={styles.container3}
+              placeholder="firm"
+              value={experienceSet.firm}
+              onChangeText={(text) => {
+                const experiences = experiencesInputs.map((item) =>
+                  item.id === experienceSet.id ? { ...item, firm: text } : item
+                );
+                setExperiencesInputs(experiences);
+              }}
+            />
+            <TextInput
+              style={styles.container3}
+              placeholder="title"
+              value={experienceSet.title}
+              onChangeText={(text) => {
+                const experiences = experiencesInputs.map((item) =>
+                  item.id === experienceSet.id ? { ...item, title: text } : item
+                );
+                setExperiencesInputs(experiences);
+              }}
+            />
+            <View style={styles.dateRow}>
+              <View style={[styles.cell, styles.dateRow1]}>
+                <Text style={styles.textProp}>Start Date:</Text>
+                {experienceSet.startDate ? (
+                  <Text style={styles.inTextProp}>
+                    {new Date(experienceSet.startDate).toDateString()}
+                  </Text>
+                ) : (
+                  <Text style={styles.inTextProp}>No date selected</Text>
+                )}
+                <Button
+                  title="Select Start Date"
+                  onPress={() => showDatePickerExp("start", index)}
+                />
+              </View>
+              <View style={[styles.cell, styles.dateRow1]}>
+                <Text style={styles.textProp}>End Date:</Text>
+                {experienceSet.endDate ? (
+                  <Text style={styles.inTextProp}>
+                    {new Date(experienceSet.endDate).toDateString()}
+                  </Text>
+                ) : (
+                  <Text style={styles.inTextProp}>No date selected</Text>
+                )}
+                <Button
+                  title="Select End Date"
+                  onPress={() => showDatePickerExp("end", index)}
+                />
+              </View>
+            </View>
+
+            <Button
+              title="Delete Experience"
+              onPress={() => deleteExperiences(experienceSet.id)}
+            />
+          </View>
+        ))}
+        <Custombutton onPress={addExperiences}>Add experience</Custombutton>
+        {(showPickerexp || isPickerVisibleexp) && (
+          <DateTimePicker
+            value={
+              experiencesInputs[currentIndexexp]?.[
+                currentPickerexp === "start" ? "startDate" : "endDate"
+              ] || new Date()
+            }
+            mode="date"
+            display="default"
+            onChange={onExperiencesDateChange}
+          />
+        )}
+        <Custombutton onPress={screen3}>Next</Custombutton>
+      </Scroll>
     </SafeArea>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -409,13 +375,15 @@ const styles = StyleSheet.create({
   },
 
   container3: {
+    flex: 1,
     flexDirection: "row",
     borderRadius: 10,
     borderColor: "lightgray",
     borderWidth: 1,
     textAlign: "center", // Centers the placeholder text
-    margin: 10,
+    margin: 5,
     backgroundColor: "white",
+    justifyContent: "center",
   },
 
   row: {
@@ -435,7 +403,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: "20%",
   },
-
+  dateRow1: {
+    flexDirection: "row",
+    paddingHorizontal: 5,
+    justifyContent: "center",
+    gap: 20,
+  },
   input: {
     width: 270,
     height: 40,
