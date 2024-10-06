@@ -166,10 +166,12 @@ const Doctors = () => {
       price: [],
       todayDate: "",
       thisWeek: "",
+      dateRange1: "",
+      dateRange2: "",
       country: [],
       language: [],
-      isOnline: "",
       sort: "",
+      isOnline: "",
     });
   };
 
@@ -203,7 +205,9 @@ const Doctors = () => {
     }
   }, [doctors]);
 
-  if (isLoading) return <CircularProgress className="mx-auto my-10" />;
+  if (isLoading)
+    return <CircularProgress className="absolute top-1/2 left-1/2" />;
+
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
   return (
@@ -246,7 +250,9 @@ const Doctors = () => {
         {filteredDoctors.length > 0 ? (
           <DoctorGrid doctors={filteredDoctors} />
         ) : (
-          <CircularProgress className="mx-auto my-10" />
+          <div className="mx-auto">
+            <CircularProgress className=" my-10" />
+          </div>
         )}
       </section>
     </main>
