@@ -124,16 +124,17 @@ export default function Follow_up({ navigation }) {
       appointment_id
     );
     const appointmentbody= JSON.stringify({
-        time_slot_code: `${slotdaycode}_${slothourcode}_${slottypecode}`,
+      time_slot_code: `${slotdaycode}_${slothourcode}_${slottypecode}`,
         appointment_date: dateTime,
         complaint: comp,
-        duration: slotduration
+        duration: slotduration,
+        appointmentId: appointment_id,
       })
       console.log(appointmentbody);
     // Send data to backend
     try {
       const response = await fetch(
-        `${NEXT_PUBLIC_SERVER_NAME}/patient/appointment/followup/book/${appointment_id}`,
+        `${NEXT_PUBLIC_SERVER_NAME}/doctor/BookFollowUp/FollowupAppointment`,
         {
           method: "POST",
           headers: {
@@ -142,11 +143,15 @@ export default function Follow_up({ navigation }) {
           },
           body: appointmentbody
         }
-      );
-
+      )
+      if (response.ok) {
+        alert("Follow up appointment booked successfully");
+        navigation.navigate('appointment'); // Navigate back after success
+        return;
+    }
       // ... handle response
     } catch (error) {
-      console.error("Error booking follow-up:", error);
+      alert("Error booking follow-up:", error);
     }
   };
 

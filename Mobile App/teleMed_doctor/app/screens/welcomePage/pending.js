@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import Custombutton from "../../components/button";
 
 export default function Pending ({ navigation }) {
 return (
@@ -33,4 +34,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 24
   }
-})
+});
