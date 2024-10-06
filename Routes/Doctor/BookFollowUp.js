@@ -4,6 +4,6 @@ const { tokenAuthentication } = require('../../Middleware/User/Authentication');
 const router = express.Router();
 
 
-router.post('/:appointmentId/FollowupAppointment', tokenAuthentication, BookFollowUpController.bookFollowUpAppointment);
+router.post('/FollowupAppointment', tokenAuthentication, BookFollowUpController.bookFollowUpAppointment);
 
 module.exports = router;
