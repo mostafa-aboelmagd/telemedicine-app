@@ -114,7 +114,7 @@ const Appointments = () => {
                   appointments={appointments}
                 />
               ) : (
-                <div className="mx-10 text-xl mt-3">No appointments available</div>
+                <div className="mx-10 text-xl font-semibold mt-3">No appointments available</div>
               )}
             </div>
           </div>

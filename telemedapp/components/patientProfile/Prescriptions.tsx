@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import PrescriptionCard from "./prescriptionCard";
@@ -7,6 +8,7 @@ import { GrFormPrevious } from "react-icons/gr";
 import MedicationTable from "./medicationTable";
 import { MdDownload } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
+
 const Prescriptions = () => {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
   const [profileData, setProfileData] = useState({

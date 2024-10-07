@@ -8,10 +8,11 @@ const AppointmentCard = ({
 }: {
   appointment: any;
 }) => {
+
   const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
 
   return (
-    <div className="bg-neutral-50 rounded-3xl md:p-6 p-4 shadow-lg flex flex-col md:space-y-3 space-y-2">
+    <div className="bg-neutral-50 rounded-3xl md:p-6 p-4 shadow-lg flex flex-col md:space-y-3 space-y-2" key={appointment.appointment_id}>
       {/* Doctor/Patient Information */}
       <div className="flex items-center md:space-x-4 space-x-2">
         {userImage}
@@ -36,6 +37,10 @@ const AppointmentCard = ({
             <strong>Details:</strong>
             {" " + appointment.appointment_settings_type}{" "}{appointment.appointment_type === "First_time" ? "First Time" : "Follow Up"}
           </p>
+          <p>
+            <strong>Complaint:</strong>
+            {" " + appointment.appointment_complaint}
+          </p>
         </div>
       </div>
 
@@ -47,8 +52,10 @@ const AppointmentCard = ({
           </button>
         </Link>
         {/* My Appointments Button */}
-        <Link href={`/doctorProfile/prescriptions/${appointment.appointment_id}`} className="w-1/2">
-          <button className={`${stylesButton.gradient_button} md:text-sm text-xs font-medium text-white py-2 px-4 rounded-lg w-full`}>
+        <Link href={`/doctorProfile/addPrescription/${appointment.appointment_id}`} className="w-1/2">
+          <button 
+            className={`${stylesButton.gradient_button} md:text-sm text-xs font-medium text-white py-2 px-4 rounded-lg w-full`}
+          >
             Submit Results
           </button>
         </Link>

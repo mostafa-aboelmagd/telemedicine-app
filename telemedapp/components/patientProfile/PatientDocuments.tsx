@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
@@ -8,6 +9,7 @@ import { FaLink } from "react-icons/fa";
 import DocumentComponent from "./DocumentComponent";
 import SearchBar from "../SearchBar/searchbar";
 import { FaUserCircle } from "react-icons/fa";
+
 const PatientDocuments = () => {
   const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
   const [profileData, setProfileData] = useState({
