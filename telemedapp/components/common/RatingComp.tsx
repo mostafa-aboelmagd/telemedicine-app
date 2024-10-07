@@ -12,24 +12,20 @@ import {
   Box,
   Slide,
 } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
-
-interface Doctor {
-  name: string;
-  rating: number;
-  reviews: number;
-  price: number;
-  specialty: string;
-  type: string;
-}
 
 interface RatingCompProps {
   text: string;
   variant: "text" | "outlined" | "contained";
-  doctor: Doctor;
+  doctor: any;
+  className: string;
 }
 
-const RatingComp: React.FC<RatingCompProps> = ({ text, variant, doctor }) => {
+const RatingComp: React.FC<RatingCompProps> = ({
+  text,
+  variant,
+  doctor,
+  className,
+}) => {
   const [open, setOpen] = useState(false);
   const [ratingValue, setRatingValue] = useState<number | null>(null);
   const [reviewText, setReviewText] = useState<string>("");
@@ -86,7 +82,11 @@ const RatingComp: React.FC<RatingCompProps> = ({ text, variant, doctor }) => {
     <>
       <Button
         variant={variant}
-        className="bg-blue-500 hover:bg-blue-700 text-white rounded-full p-2 transition duration-300"
+        className={
+          className
+            ? className
+            : "bg-blue-500 hover:bg-blue-700 text-white rounded-full p-2 transition duration-300"
+        }
         onClick={handleOpen}
       >
         {text}
@@ -112,9 +112,9 @@ const RatingComp: React.FC<RatingCompProps> = ({ text, variant, doctor }) => {
               <Typography variant="body1" mb={2}>
                 {" "}
                 <span className="flex items-center gap-2">
-                  Price:
-                  <span className="text-red-600 font-semibold">
-                    ${doctor.price.toFixed(2)}
+                  Name:
+                  <span className="text-blue-600 font-semibold">
+                    ${doctor.name}
                   </span>
                 </span>
               </Typography>
@@ -125,13 +125,10 @@ const RatingComp: React.FC<RatingCompProps> = ({ text, variant, doctor }) => {
               </Typography>
             </Box>
             <Typography variant="body1" mb={2}>
-              Reviews: {doctor.reviews}
+              Title: {doctor.title}
             </Typography>
             <Typography variant="body1" mb={2}>
-              Specialty: {doctor.specialty}
-            </Typography>
-            <Typography variant="body1" mb={2}>
-              Type: {doctor.type}
+              Reviews: {doctor.numReviews}
             </Typography>
           </Box>
           <Box textAlign="center">
@@ -143,14 +140,14 @@ const RatingComp: React.FC<RatingCompProps> = ({ text, variant, doctor }) => {
               onChange={handleRatingChange}
             />
             <TextareaAutosize
-              placeholder="Write your review here..."
+              placeholder="Write your review here... (optional)"
               value={reviewText}
               onChange={handleReviewChange}
               className="w-full h-32 p-2 my-4 border rounded focus:outline-none focus:ring focus:border-blue-300"
             />
           </Box>
         </DialogContent>
-        <Box display="flex" justifyContent="flex-end" p={2}>
+        <Box display="flex" justifyContent="flex-end" gap={2} p={2}>
           <Button onClick={handleClose} color="secondary">
             Cancel
           </Button>
@@ -158,7 +155,7 @@ const RatingComp: React.FC<RatingCompProps> = ({ text, variant, doctor }) => {
             variant="contained"
             color="primary"
             onClick={handleSubmit}
-            disabled={!reviewText}
+            disabled={!ratingValue}
           >
             Submit
           </Button>
