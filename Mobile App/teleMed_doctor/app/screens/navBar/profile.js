@@ -1,57 +1,408 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import SafeArea from '../../components/safeArea';
-import Custombutton from '../../components/button';
-import Footer from '../../components/footer';
-import CustomScroll from '../../components/scroll';
-import { NEXT_PUBLIC_SERVER_NAME } from '@env';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+  TextInput,
+} from "react-native";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import SafeArea from "../../components/safeArea";
+import Custombutton from "../../components/button";
+import Footer from "../../components/footer";
+import CustomScroll from "../../components/scroll";
+import { NEXT_PUBLIC_SERVER_NAME } from "@env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
-let sixtyMinPrice_
-let thirtyMinPrice_
+let sixtyMinPrice_;
+let thirtyMinPrice_;
 export default function Profile({ navigation }) {
   const [doctorInfo, setDoctorInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [showCertModal, setShowCertModal] = useState(false);
+  const [showExpModal, setShowExpModal] = useState(false);
+  const [showInterestModal, setShowInterestModal] = useState(false);
+  const [selectedCertId, setSelectedCertId] = useState(null);
+  const [selectedExpId, setSelectedExpId] = useState(null);
+  const [selectedInterestId, setSelectedInterestId] = useState(null);
+  // State for add functions
 
+  const [showAddCertModal, setShowAddCertModal] = useState(false);
+  const [showAddExpModal, setShowAddExpModal] = useState(false);
+  const [showAddInterestModal, setShowAddInterestModal] = useState(false);
+  const [showAddLangModal, setShowAddLangModal] = useState(false);
+
+  // State for new certificate
+  const [newCertName, setNewCertName] = useState("");
+  const [newCertAuthority, setNewCertAuthority] = useState("");
+  const [newCertStartDate, setNewCertStartDate] = useState("");
+  const [newCertEndDate, setNewCertEndDate] = useState("");
+
+  // State for new experience
+  const [newExpTitle, setNewExpTitle] = useState("");
+  const [newExpFirm, setNewExpFirm] = useState("");
+  const [newExpStartDate, setNewExpStartDate] = useState("");
+  const [newExpEndDate, setNewExpEndDate] = useState("");
+
+  // State for new interest
+  const [newInterestName, setNewInterestName] = useState("");
+  const [newInterestCategory, setNewInterestCategory] = useState("");
+
+  // State for new language
+  const [newLanguage, setNewLanguage] = useState("");
+  const handleAddCertificate = async () => {
+    try {
+      const response = await fetch(
+        `${NEXT_PUBLIC_SERVER_NAME}/doctor/profile/certificates`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+          body: JSON.stringify({
+            name: newCertName,
+            authority: newCertAuthority,
+            startDate: newCertStartDate,
+            endDate: newCertEndDate,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // Certificate added successfully
+        const newCert = await response.json(); // Get the newly created certificate from the response
+        setData((prevData) => ({
+          ...prevData,
+          certificates: [...prevData.certificates, newCert],
+        }));
+        // Clear input fields
+        setNewCertName("");
+        setNewCertAuthority("");
+        setNewCertStartDate("");
+        setNewCertEndDate("");
+      } else {
+        // Handle error
+        console.error("Error adding certificate:", response.status);
+      }
+    } catch (error) {
+      console.error("Error adding certificate:", error);
+    } finally {
+      console.log(
+        "AddCertificate",
+        JSON.stringify({
+          name: newCertName,
+          authority: newCertAuthority,
+          startDate: newCertStartDate,
+          endDate: newCertEndDate,
+        })
+      );
+      setShowAddCertModal(false);
+    }
+  };
+  const handleAddExperience = async () => {
+    try {
+      const response = await fetch(
+        `${NEXT_PUBLIC_SERVER_NAME}/doctor/profile/experiences`, // Replace with your API endpoint
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+          body: JSON.stringify({
+            title: newExpTitle,
+            firm: newExpFirm,
+            startDate: newExpStartDate,
+            endDate: newExpEndDate,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // Experience added successfully
+        const newExp = await response.json(); // Get the newly created experience from the response
+        setData((prevData) => ({
+          ...prevData,
+          experiences: [...prevData.experiences, newExp],
+        }));
+        // Clear input fields
+        setNewExpTitle("");
+        setNewExpFirm("");
+        setNewExpStartDate("");
+        setNewExpEndDate("");
+      } else {
+        // Handle error
+        console.error("Error adding experience:", response.status);
+      }
+    } catch (error) {
+      console.error("Error adding experience:", error);
+    } finally {
+      setShowAddExpModal(false);
+    }
+  };
+
+  const handleAddInterest = async () => {
+    try {
+      const response = await fetch(
+        `${NEXT_PUBLIC_SERVER_NAME}/doctor/profile/interests`, // Replace with your API endpoint
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+          body: JSON.stringify({
+            name: newInterestName,
+            category: newInterestCategory,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // Interest added successfully
+        const newInterest = await response.json(); // Get the newly created interest from the response
+        setData((prevData) => ({
+          ...prevData,
+          interests: [...prevData.interests, newInterest],
+        }));
+        // Clear input fields
+        setNewInterestName("");
+        setNewInterestCategory("");
+      } else {
+        // Handle error
+        console.error("Error adding interest:", response.status);
+      }
+    } catch (error) {
+      console.error("Error adding interest:", error);
+    } finally {
+      console.log(
+        "Addedinterest",
+        JSON.stringify({
+          name: newInterestName,
+          category: newInterestCategory,
+        })
+      );
+      setShowAddInterestModal(false);
+    }
+  };
+
+  const handleAddLanguage = async () => {
+    try {
+      const response = await fetch(
+        `${NEXT_PUBLIC_SERVER_NAME}/doctor/profile/languages`, // Replace with your API endpoint
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+          body: JSON.stringify({
+            name: newLanguage, // Assuming your API expects a "name" field for the language
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // Language added successfully
+        const newLang = await response.json(); // Get the newly added language from the response
+        setData((prevData) => ({
+          ...prevData,
+          Languages: [...prevData.Languages, newLang.name], // Update the Languages array with the new language name
+        }));
+        // Clear input field
+        setNewLanguage("");
+      } else {
+        // Handle error
+        console.error("Error adding language:", response.status);
+      }
+    } catch (error) {
+      console.error("Error adding language:", error);
+    } finally {
+      console.log(
+        "Added language",
+        JSON.stringify({
+          name: newLanguage, // Assuming your API expects a "name" field for the language
+        })
+      );
+      setShowAddLangModal(false);
+    }
+  };
+  const handleDeleteCertificate = async (certId) => {
+    try {
+      const response = await fetch(
+        `<span class="math-inline">\{NEXT\_PUBLIC\_SERVER\_NAME\}/doctor/profile/certificates/</span>{certId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        // Certificate deleted successfully
+        // Update the UI by removing the certificate from the data state
+        setData((prevData) => ({
+          ...prevData,
+          certificates: prevData.certificates.filter(
+            (cert) => cert.id !== certId
+          ),
+        }));
+      } else {
+        // Handle error
+        console.error("Error deleting certificate:", response.status);
+      }
+    } catch (error) {
+      console.error("Error deleting certificate:", error);
+    } finally {
+      console.log("DeleteCertificate", certId);
+      setShowCertModal(false); // Close the modal after the request
+    }
+  };
+  const handleDeleteExperience = async (expId) => {
+    try {
+      const response = await fetch(
+        `${NEXT_PUBLIC_SERVER_NAME}/doctor/profile/experiences/${expId}`, // Replace with your API endpoint
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        // Experience deleted successfully
+        setData((prevData) => ({
+          ...prevData,
+          experiences: prevData.experiences.filter((exp) => exp.id !== expId),
+        }));
+      } else {
+        // Handle error
+        console.error("Error deleting experience:", response.status);
+      }
+    } catch (error) {
+      console.error("Error deleting experience:", error);
+    } finally {
+      console.log("DeleteExperience", expId);
+      setShowExpModal(false);
+    }
+  };
+
+  const handleDeleteInterest = async (interestId) => {
+    try {
+      const response = await fetch(
+        `${NEXT_PUBLIC_SERVER_NAME}/doctor/profile/interests/${interestId}`, // Replace with your API endpoint
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        // Interest deleted successfully
+        setData((prevData) => ({
+          ...prevData,
+          interests: prevData.interests.filter(
+            (interest) => interest.id !== interestId
+          ),
+        }));
+      } else {
+        // Handle error
+        console.error("Error deleting interest:", response.status);
+      }
+    } catch (error) {
+      console.error("Error deleting interest:", error);
+    } finally {
+      console.log("DeleteInterest", interestId);
+      setShowInterestModal(false);
+    }
+  };
   const getToken = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
+      const token = await AsyncStorage.getItem("userToken");
       if (token !== null) {
         // Token retrieved
         return token;
       }
     } catch (e) {
       // error reading value
-      console.log('Error retrieving token', e);
+      console.log("Error retrieving token", e);
     }
     return null;
   };
-
+  // simplified mockup
+  const data = {
+    certificates: [
+      {
+        id: 120,
+        authority: "American College of Surgeons",
+        endDate: "2025-12-31",
+        name: "Board Certified General Surgeon",
+        startDate: "2020-01-01",
+      },
+      {
+        id: 121,
+        authority: "American Medical Association",
+        endDate: "2024-12-31",
+        name: "Fellow of the American College of Surgeons",
+        startDate: "2018-01-01",
+      },
+    ],
+    experiences: [
+      {
+        id: 120,
+        department: "General Surgery",
+        endDate: "2024-06-30",
+        firm: "St. Mary's Hospital",
+        startDate: "2020-07-01",
+        title: "Attending Surgeon",
+      },
+      {
+        id: 121,
+        department: "Surgical Oncology",
+        endDate: "2022-12-31",
+        firm: "Memorial Sloan Kettering Cancer Center",
+        startDate: "2018-01-01",
+        title: "Clinical Fellow",
+      },
+    ],
+    interests: [
+      { id: 121, category: "Medical Research", name: "Surgical Oncology" },
+      { id: 121, category: "Teaching", name: "Medical Student Education" },
+    ],
+    Languages: ["English", "Spanish"],
+  };
   const fetchDoctorInfo = async () => {
     try {
-      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${await getToken()}`,
-
-        },
-      });
-
+      const response = await fetch(
+        `${NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        }
+      );
       if (!response.ok) {
         console.log(response);
-        navigation.navigate('sign in')
-        throw new Error('Network response was not ok');
+        navigation.navigate("sign in");
+        throw new Error("Network response was not ok");
       }
-
       const data = await response.json();
-
       setDoctorInfo(data.formattedDoctor);
-    } catch (error) {
-      console.error('Error fetching doctor info:', error);
-      navigation.navigate('sign in')
     } finally {
       setIsLoading(false);
     }
@@ -65,33 +416,32 @@ export default function Profile({ navigation }) {
   const logOut = async () => {
     try {
       // Remove token from AsyncStorage
-      await AsyncStorage.removeItem('userToken');
+      await AsyncStorage.removeItem("userToken");
 
       // Double-check by trying to get the token to confirm deletion
-      const token = await AsyncStorage.getItem('userToken');
+      const token = await AsyncStorage.getItem("userToken");
 
       // If the token no longer exists, navigate to Sign In screen
       if (!token) {
-        navigation.navigate('sign in');  // Ensure the route name is correctly typed
+        navigation.navigate("sign in"); // Ensure the route name is correctly typed
       } else {
-        console.log('Error: Token still exists after deletion'); // Debugging message
+        console.log("Error: Token still exists after deletion"); // Debugging message
       }
     } catch (e) {
-      console.log('Error during logout:', e); // Handle errors gracefully
+      console.log("Error during logout:", e); // Handle errors gracefully
     }
   };
 
   const availability = () => {
-    navigation.navigate('availability');
+    navigation.navigate("availability");
   };
   const changePassword = () => {
-    navigation.navigate('changePassword');
+    navigation.navigate("changePassword");
   };
 
   const edit_info = (info) => {
-    navigation.navigate('edit info', 
-      {info: info})
-  }
+    navigation.navigate("edit info", { info: info });
+  };
 
   const renderProfileInfo = () => {
     const {
@@ -107,24 +457,36 @@ export default function Profile({ navigation }) {
       specialization,
       languages,
     } = doctorInfo;
-    sixtyMinPrice_ = sixtyMinPrice
-    thirtyMinPrice_ = thirtyMinPrice
+    sixtyMinPrice_ = sixtyMinPrice;
+    thirtyMinPrice_ = thirtyMinPrice;
     // console.log(doctorInfo)
     return (
       <View style={styles.card}>
         <View style={styles.profileRow}>
           <View>
-            <Image source={image ? { uri: image } : require('../../../assets/images/pp.png')} style={styles.profileImage} />
+            <Image
+              source={
+                image
+                  ? { uri: image }
+                  : require("../../../assets/images/pp.png")
+              }
+              style={styles.profileImage}
+            />
             <TouchableOpacity onPress={() => edit_info(doctorInfo)}>
               <Text style={styles.editButtonText}>Edit Profile</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.profileInfo}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <Text style={styles.name}>
                 Dr. {firstName} {lastName}
               </Text>
-              
             </View>
 
             <View style={styles.infoRow}>
@@ -139,22 +501,19 @@ export default function Profile({ navigation }) {
               <Ionicons name="call" size={20} />
               <Text style={styles.infoText}>{phone}</Text>
             </View>
-            {/* Other info rows */}
           </View>
         </View>
       </View>
     );
   };
-  
+
   if (isLoading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>Loading...</Text>
       </View>
-      );
+    );
   }
-
-
   return (
     <SafeArea>
       <CustomScroll>
@@ -166,93 +525,471 @@ export default function Profile({ navigation }) {
         {renderProfileInfo()}
 
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Years of Experience</Text>
-          <Text style={styles.sectionContent}>10 Years</Text>
-          <Custombutton>
-            <Text style={styles.actionButtonText}>Edit Experience</Text>
-          </Custombutton>
-        </View>
-
-        <View style={styles.card}>
           <Text style={styles.sectionTitle}>Availability</Text>
-          <Text style={styles.sectionContent}>Mon / 2 pm - 4 pm</Text>
+          <Text style={styles.sectionContent}></Text>
           <Custombutton onPress={availability}>
             <Text style={styles.actionButtonText}>Edit Availability</Text>
           </Custombutton>
         </View>
+        <View style={styles.container}>
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Experience</Text>
+            {data.experiences.map((exp, index) => (
+              <View key={index} style={styles.card}>
+                <Text style={styles.sectionContent}>Title: {exp.title}</Text>
+                <Text style={styles.sectionContent}>Firm: {exp.firm}</Text>
+                <Text style={styles.sectionContent}>
+                  From: {exp.startDate} To: {exp.endDate}
+                </Text>
+              </View>
+            ))}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setShowAddExpModal(true)}
+              >
+                <Text style={styles.actionButtonText}>Add</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setShowExpModal(true)}
+              >
+                <Text style={styles.actionButtonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Certificates</Text>
+            {data.certificates.map((cert, index) => (
+              <View key={index} style={styles.experienceItem}>
+                <Text style={styles.sectionContent}>Name: {cert.name}</Text>
+                <Text style={styles.sectionContent}>
+                  Authority: {cert.authority}
+                </Text>
+                <Text style={styles.sectionContent}>
+                  From: {cert.startDate} To: {cert.endDate}
+                </Text>
+              </View>
+            ))}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setShowAddCertModal(true)}
+              >
+                <Text style={styles.actionButtonText}>Add</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setShowCertModal(true)}
+              >
+                <Text style={styles.actionButtonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Languages</Text>
+            {data.Languages.map((lang, index) => (
+              <Text key={index} style={styles.sectionContent}>
+                {lang}
+              </Text>
+            ))}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setShowAddLangModal(true)}
+              >
+                <Text style={styles.actionButtonText}>Add</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.actionButtonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Interests</Text>
+            {data.interests.map((interest, index) => (
+              <View key={index} style={styles.experienceItem}>
+                <Text style={styles.sectionContent}>
+                  {interest.name} - {interest.category}
+                </Text>
+              </View>
+            ))}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setShowAddInterestModal(true)}
+              >
+                <Text style={styles.actionButtonText}>Add</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setShowInterestModal(true)}
+              >
+                <Text style={styles.actionButtonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Pricing</Text>
-          <Text style={styles.sectionContent}>30 minutes price: {thirtyMinPrice_}</Text>
-          <Text style={styles.sectionContent}>60 minutes price: {sixtyMinPrice_}</Text>
+          <Text style={styles.sectionContent}>
+            30 min price: {thirtyMinPrice_}
+          </Text>
+          <Text style={styles.sectionContent}>
+            60 min price: {sixtyMinPrice_}
+          </Text>
           <Custombutton>
             <Text style={styles.actionButtonText}>Edit Pricing</Text>
           </Custombutton>
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Reserved Appointments</Text>
-          <Text style={styles.sectionContent}>03:30 pm - Mon</Text>
           <Custombutton>
             <Text style={styles.actionButtonText}>Manage Appointments</Text>
           </Custombutton>
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Password</Text>
-          <Custombutton onPress={()=>{changePassword()}}>
+          <Custombutton
+            onPress={() => {
+              changePassword();
+            }}
+          >
             <Text style={styles.passwordChangeText}>Change Password</Text>
           </Custombutton>
         </View>
-
-        <TouchableOpacity
-          onPress={logOut}
-          style={styles.signOutButton}
-        >
+        <TouchableOpacity onPress={logOut} style={styles.signOutButton}>
           <Ionicons name="log-out" size={25} color="red" />
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>
       </CustomScroll>
+      <Modal visible={showCertModal} transparent={true} animationType="slide">
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Delete Certificate</Text>
+            {data.certificates.map((cert) => (
+              <TouchableOpacity
+                key={cert.id}
+                onPress={() => setSelectedCertId(cert.id)}
+                style={styles.modalItem}
+              >
+                <Text style={styles.modalText}>{cert.name}</Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => handleDeleteCertificate(selectedCertId)}
+            >
+              <Text style={styles.modalButtonText}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setShowCertModal(false)}
+            >
+              <Text style={styles.modalButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal visible={showExpModal} transparent={true} animationType="slide">
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Delete Experience</Text>
+            {data.experiences.map((exp) => (
+              <TouchableOpacity
+                key={exp.id}
+                onPress={() => setSelectedExpId(exp.id)}
+                style={styles.modalItem}
+              >
+                <Text>
+                  {exp.title} at {exp.firm}
+                </Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => handleDeleteExperience(selectedExpId)}
+            >
+              <Text style={styles.modalButtonText}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setShowExpModal(false)}
+            >
+              <Text style={styles.modalButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      {/* Modal for adding experience */}
+      <Modal visible={showAddExpModal} transparent={true} animationType="slide">
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Add Experience</Text>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Job Title"
+              value={newExpTitle}
+              onChangeText={setNewExpTitle}
+            />
+            <TextInput
+              style={styles.inputField}
+              placeholder="Company/Institution"
+              value={newExpFirm}
+              onChangeText={setNewExpFirm}
+            />
+            <TextInput
+              style={styles.inputField}
+              placeholder="Start Date (YYYY-MM-DD)"
+              value={newExpStartDate}
+              onChangeText={setNewExpStartDate}
+            />
+            <TextInput
+              style={styles.inputField}
+              placeholder="End Date (YYYY-MM-DD)"
+              value={newExpEndDate}
+              onChangeText={setNewExpEndDate}
+            />
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleAddExperience} // Call the appropriate function
+            >
+              <Text style={styles.modalButtonText}>Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setShowAddExpModal(false)}
+            >
+              <Text style={styles.modalButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal for adding interest */}
+      <Modal
+        visible={showAddInterestModal}
+        transparent={true}
+        animationType="slide"
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Add Interest</Text>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Interest Name"
+              value={newInterestName}
+              onChangeText={setNewInterestName}
+            />
+            <TextInput
+              style={styles.inputField}
+              placeholder="Category"
+              value={newInterestCategory}
+              onChangeText={setNewInterestCategory}
+            />
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleAddInterest} // Call the appropriate function
+            >
+              <Text style={styles.modalButtonText}>Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setShowAddInterestModal(false)}
+            >
+              <Text style={styles.modalButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal for adding language */}
+      <Modal
+        visible={showAddLangModal}
+        transparent={true}
+        animationType="slide"
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Add Language</Text>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Language"
+              value={newLanguage}
+              onChangeText={setNewLanguage}
+            />
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleAddLanguage} // Call the appropriate function
+            >
+              <Text style={styles.modalButtonText}>Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setShowAddLangModal(false)}
+            >
+              <Text style={styles.modalButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        visible={showAddCertModal}
+        transparent={true}
+        animationType="slide"
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Add Certificate</Text>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Certificate Name"
+              value={newCertName}
+              onChangeText={setNewCertName}
+            />
+            <TextInput
+              style={styles.inputField}
+              placeholder="Issuing Authority"
+              value={newCertAuthority}
+              onChangeText={setNewCertAuthority}
+            />
+            <TextInput
+              style={styles.inputField}
+              placeholder="Start Date (YYYY-MM-DD)"
+              value={newCertStartDate}
+              onChangeText={setNewCertStartDate}
+            />
+            <TextInput
+              style={styles.inputField}
+              placeholder="End Date (YYYY-MM-DD)"
+              value={newCertEndDate}
+              onChangeText={setNewCertEndDate}
+            />
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleAddCertificate}
+            >
+              <Text style={styles.modalButtonText}>Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setShowAddCertModal(false)}
+            >
+              <Text style={styles.modalButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={showInterestModal}
+        transparent={true}
+        animationType="slide"
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Delete Interest</Text>
+            {data.interests.map((interest) => (
+              <TouchableOpacity
+                key={interest.id}
+                onPress={() => setSelectedInterestId(interest.id)}
+                style={styles.modalItem}
+              >
+                <Text>
+                  {interest.name} - {interest.category}
+                </Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => handleDeleteInterest(selectedInterestId)}
+            >
+              <Text style={styles.modalButtonText}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setShowInterestModal(false)}
+            >
+              <Text style={styles.modalButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <Footer navigation={navigation} />
     </SafeArea>
   );
-};
-
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
+  },
+  inputField: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginVertical: 5,
+    width: "100%",
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
   },
   headerRow: {
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: "center",
     paddingHorizontal: 16,
     paddingTop: 10,
   },
   backIcon: {
-    color: '#1565c0',
+    color: "#1565c0",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1565c0',
+    fontWeight: "bold",
+    color: "#1565c0",
   },
   card: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     margin: 8,
     padding: 16,
+    marginBottom: 10, // Adjust the value as needed
+  },
+  modalContainer: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+    elevation: 5, // Add a subtle shadow for Android
+  },
+  modalItem: {
+    backgroundColor: "#f0f0f0", // Add a background color
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 5,
+    width: "100%", // Make items take full width
+  },
+  modalButton: {
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20, // Add spacing above the buttons
+    width: "50%", // Adjust button width
+    alignItems: "center", // Center the text
+  },
+  modalButtonText: {
+    color: "white",
+    fontSize: 16,
   },
   profileRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   profileImage: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    marginBottom: 20
+    marginBottom: 20,
   },
   profileInfo: {
     marginLeft: 12,
@@ -260,23 +997,21 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-  // editButton: {
-  //   alignSelf: 'flex-end',
-  // },
+
   editButtonText: {
-    color: '#1565c0',
+    color: "#1565c0",
     fontSize: 14,
     borderWidth: 1,
-    borderColor: '#1565c0',
+    borderColor: "#1565c0",
     width: 80,
-    textAlign: 'center',
+    textAlign: "center",
     borderRadius: 5,
   },
   infoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 4,
   },
   infoText: {
@@ -285,41 +1020,61 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1565c0',
+    fontWeight: "bold",
+    color: "#1565c0",
     marginBottom: 4,
   },
   sectionContent: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   actionButton: {
     marginTop: 8,
-    backgroundColor: '#1565c0',
+    backgroundColor: "#1565c0",
     padding: 8,
     borderRadius: 8,
   },
   actionButtonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
+    color: "white",
+    textAlign: "center",
+    fontWeight: "bold",
     fontSize: 18,
   },
   passwordChangeText: {
-    color: '#1de9b6',
-    textAlign: 'center',
+    color: "#1de9b6",
+    textAlign: "center",
     marginTop: 8,
     fontSize: 16,
   },
   signOutButton: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginVertical: 16,
     // marginBottom: '25%'
   },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 10, // Add marginBottom here for spacing between button groups
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 5,
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    // marginBottom: 10,  <-- Remove marginBottom from here
+  },
+  actionButtonText: {
+    color: "white",
+    fontSize: 16,
+  },
   signOutText: {
-    color: 'red',
+    color: "red",
     marginLeft: 8,
     fontSize: 16,
   },

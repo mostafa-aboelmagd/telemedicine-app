@@ -3,55 +3,30 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
-  Switch,
   TouchableOpacity,
   Modal,
   TextInput,
 } from "react-native";
 import LocalStorage from "../../components/LocalStorage";
 import SafeArea from "../../components/safeArea";
-import { doctorAv } from "../../test/data";
 import CustomScroll from "../../components/scroll";
 import CustomTitle from "../../components/title";
 import { getToken } from "../../components/getToken";
 import { NEXT_PUBLIC_SERVER_NAME } from "@env";
 import { Calendar } from "react-native-calendars";
 
-let newSlots = [];
-let removedSlots = [];
-let selectedSlotsOfDays = {};
 export default function Follow_up({ navigation }) {
-  const [selectedDate, setSelectedDate] = useState(new Date()); // Store selected date
-  const [availabilityData, setAvailabilityData] = useState(null); // Store fetched data
-  //   const [slots, setSlots] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [availabilityData, setAvailabilityData] = useState(null);
   const [slotdaycode, setslotdaycode] = useState(null);
   const [slothourcode, setslothourcode] = useState(null);
   const [slottypecode, setslottypecode] = useState(null);
 
-  const [complaint, setComplaint] = useState(""); // State to store complaint
-  const [booked, setBooked] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [isOnline, setIsOnline] = useState("L");
   const [slotduration, setslotduration] = useState(30);
-  const [selectedDay, setSelectedDay] = useState("sat");
-  const [message, setMessage] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [userInput, setUserInput] = useState("");
-  const decodeSlots = (slotsString) => {
-    const decodedSlots = {};
-    if (slotsString) {
-      slotsString.split(",").forEach((timeslot) => {
-        const [day, slot, status] = timeslot.split("_");
-        const key = days[day];
-        if (!decodedSlots[key]) {
-          decodedSlots[key] = [];
-        }
-        decodedSlots[key].push([slot, status]);
-      });
-    }
-    return decodedSlots;
-  };
+
   const days = {
     1: "sat",
     2: "sun",
@@ -62,76 +37,77 @@ export default function Follow_up({ navigation }) {
     7: "fri",
   };
 
-  const [hours, setHours] = useState({
-    "01": false,
-    "02": false,
-    "03": false,
-    "04": false,
-    "05": false,
-    "06": false,
-    "07": false,
-    "08": false,
-    "09": false,
-    10: false,
-    11: false,
-    12: false,
-  });
+  const decodeSlots = (slotsString) => {
+    const decodedSlots = {};
+    if (slotsString) {
+      slotsString.split(",").forEach((timeslot) => {
+        const [day, slot, status] = timeslot.split("_");
+        const key = days[day];
+        if (!decodedSlots[key]) {
+          decodedSlots[key] = [];
+        }
+        decodedSlots[key].push({ slot, status }); // Store as object
+      });
+    }
+    return decodedSlots;
+  };
 
   // Online / On-site switch
   const online = () => {
-    isOnline === "L" ? setIsOnline("S") : setIsOnline("L");
+    setIsOnline(isOnline === "L" ? "S" : "L");
   };
   const duration = () => {
-    slotduration === 30 ? setslotduration(60) : setslotduration(30);
+    setslotduration(slotduration === 30 ? 60 : 30);
   };
 
-  // Slots filtering
-  const filtered = (slot) => {
+  // Improved slot filtering
+  const isSlotAvailable = (slot) => {
     const decoded = decodeSlots(availabilityData?.available_slots);
-    const dayOfWeek = days[new Date(selectedDate).getDay() + 1]; // Get day of the week for selectedDate
+    const dayOfWeek = days[new Date(selectedDate).getDay() + 1];
     if (decoded[dayOfWeek]) {
-      return decoded[dayOfWeek]
-        .filter((element) => element[1] === isOnline)
-        .find((element) => element[0] === slot);
+      return decoded[dayOfWeek].some(
+        (s) => s.slot === slot && s.status === isOnline
+      );
     }
     return false;
   };
 
-  const chosenSlot = async (selectedDay, hour, state) => {
-    const dayOfWeek = new Date(selectedDate).getDay() + 1; // Day of the week for selectedDate
-    console.log(dayOfWeek, hour, state);
+  const chosenSlot = async (hour) => {
+    const dayOfWeek = new Date(selectedDate).getDay() + 1;
     setslotdaycode(dayOfWeek);
     setslothourcode(hour);
-    setslottypecode(state);
-    // Check for conflicts with availabilityData (You'll need to implement this logic)
-    const hasConflict = checkForConflicts(dayOfWeek, hour, state);
-    if (hasConflict) {
-      // Display an error message or prevent further action
-      alert("This slot is not valid.");
-      return;
+    setslottypecode(isOnline);
+
+    if (isSlotAvailable(hour)) {
+      setModalVisible(true);
+    } else {
+      alert("This slot is not available.");
     }
-    setModalVisible(true);
-    // Wait for the modal to be submitted
   };
+  // const appointmentbody= JSON.stringify({
+    //       time_slot_code: `${slotdaycode}_${slothourcode}_${slottypecode}`,
+    //         appointment_date: dateTime,
+    //         complaint: comp,
+    //         duration: slotduration,
+    //         appointmentId: appointment_id,
+    //       })
   const bookfollowup = async (comp) => {
     const dayOfWeek = new Date(selectedDate).getDay() + 1;
-    const slotHour = parseInt(slothourcode, 10) + 8; // Add 8 to convert to 24-hour format
+    const slotHour = parseInt(slothourcode, 10) + 8;
     const formattedHour = slotHour < 10 ? `0${slotHour}` : `${slotHour}`;
     const dateTime = `${selectedDate}T${formattedHour}:00:00.000Z`;
-    console.log(dateTime);
     const appointment_id = await LocalStorage.getItem(
       "appointment_id",
       appointment_id
     );
-    const appointmentbody= JSON.stringify({
+    const appointmentbody = JSON.stringify({
       time_slot_code: `${slotdaycode}_${slothourcode}_${slottypecode}`,
-        appointment_date: dateTime,
-        complaint: comp,
-        duration: slotduration,
-        appointmentId: appointment_id,
-      })
-      console.log(appointmentbody);
-    // Send data to backend
+      appointment_date: dateTime,
+      complaint: comp,
+      duration: slotduration,
+      appointmentId: appointment_id,
+    });
+
     try {
       const response = await fetch(
         `${NEXT_PUBLIC_SERVER_NAME}/doctor/BookFollowUp/FollowupAppointment`,
@@ -141,50 +117,42 @@ export default function Follow_up({ navigation }) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${await getToken()}`,
           },
-          body: appointmentbody
+          body: appointmentbody,
         }
-      )
+      );
       if (response.ok) {
         alert("Follow up appointment booked successfully");
-        navigation.navigate('appointment'); // Navigate back after success
+        navigation.navigate("appointment");
         return;
-    }
-      // ... handle response
+      }if (!response.ok) {
+        alert("Booking error: " + response);
+        
+        return;
+      }
     } catch (error) {
       alert("Error booking follow-up:", error);
     }
   };
 
-  const checkForConflicts = (dayOfWeek, hour, state) => {
-    // Implement your logic to check for conflicts with availabilityData
-    // Return true if there is a conflict, false otherwise
-    const decoded = decodeSlots(availabilityData?.available_slots);
-    return decoded[days[dayOfWeek]]?.find(
-      (s) => s[0] === hour && s[1] === state
-    );
-  };
   const getSlotTime = (slot) => {
-    const slotHour = parseInt(slot, 10) + 8; // Slots start at 9am (hour 01)
+    const slotHour = parseInt(slot, 10) + 8;
     const formattedHour = slotHour < 10 ? `0${slotHour}` : `${slotHour}`;
     return `${formattedHour}:00:00.000Z`;
   };
+
   const getStyle = (slot) => {
     if (isSlotBooked(selectedDate, slot)) {
-      return styles.slot;
+      return styles.slot; // Booked slot style
     }
 
-    if (filtered(slot)) {
-      return styles.slot;
+    if (isSlotAvailable(slot)) {
+      return styles.availableSlot; // Available slot style
     } else {
-      return [
-        styles.slot,
-        hours[slot]
-          ? { backgroundColor: "#002e07" }
-          : { backgroundColor: "green" },
-      ];
+      return styles.slot; // Default slot style
     }
   };
-  // Fetching doctor availability
+ 
+
   const getAvailabilSlots = async () => {
     try {
       const response = await fetch(
@@ -199,61 +167,30 @@ export default function Follow_up({ navigation }) {
       );
 
       if (!response.ok) {
-        console.log(response);
         throw new Error("Network response was not ok", response);
       }
 
       const result = await response.json();
+      console.log(JSON.stringify(result))
       setAvailabilityData(result);
-      console.log(result);
     } catch (error) {
       console.error("Error fetching doctor availability:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
     getAvailabilSlots();
-  }, [loading]);
+  }, []);
 
   const isSlotBooked = (date, slot) => {
     if (availabilityData && availabilityData.booked) {
-      const formattedDate = new Date(date).toISOString().split("T")[0]; // Format date
-      const slotTime = getSlotTime(slot); // Get time for the slot (e.g., "11:00:00.000Z")
+      const formattedDate = new Date(date).toISOString().split("T")[0];
+      const slotTime = getSlotTime(slot);
       const bookedDateTime = `${formattedDate}T${slotTime}`;
       return availabilityData.booked.includes(bookedDateTime);
     }
     return false;
   };
-  if (loading) {
-    return (
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1,
-          backgroundColor: "#f0f0f0",
-        }}
-      >
-        <Text>Loading</Text>
-      </View>
-    );
-  }
-  if (loading) {
-    return (
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1,
-          backgroundColor: "#f0f0f0",
-        }}
-      >
-        <Text>Loading</Text>
-      </View>
-    );
-  }
   return (
     <SafeArea>
       <View style={styles.container}>
@@ -275,105 +212,77 @@ export default function Follow_up({ navigation }) {
               selectedDotColor: "orange",
             },
           }}
-          minDate={new Date().toISOString().split("T")[0]} // Format date as YYYY-MM-DD
+          minDate={new Date().toISOString().split("T")[0]}
         />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginHorizontal: 10,
-          }}
-        ></View>
         <CustomScroll>
           <View style={styles.row}>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "01", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("01")}>
               <Text style={getStyle("01")}>09:00 am</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "02", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("02")}>
               <Text style={getStyle("02")}>10:00 am</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "03", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("03")}>
               <Text style={getStyle("03")}>11:00 am</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.row}>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "04", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("04")}>
               <Text style={getStyle("04")}>12:00 pm</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "05", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("05")}>
               <Text style={getStyle("05")}>01:00 pm</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "06", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("06")}>
               <Text style={getStyle("06")}>02:00 pm</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.row}>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "07", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("07")}>
               <Text style={getStyle("07")}>03:00 pm</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "08", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("08")}>
               <Text style={getStyle("08")}>04:00 pm</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "09", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("09")}>
               <Text style={getStyle("09")}>05:00 pm</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.row}>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "10", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("10")}>
               <Text style={getStyle("10")}>06:00 pm</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "11", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("11")}>
               <Text style={getStyle("11")}>07:00 pm</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => chosenSlot(selectedDay, "12", isOnline)}
-            >
+            <TouchableOpacity onPress={() => chosenSlot("12")}>
               <Text style={getStyle("12")}>08:00 pm</Text>
             </TouchableOpacity>
           </View>
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
           >
             <TouchableOpacity onPress={online}>
               <Text style={styles.button}>
-                {isOnline == "L" ? "Online" : "On-site"}
+                {isOnline === "L" ? "Online" : "On-site"}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={duration}>
               <Text style={styles.button}>
-                {slotduration == 30 ? "30 min" : "60 min"}
+                {slotduration === 30 ? "30 min" : "60 min"}
               </Text>
             </TouchableOpacity>
           </View>
         </CustomScroll>
-        <Text style={styles.message}>"{message}"</Text>
+
         <TouchableOpacity onPress={() => navigation.pop()}>
           <Text style={styles.done}>Set</Text>
         </TouchableOpacity>
       </View>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -392,7 +301,10 @@ export default function Follow_up({ navigation }) {
             />
             <TouchableOpacity
               style={[styles.button, styles.buttonClose]}
-              onPress={() => bookfollowup(userInput)}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+                bookfollowup(userInput);
+              }}
             >
               <Text style={styles.textStyle}>Submit</Text>
             </TouchableOpacity>
@@ -402,7 +314,6 @@ export default function Follow_up({ navigation }) {
     </SafeArea>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -436,6 +347,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
   },
+  availableSlot:{  
+  backgroundColor: "green",
+  padding: 10,
+  borderRadius: 10,
+  color: "white",
+  width: 105,
+  fontSize: 18,
+  textAlign: "center",
+  fontWeight: "bold",
+},
   switch: {
     marginRight: 10,
   },
