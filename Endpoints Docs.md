@@ -1022,7 +1022,6 @@ with wrong appointmentId:
         "dose": "500",
         "drugName": "Pentasa",
         "endDate": "2024-09-28",
-        "id": 1727294955165,
         "note": "3 times",
         "startDate": "2024-09-08"
       },
@@ -1030,7 +1029,6 @@ with wrong appointmentId:
         "dose": "500",
         "drugName": "Solepred",
         "endDate": "2024-09-30",
-        "id": 1727294993688,
         "note": "2 times ",
         "startDate": "2024-09-25"
       }
