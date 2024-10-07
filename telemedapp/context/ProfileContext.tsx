@@ -16,6 +16,7 @@ interface ProfileData {
 interface ProfileContextType {
   profileData: ProfileData | null;
   loading: boolean;
+  setLoading(value: boolean): void;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -77,11 +78,21 @@ export const ProfileProvider = ({
           console.error("Error fetching profile data:", error);
         })
         .finally(() => setLoading(false));
+    } else if (pathname.includes("doctorProfile")) {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
+        mode: "cors",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => setProfileData(() => response.formattedDoctor))
+        .finally(() => setLoading(false));
     }
   }, [pathname, router]);
 
   return (
-    <ProfileContext.Provider value={{ profileData, loading }}>
+    <ProfileContext.Provider value={{ profileData, loading, setLoading }}>
       {children}
     </ProfileContext.Provider>
   );

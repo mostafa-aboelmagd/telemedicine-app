@@ -1,9 +1,8 @@
-// telemedapp/components/patientProfile/ViewProfile.tsx
 "use client";
 
 import Link from "next/link";
-import { useProfile } from "@/context/ProfileContext"; // Ensure correct import path
-
+import { useProfile } from "@/context/ProfileContext";
+import { useRouter } from "next/navigation";
 interface ProfileData {
   firstName: string;
   lastName: string;
@@ -16,6 +15,7 @@ interface ProfileData {
 
 function ViewProfile() {
   const { profileData, loading } = useProfile();
+  const router = useRouter();
 
   const profileFields = [
     { name: "firstName", title: "First Name" },
@@ -34,6 +34,11 @@ function ViewProfile() {
   if (!profileData) {
     return <div>No profile data available.</div>;
   }
+  const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    localStorage.clear();
+    router.push("/auth/signin");
+  };
 
   return (
     <div className="m-4">
@@ -53,10 +58,7 @@ function ViewProfile() {
       </div>
       <div className="mt-5 mb-3">
         <button
-          onClick={() => {
-            localStorage.clear();
-            window.location.href = "/auth/signin";
-          }}
+          onClick={handleSignOut}
           className="font-medium p-3 border border-solid text-red-600 border-red-600 rounded-full"
         >
           Sign Out

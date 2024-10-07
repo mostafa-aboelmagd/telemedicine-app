@@ -1,14 +1,11 @@
 "use client";
 import React from "react";
-import { Inter } from "next/font/google";
 import "../globals.css";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { useProfile } from "@/context/ProfileContext";
 import { usePathname, useRouter } from "next/navigation";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function ProfileLayout({
   children,

@@ -1,15 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
-import { FaUserCircle } from "react-icons/fa";
 
 interface TimeIdMapping {
   [key: string]: { [time: string]: string };
 }
 function TimeSlots() {
-  const userImage = <FaUserCircle className="h-32 w-32 text-[#035fe9]" />;
   const [appointmentType, setAppointmentType] = useState("online");
   const [loadingButton, setLoadingButton] = useState(false);
 
@@ -57,13 +53,6 @@ function TimeSlots() {
   }>(Object.fromEntries(days.map((day) => [day, []])));
 
   const [toggleChecked, setToggleChecked] = useState(false);
-
-  const [profileData, setProfileData] = useState({
-    firstName: "",
-    lastName: "",
-  });
-
-  const [loading, setLoading] = useState(true);
 
   let token: string | null = "";
   const convertCodedToDates = (codedTimes: string[]) => {
@@ -163,47 +152,6 @@ function TimeSlots() {
     }
     return codedSlots;
   };
-  useEffect(() => {
-    token = localStorage.getItem("jwt");
-    if (!token) {
-      window.location.href = "/auth/signin";
-    } else if (
-      Math.floor(new Date().getTime() / 1000) >
-      Number(localStorage.getItem("expiryDate"))
-    ) {
-      localStorage.clear();
-      window.location.href = "/auth/signin";
-    } else {
-      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/profile/info`, {
-        mode: "cors",
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => setProfileData(() => response.formattedDoctor));
-
-      fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/availability/view`, {
-        mode: "cors",
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => {
-          const timeslots = response.timeslots || []; // Ensure there's a fallback for timeslots
-
-          console.log("API view Response: ", timeslots); // Log the API response for inspection
-
-          // Process the timeslots directly
-          convertCodedToDates(timeslots);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [token]);
-
   useEffect(() => {
     setTimesChosen(() =>
       Object.fromEntries(days.map((day) => [day, new Set<string>()]))
@@ -440,136 +388,88 @@ function TimeSlots() {
   };
 
   return (
-    <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 min-[980px]:flex-row min-[980px]:items-start">
-      {loading ? (
-        <CircularProgress className="absolute top-1/2" />
-      ) : (
-        <>
-          <div className="flex flex-col gap-4">
-            <div className="flex-initial flex flex-col justify-center items-center my-5 bg-white h-fit w-fit p-4 rounded-xl">
-              {userImage}
-              <p className="text-blue-500 my-1 font-semibold">
-                Dr. {profileData?.firstName} {profileData?.lastName}
-              </p>
-            </div>
-            <button
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
-              onClick={() =>
-                (window.location.href = "/doctorProfile/appointments")
-              }
-            >
-              My Appointments
-            </button>
-          </div>
-          <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 min-[880px]:basis-7/12 min-[880px]:max-w-full">
-            <div className="flex pt-4 mb-3 justify-between gap-2">
-              <Link href="/" className="font-bold ml-7">
-                Personal Info
-              </Link>
-              <Link
-                href="/doctorProfile/timeSlots"
-                className="text-blue-500 font-bold"
-              >
-                Time Slots
-              </Link>
-              <Link href="/doctorProfile/requests" className="font-bold mr-7">
-                Pending Requests
-              </Link>
-            </div>
-            <div className="flex">
-              <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
-              <hr className="bg-blue-500 border-none h-0.5 w-1/3"></hr>
-              <hr className="bg-neutral-800 border-none h-0.5 w-1/3"></hr>
-            </div>
-            <div className="m-4 relative">
-              <div className="flex items-baseline flex-col justify-between ">
-                <div className="flex gap-16 mt-3 min-[980px]:gap-20">
-                  <div className="flex flex-col gap-40 min-[430px]:gap-24 min-[470px]:gap-12 min-[550px]:gap-5">
-                    {days.map((day, i) => {
-                      return (
-                        <button
-                          key={days[i]}
-                          name={day}
-                          onClick={handleDayClick}
-                          className={
-                            day === dayDate ? clickedDayClass : dayButtonClass
-                          }
-                        >
-                          {day.toUpperCase()}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <div className=" grid grid-cols-1 gap-5 min-[470px]:grid-cols-2 min-[550px]:grid-cols-3">
-                    {Object.entries(timesList).map((timeEntry) => {
-                      return (
-                        <button
-                          key={timeEntry[0]}
-                          name={timeEntry[1]}
-                          onClick={handleTimeClick}
-                          className={getTimeClass(timeEntry[1])}
-                        >
-                          {timeEntry[0]}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-              <div className=" flex sm:flex-row flex-col items-baseline md:gap-20 gap-4">
-                <button onClick={handleSubmit} className={submitButtonClass}>
-                  {loadingButton
-                    ? toggleChecked
-                      ? "Deleting..."
-                      : "Adding..."
-                    : toggleChecked
-                    ? "Delete"
-                    : "Add"}
+    <div className="m-4 relative">
+      <div className="flex items-baseline flex-col justify-between ">
+        <div className="flex gap-16 mt-3 min-[980px]:gap-20">
+          <div className="flex flex-col gap-40 min-[430px]:gap-24 min-[470px]:gap-12 min-[550px]:gap-5">
+            {days.map((day, i) => {
+              return (
+                <button
+                  key={days[i]}
+                  name={day}
+                  onClick={handleDayClick}
+                  className={day === dayDate ? clickedDayClass : dayButtonClass}
+                >
+                  {day.toUpperCase()}
                 </button>
-                <div className="flex items-center flex-row gap-4 justify-center">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="type"
-                      value="online"
-                      checked={appointmentType === "online"}
-                      onChange={() => setAppointmentType("online")}
-                    />
-
-                    <span className="ml-2">Online</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="type"
-                      value="onsite"
-                      checked={appointmentType === "onsite"}
-                      onChange={() => setAppointmentType("onsite")}
-                    />
-
-                    <span className="ml-2">Onsite</span>
-                  </label>
-                  <label className={toggleLabelClass}>
-                    <input
-                      type="checkbox"
-                      value=""
-                      className="sr-only peer"
-                      checked={toggleChecked}
-                      onChange={handleChangeToggle}
-                    />
-                    <div className={toggleClass}></div>
-                    <span className="ms-3 text-base font-bold text-black">
-                      {toggleChecked ? "DEL" : "ADD"}
-                    </span>
-                  </label>
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
-        </>
-      )}
+          <div className=" grid grid-cols-1 gap-5 min-[470px]:grid-cols-2 min-[550px]:grid-cols-3">
+            {Object.entries(timesList).map((timeEntry) => {
+              return (
+                <button
+                  key={timeEntry[0]}
+                  name={timeEntry[1]}
+                  onClick={handleTimeClick}
+                  className={getTimeClass(timeEntry[1])}
+                >
+                  {timeEntry[0]}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div className=" flex sm:flex-row flex-col items-baseline md:gap-20 gap-4">
+        <button onClick={handleSubmit} className={submitButtonClass}>
+          {loadingButton
+            ? toggleChecked
+              ? "Deleting..."
+              : "Adding..."
+            : toggleChecked
+            ? "Delete"
+            : "Add"}
+        </button>
+        <div className="flex items-center flex-row gap-4 justify-center">
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="type"
+              value="online"
+              checked={appointmentType === "online"}
+              onChange={() => setAppointmentType("online")}
+            />
+
+            <span className="ml-2">Online</span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="type"
+              value="onsite"
+              checked={appointmentType === "onsite"}
+              onChange={() => setAppointmentType("onsite")}
+            />
+
+            <span className="ml-2">Onsite</span>
+          </label>
+          <label className={toggleLabelClass}>
+            <input
+              type="checkbox"
+              value=""
+              className="sr-only peer"
+              checked={toggleChecked}
+              onChange={handleChangeToggle}
+            />
+            <div className={toggleClass}></div>
+            <span className="ms-3 text-base font-bold text-black">
+              {toggleChecked ? "DEL" : "ADD"}
+            </span>
+          </label>
+        </div>
+      </div>
     </div>
   );
 }
-
 export default TimeSlots;
