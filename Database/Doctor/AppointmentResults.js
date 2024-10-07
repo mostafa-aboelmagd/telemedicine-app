@@ -62,16 +62,30 @@ const insertMedications = async (medicationsData) => {
         data.medication_end_date,
       ]
     );
+    return result;
   }
-  return result;
   // return result.rows;
 };
-
 const updateAppointmentStatus = async (appointmentId, status) => {
-  await pool.query(
-    "UPDATE appointment SET appointment_status = $2 WHERE appointment_id = $1",
-    [appointmentId, status]
-  );
+  try {
+      const result = await pool.query(
+          "UPDATE appointment SET appointment_status = $2 WHERE appointment_id = $1",
+          [appointmentId, status]
+      );
+
+      // Optionally, you can check the result to see how many rows were updated
+      if (result.rowCount > 0) {
+          return true; // Indicate successful update
+      } else {
+          console.log('No appointment found with id:', appointmentId);
+          return false; // No rows were updated
+      }
+
+  } catch (error) {
+      console.error('Error updating appointment status:', error);
+      // Handle the error appropriately (e.g., throw it, return an error object)
+      return false; // Indicate failure
+  }
 };
 
 module.exports = {

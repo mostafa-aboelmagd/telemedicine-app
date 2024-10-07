@@ -1,5 +1,6 @@
 const database = require('../../../Database/Doctor/Availability/Add');
 
+
 const addAvailability = async (req, res) => {
   try {
     const timeslotCodes = req.body; // Assuming the request body contains the timeslot code array
