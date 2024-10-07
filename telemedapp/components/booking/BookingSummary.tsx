@@ -2,17 +2,13 @@ import React, { useState, useRef } from "react";
 import ConfirmDialog from "./ConfirmDialog";
 import { Toast } from "primereact/toast";
 import { convertDateToCode } from "@/utils/formatDoctorAvailabilities";
-
+import type { DoctorBooking } from "@/types";
 interface BookingSummaryProps {
   selectedSlot: string | null;
   selectedDuration: number;
   selectedType: string;
 
-  doctor: {
-    id: number;
-    fees60min: number;
-    fees30min: number;
-  };
+  doctor: DoctorBooking;
   selectedDate: {
     date: string;
     slots: { id: number; time: string }[];
@@ -30,8 +26,6 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 }) => {
   const [complaint, setComplaint] = React.useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [combinedDateTime, setCombinedDateTime] = useState<string | null>(null);
-  const patientId = localStorage.getItem("userId");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [loading, setLoading] = useState(false); // Loading state
 
@@ -50,7 +44,6 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 
     // Construct the combined datetime string in the correct format
     const combinedDateTime = `${dateStr}T${timeStr}Z`;
-    setCombinedDateTime(combinedDateTime);
 
     return combinedDateTime;
   };
@@ -149,7 +142,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         </div>
       </div>
       <button
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white md:py-3 py-2 rounded-lg font-semibold disabled:opacity-50 md:text-base text-sm"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white md:py-3 py-2 rounded-lg font-semibold disabled:cursor-not-allowed disabled:opacity-50 md:text-base text-sm"
         disabled={!selectedSlot || loading}
         onClick={() => bookAppointment()}
       >

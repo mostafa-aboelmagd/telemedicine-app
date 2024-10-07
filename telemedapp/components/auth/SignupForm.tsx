@@ -8,8 +8,17 @@ import doctorImage from "@/images/doctor.png"
 import InputComponent from "./InputComponent";
 import { Calendar } from "primereact/calendar";
 import { format } from "date-fns"; // For formatting dates (optional)
+import { useRouter } from "next/navigation";
 
 function SignUpForm() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [userType, setUserType] = useState("patient");
+  const [changedField, setChangedField] = useState("");
+  const [formValid, setFormValid] = useState(false);
+  const [error, setError] = useState(false);
+  const [signedUp, setSignedUp] = useState(false);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -30,11 +39,6 @@ function SignUpForm() {
     phone: "",
     birthDate: "",
   });
-
-  const [userType, setUserType] = useState("patient");
-  const [changedField, setChangedField] = useState("");
-  const [formValid, setFormValid] = useState(false);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     validateForm();
@@ -322,6 +326,7 @@ function SignUpForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     if (!formValid) return;
     try {
       const response = await fetch(
@@ -347,11 +352,15 @@ function SignUpForm() {
       );
 
       if (!response.ok) {
+        setSignedUp(false);
         setError(true);
+        setLoading(false);
         throw new Error("Failed to register");
       }
-
-      window.location.href = "/auth/signin";
+      setLoading(false);
+      setError(false);
+      setSignedUp(true);
+      router.replace("/");
     } catch (error) {
       console.error("Error During Signup:", error);
     }
@@ -487,12 +496,17 @@ function SignUpForm() {
             This Email Is Already Registered!
           </p>
         )}
+        {signedUp && (
+          <p className="font-semibold text-green-700 mt-4 mb-2">
+            Signed up successfully!
+          </p>
+        )}
         <button
           type="submit"
-          className={submitButtonClass}
-          disabled={!formValid}
+          className={`${submitButtonClass} disabled:cursor-not-allowed disabled:opacity-50`}
+          disabled={!formValid || loading}
         >
-          Register
+          {loading ? "Loading..." : "Register"}
         </button>
       </form>
     </div>

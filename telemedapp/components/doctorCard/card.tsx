@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import { HiOutlineUserGroup } from "react-icons/hi2";
@@ -8,10 +8,11 @@ import styles from "./card.module.css";
 import { formatDate } from "@/utils/date";
 import BookingButton from "./BookingButton";
 import { FaUserCircle } from "react-icons/fa";
-const DoctorCard = ({ doctor }: { doctor: any }) => {
-  // console.log("Doctor: ", doctor);
+import RatingComp from "@/components/common/RatingComp";
 
+const DoctorCard = ({ doctor }: { doctor: any }) => {
   const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
+  // const [doctorRating, setDoctorRating] = useState{}
   const bufferToBase64 = (buffer: number[]) => {
     const binary = String.fromCharCode.apply(null, buffer);
     return window.btoa(binary);
@@ -22,7 +23,7 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
     : ""; // Handle the case if no image is available
 
   return (
-    <div className="bg-white rounded-3xl p-4 flex flex-col space-y-8 hover:scale-105 transition shadow-lg">
+    <div className="bg-white rounded-3xl p-4 flex flex-col space-y-8 hover:scale-105 transition shadow-lg max-w-96 min-w-72 md:mx-2 mx-auto">
       <div className="flex flex-col space-y-4 md:space-y-0 items-center md:items-start md:flex-row space-x-2">
         <div>
           {base64Image ? (
@@ -46,21 +47,34 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
           </div>
           <div className="flex justify-between items-center">
             <Stack spacing={1}>
-              <Rating
-                sx={{
-                  fontSize: {
-                    xs: "16px",
-                    sm: "18px",
-                    md: "20px",
-                  },
-                }}
-                name="rating"
-                defaultValue={doctor.rating}
-                precision={0.01}
-                readOnly
-              />
+              {doctor.rating ? (
+                <Rating
+                  sx={{
+                    fontSize: {
+                      xs: "16px",
+                      sm: "18px",
+                      md: "20px",
+                    },
+                  }}
+                  name="rating"
+                  defaultValue={5}
+                  precision={0.01}
+                  readOnly
+                />
+              ) : (
+                <RatingComp
+                  text="Write a Review"
+                  variant="text"
+                  doctor={doctor}
+                  className="text-blue-500 underline text-xs"
+                />
+              )}
             </Stack>
-            <p className="text-[#343a40] text-xs">{`${doctor.rating} (${doctor.numReviews} Reviews)`}</p>
+            <p className="text-[#343a40] text-xs">
+              {doctor.rating > 0
+                ? `${doctor.rating} (${doctor.numReviews} Reviews)`
+                : "No Reviews"}
+            </p>
           </div>
         </div>
       </div>

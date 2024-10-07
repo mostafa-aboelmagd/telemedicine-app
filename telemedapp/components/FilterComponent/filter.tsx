@@ -52,7 +52,7 @@ const FilterComponent = ({ handleChangeFilterDrop, handleResetFilters, handleCha
     const today = new Date();
 
     return (
-        <>{!openModal ? <aside className='flex flex-col space-y-6 p-4 border border-[#919395] rounded-[10px] max-h-fit hidden md:inline-block'>
+        <>{!openModal ? <aside className='flex flex-col space-y-6 p-4 border border-[#919395] rounded-[10px] max-h-fit hidden lg:inline-block'>
             <h2 className='text-[#035fe9] text-lg font-bold text-center'>Filters</h2>
             <hr />
             <div className='flex flex-col space-y-6'>

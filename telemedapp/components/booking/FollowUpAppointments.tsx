@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Card } from "primereact/card";
-import { Button } from "primereact/button";
 import { formatDate } from "../../utils/date";
 interface FollowUpAppointmentsProps {
   appointments: any[];
@@ -60,7 +59,9 @@ const FollowUpAppointments: React.FC<FollowUpAppointmentsProps> = ({
           zIndex: 1000,
         }}
         header={
-          appointments.length > 0 ? "Select Appointment for Follow Up" : ""
+          appointments && appointments.length > 0
+            ? "Select Appointment for Follow Up"
+            : ""
         }
         visible={showDialog}
         onHide={() => setShowDialog(false)}
@@ -105,7 +106,7 @@ const FollowUpAppointments: React.FC<FollowUpAppointmentsProps> = ({
                       </p>
                       <p>
                         <strong>Duration:</strong>{" "}
-                        {appointment.appointment_duration} min
+                        {appointment?.appointment_duration} min
                       </p>
                     </div>
                     <button

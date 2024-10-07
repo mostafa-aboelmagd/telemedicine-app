@@ -8,6 +8,7 @@ import { BsPersonFillAdd } from "react-icons/bs";
 import MenuList from "../MenuList/menuList";
 import { IoMenu } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
+import { useRouter } from "next/navigation"; // Import the hooks
 
 const menuIcon = (
   <div>
@@ -22,7 +23,7 @@ const signedInIcon = (
 const Navbar = () => {
   const [token, setToken] = useState<any>();
   const [userRole, setUserRole] = useState<any>();
-
+  const router = useRouter();
   useEffect(() => {
     const expiryDate = localStorage.getItem("expiryDate");
     if (
@@ -36,7 +37,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="h-14 bg-white border border-b-[1px] sticky top-0 z-10 pb-8">
+    <nav className="h-14 bg-white border border-b-[1px] sticky top-0 z-10 pb-8 mb-2">
       <div className="max-w-full md:max-w-[90%] min-[1130px]:max-w-[75%] flex justify-between items-center mx-auto">
         <Link href="/">
           <div className="flex justify-center items-center">
@@ -45,16 +46,30 @@ const Navbar = () => {
           </div>
         </Link>
         <div className="hidden min-[1130px]:inline-block justify-between space-x-4 text-[#4d4d4f] text-sm font-light">
-          <Link href="/doctors">
-            <button className="font-semibold hover:text-[#035fe9]">
-              Doctor List
-            </button>
-          </Link>
-          <button className="font-semibold hover:text-[#035fe9]">Tests</button>
-          <button className="font-semibold hover:text-[#035fe9]">
+          <button
+            className="font-semibold hover:text-[#035fe9]"
+            onClick={() => router.push("/doctors")}
+          >
+            Doctor List
+          </button>
+          <button
+            disabled
+            className="font-semibold hover:disable hover:opacity-50"
+          >
+            Tests
+          </button>
+          <button
+            className="font-semibold hover:text-[#035fe9]"
+            onClick={() => router.push("/doctors")}
+          >
             Find A Doctor
           </button>
-          <button className="font-semibold hover:text-[#035fe9]">Blog</button>
+          <button
+            disabled
+            className="font-semibold hover:disable hover:opacity-50"
+          >
+            Blog
+          </button>
         </div>
         <div className="flex justify-between items-center space-x-0 md:space-x-4 min-[1130px]:space-x-6">
           <a className="cursor-pointer font-medium">العربيه</a>
@@ -88,15 +103,14 @@ const Navbar = () => {
                 linkTo={
                   userRole === "Patient" || token.userRole === "Patient"
                     ? [
-                        "/patientProfile/view",
+                        "/patientProfile",
                         "/patientProfile/upcoming_appointments",
-                        // "/patientProfile/prescriptions",
                         "/patientProfile/patientDocuments",
                         "/patientProfile/paymentInfo",
                         "/auth/signout",
                       ]
                     : [
-                        "/doctorProfile/view",
+                        "/doctorProfile",
                         "/doctorProfile/timeSlots",
                         "/doctorProfile/appointments",
                         "/auth/signout",
@@ -107,7 +121,6 @@ const Navbar = () => {
                     ? [
                         "View Profile",
                         "My Appointments",
-                        // "My Prescriptions",
                         "My Documents",
                         "Wallet",
                         "Sign Out",

@@ -7,14 +7,16 @@ import BookingSummary from "@/components/booking/BookingSummary";
 import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
 import { formatDoctorAvailabilities } from "@/utils/formatDoctorAvailabilities";
+import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
+import type { DoctorBooking } from "@/types";
 const DoctorBooking = () => {
   const searchParams = useSearchParams();
-  const [doctor, setDoctor] = useState<any>(null);
+  const [doctor, setDoctor] = useState<DoctorBooking>();
   const [selectedDuration, setSelectedDuration] = useState(60);
   const [selectedDate, setSelectedDate] = useState<any>(null);
   const [selectedSlot, setSelectedSlot] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("L");
-  const [availableDates, setAvailableDates] = useState<any[]>([]);
+  const [availableDates, setAvailableDates] = useState<any[]>(["loading"]);
   const [bookedDates, setBookedDates] = useState<string[]>([]);
 
   const [appointmentState, setAppointmentState] = useState("First_time");
@@ -40,7 +42,7 @@ const DoctorBooking = () => {
 
   // Retrieve the doctor data from the query parameters
   useEffect(() => {
-    const doctorParam = searchParams.get("doctor");
+    const doctorParam = searchParams.get("doctorBooking");
 
     if (doctorParam) {
       try {
@@ -58,7 +60,6 @@ const DoctorBooking = () => {
 
     const fetchDoctorAvailability = async () => {
       if (doctor?.id) {
-        console.log("doctor.id: ", doctor.id);
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/${doctor.id}`,
@@ -71,6 +72,7 @@ const DoctorBooking = () => {
           const data = await response.json();
 
           if (!data || typeof data !== "object" || !data.available_slots) {
+            setAvailableDates([]);
             throw new Error("Invalid data structure");
           }
           console.log("data: ", data);
@@ -106,11 +108,8 @@ const DoctorBooking = () => {
       }
     )
       .then((response) => response.json())
-      .then((response) =>
-        setAppointments(response?.appointments || ["No Appointment History"])
-      );
-    console.log("History Appointments: ", appointments);
-  }, []);
+      .then((response) => setAppointments(response?.appointments || []));
+  }, [appointmentState]);
 
   const handleDurationChange = (duration: number) =>
     setSelectedDuration(duration);
@@ -128,8 +127,8 @@ const DoctorBooking = () => {
     setSelectedType(slot.type);
   };
 
-  if (!doctor) {
-    return <div className="mx-10 text-xl">Loading doctor data...</div>;
+  if (!doctor || !searchParams || !searchParams.get("doctorBooking")) {
+    return <CircularProgress className="absolute top-1/2 left-1/2" />;
   }
 
   return (
@@ -164,6 +163,7 @@ const DoctorBooking = () => {
           selectedDate={selectedDate}
           selectedSlot={selectedSlot}
           handleSlotSelect={handleSlotSelect}
+          availableDates={availableDates}
         />
       </div>
     </div>
