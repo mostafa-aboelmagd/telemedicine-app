@@ -4,15 +4,18 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import InputComponent from "./InputComponent";
 import jwt from "jsonwebtoken";
+import { useRouter } from "next/navigation";
 
 function SignInForm() {
+  const router = useRouter();
+  const [formValid, setFormValid] = useState(false);
+  const [error, setError] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
-  const [formValid, setFormValid] = useState(false);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     validateForm();
@@ -74,7 +77,7 @@ function SignInForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setLoading(true);
     if (!formValid) {
       return;
     }
@@ -97,6 +100,8 @@ function SignInForm() {
       if (!response.ok) {
         console.log("error in response");
         if (response.status === 400) {
+          setLoading(false);
+          setSignedIn(false);
           setError(true);
         }
         throw new Error("Failed To Sign In");
@@ -111,7 +116,10 @@ function SignInForm() {
         localStorage.setItem("userId", users.id);
         localStorage.setItem("firstName", users.firstName);
         localStorage.setItem("lastName", users.lastName);
-        window.location.href = "/";
+        setLoading(false);
+        setError(false);
+        setSignedIn(true);
+        router.replace("/");
       } else {
         console.log("Error During Token Authentication");
       }
@@ -156,13 +164,18 @@ function SignInForm() {
         <button
           type="submit"
           className={submitButtonClass}
-          disabled={!formValid}
+          disabled={!formValid || loading}
         >
-          Sign in
+          {loading ? "Loading..." : "Sign in"}
         </button>
         {error && (
           <p className="font-semibold text-red-700 mt-4">
             Incorrect Email And/Or Password!
+          </p>
+        )}
+        {signedIn && (
+          <p className="font-semibold text-green-700 mt-4">
+            Signed in successfully!
           </p>
         )}
       </form>

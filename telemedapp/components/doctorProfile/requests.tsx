@@ -173,7 +173,7 @@ const Requests = () => {
           })
         ) : (
           <div>
-            <p className="font-semibold text-2xl absolute left-[38%] top-[40%]">
+            <p className="font-semibold">
               {loading ? "Loading..." : "There Are Currently No Requests"}
             </p>
           </div>
