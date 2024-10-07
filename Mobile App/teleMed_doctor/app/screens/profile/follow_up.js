@@ -84,13 +84,7 @@ export default function Follow_up({ navigation }) {
       alert("This slot is not available.");
     }
   };
-  // const appointmentbody= JSON.stringify({
-    //       time_slot_code: `${slotdaycode}_${slothourcode}_${slottypecode}`,
-    //         appointment_date: dateTime,
-    //         complaint: comp,
-    //         duration: slotduration,
-    //         appointmentId: appointment_id,
-    //       })
+
   const bookfollowup = async (comp) => {
     const dayOfWeek = new Date(selectedDate).getDay() + 1;
     const slotHour = parseInt(slothourcode, 10) + 8;
@@ -124,9 +118,10 @@ export default function Follow_up({ navigation }) {
         alert("Follow up appointment booked successfully");
         navigation.navigate("appointment");
         return;
-      }if (!response.ok) {
+      }
+      if (!response.ok) {
         alert("Booking error: " + response);
-        
+
         return;
       }
     } catch (error) {
@@ -151,7 +146,27 @@ export default function Follow_up({ navigation }) {
       return styles.slot; // Default slot style
     }
   };
- 
+  const isSlotBooked = (date, slot) => {
+    if (availabilityData && availabilityData.booked) {
+      const formattedDate = new Date(date).toISOString().split("T")[0];
+      const slotTime = getSlotTime(slot);
+      const bookedDateTime = `${formattedDate}T${slotTime}`;
+      return availabilityData.booked.includes(bookedDateTime);
+    }
+    return false;
+  };
+
+  const getSlotsForDay = () => {
+    const decoded = decodeSlots(availabilityData?.available_slots);
+    const dayOfWeek = days[new Date(selectedDate).getDay() + 1];
+    if (decoded[dayOfWeek]) {
+      return decoded[dayOfWeek].filter(
+        (s) => isSlotAvailable(s.slot) && !isSlotBooked(selectedDate, s.slot)
+      );
+    }
+    return [];
+  };
+  const slots = getSlotsForDay();
 
   const getAvailabilSlots = async () => {
     try {
@@ -171,7 +186,7 @@ export default function Follow_up({ navigation }) {
       }
 
       const result = await response.json();
-      console.log(JSON.stringify(result))
+      console.log(JSON.stringify(result));
       setAvailabilityData(result);
     } catch (error) {
       console.error("Error fetching doctor availability:", error);
@@ -181,16 +196,14 @@ export default function Follow_up({ navigation }) {
   useEffect(() => {
     getAvailabilSlots();
   }, []);
-
-  const isSlotBooked = (date, slot) => {
-    if (availabilityData && availabilityData.booked) {
-      const formattedDate = new Date(date).toISOString().split("T")[0];
-      const slotTime = getSlotTime(slot);
-      const bookedDateTime = `${formattedDate}T${slotTime}`;
-      return availabilityData.booked.includes(bookedDateTime);
-    }
-    return false;
+  const formatSlotTime = (slotTime) => {
+    const [hour, minute] = slotTime.slice(0, 5).split(":");
+    const hourNum = parseInt(hour);
+    const ampm = hourNum >= 12 ? "pm" : "am";
+    const formattedHour = hourNum % 12 || 12; // Convert to 12-hour format
+    return `${formattedHour}:${minute} ${ampm}`;
   };
+
   return (
     <SafeArea>
       <View style={styles.container}>
@@ -215,50 +228,24 @@ export default function Follow_up({ navigation }) {
           minDate={new Date().toISOString().split("T")[0]}
         />
         <CustomScroll>
-          <View style={styles.row}>
-            <TouchableOpacity onPress={() => chosenSlot("01")}>
-              <Text style={getStyle("01")}>09:00 am</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => chosenSlot("02")}>
-              <Text style={getStyle("02")}>10:00 am</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => chosenSlot("03")}>
-              <Text style={getStyle("03")}>11:00 am</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.row}>
-            <TouchableOpacity onPress={() => chosenSlot("04")}>
-              <Text style={getStyle("04")}>12:00 pm</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => chosenSlot("05")}>
-              <Text style={getStyle("05")}>01:00 pm</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => chosenSlot("06")}>
-              <Text style={getStyle("06")}>02:00 pm</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.row}>
-            <TouchableOpacity onPress={() => chosenSlot("07")}>
-              <Text style={getStyle("07")}>03:00 pm</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => chosenSlot("08")}>
-              <Text style={getStyle("08")}>04:00 pm</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => chosenSlot("09")}>
-              <Text style={getStyle("09")}>05:00 pm</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.row}>
-            <TouchableOpacity onPress={() => chosenSlot("10")}>
-              <Text style={getStyle("10")}>06:00 pm</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => chosenSlot("11")}>
-              <Text style={getStyle("11")}>07:00 pm</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => chosenSlot("12")}>
-              <Text style={getStyle("12")}>08:00 pm</Text>
-            </TouchableOpacity>
-          </View>
+          {slots.length > 0 ? ( // Check if there are any slots
+            <View style={styles.row}>
+              {slots.map((slot) => (
+                <TouchableOpacity
+                  key={slot.slot}
+                  onPress={() => chosenSlot(slot.slot)}
+                >
+                  <Text style={getStyle(slot.slot)}>
+                    {formatSlotTime(getSlotTime(slot.slot))}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : (
+            <CustomTitle titleStyle={{ textAlign: "center" }}>
+              No slots available for this day
+            </CustomTitle>
+          )}
           <View
             style={{
               flexDirection: "row",
@@ -277,12 +264,10 @@ export default function Follow_up({ navigation }) {
             </TouchableOpacity>
           </View>
         </CustomScroll>
-
         <TouchableOpacity onPress={() => navigation.pop()}>
-          <Text style={styles.done}>Set</Text>
+          <Text style={styles.done}>Back</Text>
         </TouchableOpacity>
       </View>
-
       <Modal
         animationType="slide"
         transparent={true}
@@ -347,16 +332,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
   },
-  availableSlot:{  
-  backgroundColor: "green",
-  padding: 10,
-  borderRadius: 10,
-  color: "white",
-  width: 105,
-  fontSize: 18,
-  textAlign: "center",
-  fontWeight: "bold",
-},
+  availableSlot: {
+    backgroundColor: "green",
+    padding: 10,
+    borderRadius: 10,
+    color: "white",
+    width: 105,
+    fontSize: 18,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
   switch: {
     marginRight: 10,
   },
