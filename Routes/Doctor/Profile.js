@@ -8,6 +8,7 @@ router.get('/info', tokenAuthentication, doctorProfileController.doctorInfo);
 router.get('/patients', tokenAuthentication, doctorProfileController.doctorPatients);
 router.get('/appointments', tokenAuthentication, doctorProfileController.doctorAppointments);
 // router.get('/availabilities', tokenAuthentication, doctorProfileController.doctorAvailabilities);
+router.get('/DoctorFurtherInformation', tokenAuthentication, doctorProfileController.doctor_Further_Informtion);
 router.get('/experience', tokenAuthentication, doctorProfileController.doctorExperience);
 router.get('/education', tokenAuthentication, doctorProfileController.doctorEducation);
 router.get('/reviews', tokenAuthentication, doctorProfileController.doctorReviews);

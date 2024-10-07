@@ -168,6 +168,198 @@ const retrieveDoctorReviews = async (id, email) => {
     }
 };
 
+const retrieveDoctorFurtherInformation = async (Doctorid) => {
+    try {
+      const languagesResult = await pool.query(
+        `
+        SELECT 
+          languages.language,
+          languages.language_id
+        FROM 
+          languages
+        WHERE 
+          languages.lang_user_id = $1
+        `, 
+        [Doctorid]
+      );
+  
+      const interestsResult = await pool.query(
+        `
+        SELECT 
+          doctor_interest.doctor_interest_name,
+          doctor_interest.doctor_interest_category,
+          doctor_interest.doctor_interest_id
+        FROM 
+          doctor_interest
+        WHERE 
+          doctor_interest.doctor_interest_doctor_id = $1
+        `, 
+        [Doctorid]
+      );
+  
+      const educationResult = await pool.query(
+        `
+        SELECT 
+          doctor_education.education_certificate,
+          doctor_education.doctor_education_id,
+          doctor_education.education_authority,
+          doctor_education.education_start_date,
+          doctor_education.education_end_data
+        FROM 
+          doctor_education
+        WHERE 
+          doctor_education.education_doctor_id = $1
+        `, 
+        [Doctorid]
+      );
+  
+      const experienceResult = await pool.query(
+        `
+        SELECT 
+          doctor_experience.doctor_experience_job_title,
+          doctor_experience.doctor_experience_firm_name,
+          doctor_experience.doctor_experience_department,
+          doctor_experience.doctor_experience_start_date,
+          doctor_experience.doctor_experience_end_date,
+          doctor_experience.doctor_experience_id
+        FROM 
+          doctor_experience
+        WHERE 
+          doctor_experience.doctor_experience_doctor_id = $1
+        `, 
+        [Doctorid]
+      );
+  
+      const languages = languagesResult.rows.map(row => ({
+        id: row.language_id,
+        name: row.language
+      }));
+  
+      const interests = interestsResult.rows.map(row => ({
+        id: row.doctor_interest_id,
+        category: row.doctor_interest_category,
+        name: row.doctor_interest_name
+      }));
+  
+      const certificates = educationResult.rows.map(row => ({
+        id: row.doctor_education_id,
+        authority: row.education_authority,
+        startDate: row.education_start_date,
+        endDate: row.education_end_data,
+        name: row.education_certificate
+      }));
+  
+      const experiences = experienceResult.rows.map(row => ({
+        id: row.doctor_experience_id,
+        department: row.doctor_experience_department,
+        firm: row.doctor_experience_firm_name,
+        startDate: row.doctor_experience_start_date,
+        endDate: row.doctor_experience_end_date,
+        title: row.doctor_experience_job_title
+      }));
+  
+      // Combine all results into a single object
+      const data = {
+        certificates,
+        experiences,
+        interests,
+        languages
+      };
+  
+      return data;
+  
+    } catch (error) {
+      console.error("Error retrieving doctor further information:", error);
+      throw error;
+    }
+  };
+  
+// const retrieveDoctorFurtherInformation = async (Doctorid) => {
+//     try {
+//       const result = await pool.query(
+//         `
+//         SELECT 
+//           languages.language,
+//           languages.language_id,
+//           doctor_interest.doctor_interest_name,
+//           doctor_interest.doctor_interest_category,
+//           doctor_interest.doctor_interest_id,
+//           doctor_education.education_certificate,
+//           doctor_education.doctor_education_id,
+//           doctor_education.education_authority,
+//           doctor_education.education_start_date,
+//           doctor_education.education_end_data,
+//           doctor_experience.doctor_experience_job_title,
+//           doctor_experience.doctor_experience_firm_name,
+//           doctor_experience.doctor_experience_department,
+//           doctor_experience.doctor_experience_start_date,
+//           doctor_experience.doctor_experience_end_date,
+//           doctor_experience.doctor_experience_id
+//         FROM 
+//           languages
+//         JOIN 
+//           doctor_interest 
+//         ON 
+//           languages.lang_user_id = doctor_interest.doctor_interest_doctor_id
+//         JOIN 
+//           doctor_education 
+//         ON 
+//           doctor_education.education_doctor_id = doctor_interest.doctor_interest_doctor_id
+//         JOIN 
+//           doctor_experience 
+//         ON 
+//           doctor_experience.doctor_experience_doctor_id = doctor_interest.doctor_interest_doctor_id
+//         WHERE 
+//           doctor_interest.doctor_interest_doctor_id = $1
+//         `, 
+//         [Doctorid]
+//       );
+  
+//       const certificates = result.rows.map(row => ({
+//         id: row.doctor_education_id,  
+//         authority: row.authority, 
+//         startDate: row.education_start_date,  
+//         endDate: row.education_end_data,     
+//         name: row.education_certificate
+//       }));
+  
+//       const experiences = result.rows.map(row => ({
+//         id: row.doctor_experience_id, 
+//         department: row.doctor_experience_department,
+//         firm: row.doctor_experience_firm_name,
+//         startDate: row.doctor_experience_start_date,
+//         endDate: row.doctor_experience_end_date,
+//         title: row.doctor_experience_job_title
+//       }));
+  
+//       const interests = result.rows.map(row => ({
+//         id: row.doctor_interest_id,
+//         category: row.doctor_interest_category,
+//         name: row.doctor_interest_name
+//       }));
+  
+//       const Languages = result.rows.map(row => ({
+//         id: row.lang_id,   
+//         name: row.language
+//       }));
+  
+//       const data = {
+//         certificates,
+//         experiences,
+//         interests,
+//         Languages
+//       };
+  
+//       return data;
+  
+//     } catch (error) {
+//       console.error("Error retrieving doctor further information:", error);
+//       throw error;
+//     }
+//   };
+  
+  
+
 
 
 const retrieveDoctorExperience = async (id, email) => {
@@ -321,4 +513,4 @@ WHERE
 
 
 
-module.exports = {retrievePendingAppointments, retrieveDoctorDeclinedAppointments, retrieveDoctorInfo, retrieveDoctorAppointments, retrieveDoctorReviews, retrieveDoctorExperience, retrieveDoctorInterests, retrieveDoctorLanguages, retrieveDoctorEducation };
+module.exports = {retrieveDoctorFurtherInformation, retrievePendingAppointments, retrieveDoctorDeclinedAppointments, retrieveDoctorInfo, retrieveDoctorAppointments, retrieveDoctorReviews, retrieveDoctorExperience, retrieveDoctorInterests, retrieveDoctorLanguages, retrieveDoctorEducation };

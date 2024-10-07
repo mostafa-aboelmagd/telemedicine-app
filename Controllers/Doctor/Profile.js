@@ -148,85 +148,99 @@ const doctorReviews = async (req, res) => {
     }
     return res.json(reviews);
 }
-
-const doctorExperience = async (req, res) => {
+const doctor_Further_Informtion = async (req, res) => {
     const doctorUserId = req.id;
-    const doctorEmail = req.email;
     let message = '';
     if (!doctorUserId) {
         message = 'Doctor ID not found';
         return res.status(404).json(message);
     }
-    if (!doctorEmail) {
-        message = 'Doctor email not found';
-        return res.status(404).json(message);
-    }
-    const experience = await database.retrieveDoctorExperience(doctorUserId, doctorEmail);
-    if (!experience) {
-        message = 'No experience found';
+    const FurtherInformation = await database.retrieveDoctorFurtherInformation(doctorUserId);
+    if (!FurtherInformation) {
+        message = 'No Further Information found';
         return res.status(400).json(message);
     }
-    return res.json(experience);
+    return res.json(FurtherInformation);
 }
 
-const doctorEducation = async (req, res) => {
-    const doctorUserId = req.id;
-    const doctorEmail = req.email;
-    let message = '';
-    if (!doctorUserId) {
-        message = 'Doctor ID not found';
-        return res.status(404).json(message);
-    }
-    if (!doctorEmail) {
-        message = 'Doctor email not found';
-        return res.status(404).json(message);
-    }
-    const education = await database.retrieveDoctorEducation(doctorUserId, doctorEmail);
-    if (!education) {
-        message = 'Could not retrieve education';
-        return res.status(400).json(message);
-    }
-    return res.json(education);
-}
+// const doctorExperience = async (req, res) => {
+//     const doctorUserId = req.id;
+//     const doctorEmail = req.email;
+//     let message = '';
+//     if (!doctorUserId) {
+//         message = 'Doctor ID not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!doctorEmail) {
+//         message = 'Doctor email not found';
+//         return res.status(404).json(message);
+//     }
+//     const experience = await database.retrieveDoctorExperience(doctorUserId, doctorEmail);
+//     if (!experience) {
+//         message = 'No experience found';
+//         return res.status(400).json(message);
+//     }
+//     return res.json(experience);
+// }
 
-const doctorInterests = async (req, res) => {
-    const doctorUserId = req.id;
-    const doctorEmail = req.email;
-    let message = '';
-    if (!doctorUserId) {
-        message = 'Doctor ID not found';
-        return res.status(404).json(message);
-    }
-    if (!doctorEmail) {
-        message = 'Doctor email not found';
-        return res.status(404).json(message);
-    }
-    const interests = await database.retrieveDoctorInterests(doctorUserId, doctorEmail);
-    if (!interests) {
-        message = 'Could not retrieve interests';
-        return res.status(400).json(message);
-    }
-    return res.json(interests);
-}
+// const doctorEducation = async (req, res) => {
+//     const doctorUserId = req.id;
+//     const doctorEmail = req.email;
+//     let message = '';
+//     if (!doctorUserId) {
+//         message = 'Doctor ID not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!doctorEmail) {
+//         message = 'Doctor email not found';
+//         return res.status(404).json(message);
+//     }
+//     const education = await database.retrieveDoctorEducation(doctorUserId, doctorEmail);
+//     if (!education) {
+//         message = 'Could not retrieve education';
+//         return res.status(400).json(message);
+//     }
+//     return res.json(education);
+// }
 
-const doctorLanguages = async (req, res) => {
-    const doctorUserId = req.id;
-    const doctorEmail = req.email;
-    let message = '';
-    if (!doctorUserId) {
-        message = 'Doctor ID not found';
-        return res.status(404).json(message);
-    }
-    if (!doctorEmail) {
-        message = 'Doctor email not found';
-        return res.status(404).json(message);
-    }
-    const languages = await database.retrieveDoctorLanguages(doctorUserId, doctorEmail);
-    if (!languages) {
-        message = 'Could not retrieve languages';
-        return res.status(400).json(message);
-    }
-    return res.json(languages);
-}   
+// const doctorInterests = async (req, res) => {
+//     const doctorUserId = req.id;
+//     const doctorEmail = req.email;
+//     let message = '';
+//     if (!doctorUserId) {
+//         message = 'Doctor ID not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!doctorEmail) {
+//         message = 'Doctor email not found';
+//         return res.status(404).json(message);
+//     }
+//     const interests = await database.retrieveDoctorInterests(doctorUserId, doctorEmail);
+//     if (!interests) {
+//         message = 'Could not retrieve interests';
+//         return res.status(400).json(message);
+//     }
+//     return res.json(interests);
+// }
 
-module.exports = { doctorDeclinedRequests,doctorInfo, doctorPatients, doctorAppointments, doctorReviews, doctorExperience, doctorEducation, doctorInterests, doctorLanguages, doctorPendingRequests };
+// const doctorLanguages = async (req, res) => {
+//     const doctorUserId = req.id;
+//     const doctorEmail = req.email;
+//     let message = '';
+//     if (!doctorUserId) {
+//         message = 'Doctor ID not found';
+//         return res.status(404).json(message);
+//     }
+//     if (!doctorEmail) {
+//         message = 'Doctor email not found';
+//         return res.status(404).json(message);
+//     }
+//     const languages = await database.retrieveDoctorLanguages(doctorUserId, doctorEmail);
+//     if (!languages) {
+//         message = 'Could not retrieve languages';
+//         return res.status(400).json(message);
+//     }
+//     return res.json(languages);
+// }   
+
+module.exports = {doctor_Further_Informtion, doctorDeclinedRequests,doctorInfo, doctorPatients, doctorAppointments, doctorReviews, doctorExperience, doctorEducation, doctorInterests, doctorLanguages, doctorPendingRequests };

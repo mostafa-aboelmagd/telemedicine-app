@@ -33,10 +33,12 @@
 19. **Doctor View appointments** `Doctor/Profile/appointments`(Tested)
 20. **Doctor View Pending Requests** `/Doctor/Profile/PendingRequests`(Tested)
 21. **Doctor View Availability:** `/doctor/availability/view`(Tested)
-22. **Doctor View Experience:** `/doctor/profile/experience`
+22. **Doctor View Personal Profile Further Information:** `/doctor/profile/DoctorFurtherInformation`
+
+<!-- 22. **Doctor View Experience:** `/doctor/profile/experience`
 23. **Doctor View Education:** `/doctor/profile/education`
 24. **Doctor View reviews:** `/doctor/profile/reviews`
-25. **Doctor View interests:** `/doctor/profile/interests`
+25. **Doctor View interests:** `/doctor/profile/interests` -->
 26. **Doctor Availability Addition:** `/doctor/availability/add`(tested)
 27. **Doctor Availability Deletion:** `/doctor/availability/delete`(tested)
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
@@ -707,15 +709,69 @@
 
 ---
 
-22. **Doctor View Experience:** `/doctor/profile/experience`
+22. **Doctor View Personal Profile Further Information:** `/doctor/profile/DoctorFurtherInformation`
 
 - **Method:** GET
 - **Request Headers:**
   - `Authorization: Bearer your_access_token`
+  - **Response Body:**
+  ```json
+   {
+    "certificates": [
+        {
+            "id": 22,
+            "authority": "Test firm",
+            "startDate": "2015-10-05T22:00:00.000Z",
+            "endDate": "2024-10-05T21:00:00.000Z",
+            "name": "Test title"
+        }
+    ],
+    "experiences": [
+        {
+            "id": 14,
+            "department": "Test certificate ",
+            "firm": "Test auth ",
+            "startDate": "2010-10-05T22:00:00.000Z",
+            "endDate": "2014-10-05T22:00:00.000Z",
+            "title": null
+        }
+    ],
+    "interests": [
+        {
+            "id": 15,
+            "category": "Cat1",
+            "name": "Interest test 1"
+        },
+        {
+            "id": 16,
+            "category": "Cat2",
+            "name": "Interest 2"
+        }
+    ],
+    "languages": [
+        {
+            "id": 70,
+            "name": "English"
+        },
+        {
+            "id": 71,
+            "name": "Spanish"
+        },
+        {
+            "id": 72,
+            "name": "French"
+        },
+        {
+            "id": 73,
+            "name": "Arabic"
+        }
+    ]
+   }
+  ```
 
 ---
 
-23. **Doctor View Education:** `/doctor/profile/education`
+<!-- 23. **Doctor View Education:** `/doctor/profile/education` -->
 
 - **Method:** GET
 - **Request Headers:**
