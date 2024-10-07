@@ -1012,10 +1012,11 @@ with wrong appointmentId:
 - **Request Body:**
   ```json
   {
+    "appointment_id": 71,
     "diagnosis": "Colonus",
-    "operations": "Endoscope ",
+    "operations": "Endoscope",
     "report": "Endoscope",
-    "specialityReferral": "ENT ",
+    "specialityReferral": "ENT",
     "specialityReferralNotes": "Take care",
     "medications": [
       {
