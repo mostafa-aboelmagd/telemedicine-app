@@ -1,4 +1,3 @@
-// pages/doctors.tsx
 "use client";
 import React, { useEffect, useState } from "react";
 import DoctorGrid from "@/components/DoctorGrid/grid";
@@ -211,7 +210,7 @@ const Doctors = () => {
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
   return (
-    <main className="space-y-12">
+    <main className="space-y-12 mb-4">
       <ReadyTherapist />
       <h1 className="text-[#035fe9] font-bold text-[40px] text-center">
         Our Doctors
