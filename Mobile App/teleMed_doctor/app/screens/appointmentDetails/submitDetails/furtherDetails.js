@@ -70,7 +70,10 @@ const FurtherDetails = ({ navigation }) => {
         console.log(response);
         throw new Error("Network response was not ok");
       }
-
+      if (response.ok) {
+        console.log(response);
+        // throw new Error("Network response was not ok");
+      }
       const data = await response.json();
 
       // Handle the successful response (e.g., show a message or navigate to another screen)
@@ -119,7 +122,7 @@ const FurtherDetails = ({ navigation }) => {
             <CustomTitle style={styles.textColumn}>
               Speciality Referral
             </CustomTitle>
-          </View>
+          </View> 
           <View style={styles.textFieldRow}>
             <TextInput
               style={styles.textFieldColumn}
