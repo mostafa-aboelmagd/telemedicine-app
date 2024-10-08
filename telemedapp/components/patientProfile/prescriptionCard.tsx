@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { formatDate } from '@/utils/date'
+
 const PrescriptionCard = ({ prescription, handlePrescriptionModal }: { prescription: any, handlePrescriptionModal: any }) => {
     return (
         <div onClick={() => handlePrescriptionModal(prescription.id)} className='bg-gray-100 rounded-3xl p-4 cursor-pointer flex flex-col space-y-4 overflow-y-auto shadow-lg hover:scale-105 transition'>

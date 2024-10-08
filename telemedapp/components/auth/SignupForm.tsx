@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import patientImage from "@/images/patient.png";
+import doctorImage from "@/images/doctor.png"
 import InputComponent from "./InputComponent";
 import { Calendar } from "primereact/calendar";
 import { format } from "date-fns"; // For formatting dates (optional)
@@ -10,6 +13,7 @@ import { useRouter } from "next/navigation";
 function SignUpForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [userType, setUserType] = useState("patient");
   const [changedField, setChangedField] = useState("");
   const [formValid, setFormValid] = useState(false);
   const [error, setError] = useState(false);
@@ -362,11 +366,36 @@ function SignUpForm() {
     }
   };
 
+  const patientImageClass = `w-20 h-20 border-2 border-solid rounded-full ${userType === "patient" ? "border-blue-500" : ""} hover:cursor-pointer hover:scale-105`;
+  const patientTextClass = `font-bold ${userType === "patient" ? "text-blue-500" : "text-neutral-700"}`
+  const doctorImageClass = `w-20 h-20 border-2 border-solid rounded-full ${userType === "doctor" ? "border-blue-500" : ""} hover:cursor-pointer hover:scale-105`;
+  const doctorTextClass = `font-bold ${userType === "doctor" ? "text-blue-500" : "text-neutral-700"}`  
+
   return (
     <div className="p-5 rounded-xl max-w-md m-auto">
       <h2 className="font-bold text-2xl text-center text-neutral-700 mb-6">
         Sign Up
       </h2>
+      <div className="flex gap-8 items-center justify-center my-2">
+        <div className="flex flex-col gap-2 items-center">
+          <Image 
+            src={patientImage}
+            alt="Patient Image"
+            className={patientImageClass}
+            onClick={() => setUserType(() => "patient")}
+          />
+          <p className={patientTextClass}>Patient</p>
+        </div>
+        <div className="flex flex-col gap-2 items-center">
+          <Image
+            src={doctorImage}
+            alt="Doctor Image"
+            className={doctorImageClass}
+            onClick={() => setUserType(() => "doctor")}
+          />
+          <p className={doctorTextClass}>Doctor</p>
+        </div>
+      </div>
       <form onSubmit={handleSubmit}>
         {formFields.map((field) => {
           return (

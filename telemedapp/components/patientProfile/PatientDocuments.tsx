@@ -1,12 +1,12 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { FaPlus } from "react-icons/fa";
 import { FaRegFilePdf } from "react-icons/fa6";
 import { FaRegImage } from "react-icons/fa";
 import { FaLink } from "react-icons/fa";
 import DocumentComponent from "./DocumentComponent";
 import SearchBar from "../SearchBar/searchbar";
+
 
 const PatientDocuments = () => {
   const [documents, setDocuments] = React.useState<any[]>([]);
