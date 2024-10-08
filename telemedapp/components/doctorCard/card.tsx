@@ -5,7 +5,7 @@ import { HiOutlineUserGroup } from "react-icons/hi2";
 import { IoMdAlarm } from "react-icons/io";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
-import { formatDate } from "@/utils/date";
+import { formatDateString } from "@/utils/date";
 import BookingButton from "./BookingButton";
 import RatingComp from "@/components/common/RatingComp";
 import styles from "./card.module.css";
@@ -39,8 +39,8 @@ const DoctorAvailability: React.FC<DoctorAvailabilityProps> = ({ date }) =>
     <div className="flex justify-between items-center space-x-2">
       <IoMdAlarm className="h-6 w-6 text-[#035fe9]" />
       <div className="grow text-xs md:text-sm">
-        {/* Next available: {formatDate(date)} */}
-        Next available: {date}
+        Next available: {formatDateString(date)}
+        {/* Next available: {date} */}
       </div>
     </div>
   );
