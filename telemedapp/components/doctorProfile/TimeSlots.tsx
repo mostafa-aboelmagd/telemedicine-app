@@ -215,8 +215,8 @@ function TimeSlots() {
     return timeButtonClass;
   }
   const baseButtonClass =
-    "text-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2";
-  const baseDayClass = "w-40 " + baseButtonClass;
+    "text-white font-medium rounded-lg md:text-sm text-xs px-5 py-2.5 me-2 mb-2";
+  const baseDayClass = "md:w-40  " + baseButtonClass;
   const dayButtonClass = "bg-blue-500 hover:bg-blue-800 " + baseDayClass;
   const clickedDayClass = "bg-blue-800 ring-1 ring-black " + baseDayClass;
   const baseTimeClass = "w-fit " + baseButtonClass;
@@ -390,7 +390,7 @@ function TimeSlots() {
   return (
     <div className="m-4 relative">
       <div className="flex items-baseline flex-col justify-between ">
-        <div className="flex gap-16 mt-3 min-[980px]:gap-20">
+        <div className="flex  gap-2 min-[550px]:gap-16 mt-3 min-[980px]:gap-20">
           <div className="flex flex-col gap-40 min-[430px]:gap-24 min-[470px]:gap-12 min-[550px]:gap-5">
             {days.map((day, i) => {
               return (

@@ -1,14 +1,15 @@
 import React, { useState, useMemo } from "react";
 import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
+import RatingComp from "@/components/common/RatingComp";
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { IoMdAlarm } from "react-icons/io";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 import { formatDateString } from "@/utils/date";
 import BookingButton from "./BookingButton";
-import RatingComp from "@/components/common/RatingComp";
 import styles from "./card.module.css";
+import type { Doctor } from "@/types";
 
 interface DoctorInterestsProps {
   interests: string[];
@@ -61,20 +62,6 @@ const DoctorFees: React.FC<DoctorFeesProps> = ({ fees60min, fees30min }) => (
 );
 
 // Define the type for the doctor prop
-interface Doctor {
-  name: string;
-  title: string;
-  numSessions: number;
-  nearestApp: string;
-  fees60min: number;
-  fees30min: number;
-  interests: string[];
-  rating: number;
-  numReviews: number;
-  image?: {
-    data: number[];
-  };
-}
 
 interface DoctorCardProps {
   doctor: Doctor;
@@ -131,7 +118,6 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
                   doctor={doctor}
                   doctorRating={doctorRating}
                   setDoctorRating={setDoctorRating}
-                  className="text-blue-500 underline text-xs"
                 />
               )}
             </Stack>

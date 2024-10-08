@@ -40,7 +40,7 @@ export default function ProfileLayout({
           </div>
 
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
-            <div className="flex pt-4 mb-3 justify-around gap-2 px-2  md:text-base text-sm">
+            <div className="flex pt-4 mb-3 justify-around gap-1 px-2  md:text-base text-sm">
               <Link
                 href="/doctorProfile"
                 className={`${

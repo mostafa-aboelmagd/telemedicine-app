@@ -8,10 +8,10 @@ import SlotSelector from "@/components/booking/SlotSelector";
 import WeekCalendar from "@/components/booking/WeekCalendar";
 import { formatDoctorAvailabilities } from "@/utils/formatDoctorAvailabilities";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
-import type { DoctorBooking } from "@/types";
+import type { Doctor } from "@/types";
 const DoctorBooking = () => {
   const searchParams = useSearchParams();
-  const [doctor, setDoctor] = useState<DoctorBooking>();
+  const [doctor, setDoctor] = useState<Doctor>();
   const [selectedDuration, setSelectedDuration] = useState(60);
   const [selectedDate, setSelectedDate] = useState<any>(null);
   const [selectedSlot, setSelectedSlot] = useState<string>("");

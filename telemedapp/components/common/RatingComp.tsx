@@ -17,7 +17,6 @@ interface RatingCompProps {
   text: string;
   variant: "text" | "outlined" | "contained";
   doctor: any;
-  className: string;
   doctorRating: number | null;
   setDoctorRating(value: number | null): void;
 }
@@ -26,12 +25,12 @@ const RatingComp: React.FC<RatingCompProps> = ({
   text,
   variant,
   doctor,
-  className,
   doctorRating,
   setDoctorRating,
 }) => {
   const [open, setOpen] = useState(false);
   const [reviewText, setReviewText] = useState<string>("");
+  const [reviewRating, setReviewRating] = useState<number | null>(0);
 
   const handleOpen = () => {
     setOpen(true);
@@ -45,7 +44,7 @@ const RatingComp: React.FC<RatingCompProps> = ({
     event: React.ChangeEvent<{}>,
     newValue: number | null
   ) => {
-    setDoctorRating(newValue);
+    setReviewRating(newValue);
   };
 
   const handleReviewChange = (
@@ -55,9 +54,8 @@ const RatingComp: React.FC<RatingCompProps> = ({
   };
 
   const handleSubmit = () => {
-    // Here you can handle the submission of the review and rating
-    console.log("Doctor rated:", doctor.name, doctorRating, reviewText);
-    setOpen(false); // Close the dialog after submission
+    setOpen(false);
+    setDoctorRating(reviewRating);
   };
 
   // Function to render stars
@@ -85,11 +83,7 @@ const RatingComp: React.FC<RatingCompProps> = ({
     <>
       <Button
         variant={variant}
-        className={
-          className
-            ? className
-            : "bg-blue-500 hover:bg-blue-700 text-white rounded-full p-2 transition duration-300"
-        }
+        className="text-blue-500 underline text-xs"
         onClick={handleOpen}
       >
         {text}
@@ -117,27 +111,24 @@ const RatingComp: React.FC<RatingCompProps> = ({
                 <span className="flex items-center gap-2">
                   Name:
                   <span className="text-blue-600 font-semibold">
-                    ${doctor.name}
+                    {doctor.name}
                   </span>
                 </span>
               </Typography>
               <Typography variant="body1" mb={2}>
                 <span className="flex items-center gap-2">
-                  Rating: {doctor.rating.toFixed(1)} {renderStars()}
+                  Rating: {doctor.rating} {renderStars()}
                 </span>
               </Typography>
             </Box>
             <Typography variant="body1" mb={2}>
               Title: {doctor.title}
             </Typography>
-            <Typography variant="body1" mb={2}>
-              Reviews: {doctor.numReviews}
-            </Typography>
           </Box>
           <Box textAlign="center">
             <Rating
               name="doctor-rating"
-              value={doctorRating}
+              value={reviewRating}
               size="large"
               precision={0.5}
               onChange={handleRatingChange}
@@ -158,7 +149,7 @@ const RatingComp: React.FC<RatingCompProps> = ({
             variant="contained"
             color="primary"
             onClick={handleSubmit}
-            disabled={!doctorRating}
+            disabled={!reviewRating}
           >
             Submit
           </Button>
