@@ -382,10 +382,6 @@ export default function Profile({ navigation }) {
       { id: 121, category: "Medical Research", name: "Surgical Oncology" },
       { id: 121, category: "Teaching", name: "Medical Student Education" },
     ],
-    // will be edit to:
-    // Languages: [
-    //   {id: 1, name:"English"},
-    //   {id:2,name: "Spanish"}],
     Languages: ["English", "Spanish"],
   };
   const fetchDoctorInfo = async () => {
@@ -402,7 +398,6 @@ export default function Profile({ navigation }) {
       );
       if (!response.ok) {
         console.log(response);
-        await AsyncStorage.removeItem("userToken");
         navigation.navigate("sign in");
         throw new Error("Network response was not ok");
       }
@@ -596,7 +591,7 @@ export default function Profile({ navigation }) {
             <Text style={styles.sectionTitle}>Languages</Text>
             {data.Languages.map((lang, index) => (
               <Text key={index} style={styles.sectionContent}>
-                {lang.name}
+                {lang}
               </Text>
             ))}
             <View style={styles.buttonContainer}>
@@ -804,6 +799,7 @@ export default function Profile({ navigation }) {
         </View>
       </Modal>
 
+      {/* Modal for adding language */}
       <Modal
         visible={showAddLangModal}
         transparent={true}
