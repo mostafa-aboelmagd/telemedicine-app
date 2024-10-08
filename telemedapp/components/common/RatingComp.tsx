@@ -18,6 +18,8 @@ interface RatingCompProps {
   variant: "text" | "outlined" | "contained";
   doctor: any;
   className: string;
+  doctorRating: number | null;
+  setDoctorRating(value: number | null): void;
 }
 
 const RatingComp: React.FC<RatingCompProps> = ({
@@ -25,9 +27,10 @@ const RatingComp: React.FC<RatingCompProps> = ({
   variant,
   doctor,
   className,
+  doctorRating,
+  setDoctorRating,
 }) => {
   const [open, setOpen] = useState(false);
-  const [ratingValue, setRatingValue] = useState<number | null>(null);
   const [reviewText, setReviewText] = useState<string>("");
 
   const handleOpen = () => {
@@ -42,7 +45,7 @@ const RatingComp: React.FC<RatingCompProps> = ({
     event: React.ChangeEvent<{}>,
     newValue: number | null
   ) => {
-    setRatingValue(newValue);
+    setDoctorRating(newValue);
   };
 
   const handleReviewChange = (
@@ -53,7 +56,7 @@ const RatingComp: React.FC<RatingCompProps> = ({
 
   const handleSubmit = () => {
     // Here you can handle the submission of the review and rating
-    console.log("Doctor rated:", doctor.name, ratingValue, reviewText);
+    console.log("Doctor rated:", doctor.name, doctorRating, reviewText);
     setOpen(false); // Close the dialog after submission
   };
 
@@ -134,7 +137,7 @@ const RatingComp: React.FC<RatingCompProps> = ({
           <Box textAlign="center">
             <Rating
               name="doctor-rating"
-              value={ratingValue}
+              value={doctorRating}
               size="large"
               precision={0.5}
               onChange={handleRatingChange}
@@ -155,7 +158,7 @@ const RatingComp: React.FC<RatingCompProps> = ({
             variant="contained"
             color="primary"
             onClick={handleSubmit}
-            disabled={!ratingValue}
+            disabled={!doctorRating}
           >
             Submit
           </Button>

@@ -1,26 +1,96 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { IoMdAlarm } from "react-icons/io";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
-import styles from "./card.module.css";
+import { FaUserCircle } from "react-icons/fa";
 import { formatDate } from "@/utils/date";
 import BookingButton from "./BookingButton";
-import { FaUserCircle } from "react-icons/fa";
 import RatingComp from "@/components/common/RatingComp";
+import styles from "./card.module.css";
 
-const DoctorCard = ({ doctor }: { doctor: any }) => {
-  const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
-  // const [doctorRating, setDoctorRating] = useState{}
-  const bufferToBase64 = (buffer: number[]) => {
-    const binary = String.fromCharCode.apply(null, buffer);
-    return window.btoa(binary);
+interface DoctorInterestsProps {
+  interests: string[];
+}
+
+const DoctorInterests: React.FC<DoctorInterestsProps> = ({ interests }) => (
+  <div className="flex flex-col space-y-2">
+    <div className="text-sm">Interests:</div>
+    <div className="flex flex-wrap gap-2">
+      {interests.map((interest) => (
+        <span
+          key={interest}
+          className={`${styles.text_control} text-xs text-center text-[#60A899] bg-[#6CCA871A] px-2 py-1 rounded-full`}
+        >
+          {interest}
+        </span>
+      ))}
+    </div>
+  </div>
+);
+
+interface DoctorAvailabilityProps {
+  date: string;
+}
+
+const DoctorAvailability: React.FC<DoctorAvailabilityProps> = ({ date }) =>
+  date && (
+    <div className="flex justify-between items-center space-x-2">
+      <IoMdAlarm className="h-6 w-6 text-[#035fe9]" />
+      <div className="grow text-xs md:text-sm">
+        {/* Next available: {formatDate(date)} */}
+        Next available: {date}
+      </div>
+    </div>
+  );
+
+interface DoctorFeesProps {
+  fees60min: number;
+  fees30min: number;
+}
+
+const DoctorFees: React.FC<DoctorFeesProps> = ({ fees60min, fees30min }) => (
+  <div className="flex justify-between items-center space-x-2">
+    <FaMoneyBill1Wave className="h-6 w-6 text-[#035fe9]" />
+    <div className="text-xs md:text-md grow">
+      <span className="text-[#035fe9]">{fees60min} EGP</span>/ 60 min
+      <span className="text-[#035fe9]">{fees30min} EGP</span> / 30 min
+    </div>
+  </div>
+);
+
+// Define the type for the doctor prop
+interface Doctor {
+  name: string;
+  title: string;
+  numSessions: number;
+  nearestApp: string;
+  fees60min: number;
+  fees30min: number;
+  interests: string[];
+  rating: number;
+  numReviews: number;
+  image?: {
+    data: number[];
   };
+}
 
-  const base64Image = doctor.image
-    ? `data:image/jpeg;base64,${bufferToBase64(doctor.image.data)}`
-    : ""; // Handle the case if no image is available
+interface DoctorCardProps {
+  doctor: Doctor;
+}
+
+const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
+  const [doctorRating, setDoctorRating] = useState<number | null>(
+    doctor.rating || 0
+  );
+
+  // Convert buffer data to base64 image
+  const base64Image = useMemo(() => {
+    if (!doctor.image) return null;
+    const binary = String.fromCharCode(...doctor.image.data);
+    return `data:image/jpeg;base64,${window.btoa(binary)}`;
+  }, [doctor.image]);
 
   return (
     <div className="bg-white rounded-3xl p-4 flex flex-col space-y-8 hover:scale-105 transition shadow-lg max-w-96 min-w-72 md:mx-2 mx-auto">
@@ -30,10 +100,10 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
             <img
               className="w-20 h-20 rounded-full object-cover"
               src={base64Image}
-              alt="doc"
+              alt="Doctor"
             />
           ) : (
-            userImage
+            <FaUserCircle className="h-20 w-20 text-[#035fe9]" />
           )}
         </div>
         <div className="flex flex-col space-y-2 grow">
@@ -41,23 +111,16 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
           <div className="flex justify-between items-center">
             <p className="text-[#035fe9] text-xs md:text-sm">{doctor.title}</p>
             <p className="text-[#035fe9] text-xs md:text-sm flex items-center">
-              <HiOutlineUserGroup className="h-6 w-6 mr-2" />{" "}
+              <HiOutlineUserGroup className="h-6 w-6 mr-2" />
               {doctor.numSessions} Sessions
             </p>
           </div>
           <div className="flex justify-between items-center">
             <Stack spacing={1}>
-              {doctor.rating ? (
+              {doctorRating ? (
                 <Rating
-                  sx={{
-                    fontSize: {
-                      xs: "16px",
-                      sm: "18px",
-                      md: "20px",
-                    },
-                  }}
-                  name="rating"
-                  defaultValue={5}
+                  name="doctor-rating"
+                  value={doctorRating}
                   precision={0.01}
                   readOnly
                 />
@@ -66,50 +129,23 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
                   text="Write a Review"
                   variant="text"
                   doctor={doctor}
+                  doctorRating={doctorRating}
+                  setDoctorRating={setDoctorRating}
                   className="text-blue-500 underline text-xs"
                 />
               )}
             </Stack>
             <p className="text-[#343a40] text-xs">
-              {doctor.rating > 0
-                ? `${doctor.rating} (${doctor.numReviews} Reviews)`
+              {doctorRating && doctorRating > 0
+                ? `${doctorRating} (${doctor.numReviews} Reviews)`
                 : "No Reviews"}
             </p>
           </div>
         </div>
       </div>
-      <div className="flex flex-col space-y-2">
-        <div className="text-sm">Interests:</div>
-        <div className="flex">
-          {doctor.interests.map((interest: string) => (
-            <div
-              key={interest}
-              className={
-                styles.text_control +
-                " text-xs text-center text-[#60A899] bg-[#6CCA871A] px-2 py-1 rounded-full "
-              }
-            >
-              {interest}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="flex justify-between items-center space-x-2">
-        <div>
-          <IoMdAlarm className="h-6 w-6 text-[#035fe9]" />
-        </div>
-        <div className="grow text-xs md:text-sm">
-          Next available: {formatDate(doctor.nearestApp)}
-        </div>
-      </div>
-      <div className="flex justify-between items-center space-x-2">
-        <FaMoneyBill1Wave className="h-6 w-6 text-[#035fe9]" />
-        <div className="text-xs md:text-md grow">
-          <span className="text-[#035fe9]">{doctor.fees60min} EGP</span>/ 60 min{" "}
-          <span className="text-[#035fe9]">{doctor.fees30min} EGP</span> / 30
-          min
-        </div>
-      </div>
+      <DoctorInterests interests={doctor.interests} />
+      <DoctorAvailability date={doctor.nearestApp} />
+      <DoctorFees fees60min={doctor.fees60min} fees30min={doctor.fees30min} />
       <div className="flex justify-center space-x-12">
         <button className="text-xs md:text-md text-[#60A899] hover:text-[#4b8377] py-1 px-1 md:px-0 md:py-2 rounded-xl w-full hover:scale-110 transition">
           View Profile
@@ -120,4 +156,4 @@ const DoctorCard = ({ doctor }: { doctor: any }) => {
   );
 };
 
-export default DoctorCard;
+export default React.memo(DoctorCard);
