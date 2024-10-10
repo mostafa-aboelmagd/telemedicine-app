@@ -65,9 +65,26 @@ export default function Book({ navigation }) {
   // Improved slot filtering
   const isSlotAvailable = (slot) => {
     const decoded = decodeSlots(availabilityData?.available_slots);
-    const dayOfWeek = days[new Date(selectedDate).getDay() + 1];
-    if (decoded[dayOfWeek]) {
-      return decoded[dayOfWeek].some(
+    let dayofWeek;
+    if (new Date(selectedDate).getDay() == 0) {
+      dayofWeek = days[2];
+    } else if (new Date(selectedDate).getDay() == 1) {
+      dayofWeek = days[3];
+    } else if (new Date(selectedDate).getDay() == 2) {
+      dayofWeek = days[4];
+    } else if (new Date(selectedDate).getDay() == 3) {
+      dayofWeek = days[5];
+    } else if (new Date(selectedDate).getDay() == 4) {
+      dayofWeek = days[6];
+    } else if (new Date(selectedDate).getDay() == 5) {
+      dayofWeek = days[7];
+    } else if (new Date(selectedDate).getDay() == 6) {
+      dayofWeek = days[1];
+    } else {
+      console.log("err");
+    }
+    if (decoded[dayofWeek]) {
+      return decoded[dayofWeek].some(
         (s) => s.slot === slot && s.status === isOnline
       );
     }
@@ -75,8 +92,25 @@ export default function Book({ navigation }) {
   };
 
   const chosenSlot = async (hour) => {
-    const dayOfWeek = new Date(selectedDate).getDay() + 1;
-    setslotdaycode(dayOfWeek);
+    let dayofWeek;
+    if (new Date(selectedDate).getDay() == 0) {
+      dayofWeek = days[2];
+    } else if (new Date(selectedDate).getDay() == 1) {
+      dayofWeek = days[3];
+    } else if (new Date(selectedDate).getDay() == 2) {
+      dayofWeek = days[4];
+    } else if (new Date(selectedDate).getDay() == 3) {
+      dayofWeek = days[5];
+    } else if (new Date(selectedDate).getDay() == 4) {
+      dayofWeek = days[6];
+    } else if (new Date(selectedDate).getDay() == 5) {
+      dayofWeek = days[7];
+    } else if (new Date(selectedDate).getDay() == 6) {
+      dayofWeek = days[1];
+    } else {
+      console.log("err");
+    }
+    setslotdaycode(dayofWeek);
     setslothourcode(hour);
     setslottypecode(isOnline);
 
@@ -160,9 +194,29 @@ export default function Book({ navigation }) {
 
   const getSlotsForDay = () => {
     const decoded = decodeSlots(availabilityData?.available_slots);
-    const dayOfWeek = days[new Date(selectedDate).getDay() + 1];
-    if (decoded[dayOfWeek]) {
-      return decoded[dayOfWeek].filter(
+    // console.log("decoded ",decoded);
+    let dayofWeek;
+    const dayOfWeek = days[new Date(selectedDate).getDay()];
+    if (new Date(selectedDate).getDay() == 0) {
+      dayofWeek = days[2];
+    } else if (new Date(selectedDate).getDay() == 1) {
+      dayofWeek = days[3];
+    } else if (new Date(selectedDate).getDay() == 2) {
+      dayofWeek = days[4];
+    } else if (new Date(selectedDate).getDay() == 3) {
+      dayofWeek = days[5];
+    } else if (new Date(selectedDate).getDay() == 4) {
+      dayofWeek = days[6];
+    } else if (new Date(selectedDate).getDay() == 5) {
+      dayofWeek = days[7];
+    } else if (new Date(selectedDate).getDay() == 6) {
+      dayofWeek = days[1];
+    } else {
+      console.log("undefined date selection");
+    }
+
+    if (decoded[dayofWeek]) {
+      return decoded[dayofWeek].filter(
         (s) => isSlotAvailable(s.slot) && !isSlotBooked(selectedDate, s.slot)
       );
     }
@@ -171,16 +225,6 @@ export default function Book({ navigation }) {
   const slots = getSlotsForDay();
   const route = useRoute();
   const doctorData = route.params.doctorData;
-  // const doctorData = {
-  //   id: item.id,
-  //   rating: item.rating,
-  //   numReviews: item.numReviews,
-  //   name: item.name,
-  //   title: item.title,
-  //   interests: item.interests,
-  //   fees60min: item.fees60min,
-  //   fees30min: item.fees30min,
-  // };
   const getAvailabilSlots = async () => {
     try {
       const response = await fetch(
@@ -410,6 +454,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     marginTop: 12,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
   },
   switch: {
     marginRight: 10,

@@ -60,12 +60,28 @@ export default function Follow_up({ navigation }) {
     setslotduration(slotduration === 30 ? 60 : 30);
   };
 
-  // Improved slot filtering
   const isSlotAvailable = (slot) => {
     const decoded = decodeSlots(availabilityData?.available_slots);
-    const dayOfWeek = days[new Date(selectedDate).getDay() + 1];
-    if (decoded[dayOfWeek]) {
-      return decoded[dayOfWeek].some(
+    let dayofWeek;
+    if (new Date(selectedDate).getDay() == 0) {
+      dayofWeek = days[2];
+    } else if (new Date(selectedDate).getDay() == 1) {
+      dayofWeek = days[3];
+    } else if (new Date(selectedDate).getDay() == 2) {
+      dayofWeek = days[4];
+    } else if (new Date(selectedDate).getDay() == 3) {
+      dayofWeek = days[5];
+    } else if (new Date(selectedDate).getDay() == 4) {
+      dayofWeek = days[6];
+    } else if (new Date(selectedDate).getDay() == 5) {
+      dayofWeek = days[7];
+    } else if (new Date(selectedDate).getDay() == 6) {
+      dayofWeek = days[1];
+    } else {
+      console.log("err");
+    }
+    if (decoded[dayofWeek]) {
+      return decoded[dayofWeek].some(
         (s) => s.slot === slot && s.status === isOnline
       );
     }
@@ -73,8 +89,25 @@ export default function Follow_up({ navigation }) {
   };
 
   const chosenSlot = async (hour) => {
-    const dayOfWeek = new Date(selectedDate).getDay() + 1;
-    setslotdaycode(dayOfWeek);
+    let dayofWeek;
+    if (new Date(selectedDate).getDay() == 0) {
+      dayofWeek = days[2];
+    } else if (new Date(selectedDate).getDay() == 1) {
+      dayofWeek = days[3];
+    } else if (new Date(selectedDate).getDay() == 2) {
+      dayofWeek = days[4];
+    } else if (new Date(selectedDate).getDay() == 3) {
+      dayofWeek = days[5];
+    } else if (new Date(selectedDate).getDay() == 4) {
+      dayofWeek = days[6];
+    } else if (new Date(selectedDate).getDay() == 5) {
+      dayofWeek = days[7];
+    } else if (new Date(selectedDate).getDay() == 6) {
+      dayofWeek = days[1];
+    } else {
+      console.log("err");
+    }
+    setslotdaycode(dayofWeek);
     setslothourcode(hour);
     setslottypecode(isOnline);
 
@@ -86,7 +119,6 @@ export default function Follow_up({ navigation }) {
   };
 
   const bookfollowup = async (comp) => {
-    const dayOfWeek = new Date(selectedDate).getDay() + 1;
     const slotHour = parseInt(slothourcode, 10) + 8;
     const formattedHour = slotHour < 10 ? `0${slotHour}` : `${slotHour}`;
     const dateTime = `${selectedDate}T${formattedHour}:00:00.000Z`;
@@ -158,9 +190,29 @@ export default function Follow_up({ navigation }) {
 
   const getSlotsForDay = () => {
     const decoded = decodeSlots(availabilityData?.available_slots);
-    const dayOfWeek = days[new Date(selectedDate).getDay() + 1];
-    if (decoded[dayOfWeek]) {
-      return decoded[dayOfWeek].filter(
+    // console.log("decoded ",decoded);
+    let dayofWeek;
+    const dayOfWeek = days[new Date(selectedDate).getDay()];
+    if (new Date(selectedDate).getDay() == 0) {
+      dayofWeek = days[2];
+    } else if (new Date(selectedDate).getDay() == 1) {
+      dayofWeek = days[3];
+    } else if (new Date(selectedDate).getDay() == 2) {
+      dayofWeek = days[4];
+    } else if (new Date(selectedDate).getDay() == 3) {
+      dayofWeek = days[5];
+    } else if (new Date(selectedDate).getDay() == 4) {
+      dayofWeek = days[6];
+    } else if (new Date(selectedDate).getDay() == 5) {
+      dayofWeek = days[7];
+    } else if (new Date(selectedDate).getDay() == 6) {
+      dayofWeek = days[1];
+    } else {
+      console.log("undefined date selection");
+    }
+
+    if (decoded[dayofWeek]) {
+      return decoded[dayofWeek].filter(
         (s) => isSlotAvailable(s.slot) && !isSlotBooked(selectedDate, s.slot)
       );
     }
@@ -229,7 +281,12 @@ export default function Follow_up({ navigation }) {
         />
         <CustomScroll>
           {slots.length > 0 ? ( // Check if there are any slots
-            <View style={styles.row}>
+            <View style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                margin:10
+              }}>
               {slots.map((slot) => (
                 <TouchableOpacity
                   key={slot.slot}
