@@ -30,7 +30,8 @@ const VideoCall: React.FunctionComponent = () => {
               rtcProps={{
                 appId: "c27f95cfa894406c81a0c51deecacc65",
                 channel: "test",
-                token: null, // add your token if using app in secured mode
+                token: null,
+                // token: localStorage.getItem("jwt"), // add your token if using app in secured mode
                 role: isHost ? "host" : "audience",
                 layout: isPinned ? layout.pin : layout.grid,
                 enableScreensharing: true,
