@@ -129,7 +129,7 @@ function SignInForm() {
   };
 
   return (
-    <div className="p-5 rounded-xl max-w-md m-auto">
+    <div className="p-5 rounded-xl max-w-md m-auto max-h-screen">
       <h2 className="font-bold text-2xl text-center text-neutral-700 mb-6">
         Sign in
       </h2>

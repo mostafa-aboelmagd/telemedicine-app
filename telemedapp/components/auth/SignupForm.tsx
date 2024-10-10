@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import patientImage from "@/images/patient.png";
-import doctorImage from "@/images/doctor.png"
+import doctorImage from "@/images/doctor.png";
 import InputComponent from "./InputComponent";
 import { Calendar } from "primereact/calendar";
 import { format } from "date-fns"; // For formatting dates (optional)
@@ -33,28 +33,34 @@ function SignUpForm() {
     gender: "",
   });
 
-  const [doctorCertificates, setDoctorCertificates] = useState([{
-    id: 0,
-    name: "",
-    authority: "",
-    startDate: "",
-    endDate: "",
-  }]);
+  const [doctorCertificates, setDoctorCertificates] = useState([
+    {
+      id: 0,
+      name: "",
+      authority: "",
+      startDate: "",
+      endDate: "",
+    },
+  ]);
 
-  const [doctorExperiences, setDoctorExperiences] = useState([{
-    id: 0,
-    title: "",
-    firm: "",
-    department: "",
-    startDate: "",
-    endDate: "",
-  }]);
+  const [doctorExperiences, setDoctorExperiences] = useState([
+    {
+      id: 0,
+      title: "",
+      firm: "",
+      department: "",
+      startDate: "",
+      endDate: "",
+    },
+  ]);
 
-  const [doctorInterests, setDoctorInterests] = useState([{
-    id: 0,
-    name: "",
-    category: "",
-  }]);
+  const [doctorInterests, setDoctorInterests] = useState([
+    {
+      id: 0,
+      name: "",
+      category: "",
+    },
+  ]);
 
   const [errorMessage, setErrorMessage] = useState({
     firstName: "",
@@ -92,33 +98,38 @@ function SignUpForm() {
       birthDate: "",
     });
 
-    setDoctorCertificates([{
-      id: 0,
-      name: "",
-      authority: "",
-      startDate: "",
-      endDate: "",
-    }]);
+    setDoctorCertificates([
+      {
+        id: 0,
+        name: "",
+        authority: "",
+        startDate: "",
+        endDate: "",
+      },
+    ]);
 
-    setDoctorExperiences([{
-      id: 0,
-      title: "",
-      firm: "",
-      department: "",
-      startDate: "",
-      endDate: "",
-    }]);
+    setDoctorExperiences([
+      {
+        id: 0,
+        title: "",
+        firm: "",
+        department: "",
+        startDate: "",
+        endDate: "",
+      },
+    ]);
 
-    setDoctorInterests([{
-      id: 0,
-      name: "",
-      category: "",
-    }]);
+    setDoctorInterests([
+      {
+        id: 0,
+        name: "",
+        category: "",
+      },
+    ]);
 
     setCurrCertificateId(1);
     setCurrExperienceId(1);
     setCurrInterestId(1);
-
   }, [userType]);
 
   const formFields = [
@@ -411,46 +422,43 @@ function SignUpForm() {
       startDate: "",
       endDate: "",
     });
-    setDoctorCertificates(() => (currCertificates));
+    setDoctorCertificates(() => currCertificates);
   };
 
   const handleDeleteCertificate = (id: Number) => {
     setCurrCertificateId((prevId) => prevId + 1);
     let currCertificates = [];
-    for(let i = 0; i < doctorCertificates.length; i++) {
-      if(doctorCertificates[i].id === id) {
+    for (let i = 0; i < doctorCertificates.length; i++) {
+      if (doctorCertificates[i].id === id) {
         continue;
       }
-      currCertificates.push(doctorCertificates[i])
+      currCertificates.push(doctorCertificates[i]);
     }
-    setDoctorCertificates(() => (currCertificates));
+    setDoctorCertificates(() => currCertificates);
   };
-
 
   const handleCertificateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, placeholder, value } = e.target;
     let currCertificates = doctorCertificates;
-    for(let i = 0; i < currCertificates.length; i++) {
-      if(currCertificates[i].id + 1 === Number(placeholder[placeholder.length - 1])) {
-        if(name === "name") {
+    for (let i = 0; i < currCertificates.length; i++) {
+      if (
+        currCertificates[i].id + 1 ===
+        Number(placeholder[placeholder.length - 1])
+      ) {
+        if (name === "name") {
           currCertificates[i].name = value;
-        }
-        else if(name === "authority") {
+        } else if (name === "authority") {
           currCertificates[i].authority = value;
-
-        }
-        else if(name === "startDate") {
+        } else if (name === "startDate") {
           currCertificates[i].startDate = value;
-
-        }
-        else if(name === "endDate") {
+        } else if (name === "endDate") {
           currCertificates[i].endDate = value;
         }
         break;
       }
     }
     setDoctorCertificates(() => currCertificates);
-    setFormData((prevForm) => ({...prevForm}));
+    setFormData((prevForm) => ({ ...prevForm }));
   };
 
   const handleAddExperience = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -464,47 +472,45 @@ function SignUpForm() {
       startDate: "",
       endDate: "",
     });
-    setDoctorExperiences(() => (currExperiences));
+    setDoctorExperiences(() => currExperiences);
   };
 
   const handleDeleteExperience = (id: Number) => {
     setCurrExperienceId((prevId) => prevId + 1);
     let currExperiences = [];
-    for(let i = 0; i < doctorExperiences.length; i++) {
-      if(doctorExperiences[i].id === id) {
+    for (let i = 0; i < doctorExperiences.length; i++) {
+      if (doctorExperiences[i].id === id) {
         continue;
       }
-      currExperiences.push(doctorExperiences[i])
+      currExperiences.push(doctorExperiences[i]);
     }
-    setDoctorExperiences(() => (currExperiences));
+    setDoctorExperiences(() => currExperiences);
   };
-
 
   const handleExperienceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, placeholder, value } = e.target;
     let currExperiences = doctorExperiences;
-    for(let i = 0; i < currExperiences.length; i++) {
-      if(currExperiences[i].id + 1 === Number(placeholder[placeholder.length - 1])) {
-        if(name === "title") {
+    for (let i = 0; i < currExperiences.length; i++) {
+      if (
+        currExperiences[i].id + 1 ===
+        Number(placeholder[placeholder.length - 1])
+      ) {
+        if (name === "title") {
           currExperiences[i].title = value;
-        }
-        else if(name === "firm") {
+        } else if (name === "firm") {
           currExperiences[i].firm = value;
-        }
-        else if(name === "department") {
+        } else if (name === "department") {
           currExperiences[i].department = value;
-        }
-        else if(name === "startDate") {
+        } else if (name === "startDate") {
           currExperiences[i].startDate = value;
-        }
-        else if(name === "endDate") {
+        } else if (name === "endDate") {
           currExperiences[i].endDate = value;
         }
         break;
       }
     }
     setDoctorExperiences(() => currExperiences);
-    setFormData((prevForm) => ({...prevForm}));
+    setFormData((prevForm) => ({ ...prevForm }));
   };
 
   const handleAddInterest = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -515,46 +521,46 @@ function SignUpForm() {
       name: "",
       category: "",
     });
-    setDoctorInterests(() => (currInterests));
+    setDoctorInterests(() => currInterests);
   };
 
   const handleDeleteInterest = (id: Number) => {
     setCurrInterestId((prevId) => prevId + 1);
     let currInterests = [];
-    for(let i = 0; i < doctorInterests.length; i++) {
-      if(doctorInterests[i].id === id) {
+    for (let i = 0; i < doctorInterests.length; i++) {
+      if (doctorInterests[i].id === id) {
         continue;
       }
-      currInterests.push(doctorInterests[i])
+      currInterests.push(doctorInterests[i]);
     }
-    setDoctorInterests(() => (currInterests));
+    setDoctorInterests(() => currInterests);
   };
-
 
   const handleInterestChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, placeholder, value } = e.target;
     let currInterests = doctorInterests;
-    for(let i = 0; i < currInterests.length; i++) {
-      if(currInterests[i].id + 1 === Number(placeholder[placeholder.length - 1])) {
-        if(name === "name") {
+    for (let i = 0; i < currInterests.length; i++) {
+      if (
+        currInterests[i].id + 1 ===
+        Number(placeholder[placeholder.length - 1])
+      ) {
+        if (name === "name") {
           currInterests[i].name = value;
-        }
-        else if(name === "category") {
+        } else if (name === "category") {
           currInterests[i].category = value;
-
         }
         break;
       }
     }
     setDoctorInterests(() => currInterests);
-    setFormData((prevForm) => ({...prevForm}));
+    setFormData((prevForm) => ({ ...prevForm }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     if (!formValid) return;
-    if(userType === "patient") {
+    if (userType === "patient") {
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/register`,
@@ -591,8 +597,7 @@ function SignUpForm() {
       } catch (error) {
         console.error("Error During Signup:", error);
       }
-    }
-    else {
+    } else {
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/register`,
@@ -603,17 +608,19 @@ function SignUpForm() {
             },
             body: JSON.stringify({
               personalInfo: {
-              firstName: formData.firstName,
-              lastName: formData.lastName,
-              birthdate: formData.birthDate ? format(new Date(formData.birthDate), "yyyy-MM-dd") : null, // Formats date as YYYY-MM-DD,
-              city: "",
-              country: "",
-              email: formData.email,
-              gender: formData.gender,
-              location: "",
-              password: formData.password,
-              phone: formData.phone,
-              speciality: ""
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                birthdate: formData.birthDate
+                  ? format(new Date(formData.birthDate), "yyyy-MM-dd")
+                  : null, // Formats date as YYYY-MM-DD,
+                city: "",
+                country: "",
+                email: formData.email,
+                gender: formData.gender,
+                location: "",
+                password: formData.password,
+                phone: formData.phone,
+                speciality: "",
               },
               certificates: doctorCertificates,
               experiences: doctorExperiences,
@@ -640,19 +647,27 @@ function SignUpForm() {
     }
   };
 
-  const patientImageClass = `w-20 h-20 border-2 border-solid rounded-full ${userType === "patient" ? "border-blue-500" : ""} hover:cursor-pointer hover:scale-105`;
-  const patientTextClass = `font-bold ${userType === "patient" ? "text-blue-500" : "text-neutral-700"}`;
-  const doctorImageClass = `w-20 h-20 border-2 border-solid rounded-full ${userType === "doctor" ? "border-blue-500" : ""} hover:cursor-pointer hover:scale-105`;
-  const doctorTextClass = `font-bold ${userType === "doctor" ? "text-blue-500" : "text-neutral-700"}`;
+  const patientImageClass = `w-20 h-20 border-2 border-solid rounded-full ${
+    userType === "patient" ? "border-blue-500" : ""
+  } hover:cursor-pointer hover:scale-105`;
+  const patientTextClass = `font-bold ${
+    userType === "patient" ? "text-blue-500" : "text-neutral-700"
+  }`;
+  const doctorImageClass = `w-20 h-20 border-2 border-solid rounded-full ${
+    userType === "doctor" ? "border-blue-500" : ""
+  } hover:cursor-pointer hover:scale-105`;
+  const doctorTextClass = `font-bold ${
+    userType === "doctor" ? "text-blue-500" : "text-neutral-700"
+  }`;
 
   return (
-    <div className="p-5 rounded-xl max-w-md m-auto">
+    <div className="p-5 rounded-xl max-w-md m-auto h-screen overflow-y-hidden hover:overflow-y-scroll">
       <h2 className="font-bold text-2xl text-center text-neutral-700 mb-6">
         Sign Up
       </h2>
       <div className="flex gap-8 items-center justify-center my-2">
         <div className="flex flex-col gap-2 items-center">
-          <Image 
+          <Image
             src={patientImage}
             alt="Patient Image"
             className={patientImageClass}
@@ -756,184 +771,309 @@ function SignUpForm() {
             </label>
           </div>
         </div>
-        {userType === "doctor" ? 
+        {userType === "doctor" ? (
           <>
             <div className="mb-4 relative border-2 border-blue-400 rounded-lg">
               <div className="flex justify-between items-center mb-3 p-3">
-                <button className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-green-500 hover:bg-green-100 transition-colors" onClick={handleAddCertificate}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 stroke-green-500">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                <button
+                  className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-green-500 hover:bg-green-100 transition-colors"
+                  onClick={handleAddCertificate}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6 stroke-green-500"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
                   </svg>
                   <p className="text-green-500 font-bold">Add Certificate</p>
                 </button>
                 <p className="font-semibold text-xl">Certificates</p>
               </div>
               {doctorCertificates.map((certificate) => {
-              return (
-                <div key={certificate.id} className="p-2 border-t-4 border-blue-400">
-                  <InputComponent
+                return (
+                  <div
+                    key={certificate.id}
+                    className="p-2 border-t-4 border-blue-400"
+                  >
+                    <InputComponent
                       label="Certificate Name"
                       type="text"
                       name="name"
-                      placeholder={"Enter The Name Of Certificate Number " + (certificate.id + 1)}
+                      placeholder={
+                        "Enter The Name Of Certificate Number " +
+                        (certificate.id + 1)
+                      }
                       value={certificate.name}
                       onChange={handleCertificateChange}
                       required
-                  />
-                  <InputComponent
+                    />
+                    <InputComponent
                       label="Certificate Authority"
                       type="text"
                       name="authority"
-                      placeholder={"Enter The Authority Of Certificate Number " + (certificate.id + 1)}
+                      placeholder={
+                        "Enter The Authority Of Certificate Number " +
+                        (certificate.id + 1)
+                      }
                       value={certificate.authority}
                       onChange={handleCertificateChange}
                       required
-                  />
-                  <InputComponent
+                    />
+                    <InputComponent
                       label="Certificate Start Date"
                       type="text"
                       name="startDate"
-                      placeholder={"Enter The Start Date Of Certificate Number " + (certificate.id + 1)}
+                      placeholder={
+                        "Enter The Start Date Of Certificate Number " +
+                        (certificate.id + 1)
+                      }
                       value={certificate.startDate}
                       onChange={handleCertificateChange}
                       required
-                  />
-                  <InputComponent
+                    />
+                    <InputComponent
                       label="Certificate End Date"
                       type="text"
                       name="endDate"
-                      placeholder={"Enter The End Date Of Certificate Number " + (certificate.id + 1)}
+                      placeholder={
+                        "Enter The End Date Of Certificate Number " +
+                        (certificate.id + 1)
+                      }
                       value={certificate.endDate}
                       onChange={handleCertificateChange}
                       required
-                  />
-                  <button 
-                    className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-red-500 hover:bg-red-100 transition-colors"
-                    onClick={() => handleDeleteCertificate(certificate.id)}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 stroke-red-500">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
-                    </svg>
-                    <p className="text-red-500 font-bold">Delete Certificate</p>
-                </button>
-                </div>
-              )})}
+                    />
+                    <button
+                      className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-red-500 hover:bg-red-100 transition-colors"
+                      onClick={() => handleDeleteCertificate(certificate.id)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 stroke-red-500"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 12h14"
+                        />
+                      </svg>
+                      <p className="text-red-500 font-bold">
+                        Delete Certificate
+                      </p>
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-              <div className="mb-4 relative border-2 border-blue-400 rounded-lg">
+            <div className="mb-4 relative border-2 border-blue-400 rounded-lg">
               <div className="flex justify-between items-center mb-3 p-3">
-                <button className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-green-500 hover:bg-green-100 transition-colors" onClick={handleAddExperience}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 stroke-green-500">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                <button
+                  className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-green-500 hover:bg-green-100 transition-colors"
+                  onClick={handleAddExperience}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6 stroke-green-500"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
                   </svg>
                   <p className="text-green-500 font-bold">Add Experience</p>
                 </button>
                 <p className="font-semibold text-xl">Experiences</p>
               </div>
               {doctorExperiences.map((experience) => {
-              return (
-                <div key={experience.id} className="p-2 border-t-4 border-blue-400">
-                  <InputComponent
+                return (
+                  <div
+                    key={experience.id}
+                    className="p-2 border-t-4 border-blue-400"
+                  >
+                    <InputComponent
                       label="Experience Title"
                       type="text"
                       name="title"
-                      placeholder={"Enter The Title Of Experience Number " + (experience.id + 1)}
+                      placeholder={
+                        "Enter The Title Of Experience Number " +
+                        (experience.id + 1)
+                      }
                       value={experience.title}
                       onChange={handleExperienceChange}
                       required
-                  />
-                  <InputComponent
+                    />
+                    <InputComponent
                       label="Experience Firm"
                       type="text"
                       name="firm"
-                      placeholder={"Enter The Firm Of Experience Number " + (experience.id + 1)}
+                      placeholder={
+                        "Enter The Firm Of Experience Number " +
+                        (experience.id + 1)
+                      }
                       value={experience.firm}
                       onChange={handleExperienceChange}
                       required
-                  />
-                  <InputComponent
+                    />
+                    <InputComponent
                       label="Experience Department"
                       type="text"
                       name="department"
-                      placeholder={"Enter The Department Of Experience Number " + (experience.id + 1)}
+                      placeholder={
+                        "Enter The Department Of Experience Number " +
+                        (experience.id + 1)
+                      }
                       value={experience.department}
                       onChange={handleExperienceChange}
                       required
-                  />
-                  <InputComponent
+                    />
+                    <InputComponent
                       label="Experience Start Date"
                       type="text"
                       name="startDate"
-                      placeholder={"Enter The Start Date Of Experience Number " + (experience.id + 1)}
+                      placeholder={
+                        "Enter The Start Date Of Experience Number " +
+                        (experience.id + 1)
+                      }
                       value={experience.startDate}
                       onChange={handleExperienceChange}
                       required
-                  />
-                  <InputComponent
+                    />
+                    <InputComponent
                       label="Experience End Date"
                       type="text"
                       name="endDate"
-                      placeholder={"Enter The End Date Of Experience Number " + (experience.id + 1)}
+                      placeholder={
+                        "Enter The End Date Of Experience Number " +
+                        (experience.id + 1)
+                      }
                       value={experience.endDate}
                       onChange={handleExperienceChange}
                       required
-                  />
-                  <button 
-                    className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-red-500 hover:bg-red-100 transition-colors"
-                    onClick={() => handleDeleteExperience(experience.id)}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 stroke-red-500">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
-                    </svg>
-                    <p className="text-red-500 font-bold">Delete Experience</p>
-                </button>
-                </div>
-              )})}
+                    />
+                    <button
+                      className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-red-500 hover:bg-red-100 transition-colors"
+                      onClick={() => handleDeleteExperience(experience.id)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 stroke-red-500"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 12h14"
+                        />
+                      </svg>
+                      <p className="text-red-500 font-bold">
+                        Delete Experience
+                      </p>
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-              <div className="mb-4 relative border-2 border-blue-400 rounded-lg">
+            <div className="mb-4 relative border-2 border-blue-400 rounded-lg">
               <div className="flex justify-between items-center mb-3 p-3">
-                <button className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-green-500 hover:bg-green-100 transition-colors" onClick={handleAddInterest}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 stroke-green-500">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                <button
+                  className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-green-500 hover:bg-green-100 transition-colors"
+                  onClick={handleAddInterest}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6 stroke-green-500"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
                   </svg>
                   <p className="text-green-500 font-bold">Add Interest</p>
                 </button>
                 <p className="font-semibold text-xl">Interests</p>
               </div>
               {doctorInterests.map((interest) => {
-              return (
-                <div key={interest.id} className="p-2 border-t-4 border-blue-400">
-                  <InputComponent
+                return (
+                  <div
+                    key={interest.id}
+                    className="p-2 border-t-4 border-blue-400"
+                  >
+                    <InputComponent
                       label="Interest Name"
                       type="text"
                       name="name"
-                      placeholder={"Enter The Name Of Interest Number " + (interest.id + 1)}
+                      placeholder={
+                        "Enter The Name Of Interest Number " + (interest.id + 1)
+                      }
                       value={interest.name}
                       onChange={handleInterestChange}
                       required
-                  />
-                  <InputComponent
+                    />
+                    <InputComponent
                       label="Interest Categoryty"
                       type="text"
                       name="category"
-                      placeholder={"Enter The Category Of Interest Number " + (interest.id + 1)}
+                      placeholder={
+                        "Enter The Category Of Interest Number " +
+                        (interest.id + 1)
+                      }
                       value={interest.category}
                       onChange={handleInterestChange}
                       required
-                  />
-                  <button 
-                    className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-red-500 hover:bg-red-100 transition-colors"
-                    onClick={() => handleDeleteInterest(interest.id)}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 stroke-red-500">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
-                    </svg>
-                    <p className="text-red-500 font-bold">Delete Interest</p>
-                </button>
-                </div>
-              )})}
+                    />
+                    <button
+                      className="flex gap-2 rounded-xl border-2 p-2 mb-1 border-red-500 hover:bg-red-100 transition-colors"
+                      onClick={() => handleDeleteInterest(interest.id)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 stroke-red-500"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 12h14"
+                        />
+                      </svg>
+                      <p className="text-red-500 font-bold">Delete Interest</p>
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </>
-         : <></>}
+        ) : (
+          <></>
+        )}
         <p className="mb-2">
           Already have an account?{" "}
           <Link
@@ -955,7 +1095,7 @@ function SignUpForm() {
         )}
         <button
           type="submit"
-          className={`${submitButtonClass} disabled:cursor-not-allowed disabled:opacity-50`}
+          className={`${submitButtonClass} disabled:cursor-not-allowed disabled:opacity-50 mb-14`}
           disabled={!formValid || loading}
         >
           {loading ? "Loading..." : "Register"}
