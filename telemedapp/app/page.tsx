@@ -10,9 +10,9 @@ export default function Home() {
   return (
     <main className="flex flex-col space-y-10 md:space-y-20  mb-5">
       <Banner />
-      {/* <div className="h-screen">
+      <div className="h-screen">
         <VideoCall />
-      </div> */}
+      </div>
       <ReadyTherapist />
       <Connection />
       <HowItWorks />
