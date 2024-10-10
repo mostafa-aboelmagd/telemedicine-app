@@ -31,7 +31,7 @@ export default function PastAppointment({ navigation }) {
 
   const past = async () => {
     try {
-      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/appointmentHistory`, {
+      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/patient/appointment/appointmentsHistory`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -57,10 +57,15 @@ export default function PastAppointment({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    past();
-  }, []);
+  // useEffect(() => {
+  //   past();
+  // }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      past();
+    }, []) // Empty dependency array
+  );
 
   return (
     <SafeArea>
@@ -83,10 +88,10 @@ export default function PastAppointment({ navigation }) {
                     </View>
                 </View>
 
-                <Text key={id} style={styles.name}>{item.patient_first_name} {item.patient_last_name}</Text>
+                <Text key={id} style={styles.name}>{item.doctor_first_name} {item.doctor_last_name}</Text>
 
                 <Text>Duration: {item.appointment_duration} mins</Text>
-                <Text>{item.appointment_complaint}</Text>
+                <Text>Complaint: {item.appointment_complaint}</Text>
             </View>
             
             <Custombutton textStyle={{fontSize: 15}} buttonStyle={{width: '35%'}}

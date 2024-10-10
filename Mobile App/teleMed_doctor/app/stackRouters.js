@@ -68,11 +68,12 @@ export default function StackRouters() {
             <Stack.Screen name='submitMedications' component={SubmitMedications} options={{ headerShown : false}} />
             <Stack.Screen name='furtherDetails' component={FurtherDetails} options={{ headerShown : false}} />
             
-            {/* Doctor profile */}
+            {/* Patient profile */}
             <Stack.Screen name='availability' component={Availability} options={{ headerShown : false}} />
             <Stack.Screen name='follow_up' component={Follow_up} options={{ headerShown : false}} />
             <Stack.Screen name='changePassword' component={ChangePassword} options={{ headerShown : false}} />
             <Stack.Screen name='edit info' component={EditInfo} options={{ headerShown : false}} />
+
         </Stack.Navigator>
     </NavigationContainer>
   );

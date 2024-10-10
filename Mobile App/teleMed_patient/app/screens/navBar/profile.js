@@ -18,6 +18,7 @@ import CustomScroll from "../../components/scroll";
 import { NEXT_PUBLIC_SERVER_NAME } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import { appointments } from "../../test/data";
 
 export default function Profile({ navigation }) {
   const [patieneInfo, setpatieneInfo] = useState({});
@@ -67,6 +68,26 @@ export default function Profile({ navigation }) {
       fetchpatieneInfo();
     }, []) // Empty dependency array
   );
+
+  // navigation to pending appointments
+  const requests = () => {
+    navigation.navigate('request')
+  }
+
+  // navigation to history
+  const history = () => {
+    navigation.navigate('past appointments')
+  }
+
+  // navigation to coming appointments
+  const upcoming = () => {
+    navigation.navigate('appointment')
+  }
+
+  // navigation to wallet
+  const wallet = () => {
+    navigation.navigate('wallet')
+  }
 
   const logOut = async () => {
     try {
@@ -159,16 +180,16 @@ export default function Profile({ navigation }) {
         {renderProfileInfo()}
 
         <View style={styles.card}>
-          <Custombutton>
+          <Custombutton onPress={upcoming}>
             <Text style={styles.actionButtonText}>Coming Appointments</Text>
           </Custombutton>
-          <Custombutton>
+          <Custombutton onPress={requests}>
             <Text style={styles.actionButtonText}>Pending Requests</Text>
           </Custombutton>
-          <Custombutton>
+          <Custombutton onPress={history}>
             <Text style={styles.actionButtonText}>Appointments History</Text>
           </Custombutton>
-          <Custombutton>
+          <Custombutton onPress={wallet}>
             <Text style={styles.actionButtonText}>My wallet</Text>
           </Custombutton>
           <Custombutton

@@ -12,6 +12,7 @@ import { getToken } from '../../components/getToken';
 
 export default function Request ({ navigation }) {
   let state = []
+  const [cancel, setCancel] = useState(false)
   const details = () => {
     navigation.navigate('details')
   }
@@ -29,19 +30,19 @@ export default function Request ({ navigation }) {
       const fetchData = async () => {
           try {
             // console.log(NEXT_PUBLIC_SERVER_NAME)
-              const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/Doctor/Profile/PendingRequests`, {
+              const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/patient/profile/requests`, {
                   method: 'GET',
                   headers: {
                     'Authorization': `Bearer ${await getToken()}`,
                     'Content-Type': 'application/json',
                   }
               });
-              console.log(result);
+              // console.log(result);
               if (!response.ok) {
                   throw new Error('Failed to fetch data');
               }
               const result = await response.json();
-              setData(result); // Save the fetched data to state
+              setData(result.appointments); // Save the fetched data to state
               // console.log(result)
           } catch (err) {
               console.log(err)
@@ -55,7 +56,7 @@ export default function Request ({ navigation }) {
 return (
     <SafeArea>
       <CustomScroll>
-        <View style={{alignItems: 'center'}}>      
+        <View style={{padding: '5%'}}>      
           <CustomTitle titleStyle={{marginTop: '10%'}}>Requests</CustomTitle>
 
         {!loading ? (data ? data.map((item, id) => 
@@ -71,36 +72,37 @@ return (
             </View>
 
             <View style={{flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between'}}>
-              <Text style={styles.name}>{item.patient_first_name} {item.patient_last_name}</Text>
+              <View>
+              <Text style={styles.name}>Dr. {item.doctor_first_name} {item.doctor_last_name}</Text>
+              <Text style={styles.name}>Duration: {item.appointment_duration}</Text>
+              </View>
               <View style={{alignItems: 'flex-end'}}>
                 <Text>{item.doctor_availability_day_hour.slice(0,10)}</Text>
                 <Text>{item.doctor_availability_day_hour.slice(11,19)}</Text>
               </View>
             </View>
 
-            <Text>{item.appointment_complaint}</Text>
+            <Text style={styles.name}>Complaint: {item.appointment_complaint}</Text>
           </View>
 
-          <View style={{flexDirection: 'row'}}>
-          <Custombutton
+          {/* <Custombutton
                       buttonStyle={[styles.button, { backgroundColor: 'green' }]}
                       textStyle={{ fontSize: 15 }}
                       onPress={() => response(item.appointment_id, 'accept')}>
               Accept
-            </Custombutton>
+            </Custombutton> */}
             <Custombutton
-                      buttonStyle={[styles.button, { backgroundColor: 'red' }]}
-                      textStyle={{ fontSize: 15 }}
-                      onPress={() => response(item.appointment_id, 'decline')}>
-              Decline
+              buttonStyle={[styles.button, { backgroundColor: 'red' }]}
+              textStyle={{ fontSize: 15 }}
+              onPress>
+              Cancel appointment
             </Custombutton>
-            <Custombutton
+            {/* <Custombutton
             buttonStyle={[styles.button, {width: '35%'}]}
             textStyle={{fontSize: 15}}
             onPress={details}>
               Ask for details
-            </Custombutton>
-          </View>
+            </Custombutton> */}
         </View>
         ) : (<Text>No appointments to show</Text>) ): <Text>Loading</Text>}
       
@@ -135,8 +137,7 @@ const styles = StyleSheet.create({
     marginBottom: '3%'
   },
   button: {
-    width: '25%',
-    marginRight: '0%'
+    width: '50%'
   },
   
 })

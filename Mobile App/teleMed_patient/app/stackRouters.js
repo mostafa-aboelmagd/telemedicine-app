@@ -31,6 +31,8 @@ import Availability from './screens/profile/availability';
 import Book from './screens/profile/book';
 import ChangePassword from './screens/profile/changePassword';
 import EditInfo from './screens/profile/edit_info';
+import Wallet from './screens/profile/wallet';
+
 
 const Stack = createStackNavigator();
 
@@ -73,6 +75,8 @@ export default function StackRouters() {
             <Stack.Screen name='book' component={Book} options={{ headerShown : false}} />
             <Stack.Screen name='changePassword' component={ChangePassword} options={{ headerShown : false}} />
             <Stack.Screen name='edit info' component={EditInfo} options={{ headerShown : false}} />
+            <Stack.Screen name='wallet' component={Wallet} options={{ headerShown : false}} />
+
         </Stack.Navigator>
     </NavigationContainer>
   );
