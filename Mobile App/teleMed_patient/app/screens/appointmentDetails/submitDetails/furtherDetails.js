@@ -32,7 +32,7 @@ const FurtherDetails = ({ navigation }) => {
       console.log("User selected YES for follow-up appointment");
       await handleSubmit();
       // add navigation or other logic for follow-up appointment here
-      navigation.navigate("follow_up");
+      navigation.navigate("book");
     } else {
       navigation.navigate("appointment",appointment_id);
     }

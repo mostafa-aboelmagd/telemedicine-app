@@ -27,11 +27,6 @@ export default function Appointment({ navigation }) {
       lname: lname
     })
   }
-  const submitResults = (patientFirstName , patientLastName, appointment_id) => {
-    LocalStorage.setItem("appointment_id", appointment_id);
-    navigation.navigate('submitResults', { patientFirstName , patientLastName, appointment_id })
-  }
-
   const acceptedAppointmetns = async () => {
     try {
       const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/patient/profile/appointments`, {
@@ -47,6 +42,7 @@ export default function Appointment({ navigation }) {
         throw new Error('could not find your appointments');
       }
       const result = await response.json();
+      console.log(result)
       console.log(result.appointments)
       setData(result.appointments);
     } catch (error) {

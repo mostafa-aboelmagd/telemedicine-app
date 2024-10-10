@@ -14,8 +14,10 @@ import CustomTitle from "../../components/title";
 import { getToken } from "../../components/getToken";
 import { NEXT_PUBLIC_SERVER_NAME } from "@env";
 import { Calendar } from "react-native-calendars";
+import { useRoute } from "@react-navigation/native";
+import Entypo from "@expo/vector-icons/Entypo";
 
-export default function Follow_up({ navigation }) {
+export default function Book({ navigation }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availabilityData, setAvailabilityData] = useState(null);
   const [slotdaycode, setslotdaycode] = useState(null);
@@ -26,7 +28,6 @@ export default function Follow_up({ navigation }) {
   const [slotduration, setslotduration] = useState(30);
   const [modalVisible, setModalVisible] = useState(false);
   const [userInput, setUserInput] = useState("");
-
   const days = {
     1: "sat",
     2: "sun",
@@ -34,7 +35,7 @@ export default function Follow_up({ navigation }) {
     4: "tue",
     5: "wed",
     6: "thu",
-    7: "fri",
+    7: "sat",
   };
 
   const decodeSlots = (slotsString) => {
@@ -46,12 +47,13 @@ export default function Follow_up({ navigation }) {
         if (!decodedSlots[key]) {
           decodedSlots[key] = [];
         }
-        decodedSlots[key].push({ slot, status }); // Store as object
+        decodedSlots[key].push({ slot, status });
       });
     }
+    console.log(decodedSlots);
+
     return decodedSlots;
   };
-
   // Online / On-site switch
   const online = () => {
     setIsOnline(isOnline === "L" ? "S" : "L");
@@ -167,11 +169,22 @@ export default function Follow_up({ navigation }) {
     return [];
   };
   const slots = getSlotsForDay();
-
+  const route = useRoute();
+  const doctorData = route.params.doctorData;
+  // const doctorData = {
+  //   id: item.id,
+  //   rating: item.rating,
+  //   numReviews: item.numReviews,
+  //   name: item.name,
+  //   title: item.title,
+  //   interests: item.interests,
+  //   fees60min: item.fees60min,
+  //   fees30min: item.fees30min,
+  // };
   const getAvailabilSlots = async () => {
     try {
       const response = await fetch(
-        `${NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/00`,
+        `${NEXT_PUBLIC_SERVER_NAME}/patient/appointment/Availabilities/${doctorData.id}`,
         {
           method: "GET",
           headers: {
@@ -208,8 +221,56 @@ export default function Follow_up({ navigation }) {
     <SafeArea>
       <View style={styles.container}>
         <CustomTitle titleStyle={{ textAlign: "center" }}>
-          Follow up appointment
+          Book Appointment
         </CustomTitle>
+        <View style={[styles.card]}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={styles.state}>
+              {doctorData.rating} Stars/ {doctorData.numReviews} Sessions
+            </Text>
+            <View style={{ justifyContent: "flex-end" }}>
+              <TouchableOpacity>
+                <Entypo name="dots-three-horizontal" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={styles.name}>{doctorData.name}</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={styles.name}>Speciality : {doctorData.title}</Text>
+            <Text> / {doctorData.interests}</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={styles.state1}>
+              {doctorData.fees60min}/60 min | {doctorData.fees30min}/30 min
+            </Text>
+          </View>
+        </View>
         <Calendar
           onDayPress={(day) => {
             const today = new Date();
@@ -229,11 +290,18 @@ export default function Follow_up({ navigation }) {
         />
         <CustomScroll>
           {slots.length > 0 ? ( // Check if there are any slots
-            <View style={styles.row}>
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
               {slots.map((slot) => (
                 <TouchableOpacity
                   key={slot.slot}
                   onPress={() => chosenSlot(slot.slot)}
+                  style={{ width: "33.33%" }}
                 >
                   <Text style={getStyle(slot.slot)}>
                     {formatSlotTime(getSlotTime(slot.slot))}
@@ -288,7 +356,7 @@ export default function Follow_up({ navigation }) {
               style={[styles.button, styles.buttonClose]}
               onPress={() => {
                 setModalVisible(!modalVisible);
-                bookfollowup(userInput);
+                // bookfollowup(userInput);
               }}
             >
               <Text style={styles.textStyle}>Submit</Text>
@@ -341,6 +409,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     fontWeight: "bold",
+    marginTop: 12,
   },
   switch: {
     marginRight: 10,
@@ -461,5 +530,36 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     marginBottom: 10,
     padding: 10,
+  },
+  card: {
+    borderWidth: 1,
+    borderColor: "lightgray",
+    borderRadius: 10,
+    marginTop: "3%",
+    width: "100%",
+    height: 150,
+    padding: 10,
+    backgroundColor: "white",
+  },
+  state: {
+    backgroundColor: "black",
+    padding: 5,
+    borderRadius: 10,
+    color: "white",
+    width: 125,
+    textAlign: "center",
+    marginBottom: "3%",
+  },
+  state1: {
+    backgroundColor: "blue",
+    padding: 5,
+    borderRadius: 10,
+    color: "white",
+    width: 150,
+    textAlign: "center",
+    marginBottom: "3%",
+  },
+  name: {
+    marginBottom: "3%",
   },
 });
