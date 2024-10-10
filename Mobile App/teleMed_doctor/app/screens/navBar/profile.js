@@ -397,7 +397,7 @@ export default function Profile({ navigation }) {
         }
       );
       if (!response.ok) {
-        console.log(response);
+        await AsyncStorage.removeItem("userToken");
         navigation.navigate("sign in");
         throw new Error("Network response was not ok");
       }

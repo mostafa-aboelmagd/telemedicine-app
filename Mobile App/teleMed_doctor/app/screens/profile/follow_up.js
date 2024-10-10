@@ -15,7 +15,7 @@ import { getToken } from "../../components/getToken";
 import { NEXT_PUBLIC_SERVER_NAME } from "@env";
 import { Calendar } from "react-native-calendars";
 
-export default function book({ navigation }) {
+export default function Follow_up({ navigation }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availabilityData, setAvailabilityData] = useState(null);
   const [slotdaycode, setslotdaycode] = useState(null);
