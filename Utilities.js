@@ -103,19 +103,30 @@ class AppError extends Error {
   constructor(message, statusCode) {
     super(message);
 
-    this.statusCode = statusCode;
+    this.statusCode = statusCode || 500;
     this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
     this.isOperational = true;
-
-    Error.captureStackTrace(this, this.constructor);
   }
 }
 const globalErrorHanlder = (err, req, res, next) => {
-  res.status(err.statusCode).json({
+  res.status(err.statusCode || 500).json({
     status: err.status,
     ok: false,
     message: err.message,
+    err,
   });
+};
+const restrictTo = (...roles) => {
+  return (req, res, next) => {
+    const { role } = req;
+    console.log("role123", role);
+    if (!roles.includes(role))
+      return next(
+        new AppError(`you aren't allowed to reach this data....💣💣⛔`, 401)
+      );
+
+    next();
+  };
 };
 module.exports = AppError;
 
@@ -130,4 +141,5 @@ module.exports = {
   AppError,
   catchAsyncError,
   globalErrorHanlder,
+  restrictTo,
 };

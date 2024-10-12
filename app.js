@@ -12,6 +12,7 @@ const patienProfileRoute = require("./Routes/Patient/Profile");
 const patientEditRoute = require("./Routes/Patient/Edit");
 const patientAppointmentBookRoute = require("./Routes/Patient/Appointment/book");
 const patientHomeRoute = require("./Routes/Patient/Home");
+const backOfficeRoute = require("./Routes/backOffice/backOfficeRoutes");
 // const patientAddPrescriptionRoute = require('./Routes/Patient/MedicalHistory/addPrescription');
 // const patientDeletePrescriptionRoute= require('./Routes/Patient/MedicalHistory/deletePrescription');
 // const patientViewPrescriptionRoute= require('./Routes/Patient/MedicalHistory/viewPrescription');
@@ -106,6 +107,8 @@ app.use("/doctor/AppointmentResults", doctorAppointmentResultsAddRoute);
 app.use("/doctor/appointmentHistory", doctorAppointmentHistoryRoute);
 app.use("/doctor/appointmentDetails", doctorAppointmentDetailsRoute);
 app.use("/doctor/PatientSummary", doctorPatientsummaryRoute);
+/// backOffice
+app.use("/backOffice", backOfficeRoute);
 
 app.use("/", (req, res, next) => {
   res.status(404).json({
