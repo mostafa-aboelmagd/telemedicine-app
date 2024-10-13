@@ -207,7 +207,6 @@
       {
         "appointment_patient_id": 6,
         "appointment_doctor_id": 13,
-        "appointment_availability_slot": 5,
         "appointment_type": "First_time",
         "appointment_duration": 30,
         "appointment_complaint": "chest pain",
