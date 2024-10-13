@@ -187,7 +187,7 @@ const Requests = () => {
                           </div>
                           <div className="flex justify-between gap-2">
                             <button
-                              className="rounded-full border-none bg-indigo-400 text-white w-40 px-4 py-2 hover:scale-105 hover:cursor-pointer"
+                              className="rounded-full border-none  w-40 px-4 py-2 bg-indigo-400 text-white hover:scale-105 hover:cursor-pointer"
                               onClick={() =>
                                 (window.location.href = `/doctorProfile/patientHistory/${request.appointment_patient_id}`)
                               }

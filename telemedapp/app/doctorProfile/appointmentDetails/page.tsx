@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { formatDateString } from "@/utils/date";
 import { FaRegImage } from "react-icons/fa";
 import MedicationTable from "@/components/patientProfile/medicationTable";
-import DocumentComponent from "@/components/patientProfile/DocumentComponent";
 import ReadMore from "@/components/common/ReadMore";
 
 const AppointmentDetailsPage = () => {
@@ -94,10 +93,12 @@ const AppointmentDetailsPage = () => {
                 {appointment.doctor_last_name}
               </p>
               <p>
-                <strong>Specialization:</strong> {appointment.doctor_specialization}
+                <strong>Specialization:</strong>{" "}
+                {appointment.doctor_specialization}
               </p>
               <p>
-                <strong>Date:</strong> {formatDateString(appointment.doctor_availability_day_hour)}
+                <strong>Date:</strong>{" "}
+                {formatDateString(appointment.doctor_availability_day_hour)}
               </p>
               <div>
                 <strong>Complaint:</strong>{" "}
@@ -115,12 +116,15 @@ const AppointmentDetailsPage = () => {
                       <div key={index} className="space-y-4">
                         <div>
                           <p>
-                            <strong>Diagnosis:</strong>{" "} {result.appointment_diagnosis || "No Diagnosis Available"}
+                            <strong>Diagnosis:</strong>{" "}
+                            {result.appointment_diagnosis ||
+                              "No Diagnosis Available"}
                           </p>
                         </div>
                         <div>
                           <p>
-                            <strong>Report:</strong>{" "} {result.appointment_report || "No Report Available"}
+                            <strong>Report:</strong>{" "}
+                            {result.appointment_report || "No Report Available"}
                           </p>
                         </div>
                       </div>
@@ -141,13 +145,19 @@ const AppointmentDetailsPage = () => {
                 {appointment.treatmentPlan ? (
                   <div className="flex flex-col space-y-4">
                     <p>
-                      <strong>Operations:</strong>{" "} {appointment.treatmentPlan.treatment_plan_operations || "No Operations Available"}
+                      <strong>Operations:</strong>{" "}
+                      {appointment.treatmentPlan.treatment_plan_operations ||
+                        "No Operations Available"}
                     </p>
                     <p>
-                      <strong>Speciality Referral:</strong>{" "} {appointment.treatmentPlan.speciality_referral || "No Speciality Referral"}
+                      <strong>Speciality Referral:</strong>{" "}
+                      {appointment.treatmentPlan.speciality_referral ||
+                        "No Speciality Referral"}
                     </p>
                     <p>
-                      <strong>Referral Notes:</strong>{" "} {appointment.treatmentPlan.referral_notes || "No Referral Notes"}
+                      <strong>Referral Notes:</strong>{" "}
+                      {appointment.treatmentPlan.referral_notes ||
+                        "No Referral Notes"}
                     </p>
                   </div>
                 ) : (
@@ -156,7 +166,8 @@ const AppointmentDetailsPage = () => {
                       <strong>Operations:</strong> No Operations Available
                     </p>
                     <p>
-                      <strong>Speciality Referral:</strong> No Speciality Referral
+                      <strong>Speciality Referral:</strong> No Speciality
+                      Referral
                     </p>
                     <p>
                       <strong>Referral Notes:</strong> No Referral Notes

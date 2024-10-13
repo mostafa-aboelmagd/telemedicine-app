@@ -4,11 +4,9 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import AppointmentsGrid from "./AppointmentsGrid";
 import Link from "next/link";
 import { useProfile } from "@/context/ProfileContext"; // Ensure correct import path
-import { useRouter } from "next/navigation";
 
 const Appointments = () => {
   const { profileData } = useProfile();
-  const router = useRouter();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
 
