@@ -47,7 +47,7 @@ export default function HomePage({ navigation }) {
     <SafeArea>
       <CustomScroll>
         <View style={styles.container}>
-          <CustomTitle>Appointments</CustomTitle>
+          <CustomTitle>Home</CustomTitle>
           <Text>Explore Doctors</Text>
         </View>
         {!loading ? (

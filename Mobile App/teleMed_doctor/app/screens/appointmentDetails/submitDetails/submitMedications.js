@@ -82,8 +82,6 @@ const SubmitMedications = ({ navigation }) => {
         <SafeArea safeStyle={{ backgroundColor: 'lightgrey' }}>
             <CustomScroll>
                 <View style={styles.container}>
-                    <CustomTitle style={styles.titleProp}>Complaint</CustomTitle>
-                    <Text style={styles.textProp}>lorem lorem</Text>
                     <View style={styles.titleRow}>
                         <CustomTitle style={styles.titleProp}>Prescription</CustomTitle>
                     </View>

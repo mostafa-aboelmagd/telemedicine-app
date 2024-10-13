@@ -121,26 +121,23 @@ export default function Book({ navigation }) {
     }
   };
 
-  const bookfollowup = async (comp) => {
-    const dayOfWeek = new Date(selectedDate).getDay() + 1;
+  const book = async (comp) => {
     const slotHour = parseInt(slothourcode, 10) + 8;
+    const doctorData = route.params.doctorData;
     const formattedHour = slotHour < 10 ? `0${slotHour}` : `${slotHour}`;
     const dateTime = `${selectedDate}T${formattedHour}:00:00.000Z`;
-    const appointment_id = await LocalStorage.getItem(
-      "appointment_id",
-      appointment_id
-    );
     const appointmentbody = JSON.stringify({
-      time_slot_code: `${slotdaycode}_${slothourcode}_${slottypecode}`,
-      appointment_date: dateTime,
+      doctor_id: doctorData.id,
       complaint: comp,
       duration: slotduration,
-      appointmentId: appointment_id,
+      appointment_type: "First_time",
+      appointment_date: dateTime,
+      time_slot_code: `${slotdaycode}_${slothourcode}_${slottypecode}`,
     });
 
     try {
       const response = await fetch(
-        `${NEXT_PUBLIC_SERVER_NAME}/doctor/BookFollowUp/FollowupAppointment`,
+        `${NEXT_PUBLIC_SERVER_NAME}/patient/appointment/book`,
         {
           method: "POST",
           headers: {
@@ -157,11 +154,10 @@ export default function Book({ navigation }) {
       }
       if (!response.ok) {
         alert("Booking error: " + response);
-
         return;
       }
     } catch (error) {
-      alert("Error booking follow-up:", error);
+      alert("Error booking appointment:", error);
     }
   };
 
@@ -225,6 +221,7 @@ export default function Book({ navigation }) {
   const slots = getSlotsForDay();
   const route = useRoute();
   const doctorData = route.params.doctorData;
+  console.log(doctorData);
   const getAvailabilSlots = async () => {
     try {
       const response = await fetch(
@@ -400,7 +397,7 @@ export default function Book({ navigation }) {
               style={[styles.button, styles.buttonClose]}
               onPress={() => {
                 setModalVisible(!modalVisible);
-                // bookfollowup(userInput);
+                book(userInput);
               }}
             >
               <Text style={styles.textStyle}>Submit</Text>

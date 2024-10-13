@@ -9,6 +9,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { getToken } from '../../components/getToken';
 import {NEXT_PUBLIC_SERVER_NAME} from '@env'; 
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/native'; 
 
 export default function PastAppointment({ navigation }) {
 
@@ -24,14 +25,9 @@ export default function PastAppointment({ navigation }) {
       {appointment_id: appointment_id
     })
   }
-
-  // const submitResults = (patientName) => {
-  //   navigation.navigate('submitResults', { patientName })
-  // }
-
   const past = async () => {
     try {
-      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/patient/appointment/appointmentsHistory`, {
+      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/appointmentHistory`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +35,7 @@ export default function PastAppointment({ navigation }) {
 
         },
       });
-      // console.log(response);
+      console.log(response);
 
       if (!response.ok) {
         console.log(response);

@@ -339,7 +339,7 @@ export default function Follow_up({ navigation }) {
               style={styles.input}
               onChangeText={setUserInput}
               value={userInput}
-              placeholder="Enter your complaint"
+              placeholder="Notes / complaint..."
             />
             <TouchableOpacity
               style={[styles.button, styles.buttonClose]}
