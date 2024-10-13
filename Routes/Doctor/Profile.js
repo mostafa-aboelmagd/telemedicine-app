@@ -40,4 +40,15 @@ router.get(
   doctorProfileController.doctorDeclinedRequests
 );
 
+router.post("/experience", tokenAuthentication, doctorProfileController.addDoctorExperience);
+router.post("/education", tokenAuthentication, doctorProfileController.addDoctorEducation);
+router.post("/languages", tokenAuthentication, doctorProfileController.addDoctorLanguage);
+router.post("/interests", tokenAuthentication, doctorProfileController.addDoctorInterest);
+
+// Delete routes
+router.delete("/experience/:experience_id", tokenAuthentication, doctorProfileController.deleteDoctorExperience);
+router.delete("/education/:education_id", tokenAuthentication, doctorProfileController.deleteDoctorEducation);
+router.delete("/languages/:language_id", tokenAuthentication, doctorProfileController.deleteDoctorLanguage);
+router.delete("/interests/:interest_id", tokenAuthentication, doctorProfileController.deleteDoctorInterest);
+
 module.exports = router;

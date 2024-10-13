@@ -51,6 +51,11 @@
 35. **Doctor submit appointment's results:** `doctor/AppointmentResults/:appointmentId/submitresults`(Tested)
 36. **Doctor Registration:** `/doctor/register`(Tested)
 37. **Doctor Books Followup Appointment:** `/doctor/FollowupAppointment`(Tested)
+38. **Doctor adds language:**`/doctor/profile/languages`(Tested)
+39. **Doctor adds Experience:**`/doctor/profile/experience`(Tested)
+40. **Doctor adds Education:**`/doctor/profile/education`(Tested)
+41. **Doctor adds Interest:**`/doctor/profile/interests`(Tested)
+
 
 
 ---
@@ -1215,6 +1220,103 @@ with wrong appointmentId:
   ```json
   {
     "message": "Followup Appointment created successfully"
+    
+  }
+  ```
+38. **Doctor adds language:**`/doctor/profile/languages`(Tested)
+
+- **Method:** Post
+- **Request Headers:**
+- **Parameters:**
+- **Request Body:**
+  ````json
+  {
+  "doctor_id": "56",
+  "language": "seeny"
+  }
+      ```
+  ````
+- **Response Body:**
+
+  ```json
+  {
+    "message": "New Language added"
+    
+  }
+  ```
+39. **Doctor adds Experience:**`/doctor/profile/experience`(Tested)
+
+- **Method:** Post
+- **Request Headers:**
+- **Parameters:**
+- **Request Body:**
+  ````json
+  {
+  "experience": {
+    "doctor_experience_job_title": "Senior Surgeon",
+    "doctor_experience_firm_name": "City Hospital",
+    "doctor_experience_department": "Surgery",
+    "doctor_experience_start_date": "2020-01-15",
+    "doctor_experience_end_date": "2023-10-01"
+  }
+  }
+      ```
+  ````
+- **Response Body:**
+
+  ```json
+  {
+    "message": "New Experience added"
+    
+  }
+  ```
+  40. **Doctor adds Education:**`/doctor/profile/education`(Tested)
+  
+- **Method:** Post
+- **Request Headers:**
+- **Parameters:**
+- **Request Body:**
+  ````json
+  {
+  "education": {
+    "education_certificate": "MD in Internal Medicine",
+    "education_authority": "Harvard Medical School",
+    "education_start_date": "2015-09-01",
+    "education_end_data": "2020-06-30"
+  }
+  }
+
+      ```
+  ````
+- **Response Body:**
+
+  ```json
+  {
+    "message": "New Certificate added"
+    
+  }
+  ```
+  40. **Doctor adds Interest:**`/doctor/profile/interests`(Tested)
+  
+- **Method:** Post
+- **Request Headers:**
+- **Parameters:**
+- **Request Body:**
+  ````json
+  {
+  "Interest": {
+    "interest.doctor_interest_category": "Games",
+    "interest.doctor_interest_name": "COD"
+  }
+  }
+
+      ```
+  ````
+- **Response Body:**
+
+  ```json
+  {
+    "message": "New Interest added"
     
   }
   ```

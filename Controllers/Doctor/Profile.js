@@ -174,20 +174,134 @@ const doctor_Further_Informtion = async (req, res) => {
   return res.json(FurtherInformation);
 };
 
-const add_doctor_Further_Informtion = async (req, res) => {
+const addDoctorExperience = async (req, res) => {
     const doctorUserId = req.id;
-    let message = '';
-    if (!doctorUserId) {
-        message = 'Doctor ID not found';
-        return res.status(404).json(message);
+    const experience = req.body.experience; 
+  
+    if (!doctorUserId || !experience) {
+      return res.status(400).json({ message: "Invalid data" });
     }
-    const FurtherInformation = await database.retrieveDoctorFurtherInformation(doctorUserId);
-    if (!FurtherInformation) {
-        message = 'No Further Information found';
-        return res.status(400).json(message);
+  
+    try {
+      const newExperience = await database.addDoctorExperience(doctorUserId, experience);
+      return res.status(201).json({message:"New experience added"});
+    } catch (error) {
+      console.error("Error adding experience:", error);
+      return res.status(500).json({ message: "Error adding experience" });
     }
-    return res.json(FurtherInformation);
-}
+};
+
+const deleteDoctorExperience = async (req, res) => {
+    const experienceId = req.params.doctor_experience_id; 
+
+    if (!experienceId) {
+      return res.status(400).json({ message: "Experience ID is required" });
+    }
+  
+    try {
+      await database.deleteDoctorExperience(experienceId);
+      return res.status(200).json({ message: "Experience deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting experience:", error);
+      return res.status(500).json({ message: "Error deleting experience" });
+    }
+  };
+
+const addDoctorEducation = async (req, res) => {
+    const doctorUserId = req.id;
+    const education = req.body.education; 
+  
+    if (!doctorUserId || !education) {
+      return res.status(400).json({ message: "Invalid data" });
+    }
+  
+    try {
+      const newEductaion = await database.addDoctorEducation(doctorUserId, education);
+      return res.status(201).json({message:"New certificate added"});
+    } catch (error) {
+      console.error("Error adding education:", error);
+      return res.status(500).json({ message: "Error adding eductation" });
+    }};
+
+const deleteDoctorEducation = async (req, res) => {
+    const educationId = req.params.doctor_education_id; 
+
+    if (!educationId) {
+      return res.status(400).json({ message: "EducationId ID is required" });
+    }
+  
+    try {
+      await database.deleteDoctorEducation(educationId);
+      return res.status(200).json({ message: "Education deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting Education:", error);
+      return res.status(500).json({ message: "Error deleting Education" });
+    }
+};
+
+const addDoctorInterest = async (req, res) => {
+    const doctorUserId = req.id;
+    const Interest = req.body.Interest; 
+  
+    if (!doctorUserId || !Interest) {
+      return res.status(400).json({ message: "Invalid data" });
+    }
+  
+    try {
+      const newInterest = await database.addDoctorInterest(doctorUserId, Interest);
+      return res.status(201).json({message:"New Interest added"});
+    } catch (error) {
+      console.error("Error adding Interest:", error);
+      return res.status(500).json({ message: "Error adding Interest" });
+    }};
+
+const deleteDoctorInterest = async (req, res) => {
+    const interestId = req.params.doctor_interest_id; 
+
+    if (!interestId) {
+      return res.status(400).json({ message: "interest ID is required" });
+    }
+  
+    try {
+      await database.deleteDoctorInterest(interestId);
+      return res.status(200).json({ message: "Interest deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting Interest:", error);
+      return res.status(500).json({ message: "Error deleting Interest" });
+    }};
+
+const addDoctorLanguage = async (req, res) => {
+    const doctorUserId = req.id;
+    const language = req.body.language; 
+    console.log(language)
+  
+    if (!doctorUserId || !language) {
+      return res.status(400).json({ message: "Invalid data" });
+    }
+  
+    try {
+      const newLanguage = await database.addDoctorLanguage(doctorUserId, language);
+      return res.status(201).json({message: "New Language added"});
+    } catch (error) {
+      console.error("Error adding language:", error);
+      return res.status(500).json({ message: "Error adding language" });
+    }};
+
+const deleteDoctorLanguage = async (req, res) => {
+    const language_id = req.params.language_id; 
+
+    if (!language_id) {
+      return res.status(400).json({ message: "language_id ID is required" });
+    }
+  
+    try {
+      await database.deleteDoctorLanguage(language_id);
+      return res.status(200).json({ message: "Language deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting Language:", error);
+      return res.status(500).json({ message: "Error deleting Language" });
+    }};
+
 // const doctorExperience = async (req, res) => {
 //     const doctorUserId = req.id;
 //     const doctorEmail = req.email;
@@ -276,4 +390,12 @@ module.exports = {
   doctorAppointments,
   doctorReviews,
   doctorPendingRequests,
+  addDoctorExperience,
+  addDoctorEducation,
+  addDoctorLanguage,
+  addDoctorInterest,
+  deleteDoctorEducation,
+  deleteDoctorExperience,
+  deleteDoctorInterest,
+  deleteDoctorLanguage
 };
