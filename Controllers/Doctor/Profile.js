@@ -163,6 +163,20 @@ const doctor_Further_Informtion = async (req, res) => {
     return res.json(FurtherInformation);
 }
 
+const add_doctor_Further_Informtion = async (req, res) => {
+    const doctorUserId = req.id;
+    let message = '';
+    if (!doctorUserId) {
+        message = 'Doctor ID not found';
+        return res.status(404).json(message);
+    }
+    const FurtherInformation = await database.retrieveDoctorFurtherInformation(doctorUserId);
+    if (!FurtherInformation) {
+        message = 'No Further Information found';
+        return res.status(400).json(message);
+    }
+    return res.json(FurtherInformation);
+}
 // const doctorExperience = async (req, res) => {
 //     const doctorUserId = req.id;
 //     const doctorEmail = req.email;
