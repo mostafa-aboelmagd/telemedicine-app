@@ -34,7 +34,7 @@ const DoctorInfo = ({ doctor }: { doctor: Doctor }) => {
                 text="Write a Review"
                 variant="text"
                 doctor={doctor}
-                doctorRating={doctorRating}
+                // doctorRating={doctorRating}
                 setDoctorRating={setDoctorRating}
               />
             )}
