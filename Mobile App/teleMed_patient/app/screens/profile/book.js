@@ -50,7 +50,7 @@ export default function Book({ navigation }) {
         decodedSlots[key].push({ slot, status });
       });
     }
-    console.log(decodedSlots);
+    // console.log(decodedSlots);
 
     return decodedSlots;
   };
@@ -126,15 +126,24 @@ export default function Book({ navigation }) {
     const doctorData = route.params.doctorData;
     const formattedHour = slotHour < 10 ? `0${slotHour}` : `${slotHour}`;
     const dateTime = `${selectedDate}T${formattedHour}:00:00.000Z`;
+    let dayNumber;
+    // Reverse lookup in the 'days' object to get the day number
+    for (const key in days) {
+      if (days[key] === slotdaycode) {
+        dayNumber = key;
+        break;
+      }
+    }
     const appointmentbody = JSON.stringify({
       doctor_id: doctorData.id,
       complaint: comp,
       duration: slotduration,
       appointment_type: "First_time",
       appointment_date: dateTime,
-      time_slot_code: `${slotdaycode}_${slothourcode}_${slottypecode}`,
+      appointment_parent_reference:null,
+      time_slot_code: `${dayNumber}_${slothourcode}_${slottypecode}`,
     });
-
+    console.log(appointmentbody);
     try {
       const response = await fetch(
         `${NEXT_PUBLIC_SERVER_NAME}/patient/appointment/book`,
@@ -147,20 +156,25 @@ export default function Book({ navigation }) {
           body: appointmentbody,
         }
       );
+
+      console.log( await getToken());
       if (response.ok) {
-        alert("Follow up appointment booked successfully");
+        const data = await response.json(); // Assuming the server responds with JSON
+      // alert("Appointment booked successfully: " + JSON.stringify(data)); // Display the JSON response
+        alert("Appointment booked successfully");
         navigation.navigate("appointment");
         return;
       }
       if (!response.ok) {
-        alert("Booking error: " + response);
+        const errorText = await response.text(); // Read the response as text for error messages
+        alert(`Booking error: ${response.status} - ${errorText}`); // Include the status code
+        console.error("Booking error:", errorText); 
         return;
       }
     } catch (error) {
       alert("Error booking appointment:", error);
     }
-  };
-
+  };  
   const getSlotTime = (slot) => {
     const slotHour = parseInt(slot, 10) + 8;
     const formattedHour = slotHour < 10 ? `0${slotHour}` : `${slotHour}`;
@@ -221,7 +235,7 @@ export default function Book({ navigation }) {
   const slots = getSlotsForDay();
   const route = useRoute();
   const doctorData = route.params.doctorData;
-  console.log(doctorData);
+  // console.log(doctorData);
   const getAvailabilSlots = async () => {
     try {
       const response = await fetch(
@@ -240,7 +254,7 @@ export default function Book({ navigation }) {
       }
 
       const result = await response.json();
-      console.log(JSON.stringify(result));
+      // console.log(JSON.stringify(result));
       setAvailabilityData(result);
     } catch (error) {
       console.error("Error fetching doctor availability:", error);
@@ -399,6 +413,7 @@ export default function Book({ navigation }) {
                 setModalVisible(!modalVisible);
                 book(userInput);
               }}
+              disabled={userInput.trim() === ''} // Disable if input is empty
             >
               <Text style={styles.textStyle}>Submit</Text>
             </TouchableOpacity>
