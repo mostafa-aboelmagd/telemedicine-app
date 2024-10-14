@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { formatDate } from "../../../utils/date";
 import ReadMore from "../../common/ReadMore";
-import Link from "next/link";
+import VideoCallButton from "@/components/common/VideoCallButton";
 
 const AppointmentCard = ({
   appointment,
@@ -86,13 +86,8 @@ const AppointmentCard = ({
             <strong>Duration:</strong> {appointment.appointment_duration} min
           </p>
         </div>
-        <Link href="/videoCall">
-          <button
-            className={` bg-sky-600 hover:bg-sky-700 text-white  hover:cursor-pointer md:text-sm text-xs font-medium  py-2 px-4 rounded-lg w-full`}
-          >
-            Join Video Call
-          </button>
-        </Link>
+        {/* Join Video Call Button */}
+        <VideoCallButton label="Join Video Call" />
       </div>
     </div>
   );
