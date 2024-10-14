@@ -3,6 +3,7 @@ import stylesButton from "../navbarComp/navbar.module.css";
 import { FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import ReadMore from "@/components/common/ReadMore";
+import VideoCallButton from "@/components/common/VideoCallButton";
 
 const AppointmentCard = ({ appointment }: { appointment: any }) => {
   const userImage = <FaUserCircle className="h-20 w-20 text-[#035fe9]" />;
@@ -77,13 +78,8 @@ const AppointmentCard = ({ appointment }: { appointment: any }) => {
           </Link>
         </div>
 
-        <Link href="/videoCall">
-          <button
-            className={` bg-sky-600 hover:bg-sky-700 text-white  hover:cursor-pointer md:text-sm text-xs font-medium  py-2 px-4 rounded-lg w-full`}
-          >
-            Join Video Call
-          </button>
-        </Link>
+        {/* Join Video Call Button */}
+        <VideoCallButton label="Join Video Call" />
       </div>
     </div>
   );
