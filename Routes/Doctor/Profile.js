@@ -46,9 +46,9 @@ router.post("/languages", tokenAuthentication, doctorProfileController.addDoctor
 router.post("/interests", tokenAuthentication, doctorProfileController.addDoctorInterest);
 
 // Delete routes
-router.delete("/experience/:experience_id", tokenAuthentication, doctorProfileController.deleteDoctorExperience);
-router.delete("/education/:education_id", tokenAuthentication, doctorProfileController.deleteDoctorEducation);
+router.delete("/experience/:doctor_experience_id", tokenAuthentication, doctorProfileController.deleteDoctorExperience);
+router.delete("/education/:doctor_education_id", tokenAuthentication, doctorProfileController.deleteDoctorEducation);
 router.delete("/languages/:language_id", tokenAuthentication, doctorProfileController.deleteDoctorLanguage);
-router.delete("/interests/:interest_id", tokenAuthentication, doctorProfileController.deleteDoctorInterest);
+router.delete("/interests/:doctor_interest_id", tokenAuthentication, doctorProfileController.deleteDoctorInterest);
 
 module.exports = router;

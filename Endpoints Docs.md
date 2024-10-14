@@ -55,7 +55,10 @@
 39. **Doctor adds Experience:**`/doctor/profile/experience`(Tested)
 40. **Doctor adds Education:**`/doctor/profile/education`(Tested)
 41. **Doctor adds Interest:**`/doctor/profile/interests`(Tested)
-
+42. **Doctor deletes experience:**`/experience/:doctor_experience_id`(Tested)
+43. **Doctor deletes education:**`education/:doctor_education_id`(Tested)
+44. **Doctor deletes language:**`/languages/:language_id`(Tested)
+45. **Doctor deletes Interest:**`interests/:doctor_interest_id`(Tested)
 
 
 ---
@@ -1317,6 +1320,62 @@ with wrong appointmentId:
   ```json
   {
     "message": "New Interest added"
+    
+  }
+  ```
+42. **Doctor deletes experience:**`/experience/:doctor_experience_id`(Tested)
+- **Method:** Delete
+- **Request Headers:**
+- **Parameters:**
+ - [`doctor_experience_id`]
+
+- **Response Body:**
+
+  ```json
+  {
+    "message": "Experience deleted successfully"
+    
+  }
+  ```
+43. **Doctor deletes education:**`education/:doctor_education_id`(Tested)
+- **Method:** Delete
+- **Request Headers:**
+- **Parameters:**
+ - [`doctor_education_id`]
+
+- **Response Body:**
+
+  ```json
+  {
+    "message": "Education deleted successfully"
+    
+  }
+  ```
+44. **Doctor deletes language:**`/languages/:language_id`(Tested)
+- **Method:** Delete
+- **Request Headers:**
+- **Parameters:**
+ - [`language_id`]
+
+- **Response Body:**
+
+  ```json
+  {
+    "message": "Language deleted successfully"
+    
+  }
+  ```
+45. **Doctor deletes Interest:**`interests/:doctor_interest_id`(Tested)
+- **Method:** Delete
+- **Request Headers:**
+- **Parameters:**
+ - [`doctor_interest_id`]
+
+- **Response Body:**
+
+  ```json
+  {
+    "message": "Interest deleted successfully"
     
   }
   ```

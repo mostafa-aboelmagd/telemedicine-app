@@ -257,7 +257,7 @@ const addDoctorInterest = async (req, res) => {
 
 const deleteDoctorInterest = async (req, res) => {
     const interestId = req.params.doctor_interest_id; 
-
+    console.log(interestId)
     if (!interestId) {
       return res.status(400).json({ message: "interest ID is required" });
     }
