@@ -1,13 +1,14 @@
 "use client";
 import React, { CSSProperties, useState } from "react";
 import dynamic from "next/dynamic";
+import { layout } from "agora-react-uikit"; // Import layout from Agora UIKit
 
 const AgoraUIKit = dynamic(() => import("agora-react-uikit"), { ssr: false });
 
 import "agora-react-uikit/dist/index.css";
 
 const VideoCall: React.FunctionComponent = () => {
-  const [videocall, setVideocall] = useState(true);
+  const [videoCall, setVideoCall] = useState(true);
   const [isHost, setHost] = useState(true);
   const [isPinned, setPinned] = useState(false);
   const [username, setUsername] = useState("");
@@ -15,7 +16,7 @@ const VideoCall: React.FunctionComponent = () => {
   return (
     <div style={styles.container}>
       <div style={styles.videoContainer}>
-        {videocall ? (
+        {videoCall ? (
           <>
             <div style={styles.nav}>
               <p style={{ fontSize: 20, width: 200 }}>
@@ -34,12 +35,12 @@ const VideoCall: React.FunctionComponent = () => {
                 channel: "test",
                 token: null,
                 role: isHost ? "host" : "audience",
-                layout: isPinned ? layout.pin : layout.grid,
+                layout: isPinned ? layout.pin : layout.grid, // Use layout here
                 enableScreensharing: true,
               }}
               rtmProps={{ username: username || "user", displayUsername: true }}
               callbacks={{
-                EndCall: () => setVideocall(false),
+                EndCall: () => setVideoCall(false),
               }}
             />
           </>
@@ -54,7 +55,7 @@ const VideoCall: React.FunctionComponent = () => {
                 setUsername(e.target.value);
               }}
             />
-            <h3 style={styles.btn} onClick={() => setVideocall(true)}>
+            <h3 style={styles.btn} onClick={() => setVideoCall(true)}>
               Start Call
             </h3>
           </div>
