@@ -1,5 +1,5 @@
 "use client";
-import React, { CSSProperties, useState } from "react";
+import React, { CSSProperties, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { layout } from "agora-react-uikit"; // Import layout from Agora UIKit
 
@@ -12,6 +12,16 @@ const VideoCall: React.FunctionComponent = () => {
   const [isHost, setHost] = useState(true);
   const [isPinned, setPinned] = useState(false);
   const [username, setUsername] = useState("");
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure the component is only rendered on the client side
+  useEffect(() => {
+    setIsClient(true); // Mark that we're on the client
+  }, []);
+
+  if (!isClient) {
+    return null; // Do not render on the server
+  }
 
   return (
     <div style={styles.container}>
@@ -35,7 +45,7 @@ const VideoCall: React.FunctionComponent = () => {
                 channel: "test",
                 token: null,
                 role: isHost ? "host" : "audience",
-                layout: isPinned ? layout.pin : layout.grid, // Use layout here
+                layout: isPinned ? layout.pin : layout.grid,
                 enableScreensharing: true,
               }}
               rtmProps={{ username: username || "user", displayUsername: true }}
