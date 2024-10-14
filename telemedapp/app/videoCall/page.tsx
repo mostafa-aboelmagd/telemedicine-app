@@ -1,5 +1,8 @@
+// app/videoCall/page.tsx
 import VideoCall from "@/components/common/VideoCall";
-export default function Home() {
+
+// VideoCallPage component
+export default function VideoCallPage() {
   return (
     <main className="w-full">
       <VideoCall />

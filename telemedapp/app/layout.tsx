@@ -1,13 +1,15 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Head from "next/head"; // Import the Head component
-import "./globals.css";
+import Head from "next/head";
+import "./globals.css"; // Global styles
 import Navbar from "@/components/navbarComp/navbar";
 import { ProfileProvider } from "@/context/ProfileContext";
 import { DoctorProvider } from "@/context/GetDoctorsContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// Define metadata for the application
 export const metadata: Metadata = {
   title: "TelemedPilot",
   description:
@@ -17,11 +19,12 @@ export const metadata: Metadata = {
     "telemedicine, pilot, development, project, enterprise, solution, healthcare, health, medical, doctor, patient, appointment, video, call, chat, prescription, history, profile, user, admin, dashboard, calendar, schedule, reminder, notification, telemedapp",
 };
 
+// Root layout component
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <Head>
@@ -31,7 +34,8 @@ export default function RootLayout({
         <DoctorProvider>
           <ProfileProvider>
             <Navbar />
-            {children}
+            <main className="w-full">{children}</main>{" "}
+            {/* Wrap children with main for semantic HTML */}
           </ProfileProvider>
         </DoctorProvider>
       </body>

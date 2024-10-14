@@ -3,20 +3,8 @@ import React, { CSSProperties, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { layout } from "agora-react-uikit"; // Import layout from Agora UIKit
 
-// Dynamic import of AgoraUIKit
 const AgoraUIKit = dynamic(() => import("agora-react-uikit"), { ssr: false });
 import "agora-react-uikit/dist/index.css";
-
-export const metadata = {
-  title: "Video Call",
-  description: "Video call using Agora",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    minimumScale: 1,
-    maximumScale: 1,
-  },
-};
 
 const VideoCall: React.FunctionComponent = () => {
   const [videoCall, setVideoCall] = useState(true);
@@ -26,7 +14,7 @@ const VideoCall: React.FunctionComponent = () => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true); // Mark that we're on the client
+    setIsClient(true); // Set client-side flag
   }, []);
 
   if (!isClient) {
