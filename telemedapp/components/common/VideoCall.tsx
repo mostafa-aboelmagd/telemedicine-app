@@ -12,7 +12,6 @@ const VideoCall: React.FunctionComponent = () => {
   return (
     <div style={styles.container}>
       <div style={styles.videoContainer}>
-        <h1 style={styles.heading}>Agora React Web UI Kit</h1>
         {videocall ? (
           <>
             <div style={styles.nav}>
@@ -65,7 +64,7 @@ const VideoCall: React.FunctionComponent = () => {
 
 const styles = {
   container: {
-    width: "100vw",
+    width: "auto",
     height: "100vh",
     display: "flex",
     flex: 1,

@@ -1,7 +1,7 @@
 import VideoCall from "@/components/common/VideoCall";
 export default function Home() {
   return (
-    <main className="h-screen">
+    <main className="w-full">
       <VideoCall />
     </main>
   );

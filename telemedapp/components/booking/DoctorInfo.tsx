@@ -31,10 +31,9 @@ const DoctorInfo = ({ doctor }: { doctor: Doctor }) => {
               />
             ) : (
               <RatingComp
-                text="Write a Review"
+                text="Review"
                 variant="text"
                 doctor={doctor}
-                // doctorRating={doctorRating}
                 setDoctorRating={setDoctorRating}
               />
             )}

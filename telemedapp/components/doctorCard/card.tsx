@@ -113,10 +113,9 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
                 />
               ) : (
                 <RatingComp
-                  text="Write a Review"
+                  text="Review"
                   variant="text"
                   doctor={doctor}
-                  // doctorRating={doctorRating}
                   setDoctorRating={setDoctorRating}
                 />
               )}
