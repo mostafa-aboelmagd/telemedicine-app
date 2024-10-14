@@ -1,6 +1,9 @@
 "use client";
 import React, { CSSProperties, useState } from "react";
-import AgoraUIKit, { layout } from "agora-react-uikit";
+import dynamic from "next/dynamic";
+
+const AgoraUIKit = dynamic(() => import("agora-react-uikit"), { ssr: false });
+
 import "agora-react-uikit/dist/index.css";
 
 const VideoCall: React.FunctionComponent = () => {
@@ -30,7 +33,6 @@ const VideoCall: React.FunctionComponent = () => {
                 appId: "c27f95cfa894406c81a0c51deecacc65",
                 channel: "test",
                 token: null,
-                // token: localStorage.getItem("jwt"), // add your token if using app in secured mode
                 role: isHost ? "host" : "audience",
                 layout: isPinned ? layout.pin : layout.grid,
                 enableScreensharing: true,
