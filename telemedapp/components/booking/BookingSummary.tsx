@@ -71,7 +71,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       doctor_id: Number(doctor.id),
       complaint: complaint,
       duration: selectedDuration,
-      appointment_type: appointmentState,
+      // appointment_type: appointmentState,
+      appointment_type: "First_time", //STATIC FOR NOW
       appointment_date: getDateTime(),
       appointment_parent_reference: null,
       time_slot_code: convertDateToCode(

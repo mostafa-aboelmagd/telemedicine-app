@@ -27,8 +27,8 @@ const FollowUpAppointments: React.FC<FollowUpAppointmentsProps> = ({
   };
 
   const handleSaveAppointment = () => {
-    console.log("Selected appointment saved:", selectedAppointment);
-    console.log("appointmentState:", appointmentState);
+    // console.log("Selected appointment saved:", selectedAppointment);
+    // console.log("appointmentState:", appointmentState);
     setShowDialog(false);
   };
 

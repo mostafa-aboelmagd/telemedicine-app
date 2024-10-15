@@ -98,7 +98,7 @@ const VideoCallDialog: React.FC<VideoCallDialogProps> = ({
           {/* AgoraUIKit Video Call Integration */}
           <AgoraUIKit
             rtcProps={{
-              appId: agoraAppId, // Guaranteed to be a valid string now
+              appId: agoraAppId as string, // Guaranteed to be a valid string now
               channel: "test",
               token: null,
               role: isHost ? "host" : "audience",
