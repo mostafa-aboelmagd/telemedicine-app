@@ -1,34 +1,35 @@
-// components/common/VideoCallDialog.tsx
 "use client";
 import React, { useEffect, useState } from "react";
 import { Dialog } from "primereact/dialog"; // PrimeReact Dialog
-import { layout } from "agora-react-uikit"; // Import layout from Agora UIKit
 import dynamic from "next/dynamic"; // Dynamic import for Agora UIKit
-
 const AgoraUIKit = dynamic(() => import("agora-react-uikit"), { ssr: false });
-
+import { layout } from "agora-react-uikit"; // Import layout from Agora UIKit
 import "agora-react-uikit/dist/index.css"; // Import Agora UIKit CSS
 
-// Props definition for the VideoCallDialog component
 interface VideoCallDialogProps {
   isOpen: boolean; // Determines whether the dialog is open
   onHide: () => void; // Callback to hide/close the dialog
+  onError?: (error: string) => void; // Error handling callback
 }
 
 const VideoCallDialog: React.FC<VideoCallDialogProps> = ({
   isOpen,
   onHide,
+  onError,
 }) => {
   const [isHost, setHost] = useState(true); // Manages host/audience role
   const [isPinned, setPinned] = useState(false); // Toggles layout mode
-  const [username, setUsername] = useState(""); // Manages the user’s name
+  const [username, setUsername] = useState("guest"); // Manages the user's name
   const [isClient, setIsClient] = useState(false); // Ensures client-side rendering
 
   const agoraAppId = process.env.NEXT_PUBLIC_AGORA_APP_ID;
 
-  if (!agoraAppId) {
-    throw new Error("Agora App ID is not defined in the environment variables");
-  }
+  // Handle missing Agora App ID
+  useEffect(() => {
+    if (!agoraAppId && onError) {
+      onError("Agora App ID is not defined in environment variables.");
+    }
+  }, [agoraAppId, onError]);
 
   // Ensure component is only rendered client-side
   useEffect(() => {
@@ -44,6 +45,7 @@ const VideoCallDialog: React.FC<VideoCallDialogProps> = ({
   // Custom CSS styles for the dialog and its content
   const dialogStyle: React.CSSProperties = {
     width: "100vw",
+    zIndex: 1000,
   };
 
   const containerStyle: React.CSSProperties = {
@@ -81,6 +83,7 @@ const VideoCallDialog: React.FC<VideoCallDialogProps> = ({
       onHide={onHide}
       modal={true}
       style={dialogStyle}
+      className="bg-opacity-100 bg-gray-50 rounded-lg shadow-2xl"
     >
       <div style={containerStyle}>
         <div style={videoContainerStyle}>
@@ -96,21 +99,25 @@ const VideoCallDialog: React.FC<VideoCallDialogProps> = ({
             </p>
           </div>
           {/* AgoraUIKit Video Call Integration */}
-          <AgoraUIKit
-            rtcProps={{
-              appId: agoraAppId as string, // Guaranteed to be a valid string now
-              channel: "test",
-              token: null,
-              role: isHost ? "host" : "audience",
-              layout: isPinned ? layout.pin : layout.grid,
-              enableScreensharing: true,
-            }}
-            rtmProps={{ username: username || "user", displayUsername: true }}
-            callbacks={{
-              EndCall: onHide,
-            }}
-          />
-          ;{" "}
+          {agoraAppId ? (
+            <AgoraUIKit
+              rtcProps={{
+                appId: agoraAppId as string, // Agora App ID from environment variables
+                channel: "test", // Replace with dynamic channel name if needed
+                token: null, // Add token handling here
+                role: isHost ? "host" : "audience",
+                layout: isPinned ? layout.pin : layout.grid,
+                // layout: isPinned ? layout.pin : layout.grid,
+                enableScreensharing: true,
+              }}
+              rtmProps={{ username: username || "user", displayUsername: true }}
+              callbacks={{
+                EndCall: onHide,
+              }}
+            />
+          ) : (
+            <p className="text-red-600">Failed to load Agora components.</p>
+          )}
         </div>
       </div>
     </Dialog>

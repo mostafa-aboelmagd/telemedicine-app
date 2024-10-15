@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "@/components/navbarComp/navbar";
 import { ProfileProvider } from "@/context/ProfileContext";
 import { DoctorProvider } from "@/context/GetDoctorsContext";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
