@@ -7,17 +7,30 @@ import dynamic from "next/dynamic"; // Dynamic import for Agora UIKit
 
 const AgoraUIKit = dynamic(() => import("agora-react-uikit"), { ssr: false });
 
-import "agora-react-uikit/dist/index.css";
+import "agora-react-uikit/dist/index.css"; // Import Agora UIKit CSS
 
-const VideoCallDialog: React.FunctionComponent<{
-  isOpen: boolean;
-  onHide: () => void;
-}> = ({ isOpen, onHide }) => {
-  const [isHost, setHost] = useState(true);
-  const [isPinned, setPinned] = useState(false);
-  const [username, setUsername] = useState("");
-  const [isClient, setIsClient] = useState(false);
+// Props definition for the VideoCallDialog component
+interface VideoCallDialogProps {
+  isOpen: boolean; // Determines whether the dialog is open
+  onHide: () => void; // Callback to hide/close the dialog
+}
 
+const VideoCallDialog: React.FC<VideoCallDialogProps> = ({
+  isOpen,
+  onHide,
+}) => {
+  const [isHost, setHost] = useState(true); // Manages host/audience role
+  const [isPinned, setPinned] = useState(false); // Toggles layout mode
+  const [username, setUsername] = useState(""); // Manages the user’s name
+  const [isClient, setIsClient] = useState(false); // Ensures client-side rendering
+
+  const agoraAppId = process.env.NEXT_PUBLIC_AGORA_APP_ID;
+
+  if (!agoraAppId) {
+    throw new Error("Agora App ID is not defined in the environment variables");
+  }
+
+  // Ensure component is only rendered client-side
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsClient(true);
@@ -28,6 +41,7 @@ const VideoCallDialog: React.FunctionComponent<{
     return null; // Avoid rendering server-side
   }
 
+  // Custom CSS styles for the dialog and its content
   const dialogStyle: React.CSSProperties = {
     width: "100vw",
   };
@@ -81,9 +95,10 @@ const VideoCallDialog: React.FunctionComponent<{
               Change Layout
             </p>
           </div>
+          {/* AgoraUIKit Video Call Integration */}
           <AgoraUIKit
             rtcProps={{
-              appId: "c27f95cfa894406c81a0c51deecacc65",
+              appId: agoraAppId, // Guaranteed to be a valid string now
               channel: "test",
               token: null,
               role: isHost ? "host" : "audience",
@@ -95,6 +110,7 @@ const VideoCallDialog: React.FunctionComponent<{
               EndCall: onHide,
             }}
           />
+          ;{" "}
         </div>
       </div>
     </Dialog>

@@ -28,6 +28,7 @@ const FollowUpAppointments: React.FC<FollowUpAppointmentsProps> = ({
 
   const handleSaveAppointment = () => {
     console.log("Selected appointment saved:", selectedAppointment);
+    console.log("appointmentState:", appointmentState);
     setShowDialog(false);
   };
 
@@ -37,11 +38,13 @@ const FollowUpAppointments: React.FC<FollowUpAppointmentsProps> = ({
         <input
           type="radio"
           name="type"
-          value="follow-up"
-          checked={appointmentState === "follow-up"}
+          value="Follow_up"
+          checked={appointmentState === "Follow_up"}
           onChange={() => {
             setAppointmentState(
-              appointments.length > 0 ? "follow-up" : "First_time"
+              appointments && appointments.length > 0
+                ? "Follow_up"
+                : "First_time"
             );
             handleFollowUpClick();
           }}
