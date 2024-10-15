@@ -39,6 +39,7 @@
 23. **Doctor View Education:** `/doctor/profile/education`
 24. **Doctor View reviews:** `/doctor/profile/reviews`
 25. **Doctor View interests:** `/doctor/profile/interests` -->
+
 26. **Doctor Availability Addition:** `/doctor/availability/add`(tested)
 27. **Doctor Availability Deletion:** `/doctor/availability/delete`(tested)
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
@@ -60,6 +61,11 @@
 44. **Doctor deletes language:**`/languages/:language_id`(Tested)
 45. **Doctor deletes Interest:**`interests/:doctor_interest_id`(Tested)
 
+#### BackOffice Endpoints listed are:
+
+1. **retrieve all patients** `/backOffice/getAllPatients`
+2. **retrieve patient:** `/backOffice/getPatient/:patientId`
+3. **change patient state:** `/backOffice/changePatientState/:patientId`
 
 ---
 
@@ -723,57 +729,57 @@
   - `Authorization: Bearer your_access_token`
   - **Response Body:**
   ```json
-   {
+  {
     "certificates": [
-        {
-            "id": 22,
-            "authority": "Test firm",
-            "startDate": "2015-10-05T22:00:00.000Z",
-            "endDate": "2024-10-05T21:00:00.000Z",
-            "name": "Test title"
-        }
+      {
+        "id": 22,
+        "authority": "Test firm",
+        "startDate": "2015-10-05T22:00:00.000Z",
+        "endDate": "2024-10-05T21:00:00.000Z",
+        "name": "Test title"
+      }
     ],
     "experiences": [
-        {
-            "id": 14,
-            "department": "Test certificate ",
-            "firm": "Test auth ",
-            "startDate": "2010-10-05T22:00:00.000Z",
-            "endDate": "2014-10-05T22:00:00.000Z",
-            "title": null
-        }
+      {
+        "id": 14,
+        "department": "Test certificate ",
+        "firm": "Test auth ",
+        "startDate": "2010-10-05T22:00:00.000Z",
+        "endDate": "2014-10-05T22:00:00.000Z",
+        "title": null
+      }
     ],
     "interests": [
-        {
-            "id": 15,
-            "category": "Cat1",
-            "name": "Interest test 1"
-        },
-        {
-            "id": 16,
-            "category": "Cat2",
-            "name": "Interest 2"
-        }
+      {
+        "id": 15,
+        "category": "Cat1",
+        "name": "Interest test 1"
+      },
+      {
+        "id": 16,
+        "category": "Cat2",
+        "name": "Interest 2"
+      }
     ],
     "languages": [
-        {
-            "id": 70,
-            "name": "English"
-        },
-        {
-            "id": 71,
-            "name": "Spanish"
-        },
-        {
-            "id": 72,
-            "name": "French"
-        },
-        {
-            "id": 73,
-            "name": "Arabic"
-        }
+      {
+        "id": 70,
+        "name": "English"
+      },
+      {
+        "id": 71,
+        "name": "Spanish"
+      },
+      {
+        "id": 72,
+        "name": "French"
+      },
+      {
+        "id": 73,
+        "name": "Arabic"
+      }
     ]
-   }
+  }
   ```
 
 ---
@@ -1203,6 +1209,7 @@ with wrong appointmentId:
     "Languages": true
   }
   ```
+
 37. **Doctor Books Followup Appointment:** `/doctor/FollowupAppointment`
 
 - **Method:** Post
@@ -1223,9 +1230,9 @@ with wrong appointmentId:
   ```json
   {
     "message": "Followup Appointment created successfully"
-    
   }
   ```
+
 38. **Doctor adds language:**`/doctor/profile/languages`(Tested)
 
 - **Method:** Post
@@ -1244,9 +1251,9 @@ with wrong appointmentId:
   ```json
   {
     "message": "New Language added"
-    
   }
   ```
+
 39. **Doctor adds Experience:**`/doctor/profile/experience`(Tested)
 
 - **Method:** Post
@@ -1270,15 +1277,16 @@ with wrong appointmentId:
   ```json
   {
     "message": "New Experience added"
-    
   }
   ```
+
   40. **Doctor adds Education:**`/doctor/profile/education`(Tested)
-  
+
 - **Method:** Post
 - **Request Headers:**
 - **Parameters:**
 - **Request Body:**
+
   ````json
   {
   "education": {
@@ -1291,20 +1299,22 @@ with wrong appointmentId:
 
       ```
   ````
+
 - **Response Body:**
 
   ```json
   {
     "message": "New Certificate added"
-    
   }
   ```
+
   40. **Doctor adds Interest:**`/doctor/profile/interests`(Tested)
-  
+
 - **Method:** Post
 - **Request Headers:**
 - **Parameters:**
 - **Request Body:**
+
   ````json
   {
   "Interest": {
@@ -1315,67 +1325,152 @@ with wrong appointmentId:
 
       ```
   ````
+
 - **Response Body:**
 
   ```json
   {
     "message": "New Interest added"
-    
   }
   ```
+
 42. **Doctor deletes experience:**`/experience/:doctor_experience_id`(Tested)
+
 - **Method:** Delete
 - **Request Headers:**
 - **Parameters:**
- - [`doctor_experience_id`]
+- [`doctor_experience_id`]
 
 - **Response Body:**
 
   ```json
   {
     "message": "Experience deleted successfully"
-    
   }
   ```
+
 43. **Doctor deletes education:**`education/:doctor_education_id`(Tested)
+
 - **Method:** Delete
 - **Request Headers:**
 - **Parameters:**
- - [`doctor_education_id`]
+- [`doctor_education_id`]
 
 - **Response Body:**
 
   ```json
   {
     "message": "Education deleted successfully"
-    
   }
   ```
+
 44. **Doctor deletes language:**`/languages/:language_id`(Tested)
+
 - **Method:** Delete
 - **Request Headers:**
 - **Parameters:**
- - [`language_id`]
+- [`language_id`]
 
 - **Response Body:**
 
   ```json
   {
     "message": "Language deleted successfully"
-    
   }
   ```
+
 45. **Doctor deletes Interest:**`interests/:doctor_interest_id`(Tested)
+
 - **Method:** Delete
 - **Request Headers:**
 - **Parameters:**
- - [`doctor_interest_id`]
+- [`doctor_interest_id`]
 
 - **Response Body:**
 
   ```json
   {
     "message": "Interest deleted successfully"
-    
+  }
+  ```
+
+## ** BackOffice Endpoint Documentation **
+
+1. **get all patients:**`backOffice/getAllPatients?order=created_at,-user_first_name&&limit=100`
+   1.only available fields ["user_first_name", "created_at", "updated_at"] 2. (-) for descending order 3. limit default 100 0> && <10000
+
+- **Method:** GET
+- **Request Headers:**
+  - `Authorization: Bearer your_access_token`
+- **Parameters:**
+
+- **Response Body:**
+
+  ```json
+  {
+    "status": "success",
+    "ok":true ,
+  "patients": [{
+    "user_first_name"
+    "user_last_name"
+    "created_at"
+  }]
+  }
+  ```
+
+2. **get patient:**`backOffice/getPatient/:patientId`
+
+- **Method:** GET
+- **Request Headers:**
+  - `Authorization: Bearer your_access_token`
+- **Parameters:**
+- [`patientId`]
+
+- **Response Body:**
+
+  ```json
+  {
+    "status": "success",
+    "ok": true,
+    "patient": {
+      "user_email"
+      "user_phone_number"
+      "user_gender"
+      "user_birth_date"
+      "user_first_name"
+      "user_last_name"
+      "languages"
+    }
+  }
+  ```
+
+3. **change pateint state :**`backOffice/changePatientState/:patientId`
+
+- **Method:** PATCH
+- **Request Headers:**
+
+  - `Authorization: Bearer your_access_token`
+  - `Content-Type: application/json`
+
+- **Parameters:**
+- [`patientId`]
+
+- **Request Body:**
+
+  ````json
+  {
+  "state"
+  }
+      ```
+
+  ````
+
+- **Response Body:**
+
+  ```json
+  {
+    "status": "success",
+    "ok": true,
+    "message": "state changed successfully"
   }
   ```

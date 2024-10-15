@@ -28,7 +28,11 @@ const pool = new pg.Pool({
 
 exports.retrieveAllPatients = async (queryOptions) => {
   try {
-    const query = `SELECT * FROM users WHERE user_role = $1 ${queryOptions}`;
+    const query = `SELECT user_id, 
+    user_first_name, 
+    user_last_name, 
+    created_at 
+    FROM users WHERE user_role = $1 ${queryOptions}`;
     const result = await pool.query(query, ["Patient"]);
     if (result.rows.length) {
       return result.rows;
@@ -39,7 +43,7 @@ exports.retrieveAllPatients = async (queryOptions) => {
   }
 };
 
-exports.changePatientState = async (id, email, state) => {
+exports.changePatientState = async (id, state) => {
   try {
     const query = `UPDATE patient SET patient_account_state=$1 WHERE patient_user_id_reference=$2 RETURNING *`;
     const result = await pool.query(query, [state, id]); // Safe injection

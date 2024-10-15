@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use("/", tokenAuthentication, restrictTo("Patient"));
 router.get("/getAllPatients", backOfficeController.getAllPatients);
-router.post("/getPatient", backOfficeController.getPatientInfo);
-router.post("/changePatientState", backOfficeController.changePersonState);
+router.get("/getPatient/:id", backOfficeController.getPatientInfo);
+router.patch("/changePatientState/:id", backOfficeController.changePersonState);
 
 module.exports = router;
