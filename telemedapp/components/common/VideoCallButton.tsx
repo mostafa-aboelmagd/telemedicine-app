@@ -7,10 +7,18 @@ const VideoCallDialog = React.lazy(() => import("./VideoCallDialog"));
 
 const VideoCallButton: React.FC<{ label: string }> = ({ label }) => {
   const [isVideoCallOpen, setVideoCallOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // New state for loading status
   const [error, setError] = useState<string | null>(null);
 
-  const handleOpenVideoCall = () => setVideoCallOpen(true);
-  const handleCloseVideoCall = () => setVideoCallOpen(false);
+  const handleOpenVideoCall = () => {
+    setIsLoading(true); // Start loading
+    setVideoCallOpen(true);
+  };
+
+  const handleCloseVideoCall = () => {
+    setIsLoading(false); // Stop loading when the dialog closes
+    setVideoCallOpen(false);
+  };
 
   // Error boundary fallback in case of loading issues
   const renderError = () => (
@@ -22,11 +30,11 @@ const VideoCallButton: React.FC<{ label: string }> = ({ label }) => {
       {error && renderError()}
       <Button
         onClick={handleOpenVideoCall}
-        label={label}
+        label={isLoading ? "Loading Video Call..." : label} // Change label when loading
         className="bg-sky-600 hover:bg-sky-700 text-white md:text-sm text-xs font-medium py-2 px-4 rounded-lg w-full"
       />
       {/* Lazy load VideoCallDialog with error handling */}
-      <Suspense fallback={<div>Loading Video Call...</div>}>
+      <Suspense>
         {isVideoCallOpen && (
           <VideoCallDialog
             isOpen={isVideoCallOpen}
