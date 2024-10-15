@@ -6,6 +6,7 @@ import { layout } from "agora-react-uikit"; // Import layout from Agora UIKit
 import dynamic from "next/dynamic"; // Dynamic import for Agora UIKit
 
 const AgoraUIKit = dynamic(() => import("agora-react-uikit"), { ssr: false });
+
 import "agora-react-uikit/dist/index.css";
 
 const VideoCallDialog: React.FunctionComponent<{
@@ -18,15 +19,17 @@ const VideoCallDialog: React.FunctionComponent<{
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true); // Set client-side flag
+    if (typeof window !== "undefined") {
+      setIsClient(true);
+    }
   }, []);
 
   if (!isClient) {
-    return null; // Do not render on the server
+    return null; // Avoid rendering server-side
   }
 
   const dialogStyle: React.CSSProperties = {
-    width: "80vw",
+    width: "100vw",
   };
 
   const containerStyle: React.CSSProperties = {
