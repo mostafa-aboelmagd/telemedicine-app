@@ -30,8 +30,8 @@ export default function Profile({ navigation }) {
   const [selectedCertId, setSelectedCertId] = useState(null);
   const [selectedExpId, setSelectedExpId] = useState(null);
   const [selectedInterestId, setSelectedInterestId] = useState(null);
-  // State for add functions
 
+  // State for add functions
   const [showAddCertModal, setShowAddCertModal] = useState(false);
   const [showAddExpModal, setShowAddExpModal] = useState(false);
   const [showAddInterestModal, setShowAddInterestModal] = useState(false);
@@ -342,48 +342,7 @@ export default function Profile({ navigation }) {
     }
     return null;
   };
-  // simplified mockup
-  const data = {
-    certificates: [
-      {
-        id: 120,
-        authority: "American College of Surgeons",
-        endDate: "2025-12-31",
-        name: "Board Certified General Surgeon",
-        startDate: "2020-01-01",
-      },
-      {
-        id: 121,
-        authority: "American Medical Association",
-        endDate: "2024-12-31",
-        name: "Fellow of the American College of Surgeons",
-        startDate: "2018-01-01",
-      },
-    ],
-    experiences: [
-      {
-        id: 120,
-        department: "General Surgery",
-        endDate: "2024-06-30",
-        firm: "St. Mary's Hospital",
-        startDate: "2020-07-01",
-        title: "Attending Surgeon",
-      },
-      {
-        id: 121,
-        department: "Surgical Oncology",
-        endDate: "2022-12-31",
-        firm: "Memorial Sloan Kettering Cancer Center",
-        startDate: "2018-01-01",
-        title: "Clinical Fellow",
-      },
-    ],
-    interests: [
-      { id: 121, category: "Medical Research", name: "Surgical Oncology" },
-      { id: 121, category: "Teaching", name: "Medical Student Education" },
-    ],
-    Languages: ["English", "Spanish"],
-  };
+  
   const fetchDoctorInfo = async () => {
     try {
       const response = await fetch(
@@ -407,9 +366,103 @@ export default function Profile({ navigation }) {
       setIsLoading(false);
     }
   };
+
+  const [moreData, setMoreData] = useState({
+    "certificates": [
+        {
+            "id": 22,
+            "authority": "Test firm",
+            "startDate": "2015-10-05T22:00:00.000Z",
+            "endDate": "2024-10-05T21:00:00.000Z",
+            "name": "Test title"
+        }
+    ],
+    "experiences": [
+        {
+            "id": 14,
+            "department": "Test certificate ",
+            "firm": "Test auth ",
+            "startDate": "2010-10-05T22:00:00.000Z",
+            "endDate": "2014-10-05T22:00:00.000Z",
+            "title": null
+        }
+    ],
+    "interests": [
+        {
+            "id": 15,
+            "category": "Cat1",
+            "name": "Interest test 1"
+        },
+        {
+            "id": 16,
+            "category": "Cat2",
+            "name": "Interest 2"
+        }
+    ],
+    "languages": [
+        {
+            "id": 70,
+            "name": "English"
+        },
+        {
+            "id": 71,
+            "name": "Spanish"
+        },
+        {
+            "id": 72,
+            "name": "French"
+        },
+        {
+            "id": 73,
+            "name": "Arabic"
+        }
+    ]
+   }
+  );
+  
+  const moreInfo = async () => {
+    setIsLoading(true);  // Start the loading state
+    try {
+      const response = await fetch(
+        `${NEXT_PUBLIC_SERVER_NAME}/doctor/profile/DoctorFurtherInformation`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        }
+      );
+  
+      if (!response.ok) {
+        console.log('Response not ok');
+        await AsyncStorage.removeItem("userToken");
+        navigation.navigate("sign in");
+        throw new Error("Network response was not ok");
+      }
+  
+      const data = await response.json();  
+      // Update state with new data
+      setMoreData({
+        certificates: data.certificates,  // Provide default empty array
+        experiences: data.experiences,
+        interests: data.interests,
+        languages: data.languages,
+      });
+  
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setIsLoading(false);  // End the loading state
+    }
+  };
+  
+
   useFocusEffect(
     React.useCallback(() => {
       fetchDoctorInfo();
+      moreInfo();
+      console.log(moreData);
     }, []) // Empty dependency array
   );
 
@@ -534,12 +587,12 @@ export default function Profile({ navigation }) {
         <View style={styles.container}>
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>Experience</Text>
-            {data.experiences.map((exp, index) => (
+            {moreData.experiences.map((exp, index) => (
               <View key={index} style={styles.card}>
                 <Text style={styles.sectionContent}>Title: {exp.title}</Text>
                 <Text style={styles.sectionContent}>Firm: {exp.firm}</Text>
                 <Text style={styles.sectionContent}>
-                  From: {exp.startDate} To: {exp.endDate}
+                  From: {exp.startDate.split('T')[0]} To: {exp.endDate.split('T')[0]}
                 </Text>
               </View>
             ))}
@@ -560,14 +613,14 @@ export default function Profile({ navigation }) {
           </View>
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>Certificates</Text>
-            {data.certificates.map((cert, index) => (
+            {moreData.certificates.map((cert, index) => (
               <View key={index} style={styles.experienceItem}>
                 <Text style={styles.sectionContent}>Name: {cert.name}</Text>
                 <Text style={styles.sectionContent}>
                   Authority: {cert.authority}
                 </Text>
                 <Text style={styles.sectionContent}>
-                  From: {cert.startDate} To: {cert.endDate}
+                  From: {cert.startDate.split('T')[0]} To: {cert.endDate.split('T')[0]}
                 </Text>
               </View>
             ))}
@@ -586,12 +639,12 @@ export default function Profile({ navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-
+          
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>Languages</Text>
-            {data.Languages.map((lang, index) => (
+            {moreData.languages.map((lang, index) => (
               <Text key={index} style={styles.sectionContent}>
-                {lang}
+                {lang.name}
               </Text>
             ))}
             <View style={styles.buttonContainer}>
@@ -609,7 +662,7 @@ export default function Profile({ navigation }) {
 
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>Interests</Text>
-            {data.interests.map((interest, index) => (
+            {moreData.interests.map((interest, index) => (
               <View key={index} style={styles.experienceItem}>
                 <Text style={styles.sectionContent}>
                   {interest.name} - {interest.category}
@@ -663,7 +716,7 @@ export default function Profile({ navigation }) {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Delete Certificate</Text>
-            {data.certificates.map((cert) => (
+            {moreData.certificates.map((cert) => (
               <TouchableOpacity
                 key={cert.id}
                 onPress={() => setSelectedCertId(cert.id)}
@@ -691,7 +744,7 @@ export default function Profile({ navigation }) {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Delete Experience</Text>
-            {data.experiences.map((exp) => (
+            {moreData.experiences.map((exp) => (
               <TouchableOpacity
                 key={exp.id}
                 onPress={() => setSelectedExpId(exp.id)}
@@ -885,7 +938,7 @@ export default function Profile({ navigation }) {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Delete Interest</Text>
-            {data.interests.map((interest) => (
+            {moreData.interests.map((interest) => (
               <TouchableOpacity
                 key={interest.id}
                 onPress={() => setSelectedInterestId(interest.id)}
