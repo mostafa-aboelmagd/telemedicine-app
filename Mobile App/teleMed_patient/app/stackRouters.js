@@ -32,6 +32,7 @@ import Book from './screens/profile/book';
 import ChangePassword from './screens/profile/changePassword';
 import EditInfo from './screens/profile/edit_info';
 import Wallet from './screens/profile/wallet';
+import RatingPage from './screens/profile/rating'
 
 
 const Stack = createStackNavigator();
@@ -39,7 +40,7 @@ const Stack = createStackNavigator();
 export default function StackRouters() {
   return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="profile">
+        <Stack.Navigator initialRouteName="rating">
             {/* welcome page */}
             <Stack.Screen name='index' component={Index} options={{ headerShown : false}} />
             <Stack.Screen name='sign in' component={SignIn} options={{ headerShown : false}} />
@@ -76,6 +77,7 @@ export default function StackRouters() {
             <Stack.Screen name='changePassword' component={ChangePassword} options={{ headerShown : false}} />
             <Stack.Screen name='edit info' component={EditInfo} options={{ headerShown : false}} />
             <Stack.Screen name='wallet' component={Wallet} options={{ headerShown : false}} />
+            <Stack.Screen name='rating' component={RatingPage} options={{ headerShown : false}} />
 
         </Stack.Navigator>
     </NavigationContainer>
