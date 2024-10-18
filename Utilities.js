@@ -1,3 +1,4 @@
+const { query } = require("express");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { ACCESS_TOKEN_EXPIRATION_IN_DAYS, ACCESS_TOKEN_SECRET_KEY } =
@@ -128,6 +129,35 @@ const restrictTo = (...roles) => {
     next();
   };
 };
+
+const queryHandler = (query) => {
+  // const validParams = ['user_email' , 'user_phone_number' , 'user_gender' ,'user_birth_date' , 'user_first_name' ,'user_last_name']
+  let { order, limit } = query;
+  if (!limit || !Number.isInteger(+limit) || +limit > 10000 || +limit < 0) {
+    limit = 100;
+  }
+  let queryOptions = `LIMIT ${limit} `;
+
+  if (order) {
+    const orderArr = order.split(",");
+    const orderDir = orderArr
+      .map((el, i) => {
+        if (el.startsWith("-")) {
+          orderArr[i] = el.slice(1);
+          return "DESC";
+        }
+        return "ASC";
+      })
+      .join("|");
+    // const isValidCol = orderArr.every((el) => validCol.includes(el));
+    // if (!isValidCol) {
+    //   return next(new AppError("Invalid order fields....", 400));
+    // }
+    queryOptions = `ORDER BY ${orderArr.join(" ")} ${orderDir}`;
+  }
+  return queryOptions;
+  //
+};
 module.exports = AppError;
 
 module.exports = {
@@ -142,4 +172,5 @@ module.exports = {
   catchAsyncError,
   globalErrorHanlder,
   restrictTo,
+  queryHandler,
 };

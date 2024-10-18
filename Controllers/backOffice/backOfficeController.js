@@ -1,31 +1,27 @@
 const { AppError } = require("../../Utilities");
 const { catchAsyncError } = require("../../Utilities");
-const {
-  retrievePatientInfo,
-  retrievePatientAppointments,
-} = require("../../Database/Patient/Profile");
+const { retrievePatientInfo } = require("../../Database/Patient/Profile");
 const {
   retrieveAllPatients,
+  retrieveAllDoctors,
+  retrievePatientAppointments,
 } = require("../../Database/backOffice/backOfficeModel");
 const {
   changePatientState,
+  changePersonState,
 } = require("../../Database/backOffice/backOfficeModel");
+const { queryHandler } = require("../../Utilities");
 const { emit } = require("nodemon");
+const { query } = require("express");
 
-// exports.getAllAppointments = catchAsyncError(async (req, res, next) => {
-//   const { id } = req;
-//   if (!id) {
-//     return next(new AppError("User id not found....💣💣💣", 400));
-//   }
-//   res.status(200).json({
-//     status: "sucess",
-//     ok: true,
-//   });
-// });
 exports.getPatientInfo = catchAsyncError(async (req, res, next) => {
-  const { id } = req.params;
-  if (!id) return next(new AppError("Please provide id  ...💣💣💣", 400));
-  const patientInfo = await retrievePatientInfo(id);
+  const { field } = req.params;
+  let id, email;
+  if (!field) return next(new AppError("Please provide id  ...💣💣💣", 400));
+  if (Number.isInteger(field)) id = field;
+  else email = field;
+
+  const patientInfo = await retrievePatientInfo(id, email);
   // const patientApp = await retrievePatientAppointments(id);
   if (patientInfo) {
     return res.status(200).json({
@@ -38,20 +34,20 @@ exports.getPatientInfo = catchAsyncError(async (req, res, next) => {
   return next(new AppError("Invalid id or email...💣💣💣", 400));
 });
 
-exports.changePersonState = catchAsyncError(async (req, res, next) => {
+exports.changePatientState = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   if (!id) return next(new AppError("User id not found...💣💣", 400));
   const { state } = req.body;
   if (!state)
     return next(new AppError("Please provide the new state....", 400));
 
-  const patient = await changePatientState(id, state);
+  const patient = await changePersonState("patient", id, state);
 
   console.log(patient);
 
   if (!patient) return next(new AppError("failed to updated data .....", 400));
 
-  res.status(202).json({
+  res.status(204).json({
     status: "success",
     ok: true,
     message: "state changed successfully",
@@ -59,34 +55,11 @@ exports.changePersonState = catchAsyncError(async (req, res, next) => {
 });
 
 exports.getAllPatients = catchAsyncError(async (req, res, next) => {
-  // order validation to avoid injection
-  const validCol = ["user_first_name", "created_at", "updated_at"];
-  let { order, limit } = req.query;
-  if (!limit || !Number.isInteger(+limit) || +limit > 10000 || +limit < 0) {
-    limit = 100;
-  }
-  let queryOptions = `LIMIT ${limit} `;
-
-  if (order) {
-    const orderArr = order.split(",");
-    const orderDir = orderArr
-      .map((el, i) => {
-        if (el.startsWith("-")) {
-          orderArr[i] = el.slice(1);
-          return "DESC";
-        }
-        return "ASC";
-      })
-      .join("|");
-    const isValidCol = orderArr.every((el) => validCol.includes(el));
-    if (!isValidCol) {
-      return next(new AppError("Invalid order fields....", 400));
-    }
-    queryOptions = `ORDER BY ${orderArr.join(" ")} ${orderDir}`;
-  }
+  const queryOptions = queryHandler(req.query);
+  const { fields } = req.query;
   //
 
-  const patients = await retrieveAllPatients(queryOptions);
+  const patients = await retrieveAllPatients(queryOptions, fields);
   if (!patients) {
     return next(new AppError("no patients founded....", 400));
   }
@@ -95,4 +68,58 @@ exports.getAllPatients = catchAsyncError(async (req, res, next) => {
     ok: true,
     patients,
   });
+});
+
+exports.getPatientAppointment = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+  const queryOptions = queryHandler(req.query);
+  const { fields } = req.query;
+
+  if (!id) return next(new AppError("Please Provide Patient id ....⛔", 400));
+  const patientAppointments = await retrievePatientAppointments(
+    id,
+    queryOptions,
+    fields
+  );
+  if (patientAppointments) {
+    res.status(200).json({
+      status: "success",
+      ok: true,
+      patientAppointments,
+    });
+  }
+});
+
+exports.getAllDoctors = catchAsyncError(async (req, res, next) => {
+  let doctors = await retrieveAllDoctors();
+  if (!doctors) doctors = [];
+  res.status(200).json({
+    status: "success",
+    ok: true,
+    doctors,
+  });
+});
+
+exports.changeDoctorState = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+  if (!id) return next(new AppError("Please Provide Dcotor id ....⛔", 400));
+
+  const { state } = req.body;
+  if (!state)
+    return next(new AppError("Please Provide Dcotor New State ....⛔", 400));
+
+  const result = await changePersonState("doctor", id, state);
+  if (result) {
+    return res.status(204).json({
+      status: "succes",
+      ok: true,
+      message: "Doctor State Updated Successfully..",
+    });
+  }
+  return next(
+    new AppError(
+      "Failed to update Doctor State , Please try agian later..⛔💣",
+      400
+    )
+  );
 });

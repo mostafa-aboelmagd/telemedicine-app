@@ -35,7 +35,7 @@ const retrievePatientInfo = async (id, email) => {
     array_agg(L.language) AS languages
     FROM users U
     LEFT JOIN languages L ON u.user_id = L.lang_user_id
-    WHERE U.user_id = $1 AND U.user_email = $2 AND U.user_role = $3
+    WHERE  U.user_email = $2 AND U.user_role = $3
     GROUP BY U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name`;
     } else {
       query = `SELECT 
@@ -117,7 +117,7 @@ const retrievePatientAppointments = async (patientId) => {
         a.appointment_status = $2`,
     [patientId, "Approved"]
   );
-
+  console.log(result.rows);
   return result.rows;
 };
 // not tested with new data model
