@@ -60,6 +60,7 @@
 43. **Doctor deletes education:**`education/:doctor_education_id`(Tested)
 44. **Doctor deletes language:**`/languages/:language_id`(Tested)
 45. **Doctor deletes Interest:**`interests/:doctor_interest_id`(Tested)
+46. **Patient submit Review:**`/patient/appointment/203/review`(Tested)
 
 #### BackOffice Endpoints listed are:
 
@@ -1391,6 +1392,32 @@ with wrong appointmentId:
   ```json
   {
     "message": "Interest deleted successfully"
+  }
+  ```
+46. **Patient submit Review:**`/patient/appointment/203/review`(Tested)
+
+- **Method:** Post
+- **Request Headers:**
+- **Parameters:**(appointment)
+- **Request Body:**
+
+  ````json
+  {
+  "doctorId": 56, 
+  "communication_rating": 5,
+  "understanding_rating": 5,
+  "providing_solution_rating": 5,
+  "commitment_rating": 5
+  }
+
+      ```
+  ````
+
+- **Response Body:**
+
+  ```json
+  {
+    "message": "Review submitted successfully"
   }
   ```
 
