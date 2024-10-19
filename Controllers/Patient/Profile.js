@@ -2,7 +2,7 @@ const  database  = require('../../Database/Patient/Profile');
 
 const patientInfo = async (req, res) => {
     const patientUserId = req.id;
-    // const patientEmail = req.email;
+    const patientEmail = req.email;
     let message = '';
     if (!patientUserId) {
         message = 'Patient ID not found';
