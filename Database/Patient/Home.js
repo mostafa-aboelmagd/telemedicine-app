@@ -45,7 +45,7 @@ const retrieveDoctors = async () => {
         const query = 
         `SELECT 
         U.user_id, U.user_first_name, U.user_last_name, U.user_gender,
-        D.doctor_specialization, D.doctor_country, D.doctor_thirty_min_price, D.doctor_sixty_min_price, D.doctor_image,
+        D.doctor_specialization, D.doctor_country, D.doctor_thirty_min_price, D.doctor_sixty_min_price, D.doctor_image,D.doctor_rating,D.review_count,
         DI.doctor_interest_name,
         L.language
         FROM doctor D

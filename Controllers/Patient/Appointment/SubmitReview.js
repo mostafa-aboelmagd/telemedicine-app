@@ -18,10 +18,11 @@ const SubmitReview = async (req, res) => {
      const { doctor_rating, review_count } = doctorRatingResult;
 
       // Calculate the new doctor rating
+      const newReview_Count=review_count+1;
       const newRating = ((doctor_rating * review_count + (communication_rating + understanding_rating + providing_solution_rating + commitment_rating)) / 4) / (review_count + 1);
       console.log(newRating);
       // Update the new doctor rating
-      await database.NewDoctorRating(doctorId, newRating);
+      await database.NewDoctorRating(doctorId, newRating,newReview_Count);
     }
 
   

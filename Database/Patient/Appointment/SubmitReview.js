@@ -72,17 +72,17 @@ if (result.rows.length === 0 || result.rows[0].review_count === 0) {
 }
 };
 
-const NewDoctorRating = async (doctorID,newRating) => {
+const NewDoctorRating = async (doctorID,newRating, newReview_Count) => {
     try {
       console.log(doctorID, newRating)
   
       // Insert the Rating into the database
       const result = await pool.query(
         `UPDATE doctor
-        SET doctor_rating = $1
-        WHERE doctor_user_id_reference= $2
+        SET doctor_rating = $1, review_count=$2
+        WHERE doctor_user_id_reference= $3
         RETURNING doctor_rating`, 
-        [newRating, doctorID] 
+        [newRating, newReview_Count,doctorID] 
       );
   
       return result.rows[0].appointment_id;
