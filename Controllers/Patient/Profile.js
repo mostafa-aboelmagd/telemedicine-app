@@ -2,7 +2,7 @@ const  database  = require('../../Database/Patient/Profile');
 
 const patientInfo = async (req, res) => {
     const patientUserId = req.id;
-    const patientEmail = req.email;
+    // const patientEmail = req.email;
     let message = '';
     if (!patientUserId) {
         message = 'Patient ID not found';
@@ -12,7 +12,7 @@ const patientInfo = async (req, res) => {
         message = 'Patient email not found';
         return res.status(404).json(message);
     }
-    const patient = await database.retrievePatientInfo(patientUserId, patientEmail);
+    const patient = await database.retrievePatientInfo(patientUserId);
     if (!patient) {
         message = 'Could not retrieve patient info';
         return res.status(400).json(message);

@@ -26,18 +26,9 @@ const pool = new pg.Pool({
   }
 })();
 
-const retrievePatientInfo = async (id, email) => {
+const retrievePatientInfo = async (id) => {
   try {
     let query;
-    if (email) {
-      query = `SELECT 
-    U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name,
-    array_agg(L.language) AS languages
-    FROM users U
-    LEFT JOIN languages L ON u.user_id = L.lang_user_id
-    WHERE  U.user_email = $2 AND U.user_role = $3
-    GROUP BY U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name`;
-    } else {
       query = `SELECT 
     U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name,
     array_agg(L.language) AS languages
@@ -45,8 +36,6 @@ const retrievePatientInfo = async (id, email) => {
     LEFT JOIN languages L ON u.user_id = L.lang_user_id
     WHERE U.user_id = $1  AND U.user_role = $2
     GROUP BY U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name`;
-    }
-
     const result = await pool.query(query, [id, "Patient"]);
     if (result.rows.length) {
       console.log("Patient info found", result.rows);
