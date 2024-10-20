@@ -6,7 +6,6 @@ const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const http = require('http'); // Add this line
 const { initiateChatServer } = require('./Controllers/Chat');
-
 const userLoginRoute = require("./Routes/Login");
 const userLogoutRoute = require("./Routes/Logout");
 const patientRegisterRoute = require("./Routes/Patient/Register");
@@ -118,13 +117,13 @@ app.use("/doctor/PatientSummary", doctorPatientsummaryRoute);
 app.use("/backOffice", backOfficeRoute);
 app.use("/appointment-chat", chatRoute);
 
-app.use("/", (req, res, next) => {
-  res.status(404).json({
-    status: "fail",
-    ok: false,
-    message: "No such route founded in server...💣💣💣",
-  });
-});
+// app.use("/", (req, res, next) => {
+//   res.status(404).json({
+//     status: "fail",
+//     ok: false,
+//     message: "No such route founded in server...💣💣💣",
+//   });
+// });
 
 app.use(globalErrorHanlder);
 
