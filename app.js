@@ -56,6 +56,11 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.get('/start-chat-server', (req, res) => {
+  const server = http.createServer(app);  // Create the HTTP server here
+  initiateChatServer(server);           // Initiate the chat server
+  res.send('Chat server initiated!');    // Send a success response
+});
 const allowedOrigins = [
   "*",
   "https://tele-med-pilot.vercel.app",
@@ -116,19 +121,18 @@ app.use("/doctor/PatientSummary", doctorPatientsummaryRoute);
 /// backOffice
 app.use("/backOffice", backOfficeRoute);
 app.use("/appointment-chat", chatRoute);
-
-// app.use("/", (req, res, next) => {
-//   res.status(404).json({
-//     status: "fail",
-//     ok: false,
-//     message: "No such route founded in server...💣💣💣",
-//   });
-// });
+app.use("/", (req, res, next) => {
+  res.status(404).json({
+    status: "fail",
+    ok: false,
+    message: "No such route founded in server...💣💣💣",
+  });
+});
 
 app.use(globalErrorHanlder);
 
 const server = http.createServer(app); 
-initiateChatServer(server);
+// initiateChatServer(server);
 
 app.listen(port, (error) => {
   if (error) {
