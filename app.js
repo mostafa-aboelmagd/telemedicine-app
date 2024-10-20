@@ -4,6 +4,9 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const http = require('http'); // Add this line
+const { initiateChatServer } = require('./Controllers/Chat');
+
 const userLoginRoute = require("./Routes/Login");
 const userLogoutRoute = require("./Routes/Logout");
 const patientRegisterRoute = require("./Routes/Patient/Register");
@@ -33,6 +36,7 @@ const doctorAppointmentHistoryRoute = require("./Routes/Doctor/AppointmentHistor
 const doctorAppointmentDetailsRoute = require("./Routes/Doctor/AppointmentDetails");
 const doctorPatientsummaryRoute = require("./Routes/Doctor/Patientsummary");
 const doctorAvailabilityRoute = require("./Routes/Doctor/Availability");
+const chatRoute = require("./Routes/Chat");
 const { globalErrorHanlder } = require("./Utilities");
 const port = process.env.PORT || 4000;
 const app = express();
@@ -78,6 +82,7 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static('public'));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -111,6 +116,7 @@ app.use("/doctor/appointmentDetails", doctorAppointmentDetailsRoute);
 app.use("/doctor/PatientSummary", doctorPatientsummaryRoute);
 /// backOffice
 app.use("/backOffice", backOfficeRoute);
+app.use("/appointment-chat", chatRoute);
 
 app.use("/", (req, res, next) => {
   res.status(404).json({
@@ -122,6 +128,9 @@ app.use("/", (req, res, next) => {
 
 app.use(globalErrorHanlder);
 
+const server = http.createServer(app); 
+initiateChatServer(server);
+
 app.listen(port, (error) => {
   if (error) {
     console.error(error);
@@ -129,3 +138,5 @@ app.listen(port, (error) => {
   }
   console.log(`Server is running on port ${port}`);
 });
+
+module.exports = app;
