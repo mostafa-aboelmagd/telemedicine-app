@@ -83,9 +83,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hello World!");
+// });
 app.use("/login", userLoginRoute);
 app.use("/logout", userLogoutRoute);
 app.use("/patient/register", patientRegisterRoute);
