@@ -25,9 +25,9 @@ export default function PastAppointment({ navigation }) {
     })
   }
 
-  // const submitResults = (patientName) => {
-  //   navigation.navigate('submitResults', { patientName })
-  // }
+  const rate = () => {
+    navigation.navigate('rating')
+  }
 
   const past = async () => {
     try {
@@ -72,6 +72,9 @@ export default function PastAppointment({ navigation }) {
             </TouchableOpacity>
             <CustomTitle>Past appointments</CustomTitle>
         </View>
+        <TouchableOpacity onPress={rate}>
+          <Text style={styles.button}>Rate appointment</Text>
+        </TouchableOpacity>
             {!loading ? ( data ? data.map((item, id) =>
             <View key={id}>
                 <View style={[styles.card]}>
@@ -127,4 +130,16 @@ const styles = StyleSheet.create({
   name:{
     marginBottom: '3%'
   },
+  button: {
+    margin: 10,
+    padding: 5,
+    borderRadius: 15,
+    borderWidth: 2,
+    fontSize: 15,
+    width: 150,
+    textAlign: 'center',
+    color: '#1565c0',
+    borderColor: '#1565c0'
+  },
+  
 })

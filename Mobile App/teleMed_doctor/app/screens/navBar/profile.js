@@ -18,6 +18,7 @@ import CustomScroll from "../../components/scroll";
 import { NEXT_PUBLIC_SERVER_NAME } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import { Rating } from 'react-native-ratings';
 
 let sixtyMinPrice_;
 let thirtyMinPrice_;
@@ -30,6 +31,7 @@ export default function Profile({ navigation }) {
   const [selectedCertId, setSelectedCertId] = useState(null);
   const [selectedExpId, setSelectedExpId] = useState(null);
   const [selectedInterestId, setSelectedInterestId] = useState(null);
+  const [rating, setRating] = useState(3)
 
   // State for add functions
   const [showAddCertModal, setShowAddCertModal] = useState(false);
@@ -525,6 +527,12 @@ export default function Profile({ navigation }) {
               }
               style={styles.profileImage}
             />
+            <Rating
+              readonly={true}
+              startingValue={rating}
+              style={{marginBottom: '2%'}}
+              imageSize={15}
+              />
             <TouchableOpacity onPress={() => edit_info(doctorInfo)}>
               <Text style={styles.editButtonText}>Edit Profile</Text>
             </TouchableOpacity>
@@ -1042,7 +1050,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    marginBottom: 20,
+    marginBottom: '5%',
   },
   profileInfo: {
     marginLeft: 12,
