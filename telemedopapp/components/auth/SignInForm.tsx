@@ -12,10 +12,13 @@ function SignInForm() {
   const [error, setError] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showUnauthorizedPopup, setShowUnauthorizedPopup] = useState(false); // New state
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
 
   useEffect(() => {
     validateForm();
@@ -25,7 +28,6 @@ function SignInForm() {
 
   const tokenAuthentication = (req: any) => {
     const token = req.token;
-
     let message = "";
     if (token) {
       jwt.verify(
@@ -34,7 +36,7 @@ function SignInForm() {
         (err: any, decodedToken: any) => {
           if (err) {
             message = "Invalid token";
-            console.log(message);
+            console.log(message, err);
             return false;
           }
           console.log(decodedToken);
@@ -44,7 +46,7 @@ function SignInForm() {
           req.firstName = decodedToken.firstName;
           req.lastName = decodedToken.lastName;
           req.tokenExpiryDate = decodedToken.exp;
-
+          console.log(req);
           return true;
         }
       );
@@ -107,7 +109,7 @@ function SignInForm() {
         throw new Error("Failed To Sign In");
       }
       const users = await response.json();
-      console.log("responseee",users); 
+      console.log("response", users);
 
       if (tokenAuthentication(users)) {
         localStorage.setItem("jwt", users.token);
@@ -116,10 +118,18 @@ function SignInForm() {
         localStorage.setItem("userId", users.id);
         localStorage.setItem("firstName", users.firstName);
         localStorage.setItem("lastName", users.lastName);
+        const role = localStorage.getItem("userRole")
+        console.log("role ", role)
         setLoading(false);
-        setError(false);
-        setSignedIn(true);
-        router.replace("/");
+
+        if (role === "Admin") {
+          router.replace("/"); // Redirect to home page
+          setError(false);
+          setSignedIn(true);
+        } else {
+          localStorage.clear(); // Clear localStorage if not Admin
+          setShowUnauthorizedPopup(true); // Show unauthorized popup
+        }
       } else {
         console.log("Error During Token Authentication");
       }
@@ -131,7 +141,7 @@ function SignInForm() {
   return (
     <div className="p-5 rounded-xl max-w-md m-auto max-h-screen">
       <h2 className="font-bold text-2xl text-center text-neutral-700 mb-6">
-        Sign in
+        Administration Sign in
       </h2>
       <form onSubmit={handleSubmit}>
         <InputComponent
@@ -152,15 +162,6 @@ function SignInForm() {
           onChange={handleChange}
           required
         />
-        <p className="mb-2">
-          Don&apos;t Have An Account?{" "}
-          <Link
-            href="/auth/signup"
-            className="text-blue-500 font-semibold cursor-pointer"
-          >
-            Sign Up
-          </Link>
-        </p>
         <button
           type="submit"
           className={submitButtonClass}
@@ -172,6 +173,22 @@ function SignInForm() {
           <p className="font-semibold text-red-700 mt-4">
             Incorrect Email And/Or Password!
           </p>
+        )}
+        {showUnauthorizedPopup && ( // Conditional rendering for the popup
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <p className="text-lg   
+ text-center">
+                This email does not have access to the administration panel.
+              </p>
+              <button
+                className="mt-4 bg-sky-500 text-neutral-50 text-lg p-3.5 w-full border-none rounded-lg cursor-pointer transition-[background-color]"
+                onClick={() => setShowUnauthorizedPopup(false)}
+              >
+                OK
+              </button>
+            </div>
+          </div>
         )}
         {signedIn && (
           <p className="font-semibold text-green-700 mt-4">

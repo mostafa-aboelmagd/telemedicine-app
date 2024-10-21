@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import ImageContainer from "@/components/auth/ImageContainer";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import React from "react";
 import "../globals.css";
@@ -37,7 +36,6 @@ export default function AuthLayout({
       ) : (
         <>
           {children}
-          <ImageContainer />
         </>
       )}
     </div>
