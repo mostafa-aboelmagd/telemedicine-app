@@ -57,11 +57,11 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
-const allowedOrigins = [
-  "*",
-  "https://tele-med-pilot.vercel.app",
-  "https://tele-med-pilot-fe.vercel.app",
-];
+// const allowedOrigins = [
+//   "*",
+//   "https://tele-med-pilot.vercel.app",
+//   "https://tele-med-pilot-fe.vercel.app",
+// ];
 // Allow all origins for development purposes, uncomment for production.
 //app.use(cors({
 // origin: function (origin, callback) {
@@ -84,9 +84,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
 
-// app.get("/", (req, res) => {
-//   res.send("Hello World!");
-// });
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 app.use("/login", userLoginRoute);
 app.use("/logout", userLogoutRoute);
 app.use("/patient/register", patientRegisterRoute);
@@ -129,17 +129,17 @@ app.use(globalErrorHanlder);
 
 const server = http.createServer(app)
 
-const io = new Server(server, {
-  cors: {
-    origin: "*",  // Or specify your Next.js origin for production
-    methods: ["GET", "POST"]
-  }
-});
+// const io = new Server(server, {
+//   cors: {
+//     origin: "*",  // Or specify your Next.js origin for production
+//     methods: ["GET", "POST"]
+//   }
+// });
 
-app.get('/start-chat-server', (req, res) => {
-  initiateChatServer(server, io);  // Pass the io instance 
-  res.send('Chat server initiated!');
-});
+// app.get('/start-chat-server', (req, res) => {
+//   initiateChatServer(server, io);  // Pass the io instance 
+//   res.send('Chat server initiated!');
+// });
 
 app.listen(port, (error) => {
   if (error) {
