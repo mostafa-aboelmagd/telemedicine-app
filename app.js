@@ -56,11 +56,7 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.get('/start-chat-server', (req, res) => {
-  const server = http.createServer(app);  // Create the HTTP server here
-  initiateChatServer(server);           // Initiate the chat server
-  res.send('Chat server initiated!');    // Send a success response
-});
+
 const allowedOrigins = [
   "*",
   "https://tele-med-pilot.vercel.app",
@@ -131,8 +127,19 @@ app.use("/", (req, res, next) => {
 
 app.use(globalErrorHanlder);
 
-const server = http.createServer(app); 
-// initiateChatServer(server);
+const server = http.createServer(app)
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",  // Or specify your Next.js origin for production
+    methods: ["GET", "POST"]
+  }
+});
+
+app.get('/start-chat-server', (req, res) => {
+  initiateChatServer(server, io);  // Pass the io instance 
+  res.send('Chat server initiated!');
+});
 
 app.listen(port, (error) => {
   if (error) {

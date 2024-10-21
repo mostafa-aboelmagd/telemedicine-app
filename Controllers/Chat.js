@@ -1,14 +1,8 @@
 const database = require('../Database/Login');
 const { Server } = require('socket.io');
 
-const initiateChatServer = (server) => {
-    const io = new Server(server, {
-      cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-      }
-    });
-  
+const initiateChatServer = (server,io) => {
+
     io.on('connection', (socket) => {
       console.log('A user connected:', socket.id);
   
