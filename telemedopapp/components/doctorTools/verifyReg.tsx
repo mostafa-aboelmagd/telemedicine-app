@@ -41,7 +41,10 @@ interface Doctor {
 
 const VerifyReg = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<any>(null); // New state
-  const token = localStorage.getItem("jwt");
+  const [token, setToken] = useState<string | null>(null);
+  useEffect(() => {
+    setToken(localStorage.getItem("jwt")); // Access localStorage inside useEffect
+  }, []);
   const handleShowFullData = (doctor: any) => {
     setSelectedDoctor(doctor); // Set the selected doctor data
   };
@@ -49,13 +52,13 @@ const VerifyReg = () => {
     fetch(
       `${process.env.NEXT_PUBLIC_SERVER_NAME}/backOffice/changeDoctorState/${doctorId}`,
       {
-        method: "POST", 
+        method: "POST",
         mode: "cors",
         headers: {
-          'Content-Type': 'application/json', 
+          'Content-Type': 'application/json',
           Authorization: "Bearer " + token,
         },
-        body: JSON.stringify({"state":"Active"}), // Send an empty JSON object
+        body: JSON.stringify({ "state": "Active" }), // Send an empty JSON object
       }
     )
       .then(response => {
