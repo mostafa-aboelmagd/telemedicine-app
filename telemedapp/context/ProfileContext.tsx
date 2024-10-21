@@ -41,6 +41,7 @@ export const ProfileProvider = ({
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
+    console.log("token", token)
     if (!token) {
       if (
         pathname !== "/auth/signin" &&
@@ -67,12 +68,15 @@ export const ProfileProvider = ({
       })
         .then((response) => {
           if (!response.ok) {
+            console.log("response", response.json())
             throw new Error("Failed to fetch profile data");
           }
+          // console.log("json",response.json());
           return response.json();
         })
         .then((response) => {
           setProfileData(response.formattedPatient);
+          console.log("profileData", profileData);
         })
         .catch((error) => {
           console.error("Error fetching profile data:", error);
@@ -84,11 +88,21 @@ export const ProfileProvider = ({
         headers: {
           Authorization: "Bearer " + token,
         },
+
       })
-        .then((response) => response.json())
+
+        .then((response) => {
+          if (!response.ok) {
+            console.log("response", response.json())
+            localStorage.clear();
+            router.push("/auth/signin");
+          }
+          return response.json();
+        })
         .then((response) => setProfileData(() => response.formattedDoctor))
         .finally(() => setLoading(false));
     }
+    console.log("profileData11", profileData)
   }, [pathname, router]);
 
   return (

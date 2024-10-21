@@ -6,6 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import ReadMore from "@/components/common/ReadMore";
 import Image from "next/image";
 import userImage from "@/images/user.png";
+import { useRouter } from "next/navigation"; 
 
 interface ProfileData {
   firstName: string;
@@ -19,6 +20,8 @@ interface ProfileData {
 
 const Requests = () => {
   const { profileData, loading } = useProfile();
+  const router = useRouter(); // Initialize the router
+
 
   if (loading) {
     return <div>Loading profile data...</div>;
@@ -27,7 +30,18 @@ const Requests = () => {
   if (!profileData) {
     return <div>No profile data available.</div>;
   }
-
+  // Define an interface for the IDs object
+  interface AppointmentIds {
+    appointmentId: string;
+    patientId: string;
+  }
+  const handleAskForDetails = (ids: AppointmentIds) => {
+    localStorage.setItem("chat_appointmentId", ids.appointmentId);
+    localStorage.setItem("chat_patientId", ids.patientId);
+    
+    // Wrap the routing logic in a useEffect to ensure it runs on the client-side
+    router.push(`/doctorProfile/chat`); 
+  };
   const [requests, setRequests] = useState([
     {
       appointment_id: "",
@@ -196,9 +210,11 @@ const Requests = () => {
                             </button>
                             <button
                               className="rounded-full border-none bg-blue-500 text-white w-40 px-4 py-2 hover:scale-105 hover:cursor-pointer"
-                              onClick={() =>
-                                (window.location.href = "/doctorProfile/chat")
-                              }
+                              onClick={() => handleAskForDetails({
+                                appointmentId: request.appointment_id,
+                                patientId: request.appointment_patient_id
+                              })}
+
                             >
                               Ask For Details
                             </button>

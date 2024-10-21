@@ -21,6 +21,7 @@ function SignUpForm() {
   const [currCertificateId, setCurrCertificateId] = useState(1);
   const [currExperienceId, setCurrExperienceId] = useState(1);
   const [currInterestId, setCurrInterestId] = useState(1);
+  const [showPopup, setShowPopup] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -599,6 +600,26 @@ function SignUpForm() {
       }
     } else {
       try {
+        const requestBody = {
+          personalInfo: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            birthdate: format(new Date(formData.birthDate), "yyyy-MM-dd"), // Format date as needed
+            city: "", // Add city if available
+            country: "", // Add country if available
+            email: formData.email,
+            gender: formData.gender, // Assuming you have a gender field
+            location: "", // Add location if available
+            password: formData.password,
+            phone: formData.phone,
+            speciality: "" // Add speciality if available
+          },
+          certificates: doctorCertificates.slice(1), // Remove the initial empty object
+          experiences: doctorExperiences.slice(1), // Remove the initial empty object
+          interests: doctorInterests.slice(1), // Remove the initial empty object
+          Languages: [] // Add languages if available
+        };
+        console.log("body", requestBody)
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/register`,
           {
@@ -606,27 +627,7 @@ function SignUpForm() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              personalInfo: {
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                birthdate: formData.birthDate
-                  ? format(new Date(formData.birthDate), "yyyy-MM-dd")
-                  : null, // Formats date as YYYY-MM-DD,
-                city: "",
-                country: "",
-                email: formData.email,
-                gender: formData.gender,
-                location: "",
-                password: formData.password,
-                phone: formData.phone,
-                speciality: "",
-              },
-              certificates: doctorCertificates,
-              experiences: doctorExperiences,
-              interests: doctorInterests,
-              Languages: [],
-            }),
+            body: JSON.stringify(requestBody),
             mode: "cors",
           }
         );
@@ -635,30 +636,28 @@ function SignUpForm() {
           setSignedUp(false);
           setError(true);
           setLoading(false);
+          console.log(response.json())
           throw new Error("Failed to register");
         }
         setLoading(false);
         setError(false);
         setSignedUp(true);
-        router.replace("/");
+        setShowPopup(true); // Show the popup
+        // router.replace("/");
       } catch (error) {
         console.error("Error During Signup:", error);
       }
     }
   };
 
-  const patientImageClass = `w-20 h-20 border-2 border-solid rounded-full ${
-    userType === "patient" ? "border-blue-500" : ""
-  } hover:cursor-pointer hover:scale-105`;
-  const patientTextClass = `font-bold ${
-    userType === "patient" ? "text-blue-500" : "text-neutral-700"
-  }`;
-  const doctorImageClass = `w-20 h-20 border-2 border-solid rounded-full ${
-    userType === "doctor" ? "border-blue-500" : ""
-  } hover:cursor-pointer hover:scale-105`;
-  const doctorTextClass = `font-bold ${
-    userType === "doctor" ? "text-blue-500" : "text-neutral-700"
-  }`;
+  const patientImageClass = `w-20 h-20 border-2 border-solid rounded-full ${userType === "patient" ? "border-blue-500" : ""
+    } hover:cursor-pointer hover:scale-105`;
+  const patientTextClass = `font-bold ${userType === "patient" ? "text-blue-500" : "text-neutral-700"
+    }`;
+  const doctorImageClass = `w-20 h-20 border-2 border-solid rounded-full ${userType === "doctor" ? "border-blue-500" : ""
+    } hover:cursor-pointer hover:scale-105`;
+  const doctorTextClass = `font-bold ${userType === "doctor" ? "text-blue-500" : "text-neutral-700"
+    }`;
 
   return (
     <div className="p-5 rounded-xl max-w-md m-auto h-screen overflow-y-hidden hover:overflow-y-scroll">
@@ -704,9 +703,8 @@ function SignUpForm() {
                     placeholder="Select your birth date (yyyy-mm-dd)"
                     maxDate={new Date()}
                     yearRange="1900:2023"
-                    className={`bg-neutral-100 w-full py-4 px-6 text-base rounded-lg border border-solid border-neutral-300 grey-100 outline-none transition-[border-color] focus:border-sky-500 focus:bg-neutral-50 ${
-                      errorMessage.birthDate ? "p-invalid" : ""
-                    }`}
+                    className={`bg-neutral-100 w-full py-4 px-6 text-base rounded-lg border border-solid border-neutral-300 grey-100 outline-none transition-[border-color] focus:border-sky-500 focus:bg-neutral-50 ${errorMessage.birthDate ? "p-invalid" : ""
+                      }`}
                   />
                   {errorMessage.birthDate && (
                     <small className="text-xs mt-1 text-red-700 font-semibold">
@@ -1073,6 +1071,24 @@ function SignUpForm() {
           </>
         ) : (
           <></>
+        )}
+        {showPopup && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <p className="text-lg text-center">
+                Your registration is being confirmed. Once it's done, you will get an email.
+              </p>
+              <button
+                className="mt-4 bg-sky-500 text-neutral-50 text-lg p-3.5 w-full border-none rounded-lg cursor-pointer transition-[background-color]"
+                onClick={() => {
+                  setShowPopup(false);
+                  router.replace("/"); // Redirect after closing the popup
+                }}
+              >
+                OK
+              </button>
+            </div>
+          </div>
         )}
         <p className="mb-2">
           Already have an account?{" "}
