@@ -1,11 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const cookieParser = require("cookie-parser");
-require("dotenv").config();
-const swaggerJsdoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
-const http = require('http'); // Add this line
-const { initiateChatServer } = require('./Controllers/Chat');
 const userLoginRoute = require("./Routes/Login");
 const userLogoutRoute = require("./Routes/Logout");
 const patientRegisterRoute = require("./Routes/Patient/Register");
@@ -40,40 +34,6 @@ const { globalErrorHanlder } = require("./Utilities");
 const port = process.env.PORT || 4000;
 const app = express();
 
-const swaggerOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "API",
-      version: "1.0.0",
-      description: "API documentation for my Express server.",
-    },
-  },
-  apis: ["./routes/**/*.js", "./controllers/**/*.js", "./swagger.json"],
-};
-
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-
-// const allowedOrigins = [
-//   "*",
-//   "https://tele-med-pilot.vercel.app",
-//   "https://tele-med-pilot-fe.vercel.app",
-// ];
-// Allow all origins for development purposes, uncomment for production.
-//app.use(cors({
-// origin: function (origin, callback) {
-//    if (!origin) return callback(null, true);
-//    if (allowedOrigins.indexOf(origin) === -1) {
-//      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-//      return callback(new Error(msg), false);
-//    }
-//    return callback(null, true);
-//  },
-//  credentials: true,
-//}));
 app.use(
   cors({
     origin: "*",
@@ -81,8 +41,6 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(cookieParser());
-app.use(express.static('public'));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -114,9 +72,9 @@ app.use("/doctor/AppointmentResults", doctorAppointmentResultsAddRoute);
 app.use("/doctor/appointmentHistory", doctorAppointmentHistoryRoute);
 app.use("/doctor/appointmentDetails", doctorAppointmentDetailsRoute);
 app.use("/doctor/PatientSummary", doctorPatientsummaryRoute);
+app.use("/appointment-chat", chatRoute);
 /// backOffice
 app.use("/backOffice", backOfficeRoute);
-app.use("/appointment-chat", chatRoute);
 app.use("/", (req, res, next) => {
   res.status(404).json({
     status: "fail",
@@ -126,20 +84,6 @@ app.use("/", (req, res, next) => {
 });
 
 app.use(globalErrorHanlder);
-
-const server = http.createServer(app)
-
-// const io = new Server(server, {
-//   cors: {
-//     origin: "*",  // Or specify your Next.js origin for production
-//     methods: ["GET", "POST"]
-//   }
-// });
-
-// app.get('/start-chat-server', (req, res) => {
-//   initiateChatServer(server, io);  // Pass the io instance 
-//   res.send('Chat server initiated!');
-// });
 
 app.listen(port, (error) => {
   if (error) {

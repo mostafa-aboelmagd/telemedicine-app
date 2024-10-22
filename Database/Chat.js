@@ -18,7 +18,7 @@ const pool = new pg.Pool({
 (async () => {
     try {
         const client = await pool.connect();
-        console.log('Connected to the database from chat server');
+        console.log('Connected to the database');
         client.release();
     } catch (error) {
         console.error('Database connection error', error.stack);
@@ -26,7 +26,7 @@ const pool = new pg.Pool({
 })();
 
 
-const insertMessage = async (senderId, receiverId, message, appointmentId) => {
+const addChatMessage = async (appointmentId, senderId, receiverId, message) => {
     try {
         const result = await pool.query(
             'INSERT INTO message (message_sender_id, message_receiver_id, message_content, message_appointment_id, message_date) VALUES ($1, $2, $3, $4, NOW()) RETURNING *',
@@ -45,6 +45,11 @@ const getChatMessages = async (appointmentId) => {
             'SELECT * FROM message WHERE message_appointment_id = $1 ORDER BY message_date ASC',
             [appointmentId]
         );
+        
+        if (!result.rows.length) {
+            return [];
+        }
+
         return result.rows;
     } catch (error) {
         console.error('Error retrieving chat messages:', error);
@@ -52,4 +57,4 @@ const getChatMessages = async (appointmentId) => {
     }
 };
 
-module.exports = { insertMessage, getChatMessages };
+module.exports = { addChatMessage, getChatMessages };

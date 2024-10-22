@@ -4,6 +4,7 @@ const { tokenAuthentication } = require('../Middleware/User/Authentication');
 
 const router = express.Router();
 
-router.get('', tokenAuthentication, chatController.getAppointmentChat);
+router.get('/:appointmentId', tokenAuthentication, chatController.getAppointmentChat);
+router.post('', tokenAuthentication, chatController.sendAppointmentMessage);
 
 module.exports = router;

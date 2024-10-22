@@ -3,64 +3,6 @@ const database = require('../Database/Login');
 const { createToken } = require('../Utilities');
 const { ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS } = process.env;
 
-/**
- * @swagger
- * /login:
- *   post:
- *     summary: Login a user
- *     description: Logs in a user and returns an authentication token.
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: "object"
- *             properties:
- *               email:
- *                 type: "string"
- *                 format: "email"
- *                 description: "User's email address"
- *               password:
- *                 type: "string"
- *                 description: "User's password"
- *             required:
- *               - email
- *               - password
- *     responses:
- *       200:
- *         description: Login successful
- *         content:
- *           application/json:
- *             schema:
- *               type: "object"
- *               properties:
- *                 message:
- *                   type: "string"
- *                   example: "Login successful"
- *                 token:
- *                   type: "string"
- *       400:
- *         description: Invalid credentials or token generation error
- *         content:
- *           application/json:
- *             schema:
- *               type: "string"
- *               examples:
- *                 - 
- *                   summary: "Invalid email or password"
- *                   value: "Invalid email or password"
- *                 -
- *                   summary: "Token could not be created"
- *                   value: "Token could not be created"
- *       404:
- *         description: Missing fields in the request body
- *         content:
- *           application/json:
- *             schema:
-*                   type: "string"
-*                   example: "Please fill all the fields" 
- *     
- */ 
-
 const login = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
