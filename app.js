@@ -51,8 +51,8 @@ app.use("/patient/register", patientRegisterRoute);
 app.use("/doctor/register", doctorRegisterRoute);
 app.use("/patient/profile", patienProfileRoute);
 app.use("/patient/edit", patientEditRoute);
-app.use("/patient/appointment", patientAppointmentBookRoute);
-app.use("/patient/appointment", patientSubmitReviewRoute);
+app.use("/patient/appointment", patientAppointmentBookRoute); 
+// app.use("/patient/appointment", patientSubmitReviewRoute);doblecated end piont moved to patientAppointmentBookRoute
 app.use("/patient/home", patientHomeRoute);
 // app.use('/patient/prescription/add',patientAddPrescriptionRoute);
 // app.use('/patient/prescription/view',patientViewPrescriptionRoute);
