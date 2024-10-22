@@ -15,13 +15,20 @@ const { emit } = require("nodemon");
 const { query } = require("express");
 
 exports.getPatientInfo = catchAsyncError(async (req, res, next) => {
+  const queryOptions = queryHandler(req.query);
+  const { fields } = req.query;
   const { field } = req.params;
   let id, email;
   if (!field) return next(new AppError("Please provide id  ...💣💣💣", 400));
-  if (Number.isInteger(field)) id = field;
+  if (Number.isInteger(+field)) id = field;
   else email = field;
 
-  const patientInfo = await retrievePatientInfo(id, email);
+  const patientInfo = await retrieveAllPatients(
+    queryOptions,
+    fields,
+    id,
+    email
+  );
   // const patientApp = await retrievePatientAppointments(id);
   if (patientInfo) {
     return res.status(200).json({
@@ -125,4 +132,29 @@ exports.changeDoctorState = catchAsyncError(async (req, res, next) => {
       400
     )
   );
+});
+
+exports.getDoctorInfo = catchAsyncError(async (req, res, next) => {
+  const queryOptions = queryHandler(req.query);
+  const { fields } = req.query;
+  const { field } = req.params;
+  let id, email;
+  if (!field) {
+    return next(new AppError("Please Provide Doctor id ....⛔", 400));
+  }
+  if (Number.isInteger(+field)) {
+    id = field;
+  } else email = field;
+  const doctor = await retrieveAllDoctors(
+    undefined,
+    fields,
+    undefined,
+    id,
+    email
+  );
+  res.status(200).json({
+    status: "sucess",
+    ok: true,
+    doctor,
+  });
 });

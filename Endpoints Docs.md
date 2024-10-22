@@ -1446,7 +1446,8 @@ with wrong appointmentId:
   }
   ```
 
-2. **get patient:**`backOffice/getPatient/:patientId`
+2. **get patient:**`backOffice/getPatient/:field`
+   field:(email,id) `backOffice/getPatient/7` or `backOffice/getDoctor/patient5@test.com`
 
 - **Method:** GET
 - **Request Headers:**
@@ -1458,17 +1459,21 @@ with wrong appointmentId:
 
   ```json
   {
-    "status": "success",
+    "status": "sucess",
     "ok": true,
-    "patient": {
-      "user_email"
-      "user_phone_number"
-      "user_gender"
-      "user_birth_date"
-      "user_first_name"
-      "user_last_name"
-      "languages"
-    }
+    "patientInfo": [
+      {
+        "user_id": 7,
+        "user_email": "patient5@test.com",
+        "user_phone_number": "+331234567890",
+        "user_gender": "Female",
+        "user_birth_date": "2002-03-10T08:00:00.000Z",
+        "user_first_name": "Emily",
+        "user_last_name": "Johnson",
+        "patient_account_state": "On_hold",
+        "languages": [null]
+      }
+    ]
   }
   ```
 
@@ -1598,5 +1603,58 @@ with wrong appointmentId:
     "status": "success",
     "ok": true,
     "message": "state changed successfully"
+  }
+  ```
+
+6. **get doctor:**`backOffice/getDoctor/:field`
+   field:(email,id) `backOffice/getDoctor/doctor1@testcom` or `backOffice/getDoctor/12`
+
+- **Method:** GET
+- **Request Headers:**
+  - `Authorization: Bearer your_access_token`
+- **Parameters:**
+- [`doctorId , email`]
+
+- **Response Body:**
+
+  ```json
+  {
+    "status": "sucess",
+    "ok": true,
+    "doctor": [
+      {
+        "user_id": 12,
+        "user_first_name": "Olivia",
+        "user_last_name": "Martinez",
+        "user_email": "doctor1@test.com",
+        "user_gender": "Female",
+        "user_phone_number": "+346123456789",
+        "user_birth_date": "2005-08-15T07:00:00.000Z",
+        "doctor_account_state": "Active",
+        "doctor_country": "Egypt",
+        "doctor_specialization": "Internal Medicine",
+        "doctor_city": "Cairo",
+        "doctor_clinic_location": "Maadi",
+        "doctor_sixty_min_price": 350,
+        "doctor_thirty_min_price": 200,
+        "doctor_image": null,
+        "experiences": [
+          {
+            "firm": null,
+            "title": null,
+            "endDate": null,
+            "startDate": null,
+            "department": null
+          }
+        ],
+        "interests": [
+          {
+            "name": null,
+            "category": null
+          }
+        ],
+        "languages": [null]
+      }
+    ]
   }
   ```

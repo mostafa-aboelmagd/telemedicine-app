@@ -26,8 +26,9 @@ const pool = new pg.Pool({
   }
 })();
 
-exports.retrieveAllPatients = async (queryOptions, fields) => {
+exports.retrieveAllPatients = async (queryOptions, fields, id, email) => {
   try {
+    let personalize = "";
     let query = `SELECT `;
     if (fields) {
       fields = fields.replace(
@@ -36,14 +37,28 @@ exports.retrieveAllPatients = async (queryOptions, fields) => {
       );
       query += fields.split(",");
     } else {
-      query += `U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name,
-      array_agg(L.language) AS languages `;
+      query += ` 
+      U.user_id , U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name,
+      p.patient_account_state,
+      array_agg(L.language) AS languages 
+      `;
+    }
+    if (id) {
+      personalize = `
+      AND U.user_id=${id}
+      `;
+    }
+    if (email) {
+      personalize = `
+      AND user_email='${email}'
+      `;
     }
     query += `
     FROM users U
     LEFT JOIN languages L ON u.user_id = L.lang_user_id
-    WHERE  U.user_role = $1
-    GROUP BY U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name ${queryOptions}`;
+    join patient p ON  U.user_id  = p.patient_user_id_reference 
+    WHERE  U.user_role = $1 ${personalize}
+    GROUP BY U.user_id , U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name , p.patient_account_state  ${queryOptions}`;
     const result = await pool.query(query, ["Patient"]);
     if (result.rows.length) {
       return result.rows;
@@ -54,132 +69,102 @@ exports.retrieveAllPatients = async (queryOptions, fields) => {
   }
 };
 
-exports.retrieveAllDoctors = async (queryOptions, fields, state) => {
+exports.retrieveAllDoctors = async (queryOptions, fields, state, id, email) => {
   try {
     let query = `SELECT `;
-    if (state) {
-      state = `WHERE d.doctor_account_state = '${state}' `;
-      console.log(state);
-    } else state = "";
+
+    // To query on some fields
     if (fields) {
       query += fields;
     } else {
-      query += ` 
-      u.user_id,
-      u.user_first_name, 
-      u.user_last_name,
-      u.user_email,
-      u.user_gender,
-      u.user_phone_number,
-      u.user_birth_date,
-      d.doctor_account_state,
-      d.doctor_country, 
-      d.doctor_specialization, 
-      d.doctor_city, 
-      d.doctor_clinic_location,
-      d.doctor_sixty_min_price, 
-      d.doctor_thirty_min_price, 
-      doctor_image,
-      COALESCE(
-        json_agg(
-          DISTINCT jsonb_build_object(
-            'title', e.doctor_experience_job_title,
-            'firm', e.doctor_experience_firm_name,
-            'department', e.doctor_experience_department,
-            'startDate', e.doctor_experience_start_date,
-            'endDate', e.doctor_experience_end_date
-          )
-        ) 
-      ) AS experiences,
-      COALESCE(
-        json_agg(
-          DISTINCT jsonb_build_object(
-            'category', i.doctor_interest_category,
-            'name', i.doctor_interest_name 
-          )
-        ) 
-      ) AS interests,
-      array_agg(DISTINCT l.language) AS languages 
-    `;
-    }
-    query += `           
-      FROM 
-        users u
-      JOIN 
-        doctor d ON u.user_id = d.doctor_user_id_reference
-      LEFT JOIN 
-        languages l ON u.user_id = l.lang_user_id
-      LEFT JOIN 
-        doctor_experience e ON u.user_id = e.doctor_experience_doctor_id 
-      LEFT JOIN 
-        doctor_interest i ON u.user_id = i.doctor_interest_doctor_id 
-
-      ${state}
-      GROUP BY 
-        u.user_id, 
+      query += `
+        u.user_id,
         u.user_first_name, 
-        u.user_last_name, 
-        u.user_email, 
-        u.user_gender, 
-        u.user_phone_number, 
-        u.user_birth_date, 
+        u.user_last_name,
+        u.user_email,
+        u.user_gender,
+        u.user_phone_number,
+        u.user_birth_date,
         d.doctor_account_state,
         d.doctor_country, 
+        d.doctor_specialization, 
         d.doctor_city, 
-        d.doctor_clinic_location, 
+        d.doctor_clinic_location,
         d.doctor_sixty_min_price, 
         d.doctor_thirty_min_price, 
-        d.doctor_specialization, 
-        doctor_image
-        ${queryOptions}
+        doctor_image,
+        COALESCE(
+          json_agg(
+            DISTINCT jsonb_build_object(
+              'title', e.doctor_experience_job_title,
+              'firm', e.doctor_experience_firm_name,
+              'department', e.doctor_experience_department,
+              'startDate', e.doctor_experience_start_date,
+              'endDate', e.doctor_experience_end_date
+            )
+          ) 
+        ) AS experiences,
+        COALESCE(
+          json_agg(
+            DISTINCT jsonb_build_object(
+              'category', i.doctor_interest_category,
+              'name', i.doctor_interest_name 
+            )
+          ) 
+        ) AS interests,
+        array_agg(DISTINCT l.language) AS languages 
+      `;
+    }
+
+    // Handling state and personalize conditions
+    let whereClause = [];
+
+    if (state) {
+      whereClause.push(`d.doctor_account_state = '${state}'`);
+    }
+    if (id) {
+      whereClause.push(`u.user_id = ${id}`);
+    } else if (email) {
+      whereClause.push(`u.user_email = '${email}'`);
+    }
+
+    let whereQuery =
+      whereClause.length > 0 ? `WHERE ${whereClause.join(" AND ")}` : "";
+
+    // Construct the rest of the query
+    query += `           
+        FROM 
+          users u
+        JOIN 
+          doctor d ON u.user_id = d.doctor_user_id_reference
+        LEFT JOIN 
+          languages l ON u.user_id = l.lang_user_id
+        LEFT JOIN 
+          doctor_experience e ON u.user_id = e.doctor_experience_doctor_id 
+        LEFT JOIN 
+          doctor_interest i ON u.user_id = i.doctor_interest_doctor_id 
+        ${whereQuery}
+        GROUP BY 
+          u.user_id, 
+          u.user_first_name, 
+          u.user_last_name, 
+          u.user_email, 
+          u.user_gender, 
+          u.user_phone_number, 
+          u.user_birth_date, 
+          d.doctor_account_state,
+          d.doctor_country, 
+          d.doctor_city, 
+          d.doctor_clinic_location, 
+          d.doctor_sixty_min_price, 
+          d.doctor_thirty_min_price, 
+          d.doctor_specialization, 
+          doctor_image
+        ${queryOptions || ""}
     `;
 
     const result = await pool.query(query);
-    if (result.rows.length) {
-      return result.rows;
-    }
-    return false;
-  } catch (err) {
-    throw err;
-  }
-};
-
-exports.retrievePatientAppointments = async (id, queryOptions, fields) => {
-  try {
-    let query = `SELECT `;
-    if (fields) {
-      const arrFields = fields.split(",");
-      arrFields.forEach((element, index) => {
-        if (element === "doctor_name") {
-          element = `(d.user_first_name || ' ' || d.user_last_name) AS doctor_name `;
-        } else {
-          element = `a.${element}  `;
-        }
-        query += `${element}`;
-        if (index < arrFields.length - 1) {
-          query += ", ";
-        }
-      });
-    } else {
-      query += `
-      a.appointment_patient_id,
-      a.appointment_status,
-      (d.user_first_name|| ' ' || d.user_last_name) AS doctor_name,
-      a.appointment_date,
-      a.appointment_duration
-      `;
-    }
-    query += `FROM
-        appointment a
-        JOIN users p ON a.appointment_patient_id = p.user_id
-        JOIN users d ON a.appointment_doctor_id = d.user_id
-        JOIN doctor doc ON a.appointment_doctor_id = doc.doctor_user_id_reference
-      WHERE
-        p.user_id = $1 
-        ${queryOptions}
-    `;
-    const result = await pool.query(query, [id]);
-    return result.rows;
+    return result.rows.length ? result.rows : false;
   } catch (err) {
     throw err;
   }
