@@ -37,8 +37,8 @@ const Navbar = () => {
 
   const confirmSignOut = () => {
     localStorage.clear(); // Clear local storage
-    window.location.reload(); // Reload the page
-  };
+    const router = useRouter();
+    router.push('/')  };
   useEffect(() => {
     const expiryDate = localStorage.getItem("expiryDate");
     if (

@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useProfile } from "@/context/ProfileContext"; // Ensure correct import path
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import ReadMore from "@/components/common/ReadMore";
 import Image from "next/image";
@@ -39,8 +38,9 @@ interface Doctor {
 }
 
 const VerifyReg = () => {
+  const [loadingRequest, setLoadingRequest] = useState(true);
   const [selectedDoctor, setSelectedDoctor] = useState<any>(null); // New state
-
+  const [token, setToken] = useState<any>();
   const handleShowFullData = (doctor: any) => {
     setSelectedDoctor(doctor); // Set the selected doctor data
   };
@@ -96,15 +96,18 @@ const VerifyReg = () => {
     user_phone_number: "Phone Number",
     doctor_specialization: "Specialization",
   };
-  const [loadingRequest, setLoadingRequest] = useState(false);
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
+    setToken(localStorage.getItem("jwt"));
+  }, []);
+
+  useEffect(() => {
+    const tok =localStorage.getItem("jwt");
     fetch(
       `${process.env.NEXT_PUBLIC_SERVER_NAME}/backOffice/getAllDoctors?order=user_id&&state=On_hold`,
       {
         mode: "cors",
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + tok,
         },
       }
     )
@@ -112,20 +115,13 @@ const VerifyReg = () => {
       .then((data) => {
         setDoctorsData(data.doctors); // Update the state variable with the fetched data
       });
+      if (doctorsData){
+        setLoadingRequest(false)  }
   }, []);
 
-
-  useEffect(() => {
-
-
-    console.log("data", doctorsData); // Now you can access the data here
-  }, [doctorsData]);
-
-  const handleAccept = (doctorId: number) => {
-    useEffect(() => {
-      const token = localStorage.getItem("jwt");
-
-      fetch(
+  const handleAccept = async (doctorId: number) => { // Make handleAccept async
+    try {
+      const response = await fetch( // Use await here
         `${process.env.NEXT_PUBLIC_SERVER_NAME}/backOffice/changeDoctorState/${doctorId}`,
         {
           method: "PATCH",
@@ -136,20 +132,20 @@ const VerifyReg = () => {
           },
           body: JSON.stringify({ "state": "Active" }),
         }
-      )
-        .then(response => {
-          if (!response.ok) {
-            console.log(response.json())
-            throw new Error('Failed to accept doctor');
-          }
-          console.log('Doctor accepted successfully');
-        })
-        .catch(error => {
-          console.error('Error accepting doctor:', error);
-        });
-    }, [doctorId]); // Add doctorId to the dependency array
-  };
+      );
 
+      if (!response.ok) {
+        const errorData = await response.json(); // Get error data
+        console.error('Failed to accept doctor:', errorData);
+        throw new Error('Failed to accept doctor');
+      }
+      console.log('Doctor accepted successfully');
+      // Optionally, update doctorsData state here to reflect the change
+    } catch (error) {
+      console.error('Error accepting doctor:', error);
+    }
+  };
+  
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 min-[880px]:flex-row min-[880px]:items-start">
       {loadingRequest ? (
