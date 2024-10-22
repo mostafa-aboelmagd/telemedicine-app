@@ -1502,3 +1502,101 @@ with wrong appointmentId:
     "message": "state changed successfully"
   }
   ```
+
+4. **get all doctors:**`127.0.0.1:3000/backOffice/getAllDoctors?fields=user_first_name ,doctor_specialization&&order=user_id&&limit=14&&state=Active`
+1. (-) for descending order 2. limit default 100 0> && <10000 3. only to query on state valid
+
+- **Method:** GET
+- **Request Headers:**
+  - `Authorization: Bearer your_access_token`
+- **Parameters:**
+
+- **Response Body:**
+
+  ```json
+  {
+    "status": "success",
+    "ok": true,
+    "doctors": [
+      {
+        "user_id": 56,
+        "user_first_name": "ahmed",
+        "user_last_name": "Mohamed",
+        "user_email": "doctor5@test.com",
+        "user_gender": "Male",
+        "user_phone_number": "010",
+        "user_birth_date": "1995-10-06T07:00:00.000Z",
+        "doctor_account_state": "Active",
+        "doctor_country": "Saudi Arabia",
+        "doctor_specialization": "Cardiology ",
+        "doctor_city": "Dammam",
+        "doctor_clinic_location": "Test location",
+        "doctor_sixty_min_price": 350,
+        "doctor_thirty_min_price": 250,
+        "doctor_image": null,
+        "experiences": [
+          {
+            "firm": "City Hospital",
+            "title": "Senior Surgeon",
+            "endDate": "2023-10-01",
+            "startDate": "2020-01-15",
+            "department": "Surgery"
+          },
+          {
+            "firm": "Test auth ",
+            "title": null,
+            "endDate": "2014-10-06",
+            "startDate": "2010-10-06",
+            "department": "Test certificate "
+          }
+        ],
+        "interests": [
+          {
+            "name": "COD",
+            "category": "Games"
+          },
+          {
+            "name": "Interest 2",
+            "category": "Cat2"
+          },
+          {
+            "name": "Interest test 1",
+            "category": "Cat1"
+          }
+        ],
+        "languages": ["Arabic", "French", "Spanish", "seeny"]
+      }
+    ]
+  }
+  ```
+
+5. **change pateint state :**`backOffice/changeDoctorState/:patientId`
+
+- **Method:** PATCH
+- **Request Headers:**
+
+  - `Authorization: Bearer your_access_token`
+  - `Content-Type: application/json`
+
+- **Parameters:**
+- [`patientId`]
+
+- **Request Body:**
+
+  ````json
+  {
+  "state"
+  }
+      ```
+
+  ````
+
+- **Response Body:**
+
+  ```json
+  {
+    "status": "success",
+    "ok": true,
+    "message": "state changed successfully"
+  }
+  ```

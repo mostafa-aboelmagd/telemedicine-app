@@ -47,7 +47,7 @@ exports.changePatientState = catchAsyncError(async (req, res, next) => {
 
   if (!patient) return next(new AppError("failed to updated data .....", 400));
 
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
     ok: true,
     message: "state changed successfully",
@@ -113,7 +113,7 @@ exports.changeDoctorState = catchAsyncError(async (req, res, next) => {
 
   const result = await changePersonState("doctor", id, state);
   if (result) {
-    return res.status(204).json({
+    return res.status(200).json({
       status: "succes",
       ok: true,
       message: "Doctor State Updated Successfully..",
