@@ -4,7 +4,7 @@ const { tokenAuthentication } = require("../../Middleware/User/Authentication");
 const { restrictTo } = require("../../Utilities");
 const router = express.Router();
 
-router.use("/", tokenAuthentication, restrictTo("Patient"));
+router.use("/", tokenAuthentication, restrictTo("Admin"));
 
 router.get("/getAllPatients", backOfficeController.getAllPatients);
 
