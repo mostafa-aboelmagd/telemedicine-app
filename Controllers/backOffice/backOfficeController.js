@@ -91,7 +91,10 @@ exports.getPatientAppointment = catchAsyncError(async (req, res, next) => {
 });
 
 exports.getAllDoctors = catchAsyncError(async (req, res, next) => {
-  let doctors = await retrieveAllDoctors();
+  const queryOptions = queryHandler(req.query);
+  const { fields, state } = req.query;
+
+  let doctors = await retrieveAllDoctors(queryOptions, fields, state);
   if (!doctors) doctors = [];
   res.status(200).json({
     status: "success",

@@ -54,21 +54,86 @@ exports.retrieveAllPatients = async (queryOptions, fields) => {
   }
 };
 
-exports.retrieveAllDoctors = async (queryOptions) => {
+exports.retrieveAllDoctors = async (queryOptions, fields, state) => {
   try {
-    const query = `            
-    SELECT 
-        u.user_id, u.user_first_name, u.user_last_name, u.user_email, u.user_gender, u.user_phone_number, u.user_birth_date,
-        d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization, doctor_image,
-        array_agg(l.language) AS languages
-    FROM 
+    let query = `SELECT `;
+    if (state) {
+      state = `WHERE d.doctor_account_state = '${state}' `;
+      console.log(state);
+    } else state = "";
+    if (fields) {
+      query += fields;
+    } else {
+      query += ` 
+      u.user_id,
+      u.user_first_name, 
+      u.user_last_name,
+      u.user_email,
+      u.user_gender,
+      u.user_phone_number,
+      u.user_birth_date,
+      d.doctor_account_state,
+      d.doctor_country, 
+      d.doctor_specialization, 
+      d.doctor_city, 
+      d.doctor_clinic_location,
+      d.doctor_sixty_min_price, 
+      d.doctor_thirty_min_price, 
+      doctor_image,
+      COALESCE(
+        json_agg(
+          DISTINCT jsonb_build_object(
+            'title', e.doctor_experience_job_title,
+            'firm', e.doctor_experience_firm_name,
+            'department', e.doctor_experience_department,
+            'startDate', e.doctor_experience_start_date,
+            'endDate', e.doctor_experience_end_date
+          )
+        ) 
+      ) AS experiences,
+      COALESCE(
+        json_agg(
+          DISTINCT jsonb_build_object(
+            'category', i.doctor_interest_category,
+            'name', i.doctor_interest_name 
+          )
+        ) 
+      ) AS interests,
+      array_agg(DISTINCT l.language) AS languages 
+    `;
+    }
+    query += `           
+      FROM 
         users u
-    JOIN 
+      JOIN 
         doctor d ON u.user_id = d.doctor_user_id_reference
-    LEFT JOIN 
+      LEFT JOIN 
         languages l ON u.user_id = l.lang_user_id
-    GROUP BY 
-        u.user_id, d.doctor_country, d.doctor_sixty_min_price, d.doctor_thirty_min_price, d.doctor_specialization, doctor_image`;
+      LEFT JOIN 
+        doctor_experience e ON u.user_id = e.doctor_experience_doctor_id 
+      LEFT JOIN 
+        doctor_interest i ON u.user_id = i.doctor_interest_doctor_id 
+
+      ${state}
+      GROUP BY 
+        u.user_id, 
+        u.user_first_name, 
+        u.user_last_name, 
+        u.user_email, 
+        u.user_gender, 
+        u.user_phone_number, 
+        u.user_birth_date, 
+        d.doctor_account_state,
+        d.doctor_country, 
+        d.doctor_city, 
+        d.doctor_clinic_location, 
+        d.doctor_sixty_min_price, 
+        d.doctor_thirty_min_price, 
+        d.doctor_specialization, 
+        doctor_image
+        ${queryOptions}
+    `;
+
     const result = await pool.query(query);
     if (result.rows.length) {
       return result.rows;

@@ -1124,17 +1124,17 @@ with wrong appointmentId:
   ````json
   {
   "personalInfo": {
-  "firstName": "John",
-  "lastName": "Doe",
-  "birthdate": "1990-01-01",
-  "city": "New York",
-  "country": "United States",
-  "email": "johndoe@example.com",
-  "gender": "Male",
-  "location": "New York, NY",
+  "firstName": "John",//
+  "lastName": "Doe",//
+  "birthdate": "1990-01-01",//
+  "city": "New York", //
+  "country": "United States", //
+  "email": "johndoe@example.com",//
+  "gender": "Male", //
+  "location": "New York, NY", //
   "password": "password123",
-  "phone": "+1 123-456-7890",
-  "speciality": "Software Engineer"
+  "phone": "+1 123-456-7890",//
+  "speciality": "Software Engineer" //
   },
   "certificates": [
   {
@@ -1394,6 +1394,7 @@ with wrong appointmentId:
     "message": "Interest deleted successfully"
   }
   ```
+
 46. **Patient submit Review:**`/patient/appointment/203/review`(Tested)
 
 - **Method:** Post
@@ -1403,7 +1404,7 @@ with wrong appointmentId:
 
   ````json
   {
-  "doctorId": 56, 
+  "doctorId": 56,
   "communication_rating": 5,
   "understanding_rating": 5,
   "providing_solution_rating": 5,
