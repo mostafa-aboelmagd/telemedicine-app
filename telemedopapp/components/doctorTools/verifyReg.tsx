@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useProfile } from "@/context/ProfileContext"; // Ensure correct import path
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
@@ -41,375 +40,115 @@ interface Doctor {
 
 const VerifyReg = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<any>(null); // New state
-  const [token, setToken] = useState<string | null>(null);
-  useEffect(() => {
-    setToken(localStorage.getItem("jwt")); // Access localStorage inside useEffect
-  }, []);
+
   const handleShowFullData = (doctor: any) => {
     setSelectedDoctor(doctor); // Set the selected doctor data
   };
-  const handleAccept = (doctorId: number) => {
+  const [doctorsData, setDoctorsData] = useState([
+    {
+      user_id: null,
+      user_first_name: "",
+      user_last_name: "",
+      user_email: "",
+      user_gender: "",
+      user_phone_number: "",
+      user_birth_date: "",
+      doctor_account_state: "",
+      doctor_country: "",
+      doctor_specialization: "",
+      doctor_city: "",
+      doctor_clinic_location: "",
+      doctor_sixty_min_price: "",
+      doctor_thirty_min_price: "",
+      doctor_image: null,
+      experiences: [
+        {
+          firm: "",
+          title: "",
+          endDate: "",
+          startDate: "",
+          department: ""
+        },
+        {
+          firm: "",
+          title: "",
+          endDate: "",
+          startDate: "",
+          department: ""
+        }
+      ],
+      interests: [{
+        name: "",
+        category: ""
+      }
+      ],
+      languages: []
+    }
+  ]); // State variable to store the data
+  const keyMapping: { [key: string]: string } = {
+    user_first_name: "First Name",
+    user_last_name: "Last Name",
+    user_birth_date: "Birth Date",
+    doctor_country: "Country",
+    doctor_city: "City",
+    user_email: "Email",
+    user_gender: "Gender",
+    user_phone_number: "Phone Number",
+    doctor_specialization: "Specialization",
+  };
+  const [loadingRequest, setLoadingRequest] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
     fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_NAME}/backOffice/changeDoctorState/${doctorId}`,
+      `${process.env.NEXT_PUBLIC_SERVER_NAME}/backOffice/getAllDoctors?order=user_id&&state=On_hold`,
       {
-        method: "POST",
         mode: "cors",
         headers: {
-          'Content-Type': 'application/json',
           Authorization: "Bearer " + token,
         },
-        body: JSON.stringify({ "state": "Active" }), // Send an empty JSON object
       }
     )
-      .then(response => {
-        // Handle the response here, e.g., check for success or error
-        if (response.ok) {
-          // Request was successful
-          console.log('Doctor accepted successfully');
-          // You might want to update the UI here, e.g., remove the accepted doctor from the list
-        } else {
-          // Request failed
-          console.error('Failed to accept doctor');
-        }
-      })
-      .catch(error => {
-        // Handle errors here
-        console.error('Error accepting doctor:', error);
+      .then((response) => response.json())
+      .then((data) => {
+        setDoctorsData(data.doctors); // Update the state variable with the fetched data
       });
+  }, []);
+
+
+  useEffect(() => {
+
+
+    console.log("data", doctorsData); // Now you can access the data here
+  }, [doctorsData]);
+
+  const handleAccept = (doctorId: number) => {
+    useEffect(() => {
+      const token = localStorage.getItem("jwt");
+
+      fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/backOffice/changeDoctorState/${doctorId}`,
+        {
+          method: "PATCH",
+          mode: "cors",
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({ "state": "Active" }),
+        }
+      )
+        .then(response => {
+          if (!response.ok) {
+            console.log(response.json())
+            throw new Error('Failed to accept doctor');
+          }
+          console.log('Doctor accepted successfully');
+        })
+        .catch(error => {
+          console.error('Error accepting doctor:', error);
+        });
+    }, [doctorId]); // Add doctorId to the dependency array
   };
-  const [requests, setRequests] = useState([
-    {
-      doctorId: 7,
-      firstName: "Ahmed",
-      lastName: "Said",
-      birthdate: "1985-05-10",
-      city: "Cairo",
-      country: "Egypt",
-      email: "ahmed.said@example.com",
-      gender: "Male",
-      location: "Cairo, Egypt",
-      password: "password123",
-      phone: "+20 11 1234 5678",
-      speciality: "Cardiology",
-      certificates: [
-        {
-          authority: "Egyptian Board of Cardiology",
-          endDate: "2027-06-30",
-          name: "Board Certified Cardiologist",
-          startDate: "2022-01-01",
-        },
-        {
-          authority: "Cairo University",
-          endDate: "2018-12-31",
-          name: "Master of Cardiology",
-          startDate: "2016-01-01",
-        },
-      ],
-      experiences: [
-        {
-          department: "Cardiology",
-          endDate: "2024-12-31",
-          firm: "Al-Azhar University Hospital",
-          startDate: "2022-07-01",
-          title: "Consultant Cardiologist",
-        },
-        {
-          department: "Cardiology",
-          endDate: "2022-06-30",
-          firm: "Kasr El Aini Hospital",
-          startDate: "2019-01-01",
-          title: "Resident Cardiologist",
-        },
-      ],
-      interests: [
-        {
-          category: "Medical Research",
-          name: "Interventional Cardiology",
-        },
-        {
-          category: "Teaching",
-          name: "Cardiology Fellowship Training",
-        },
-      ],
-      Languages: ["Arabic", "English"],
-    }, {
-      doctorId: 8,
-      firstName: "Mona",
-      lastName: "Ali",
-      birthdate: "1988-11-20",
-      city: "Alexandria",
-      country: "Egypt",
-      email: "mona.ali@example.com",
-      gender: "Female",
-      location: "Alexandria, Egypt",
-      password: "password123",
-      phone: "+20 10 9876 5432",
-      speciality: "Pediatrics",
-      certificates: [
-        {
-          authority: "Egyptian Board of Pediatrics",
-          endDate: "2028-03-15",
-          name: "Board Certified Pediatrician",
-          startDate: "2023-07-01",
-        },
-        {
-          authority: "Alexandria University",
-          endDate: "2021-06-30",
-          name: "Master of Pediatrics",
-          startDate: "2019-01-01",
-        },
-      ],
-      experiences: [
-        {
-          department: "Pediatrics",
-          endDate: "2024-12-31",
-          firm: "Alexandria University Hospital",
-          startDate: "2023-08-01",
-          title: "Consultant Pediatrician",
-        },
-        {
-          department: "Pediatrics",
-          endDate: "2023-07-31",
-          firm: "El-Shatby Maternity University Hospital",
-          startDate: "2021-07-01",
-          title: "Resident Pediatrician",
-        },
-      ],
-      interests: [
-        {
-          category: "Medical Research",
-          name: "Neonatology",
-        },
-        {
-          category: "Teaching",
-          name: "Pediatric Emergency Medicine",
-        },
-      ],
-      Languages: ["Arabic", "English", "French"],
-    },
-    {
-      doctorId: 9,
-      firstName: "Omar",
-      lastName: "Hassan",
-      birthdate: "1975-04-05",
-      city: "Giza",
-      country: "Egypt",
-      email: "omar.hassan@example.com",
-      gender: "Male",
-      location: "Giza, Egypt",
-      password: "password123",
-      phone: "+20 12 7654 3210",
-      speciality: "Orthopedic Surgery",
-      certificates: [
-        {
-          authority: "Egyptian Board of Orthopedic Surgery",
-          endDate: "2026-11-30",
-          name: "Board Certified Orthopedic Surgeon",
-          startDate: "2021-05-01",
-        },
-        {
-          authority: "Ain Shams University",
-          endDate: "2017-12-31",
-          name: "Master of Orthopedic Surgery",
-          startDate: "2015-01-01",
-        },
-      ],
-      experiences: [
-        {
-          department: "Orthopedic Surgery",
-          endDate: "2024-12-31",
-          firm: "Ain Shams University Hospital",
-          startDate: "2022-01-01",
-          title: "Consultant Orthopedic Surgeon",
-        },
-        {
-          department: "Orthopedic Surgery",
-          endDate: "2021-12-31",
-          firm: "Dar El Fouad Hospital",
-          startDate: "2018-01-01",
-          title: "Resident Orthopedic Surgeon",
-        },
-      ],
-      interests: [
-        {
-          category: "Medical Research",
-          name: "Sports Medicine",
-        },
-        {
-          category: "Teaching",
-          name: "Orthopedic Trauma",
-        },
-      ],
-      Languages: ["Arabic", "English"],
-    },
-    {
-      doctorId: 10,
-      firstName: "Nadia",
-      lastName: "Khaled",
-      birthdate: "1992-09-12",
-      city: "Asyut",
-      country: "Egypt",
-      email: "nadia.khaled@example.com",
-      gender: "Female",
-      location: "Asyut, Egypt",
-      password: "password123",
-      phone: "+20 15 2109 8765",
-      speciality: "Dermatology",
-      certificates: [
-        {
-          authority: "Egyptian Board of Dermatology",
-          endDate: "2029-08-31",
-          name: "Board Certified Dermatologist",
-          startDate: "2024-02-01",
-        },
-        {
-          authority: "Asyut University",
-          endDate: "2022-06-30",
-          name: "Master of Dermatology",
-          startDate: "2020-01-01",
-        },
-      ],
-      experiences: [
-        {
-          department: "Dermatology",
-          endDate: "2024-12-31",
-          firm: "Asyut University Hospital",
-          startDate: "2024-03-01",
-          title: "Consultant Dermatologist",
-        },
-        {
-          department: "Dermatology",
-          endDate: "2024-02-28",
-          firm: "Asyut Skin Hospital",
-          startDate: "2022-07-01",
-          title: "Resident Dermatologist",
-        },
-      ],
-      interests: [
-        {
-          category: "Medical Research",
-          name: "Cosmetic Dermatology",
-        },
-        {
-          category: "Teaching",
-          name: "Pediatric Dermatology",
-        },
-      ],
-      Languages: ["Arabic", "English"],
-    },
-    {
-      doctorId: 11,
-      firstName: "Mohamed",
-      lastName: "Mahmoud",
-      birthdate: "1980-02-28",
-      city: "Ismailia",
-      country: "Egypt",
-      email: "mohamed.mahmoud@example.com",
-      gender: "Male",
-      location: "Ismailia, Egypt",
-      password: "password123",
-      phone: "+20 11 4321 0987",
-      speciality: "Ophthalmology",
-      certificates: [
-        {
-          authority: "Egyptian Board of Ophthalmology",
-          endDate: "2025-10-31",
-          name: "Board Certified Ophthalmologist",
-          startDate: "2020-04-01",
-        },
-        {
-          authority: "Suez Canal University",
-          endDate: "2016-12-31",
-          name: "Master of Ophthalmology",
-          startDate: "2014-01-01",
-        },
-      ],
-      experiences: [
-        {
-          department: "Ophthalmology",
-          endDate: "2024-12-31",
-          firm: "Suez Canal University Hospital",
-          startDate: "2021-01-01",
-          title: "Consultant Ophthalmologist",
-        },
-        {
-          department: "Ophthalmology",
-          endDate: "2020-12-31",
-          firm: "Ismailia Eye Hospital",
-          startDate: "2017-01-01",
-          title: "Resident Ophthalmologist",
-        },
-      ],
-      interests: [
-        {
-          category: "Medical Research",
-          name: "Cataract Surgery",
-        },
-        {
-          category: "Teaching",
-          name: "Refractive Surgery",
-        },
-      ],
-      Languages: ["Arabic", "English"],
-    },
-  ]);
-
-  const [loadingRequest, setLoadingRequest] = useState(false);
-  // useEffect(() => {
-  //   const token = localStorage.getItem("jwt");
-  //   fetch(
-  //     `${process.env.NEXT_PUBLIC_SERVER_NAME}/Doctor/Profile/PendingRequests`,
-  //     {
-  //       mode: "cors",
-  //       headers: {
-  //         Authorization: "Bearer " + token,
-  //       },
-  //     }
-  //   )
-  //     .then((response) => response.json())
-  //     .then((response) => setRequests(() => response))
-  //     .finally(() => setLoadingRequest(false));
-  // }, [profileData]);
-
-  // const handleResolveRequest = async (
-  //   e: React.MouseEvent<HTMLButtonElement>
-  // ) => {
-  //   e.preventDefault();
-  //   const buttonName = e.currentTarget.name;
-  //   const appointmentID = e.currentTarget.value;
-
-  //   try {
-  //     const token = localStorage.getItem("jwt");
-
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/AppointmentResponse/${appointmentID}/${buttonName}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: "Bearer " + token,
-  //         },
-  //         mode: "cors",
-  //       }
-  //     );
-
-  //     if (!response.ok) {
-  //       if (buttonName === "accept") {
-  //         throw new Error("Failed To Accept Request");
-  //       } else if (buttonName === "decline") {
-  //         throw new Error("Failed To Decline Request");
-  //       }
-  //     }
-
-  //     window.location.href = "/doctorProfile/requests";
-  //   } catch (error) {
-  //     if (buttonName === "accept") {
-  //       console.error("Error While Accepting Request", error);
-  //     } else if (buttonName === "decline") {
-  //       console.error("Error While Declining Request", error);
-  //     }
-  //   }
-  // };
 
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 min-[880px]:flex-row min-[880px]:items-start">
@@ -419,13 +158,13 @@ const VerifyReg = () => {
         <>
           <div className="p-7">
             <div className="grid grid-cols-1 min-[1350px]:grid-cols-2 p-3 gap-y-10 justify-items-center">
-              {requests.length > 0 ? (
-                requests.map((request) => {
+              {doctorsData.length > 0 ? (
+                doctorsData.map((doctors) => {
                   return (
                     <>
                       <div
                         className="min-w-80 max-w-[400px] h-fit flex flex-col p-2 gap-2 rounded-lg bg-neutral-50 shadow-lg"
-                        key={request.doctorId}
+                        key={doctors.user_id}
                       >
                         <div className="flex gap-3">
                           <Image
@@ -434,8 +173,8 @@ const VerifyReg = () => {
                             alt="Doctor Image"
                           />
                           <p className="font-bold pt-1 self-center">
-                            {request.firstName}{" "}
-                            {request.lastName}
+                            {doctors.user_first_name}{" "}
+                            {doctors.user_last_name}
                           </p>
                         </div>
                         <div className="flex flex-col gap-1">
@@ -443,42 +182,49 @@ const VerifyReg = () => {
                             <span className="font-semibold text-gray-600">
                               location:
                             </span>
-                            {request.country} {request.city}
+                            {doctors.doctor_country} {doctors.doctor_city}
                           </p>
                           <p>
                             <span className="font-semibold text-gray-600">
                               Spetialty:
                             </span>
-                            {request.speciality}
+                            {doctors.doctor_specialization}
                           </p>
                           <p>
                             <span className="font-semibold text-gray-600">
                               Email:
                             </span>
-                            {" " + request.email}
+                            {" " + doctors.user_email}
                           </p>
                         </div>
                         <div className="max-w-[400px] whitespace-break-spaces break-words">
                           <div>
                             <strong>Gender:</strong>{" "}
-                            {request.gender}
+                            {doctors.user_gender}
                           </div>
                         </div>
                         <div className="flex flex-col gap-3">
                           <div className="flex justify-between gap-2">
                             <button
                               name="accept"
-                              // value={request.appointment_id}
+                              // value={doctors.appointment_id}
                               className="rounded-full border-none bg-emerald-600 text-white w-40 px-4 py-2 hover:scale-105 hover:cursor-pointer"
-                              onClick={() => handleAccept(request.doctorId)} // Pass doctorId
+                              onClick={() => {
+                                if (doctors.user_id) {  // Check if doctorId is not null
+                                  handleAccept(doctors.user_id); // Pass doctorId
+                                } else {
+                                  // Handle the case where doctorId is null, e.g., show an error message
+                                  console.error("Error: doctorId is null");
+                                }
+                              }}
                             >
                               Accept
                             </button>
                             <button
                               name="decline"
-                              // value={request.appointment_id}
+                              // value={doctors.appointment_id}
                               className="rounded-full border-none bg-emerald-600 text-white w-40 px-4 py-2 hover:scale-105 hover:cursor-pointer"
-                              onClick={() => handleShowFullData(request)} // Call the function
+                              onClick={() => handleShowFullData(doctors)} // Call the function
                             >
                               Full Data
                             </button>
@@ -514,37 +260,53 @@ const VerifyReg = () => {
                         {Object.entries(selectedDoctor)
                           .filter(([key]) =>
                             [
-                              "firstName",
-                              "lastName",
-                              "birthdate",
-                              "city",
-                              "country",
-                              "email",
-                              "gender",
-                              "location",
-                              "phone",
-                              "speciality",
+                              "user_first_name",
+                              "user_last_name",
+                              "user_birth_date",
+                              "doctor_country",
+                              "doctor_city",
+                              "user_email",
+                              "user_gender",
+                              "user_phone_number",
+                              "doctor_specialization",
                             ].includes(key)
                           )
-                          .map(([key, value]) => (
-                            <div key={key} className="flex items-center">
-                              <strong className="text-gray-600 mr-2">{key}:</strong>
-                              <span>{String(value)}</span>
+                          .map(([key, value]) => {
+                            if (key === "user_first_name") {
+                              return (
+                                <div key="full_name" className="flex items-center">
+                                  <strong className="text-gray-600 mr-2">Name:</strong>
+                                  <span>
+                                    {selectedDoctor.user_first_name} {selectedDoctor.user_last_name}
+                                  </span>
+                                </div>
+                              );
+                            } else if (key !== "user_last_name") { // Skip rendering last name separately
+                              // ... your existing code for other keys ...
+                              return (
+                                <div key={key} className="flex items-center">
+                                  <strong className="text-gray-600 mr-2">{keyMapping[key]}:</strong>
+                                  <span>{String(value)}</span>
+                                </div>
+                              );
+                            } else {
+                              return null; // Don't render anything for "user_last_name"
+                            }
+                          })
+                        }
+                      </div>
+                      {/* certificates is not sent from backend yet */}
+                      {/* <div>
+                          <h3 className="text-lg font-semibold mb-2">Certificates</h3>
+                          {selectedDoctor.certificates.map((cert: Certificate, index: number) => (
+                            <div key={index} className="mb-4">
+                              <div><strong>Authority:</strong> {cert.authority}</div>
+                              <div><strong>Name:</strong> {cert.name}</div>
+                              <div><strong>Start Date:</strong> {cert.startDate}</div>
+                              <div><strong>End Date:</strong> {cert.endDate}</div>
                             </div>
                           ))}
-                      </div>
-
-                      <div>
-                        <h3 className="text-lg font-semibold mb-2">Certificates</h3>
-                        {selectedDoctor.certificates.map((cert: Certificate, index: number) => (
-                          <div key={index} className="mb-4">
-                            <div><strong>Authority:</strong> {cert.authority}</div>
-                            <div><strong>Name:</strong> {cert.name}</div>
-                            <div><strong>Start Date:</strong> {cert.startDate}</div>
-                            <div><strong>End Date:</strong> {cert.endDate}</div>
-                          </div>
-                        ))}
-                      </div>
+                        </div> */}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 mt-4">
@@ -564,7 +326,7 @@ const VerifyReg = () => {
                       <div>
                         <h3 className="text-lg font-semibold mb-2">Languages</h3>
                         <ul>
-                          {selectedDoctor.Languages.map((lang: string, index: number) => (
+                          {selectedDoctor.languages.map((lang: string, index: number) => (
                             <li key={index}>{lang}</li>
                           ))}
                         </ul>
