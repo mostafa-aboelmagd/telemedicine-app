@@ -4,6 +4,7 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import ReadMore from "@/components/common/ReadMore";
 import Image from "next/image";
 import userImage from "@/images/user.png";
+
 interface Certificate {
   authority: string;
   endDate: string;
@@ -44,6 +45,7 @@ const VerifyReg = () => {
   const handleShowFullData = (doctor: any) => {
     setSelectedDoctor(doctor); // Set the selected doctor data
   };
+  const [showAcceptPopup, setshowAcceptPopup] = useState(false);
   const [doctorsData, setDoctorsData] = useState([
     {
       user_id: null,
@@ -140,12 +142,16 @@ const VerifyReg = () => {
         throw new Error('Failed to accept doctor');
       }
       console.log('Doctor accepted successfully');
-      // Optionally, update doctorsData state here to reflect the change
+      setshowAcceptPopup(true); // Show the confirmation popup
     } catch (error) {
       console.error('Error accepting doctor:', error);
     }
   };
-  
+  const AcceptPopup=()=>{
+    setshowAcceptPopup(false)
+    window.location.reload(); 
+
+  }
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 min-[880px]:flex-row min-[880px]:items-start">
       {loadingRequest ? (
@@ -335,6 +341,22 @@ const VerifyReg = () => {
                     >
                       Close
                     </button>
+                  </div>
+                </div>
+              )}
+              {showAcceptPopup && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                  <div className="bg-white p-6 rounded-lg shadow-md">
+                    <p className="text-lg   
+ text-center">This Account has been avtitated</p>
+                    <div className="mt-4 flex justify-center gap-4">
+                      <button
+                        className="bg-gray-300 text-neutral-700 text-lg p-3.5 px-6 border-none rounded-lg cursor-pointer transition-[background-color]"
+                        onClick={() => AcceptPopup()}
+                      >
+                        OK
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
