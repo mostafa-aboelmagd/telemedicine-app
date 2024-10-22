@@ -123,7 +123,7 @@ const restrictTo = (...roles) => {
     console.log("role123", role);
     if (!roles.includes(role))
       return next(
-        new AppError(`you aren't allowed to reach this data....💣💣⛔`, 401)
+        new AppError(`Role '${role}' is not allowed to reach this data....💣💣⛔`, 401)
       );
 
     next();
