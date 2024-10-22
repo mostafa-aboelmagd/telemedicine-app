@@ -34,7 +34,7 @@ const Pendingappointments: React.FC = () => {
         />
       ) : (
         <p className="font-semibold">
-          {loading ? "Loading..." : "No Upcoming Appointments Available"}
+          {loading ? "Loading..." : "Your pending appointments will appear here."}
         </p>
       )}
     </div>
