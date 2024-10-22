@@ -4,107 +4,106 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import userImage from "@/images/user.png";
 import Message from "./message"
+
+interface Message {
+  time: string;
+  text: string;
+}
 // import { io } from "socket.io-client";
 import io from 'socket.io-client';
 import { Socket } from 'socket.io-client'; // Import the Socket type
 
 function Chat() {
-  const [socket, setSocket] = useState<Socket | null>(null); // Specify the type of socket
+  const chat_doctorID = localStorage.getItem("userId");
+  const chat_appointmentId = localStorage.getItem("chat_appointmentId");
+  const chat_patientId = localStorage.getItem("chat_patientId");
+
+  const [inputValue, setInputValue] = useState("");
+  const [messagesList, setMessagesList] = useState<Message[]>([]);
+
   useEffect(() => {
-    console.log(`${process.env.NEXT_PUBLIC_SERVER_NAME}/start-chat-server`)
-    const newSocket = io(process.env.NEXT_PUBLIC_SERVER_NAME, {
-      path: '/start-chat-server'  // Specify the path here
-    }); console.log("newSocket", newSocket)
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+      window.location.href = "/auth/signin";
+    } else if (
+      Math.floor(new Date().getTime() / 1000) >
+      Number(localStorage.getItem("expiryDate"))
+    ) {
+      localStorage.clear();
+      window.location.href = "/auth/signin";
+    }
 
-    setSocket(newSocket);
-    newSocket.on('connect_error', (error) => {
-      console.log('Socket.IO connection error:', error);
-    });
-
-    return () => {
-      if (newSocket) {
-        newSocket.disconnect();
+    const fetchMessages = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_NAME}/appointment-chat/${chat_appointmentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        setMessagesList(data);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
       }
     };
-  }, []);
 
+    fetchMessages();
 
-  const chat_doctorID = localStorage.getItem("userId")
-  const chat_appointmentId = localStorage.getItem("chat_appointmentId")
-  const chat_patientId = localStorage.getItem("chat_patientId")
-  // console.log("patientid", chat_patientId);
-  // console.log("appointment is ", chat_appointmentId);
-  // console.log("doc is ", chat_doctorID);
-  const [inputValue, setInputValue] = useState("");
-  const [messagesList, setMessagesList] = useState([{
-    time: "",
-    text: ""
-  }]);
-  useEffect(() => {
-    if (socket) {
-      console.log('useEffect triggered');
-      const token = localStorage.getItem("jwt");
-      if (!token) {
-        window.location.href = "/auth/signin";
-      } else if (Math.floor(new Date().getTime() / 1000) > Number(localStorage.getItem("expiryDate"))) {
-        localStorage.clear();
-        window.location.href = "/auth/signin";
-      }
+    // Set up interval to fetch new messages periodically
+    const intervalId = setInterval(fetchMessages, 5000); // Fetch every 5 seconds
 
-      console.log('Joining room:', chat_appointmentId);
-      socket.emit('joinAppointmentChat', chat_appointmentId); // Use correct event name
-
-      const fetchMessages = async () => {
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/appointment-chat/${chat_appointmentId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          const data = await response.json();
-          setMessagesList(data);
-          console.log(data)
-        } catch (error) {
-          console.error('Error fetching messages:', error);
-        }
-      };
-      fetchMessages();
-      socket.on('newMessage', (message) => {
-        console.log('New message received:', message);
-        setMessagesList((prevMessages) => [...prevMessages, message]);
-      });
-      socket.on('connect_error', (error) => {
-        console.error('Socket.IO connection error:', error);
-        // Handle the error, e.g., display an error message to the user
-      });
-    }
-  }, [socket, chat_appointmentId]); // Add socket to dependency array
-
+    return () => clearInterval(intervalId); // Clear interval on component unmount
+  }, [chat_appointmentId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setInputValue(() => (value));
+    setInputValue(e.target.value);
   };
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!inputValue) {
-      console.log('Cannot send an empty message');
+      console.log("Cannot send an empty message");
       return;
     }
 
-    if (socket) { // Check if socket is initialized
-      socket.emit('sendMessage', {
-        doctorId: chat_doctorID,
-        patientId: chat_patientId,
-        message: inputValue,
-        appointmentId: chat_appointmentId
-      });
-    } else {
-      console.error('Socket.IO not initialized. Cannot send message.');
-    }
+    try {
+      const token = localStorage.getItem("jwt");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/appointment-chat/sendMessage`, // Use the correct endpoint for sending messages
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            doctorId: chat_doctorID,
+            patientId: chat_patientId,
+            message: inputValue,
+            appointmentId: chat_appointmentId,
+          }),
+        }
+      );
 
-    setInputValue("");
+      if (response.ok) {
+        // Message sent successfully, clear input field and refetch messages
+        setInputValue("");
+        const data = await response.json();
+        setMessagesList(data); // Update messagesList with the new message
+      } else {
+        console.error("Error sending message:", response.status);
+        // Handle the error, e.g., display an error message to the user
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      // Handle the error, e.g., display an error message to the user
+    }
   };
+
 
   return (
     <div className="flex justify-center">
@@ -137,7 +136,6 @@ function Chat() {
           )) :
             <></>}
         </div>
-
         <div className="flex gap-2 p-2 border-solid border-[1px] border-zinc-300 items-center h-[15%]">
           <svg
             xmlns="http://www.w3.org/2000/svg"

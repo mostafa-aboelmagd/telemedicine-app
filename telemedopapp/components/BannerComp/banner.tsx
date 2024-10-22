@@ -12,14 +12,14 @@ const Banner = () => {
     }
   }, []);
   return (
-    <section className="flex flex-col md:flex-row md:ml-[12.5%] items-center justify-center">
-      <div className="flex flex-col h-full space-y-4">
+    <section className="flex flex-col md:flex-row md:ml-[12.5%] items-center justify-center w-full">
+      <div className="flex flex-col h-full space-y-4 w-full">
         <div className="flex flex-col p-2 space-y-6">
           <p className="text-base md:text-lg font-semibold text-[#343a40]">
             Take Control of Your Healthcare Operations          </p>
         </div>
         {isAdmin ? (
-        <div className="flex flex-col items-center justify-center space-y-4 md:max-w-[80%]">
+        <div className="flex flex-col items-center justify-center space-y-4 md:max-w-[80%] w-full">
           <div className="flex flex-col md:flex-row gap-4 w-full">
             <div className="w-full md:w-1/2">
               <Link className="w-full" href="/docTools">
@@ -73,7 +73,7 @@ const Banner = () => {
           </div>
         </div>):(
           <div className="flex flex-col items-center justify-center space-y-4 md:max-w-[80%]">
-            <p className="text-lg text-center">
+            <p className="text-lg text-center w-full">
               Sign in to access administration tools
             </p>
             <Link href="/auth/signin">
