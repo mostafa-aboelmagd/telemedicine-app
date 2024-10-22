@@ -32,6 +32,14 @@ export default function ProfileLayout({
                 </p>
               </div>
               <div className="flex flex-col gap-3 font-semibold text-sm">
+              <button
+                  className=" bg-blue-600 text-white py-3 px-1 rounded-lg"
+                  onClick={() =>
+                    router.push("/patientProfile/pendingappointments")
+                  }
+                >
+                  Pending Appointments
+                </button>
                 <button
                   className=" bg-blue-600 text-white py-3 px-1 rounded-lg"
                   onClick={() =>

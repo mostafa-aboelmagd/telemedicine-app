@@ -4,23 +4,25 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import userImage from "@/images/user.png";
 import Message from "./message"
+import { format } from 'date-fns'; // Import date-fns
 
 interface Message {
-  time: string;
-  text: string;
+  message_id: number
+  message_date: string; // Use the actual field name from the response
+  message_content: string; // Use the actual field name from the response
+  message_receiver_id: number
 }
-// import { io } from "socket.io-client";
-import io from 'socket.io-client';
-import { Socket } from 'socket.io-client'; // Import the Socket type
 
 function Chat() {
-  const chat_doctorID = localStorage.getItem("userId");
   const chat_appointmentId = localStorage.getItem("chat_appointmentId");
   const chat_patientId = localStorage.getItem("chat_patientId");
+  const chat_patientfirstname = localStorage.getItem("chat_patient_firstname");
+  const chat_patientlastname = localStorage.getItem("chat_patient_lastname");
 
   const [inputValue, setInputValue] = useState("");
   const [messagesList, setMessagesList] = useState<Message[]>([]);
-
+  console.log(chat_appointmentId)
+  console.log(chat_patientId)
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (!token) {
@@ -38,23 +40,33 @@ function Chat() {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_NAME}/appointment-chat/${chat_appointmentId}`,
           {
+            method: "GET",
             headers: {
-              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
             },
+            mode: "cors",
           }
         );
-        const data = await response.json();
-        setMessagesList(data);
+        if (response.status === 404) {
+          // No previous messages available
+          console.log("No previous messages found.");
+          setMessagesList([]); // Or handle it differently, e.g., show a message to the user
+        } else if (response.ok) {
+          const chat = await response.json();
+          console.log(chat)
+          setMessagesList(chat);
+        } else {
+          console.error("Error fetching messages:", response.status);
+          // Handle other error statuses if needed
+        }
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
     };
-
     fetchMessages();
-
     // Set up interval to fetch new messages periodically
     const intervalId = setInterval(fetchMessages, 5000); // Fetch every 5 seconds
-
     return () => clearInterval(intervalId); // Clear interval on component unmount
   }, [chat_appointmentId]);
 
@@ -72,7 +84,7 @@ function Chat() {
     try {
       const token = localStorage.getItem("jwt");
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_NAME}/appointment-chat/sendMessage`, // Use the correct endpoint for sending messages
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/appointment-chat`,
         {
           method: "POST",
           mode: "cors",
@@ -81,8 +93,7 @@ function Chat() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            doctorId: chat_doctorID,
-            patientId: chat_patientId,
+            receiverId: chat_patientId,
             message: inputValue,
             appointmentId: chat_appointmentId,
           }),
@@ -90,10 +101,20 @@ function Chat() {
       );
 
       if (response.ok) {
-        // Message sent successfully, clear input field and refetch messages
+        // Message sent successfully, clear input field and update messagesList
         setInputValue("");
-        const data = await response.json();
-        setMessagesList(data); // Update messagesList with the new message
+
+        // Construct the new message object
+        const newMessage: Message = {
+          message_id: Date.now(), // You might need a better way to generate a unique ID
+          message_date: new Date().toISOString(),
+          message_content: inputValue,
+          message_receiver_id: parseInt(chat_patientId!),
+        };
+
+        // Update messagesList with the new message
+        setMessagesList(prevMessages => [...prevMessages, newMessage]);
+
       } else {
         console.error("Error sending message:", response.status);
         // Handle the error, e.g., display an error message to the user
@@ -112,7 +133,7 @@ function Chat() {
           <div className="flex mx-2 justify-between items-center">
             <div className="flex gap-2 items-center">
               <Image className="inline-block h-10 w-10 rounded-full" src={userImage} alt="Doctor Image" />
-              <p className="font-bold">Mahmoud</p>
+              <p className="font-bold">{chat_patientfirstname}{" "}{chat_patientlastname}</p>
             </div>
             <button
               onClick={() => (window.location.href = "/doctorProfile/requests")}>
@@ -131,10 +152,17 @@ function Chat() {
         </div>
 
         <div className="h-3/4 border-solid border-x-[1px] border-x-zinc-300 p-2 overflow-y-scroll">
-          {messagesList.length > 1 ? messagesList.slice(1, messagesList.length).map((message) => (
-            <Message key={message.text + message.time} time={message.time} text={message.text} />
-          )) :
-            <></>}
+          {messagesList.map((message) => (
+            <div
+              key={message.message_id}
+              className={`flex ${message.message_receiver_id === parseInt(chat_patientId!) ? 'justify-end' : 'justify-start'}`}
+            >
+              <Message
+                time={format(new Date(message.message_date), 'dd/MM HH:mm')}
+                text={message.message_content}
+              />
+            </div>
+          ))}
         </div>
         <div className="flex gap-2 p-2 border-solid border-[1px] border-zinc-300 items-center h-[15%]">
           <svg

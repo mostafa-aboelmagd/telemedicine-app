@@ -10,23 +10,23 @@ interface ProfileData {
   email: string;
   gender: string;
   birthDate: string;
-  languages: string;
 }
 
 function ViewProfile() {
   const { profileData, loading } = useProfile();
   const router = useRouter();
 
+
   const profileFields = [
     { name: "firstName", title: "First Name" },
     { name: "lastName", title: "Last Name" },
     { name: "phone", title: "Phone Number" },
     { name: "email", title: "Email" },
-    { name: "languages", title: "Languages" },
-    { name: "birthDate", title: "Date Of Birth" },
     { name: "gender", title: "Gender" },
   ];
   console.log("profileFields",profileFields);
+  console.log("profiledata",profileData);
+
 
   if (loading) {
     return <div>Loading profile data...</div>;

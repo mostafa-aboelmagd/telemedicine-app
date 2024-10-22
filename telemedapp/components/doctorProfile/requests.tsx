@@ -6,7 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import ReadMore from "@/components/common/ReadMore";
 import Image from "next/image";
 import userImage from "@/images/user.png";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 
 interface ProfileData {
   firstName: string;
@@ -34,13 +34,18 @@ const Requests = () => {
   interface AppointmentIds {
     appointmentId: string;
     patientId: string;
+    patientfirstname: string,
+    patientlastname: string
   }
   const handleAskForDetails = (ids: AppointmentIds) => {
     localStorage.setItem("chat_appointmentId", ids.appointmentId);
     localStorage.setItem("chat_patientId", ids.patientId);
-    
+    localStorage.setItem("chat_patient_firstname", ids.patientfirstname);
+    localStorage.setItem("chat_patient_lastname", ids.patientlastname);
+
+
     // Wrap the routing logic in a useEffect to ensure it runs on the client-side
-    router.push(`/doctorProfile/chat`); 
+    router.push(`/doctorProfile/chat`);
   };
   const [requests, setRequests] = useState([
     {
@@ -212,7 +217,10 @@ const Requests = () => {
                               className="rounded-full border-none bg-blue-500 text-white w-40 px-4 py-2 hover:scale-105 hover:cursor-pointer"
                               onClick={() => handleAskForDetails({
                                 appointmentId: request.appointment_id,
-                                patientId: request.appointment_patient_id
+                                patientId: request.appointment_patient_id,
+                                patientfirstname: request.patient_first_name,
+                                patientlastname: request.patient_last_name
+
                               })}
 
                             >
