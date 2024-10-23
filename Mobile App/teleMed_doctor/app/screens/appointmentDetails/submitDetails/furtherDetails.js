@@ -96,7 +96,6 @@ const FurtherDetails = ({ navigation }) => {
       <CustomScroll>
         <View style={styles.container}>
           <View style={styles.titleRow}>
-            <CustomTitle style={styles.textColumn}>Complaint</CustomTitle>
           </View>
           <View style={styles.titleRow}>
             <CustomTitle style={styles.textColumn}>Operations</CustomTitle>

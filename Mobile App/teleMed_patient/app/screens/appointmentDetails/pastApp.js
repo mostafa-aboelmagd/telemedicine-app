@@ -31,7 +31,7 @@ export default function PastAppointment({ navigation }) {
 
   const past = async () => {
     try {
-      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/doctor/appointmentHistory`, {
+      const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/patient/appointment/appointmentsHistory`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -47,13 +47,14 @@ export default function PastAppointment({ navigation }) {
       }
 
       const result = await response.json();
-      // console.log(result)
+      console.log(result)
 
       setData(result.appointments);
     } catch (error) {
       console.error('Error fetching doctor info:', error);
     } finally {
       setLoading(false);
+      console.log("data",data);
     }
   };
 
@@ -72,9 +73,9 @@ export default function PastAppointment({ navigation }) {
             </TouchableOpacity>
             <CustomTitle>Past appointments</CustomTitle>
         </View>
-        <TouchableOpacity onPress={rate}>
+        {/* <TouchableOpacity onPress={rate}>
           <Text style={styles.button}>Rate appointment</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
             {!loading ? ( data ? data.map((item, id) =>
             <View key={id}>
                 <View style={[styles.card]}>
