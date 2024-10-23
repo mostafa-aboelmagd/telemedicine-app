@@ -31,9 +31,6 @@ const SubmitResults = ({ navigation }) => {
                     <CustomTitle titleStyle={{ marginTop: "1%", textAlign: 'center' }}>
                         Patient Name: {patientFirstName} {patientLastName}
                     </CustomTitle>
-                    <CustomTitle titleStyle={{ textAlign: 'center' }}>
-                        Visit Date: 22-5-2024
-                    </CustomTitle>
                     <View style={styles.titleRow} >
                         <CustomTitle style={styles.textColumn}>
                             Diagnosis
