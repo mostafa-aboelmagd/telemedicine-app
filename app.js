@@ -29,6 +29,8 @@ const doctorAppointmentHistoryRoute = require("./Routes/Doctor/AppointmentHistor
 const doctorAppointmentDetailsRoute = require("./Routes/Doctor/AppointmentDetails");
 const doctorPatientsummaryRoute = require("./Routes/Doctor/Patientsummary");
 const doctorAvailabilityRoute = require("./Routes/Doctor/Availability");
+const notificationsRoute = require("./Routes/notifications");
+
 const chatRoute = require("./Routes/Chat");
 const { globalErrorHanlder } = require("./Utilities");
 const port = process.env.PORT || 4000;
@@ -73,6 +75,8 @@ app.use("/doctor/appointmentHistory", doctorAppointmentHistoryRoute);
 app.use("/doctor/appointmentDetails", doctorAppointmentDetailsRoute);
 app.use("/doctor/PatientSummary", doctorPatientsummaryRoute);
 app.use("/appointment-chat", chatRoute);
+app.use("/notifications", notificationsRoute);
+
 /// backOffice
 app.use("/backOffice", backOfficeRoute);
 app.use("/", (req, res, next) => {

@@ -69,5 +69,17 @@ const retrieveUserState = async (UserID, UserRole) => {
         return false;
     }
 };
+const getUnreadNotificationCount = async (userId) => {
+    try {
+        const result = await pool.query(
+            'SELECT COUNT(*) FROM notifications WHERE user_id = $1 AND read = FALSE',
+            [userId]
+        );
+        return result.rows[0].count;
+    } catch (error) {
+        console.error(error.stack);
+        return 0; // Return 0 in case of an error
+    }
+};
 
-module.exports = { retrieveUser, retrieveUserState };
+module.exports = { retrieveUser, retrieveUserState, getUnreadNotificationCount };

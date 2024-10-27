@@ -40,6 +40,7 @@
 24. **Doctor View reviews:** `/doctor/profile/reviews`
 25. **Doctor View interests:** `/doctor/profile/interests` -->
 
+
 26. **Doctor Availability Addition:** `/doctor/availability/add`(tested)
 27. **Doctor Availability Deletion:** `/doctor/availability/delete`(tested)
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
@@ -61,6 +62,10 @@
 44. **Doctor deletes language:**`/languages/:language_id`(Tested)
 45. **Doctor deletes Interest:**`interests/:doctor_interest_id`(Tested)
 46. **Patient submit Review:**`/patient/appointment/203/review`(Tested)
+47. **User gits unread notifications:**`/notifications/Unread`(Tested)
+48. **User gits unread notifications:**`/notifications/All`(Tested)
+49. **change notification to read:**`/notifications/Markread`(Tested)
+
 
 #### BackOffice Endpoints listed are:
 
@@ -85,7 +90,9 @@
   ```json
   {
     "email": "patient4@test.com",
-    "password": "test@123!"
+    "password": "test@123!",
+    "Notifications": "1"
+
   }
   ```
 - **Response Body:**
@@ -943,26 +950,26 @@
   - `Content-Type: application/json`
 - **Response Body:**
   ```json
-  {
-    "appointments": [
-      {
-        "appointment_patient_id": 3,
-        "appointment_doctor_id": 13,
-        "appointment_availability_slot": 55,
-        "appointment_type": "Followup",
-        "appointment_duration": 30,
-        "appointment_complaint": "I have a headache",
-        "appointment_parent_reference": null,
-        "appointment_settings_type": "Onsite",
-        "patient_first_name": "mohamed ",
-        "patient_last_name": "salem",
-        "doctor_first_name": "samy",
-        "doctor_last_name": "ali",
-        "doctor_specialization": "Cardiology",
-        "doctor_availability_day_hour": "2024-11-17T07:00:00.000Z"
-      }
-    ]
-  }
+    {
+      "appointments": [
+        {
+          "appointment_patient_id": 3,
+          "appointment_doctor_id": 13,
+          "appointment_availability_slot": 55,
+          "appointment_type": "Followup",
+          "appointment_duration": 30,
+          "appointment_complaint": "I have a headache",
+          "appointment_parent_reference": null,
+          "appointment_settings_type": "Onsite",
+          "patient_first_name": "mohamed ",
+          "patient_last_name": "salem",
+          "doctor_first_name": "samy",
+          "doctor_last_name": "ali",
+          "doctor_specialization": "Cardiology",
+          "doctor_availability_day_hour": "2024-11-17T07:00:00.000Z"
+        }
+      ]
+    }
   ```
   If no appointments are available:
   ```json
@@ -978,57 +985,57 @@
   - `Authorization: Bearer your_access_token`
 - **Response Body:**
   ```json
-  {
-    "appointment": {
-      "appointment_patient_id": 2,
-      "appointment_doctor_id": 12,
-      "appointment_availability_slot": 1,
-      "appointment_type": "First_time",
-      "appointment_duration": 30,
-      "appointment_complaint": "Headache",
-      "appointment_status": "Approved",
-      "appointment_parent_reference": null,
-      "appointment_settings_type": "Onsite",
-      "patient_first_name": "yahya",
-      "patient_last_name": "khalaf",
-      "doctor_first_name": "Olivia",
-      "doctor_last_name": "Martinez",
-      "doctor_availability_day_hour": "2024-10-01T07:00:00.000Z",
-      "doctor_specialization": "Internal Medicine",
-      "doctor_clinic_location": "Maadi",
-      "appointmentResults": [
-        {
-          "appointment_diagnosis": "Migraine",
-          "appointment_report": "Patient will recover with rest and medication.",
-          "updated_at": "2024-09-23T10:13:15.984Z"
-        }
-      ],
-      "treatmentPlan": {
-        "treatment_plan_operations": "Rest, medication",
-        "treatment_plan_speciality_referral": null,
-        "treatment_plan_referral_notes": null,
-        "treatment_plan_id": 1
-      },
-      "medications": [
-        {
-          "medication_note": "For headache relief",
-          "medication_start_date": "2024-09-30T21:00:00.000Z",
-          "medication_end_date": "2024-10-06T21:00:00.000Z",
-          "medication_id": 1,
-          "medication_name": "Ibuprofen",
-          "medication_dosage": "400mg, 3 times daily"
-        }
-      ],
-      "medicalDocuments": []
+    {
+      "appointment": {
+        "appointment_patient_id": 2,
+        "appointment_doctor_id": 12,
+        "appointment_availability_slot": 1,
+        "appointment_type": "First_time",
+        "appointment_duration": 30,
+        "appointment_complaint": "Headache",
+        "appointment_status": "Approved",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": "Onsite",
+        "patient_first_name": "yahya",
+        "patient_last_name": "khalaf",
+        "doctor_first_name": "Olivia",
+        "doctor_last_name": "Martinez",
+        "doctor_availability_day_hour": "2024-10-01T07:00:00.000Z",
+        "doctor_specialization": "Internal Medicine",
+        "doctor_clinic_location": "Maadi",
+        "appointmentResults": [
+          {
+            "appointment_diagnosis": "Migraine",
+            "appointment_report": "Patient will recover with rest and medication.",
+            "updated_at": "2024-09-23T10:13:15.984Z"
+          }
+        ],
+        "treatmentPlan": {
+          "treatment_plan_operations": "Rest, medication",
+          "treatment_plan_speciality_referral": null,
+          "treatment_plan_referral_notes": null,
+          "treatment_plan_id": 1
+        },
+        "medications": [
+          {
+            "medication_note": "For headache relief",
+            "medication_start_date": "2024-09-30T21:00:00.000Z",
+            "medication_end_date": "2024-10-06T21:00:00.000Z",
+            "medication_id": 1,
+            "medication_name": "Ibuprofen",
+            "medication_dosage": "400mg, 3 times daily"
+          }
+        ],
+        "medicalDocuments": []
+      }
     }
-  }
   ```
   with wrong appointmentId:
 
 ```json
-{
-  "message": "Appointment not found"
-}
+  {
+    "message": "Appointment not found"
+  }
 ```
 
 ---
@@ -1041,33 +1048,33 @@
 - **Response Body:**
 
 ```json
-{
-  "appointments": [
-    {
-      "appointment_patient_id": 3,
-      "appointment_doctor_id": 14,
-      "appointment_id": 71,
-      "appointment_type": "Followup",
-      "appointment_duration": 30,
-      "appointment_complaint": "I have a headache",
-      "appointment_parent_reference": null,
-      "appointment_settings_type": "Online",
-      "patient_first_name": "mohamed ",
-      "patient_last_name": "salem",
-      "doctor_first_name": "Ava",
-      "doctor_last_name": "Taylor",
-      "doctor_availability_day_hour": "2024-10-03T06:00:00.000Z"
-    }
-  ]
-}
+  {
+    "appointments": [
+      {
+        "appointment_patient_id": 3,
+        "appointment_doctor_id": 14,
+        "appointment_id": 71,
+        "appointment_type": "Followup",
+        "appointment_duration": 30,
+        "appointment_complaint": "I have a headache",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": "Online",
+        "patient_first_name": "mohamed ",
+        "patient_last_name": "salem",
+        "doctor_first_name": "Ava",
+        "doctor_last_name": "Taylor",
+        "doctor_availability_day_hour": "2024-10-03T06:00:00.000Z"
+      }
+    ]
+  }
 ```
 
 with wrong appointmentId:
 
 ```json
-{
-  "message": "No Completed appointments found"
-}
+  {
+    "message": "No Completed appointments found"
+  }
 ```
 
 ---
@@ -1122,166 +1129,162 @@ with wrong appointmentId:
 - **Parameters:**
 - **Request Body:**
   ````json
-  {
-  "personalInfo": {
-  "firstName": "John",//
-  "lastName": "Doe",//
-  "birthdate": "1990-01-01",//
-  "city": "New York", //
-  "country": "United States", //
-  "email": "johndoe@example.com",//
-  "gender": "Male", //
-  "location": "New York, NY", //
-  "password": "password123",
-  "phone": "+1 123-456-7890",//
-  "speciality": "Software Engineer" //
-  },
-  "certificates": [
-  {
-  "authority": "American College of Surgeons",
-  "endDate": "2025-12-31",
-  "name": "Board Certified General Surgeon",
-  "startDate": "2020-01-01"
-  },
-  {
-  "authority": "American Medical Association",
-  "endDate": "2024-12-31",
-  "name": "Fellow of the American College of Surgeons",
-  "startDate": "2018-01-01"
-  }
-  ],
-  "experiences": [
-  {
-  "department": "General Surgery",
-  "endDate": "2024-06-30",
-  "firm": "St. Mary's Hospital",
-  "startDate": "2020-07-01",
-  "title": "Attending Surgeon"
-  },
-  {
-  "department": "Surgical Oncology",
-  "endDate": "2022-12-31",
-  "firm": "Memorial Sloan Kettering Cancer Center",
-  "startDate": "2018-01-01",
-  "title": "Clinical Fellow"
-  }
-  ],
-  "interests": [
-  {
-  "category": "Medical Research",
-  "name": "Surgical Oncology"
-  },
-  {
-  "category": "Teaching",
-  "name": "Medical Student Education"
-  }
-  ],
-  "Languages": [
-  "English",
-  "Spanish"
-  ]
-  }
-      ```
-  ````
-- **Response Body:**
-
-  ```json
-  {
-    "message": "Doctor created successfully",
-    "doctor": {
-      "user_id": 52,
-      "user_first_name": "John",
-      "user_last_name": "Doe",
-      "user_email": "johndoe@example.com",
-      "user_phone_number": "+1 123-456-7890",
-      "user_gender": "Male",
-      "user_role": "Doctor",
-      "user_birth_date": "1989-12-31T22:00:00.000Z",
-      "doctor_user_id_reference": 52,
-      "doctor_specialization": "Software Engineer",
-      "doctor_country": "United States",
-      "doctor_city": "New York",
-      "doctor_clinic_location": "New York, NY",
-      "doctor_account_state": "On_hold"
+    {
+    "personalInfo": {
+    "firstName": "John",//
+    "lastName": "Doe",//
+    "birthdate": "1990-01-01",//
+    "city": "New York", //
+    "country": "United States", //
+    "email": "johndoe@example.com",//
+    "gender": "Male", //
+    "location": "New York, NY", //
+    "password": "password123",
+    "phone": "+1 123-456-7890",//
+    "speciality": "Software Engineer" //
     },
-    "certificates": true,
-    "experiences": true,
-    "interests": true,
-    "Languages": true
-  }
-  ```
-
-37. **Doctor Books Followup Appointment:** `/doctor/FollowupAppointment`
-
-- **Method:** Post
-- **Request Headers:**
-- **Parameters:**
-- **Request Body:**
-  ````json
-  { "appointmentId":150,
-  "complaint": "Follow-up on prior diagnosis",
-  "duration": 30,
-  "appointment_date": "2025-12-01 19:00:00",
-  "time_slot_code": "4_11_L"
-  }
-      ```
+    "certificates": [
+    {
+    "authority": "American College of Surgeons",
+    "endDate": "2025-12-31",
+    "name": "Board Certified General Surgeon",
+    "startDate": "2020-01-01"
+    },
+    {
+    "authority": "American Medical Association",
+    "endDate": "2024-12-31",
+    "name": "Fellow of the American College of Surgeons",
+    "startDate": "2018-01-01"
+    }
+    ],
+    "experiences": [
+    {
+    "department": "General Surgery",
+    "endDate": "2024-06-30",
+    "firm": "St. Mary's Hospital",
+    "startDate": "2020-07-01",
+    "title": "Attending Surgeon"
+    },
+    {
+    "department": "Surgical Oncology",
+    "endDate": "2022-12-31",
+    "firm": "Memorial Sloan Kettering Cancer Center",
+    "startDate": "2018-01-01",
+    "title": "Clinical Fellow"
+    }
+    ],
+    "interests": [
+    {
+    "category": "Medical Research",
+    "name": "Surgical Oncology"
+    },
+    {
+    "category": "Teaching",
+    "name": "Medical Student Education"
+    }
+    ],
+    "Languages": [
+    "English",
+    "Spanish"
+    ]
+    }
   ````
 - **Response Body:**
 
   ```json
-  {
-    "message": "Followup Appointment created successfully"
-  }
+    {
+      "message": "Doctor created successfully",
+      "doctor": {
+        "user_id": 52,
+        "user_first_name": "John",
+        "user_last_name": "Doe",
+        "user_email": "johndoe@example.com",
+        "user_phone_number": "+1 123-456-7890",
+        "user_gender": "Male",
+        "user_role": "Doctor",
+        "user_birth_date": "1989-12-31T22:00:00.000Z",
+        "doctor_user_id_reference": 52,
+        "doctor_specialization": "Software Engineer",
+        "doctor_country": "United States",
+        "doctor_city": "New York",
+        "doctor_clinic_location": "New York, NY",
+        "doctor_account_state": "On_hold"
+      },
+      "certificates": true,
+      "experiences": true,
+      "interests": true,
+      "Languages": true
+    }
   ```
 
-38. **Doctor adds language:**`/doctor/profile/languages`(Tested)
+1.  **Doctor Books Followup Appointment:** `/doctor/FollowupAppointment`
 
 - **Method:** Post
 - **Request Headers:**
 - **Parameters:**
 - **Request Body:**
   ````json
-  {
-  "doctor_id": "56",
-  "language": "seeny"
-  }
-      ```
+    { "appointmentId":150,
+    "complaint": "Follow-up on prior diagnosis",
+    "duration": 30,
+    "appointment_date": "2025-12-01 19:00:00",
+    "time_slot_code": "4_11_L"
+    }
   ````
 - **Response Body:**
 
   ```json
-  {
-    "message": "New Language added"
-  }
+    {
+      "message": "Followup Appointment created successfully"
+    }
   ```
 
-39. **Doctor adds Experience:**`/doctor/profile/experience`(Tested)
+1.  **Doctor adds language:**`/doctor/profile/languages`(Tested)
 
 - **Method:** Post
 - **Request Headers:**
 - **Parameters:**
 - **Request Body:**
   ````json
-  {
-  "experience": {
-    "doctor_experience_job_title": "Senior Surgeon",
-    "doctor_experience_firm_name": "City Hospital",
-    "doctor_experience_department": "Surgery",
-    "doctor_experience_start_date": "2020-01-15",
-    "doctor_experience_end_date": "2023-10-01"
-  }
-  }
-      ```
+    {
+    "doctor_id": "56",
+    "language": "seeny"
+    }
   ````
 - **Response Body:**
 
   ```json
-  {
-    "message": "New Experience added"
-  }
+    {
+      "message": "New Language added"
+    }
   ```
 
-  40. **Doctor adds Education:**`/doctor/profile/education`(Tested)
+1.  **Doctor adds Experience:**`/doctor/profile/experience`(Tested)
+
+- **Method:** Post
+- **Request Headers:**
+- **Parameters:**
+- **Request Body:**
+  ````json
+    {
+    "experience": {
+      "doctor_experience_job_title": "Senior Surgeon",
+      "doctor_experience_firm_name": "City Hospital",
+      "doctor_experience_department": "Surgery",
+      "doctor_experience_start_date": "2020-01-15",
+      "doctor_experience_end_date": "2023-10-01"
+    }
+    }
+  ````
+- **Response Body:**
+
+  ```json
+    {
+      "message": "New Experience added"
+    }
+  ```
+
+  1.  **Doctor adds Education:**`/doctor/profile/education`(Tested)
 
 - **Method:** Post
 - **Request Headers:**
@@ -1289,27 +1292,26 @@ with wrong appointmentId:
 - **Request Body:**
 
   ````json
-  {
-  "education": {
-    "education_certificate": "MD in Internal Medicine",
-    "education_authority": "Harvard Medical School",
-    "education_start_date": "2015-09-01",
-    "education_end_data": "2020-06-30"
-  }
-  }
+    {
+    "education": {
+      "education_certificate": "MD in Internal Medicine",
+      "education_authority": "Harvard Medical School",
+      "education_start_date": "2015-09-01",
+      "education_end_data": "2020-06-30"
+    }
+    }
 
-      ```
   ````
 
 - **Response Body:**
 
   ```json
-  {
-    "message": "New Certificate added"
-  }
+    {
+      "message": "New Certificate added"
+    }
   ```
 
-  40. **Doctor adds Interest:**`/doctor/profile/interests`(Tested)
+  1.  **Doctor adds Interest:**`/doctor/profile/interests`(Tested)
 
 - **Method:** Post
 - **Request Headers:**
@@ -1317,14 +1319,13 @@ with wrong appointmentId:
 - **Request Body:**
 
   ````json
-  {
-  "Interest": {
-    "interest.doctor_interest_category": "Games",
-    "interest.doctor_interest_name": "COD"
-  }
-  }
+    {
+    "Interest": {
+      "interest.doctor_interest_category": "Games",
+      "interest.doctor_interest_name": "COD"
+    }
+    }
 
-      ```
   ````
 
 - **Response Body:**
@@ -1335,7 +1336,7 @@ with wrong appointmentId:
   }
   ```
 
-42. **Doctor deletes experience:**`/experience/:doctor_experience_id`(Tested)
+1.  **Doctor deletes experience:**`/experience/:doctor_experience_id`(Tested)
 
 - **Method:** Delete
 - **Request Headers:**
@@ -1402,17 +1403,15 @@ with wrong appointmentId:
 - **Parameters:**(appointment)
 - **Request Body:**
 
-  ````json
-  {
-  "doctorId": 56,
-  "communication_rating": 5,
-  "understanding_rating": 5,
-  "providing_solution_rating": 5,
-  "commitment_rating": 5
-  }
-
-      ```
-  ````
+  ```json
+    {
+    "doctorId": 56,
+    "communication_rating": 5,
+    "understanding_rating": 5,
+    "providing_solution_rating": 5,
+    "commitment_rating": 5
+    }
+  ```
 
 - **Response Body:**
 
@@ -1420,6 +1419,69 @@ with wrong appointmentId:
   {
     "message": "Review submitted successfully"
   }
+  ```
+
+
+
+
+1.    **User gits unread notifications:**`/notifications/All`(Tested)
+  - **Method:** GET
+- **Request Headers:**
+  - `Authorization: Bearer your_access_token`
+- **Parameters:**
+  - [`appointmentId`]The ID of the appointment
+- **Request Body:**
+- **Response Body:**
+
+  ```json
+    [
+        {
+            "notification_id": 1,
+            "user_id": 75,
+            "message": "test",
+            "read": false,
+            "created_at": "2024-10-27T14:33:20.855Z"
+        }
+    ]
+  ```
+
+    
+48.   **User gits unread notifications:**`/notifications/Unread`(Tested)
+  - **Method:** GET
+- **Request Headers:**
+  - `Authorization: Bearer your_access_token`
+- **Parameters:**
+- **Request Body:**
+- **Response Body:**
+
+  ```json
+    [
+        {
+            "notification_id": 1,
+            "user_id": 75,
+            "message": "test",
+            "read": false,
+            "created_at": "2024-10-27T14:33:20.855Z"
+        }
+    ]
+  ```
+
+49.   **change notification to read:**`/notifications/Markread`(Tested)
+  - **Method:** PUT
+- **Request Headers:**
+  - `Authorization: Bearer your_access_token`
+- **Parameters:**
+- **Request Body:**
+  ```json
+    {
+      "notificationIds": [1, 5, 12, 20]
+    } 
+  ```
+- **Response Body:**
+  ```json 
+  {
+      "message": "Notifications marked as read"
+  }  
   ```
 
 ## ** BackOffice Endpoint Documentation **
@@ -1495,8 +1557,6 @@ with wrong appointmentId:
   "state"
   }
       ```
-
-  ````
 
 - **Response Body:**
 

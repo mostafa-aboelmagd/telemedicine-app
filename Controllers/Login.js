@@ -34,13 +34,15 @@ const login = async (req, res) => {
         const message = 'Account has been banned';
         return res.status(403).json({ message });
     }
+    const unreadCount = await database.getUnreadNotificationCount(user[0].user_id); 
+
     const token = createToken(user[0].user_id, user[0].user_email, user[0].user_role, user[0].user_first_name, user[0].user_last_name);
     if (!token) {
         message = 'Token could not be created';
         return res.status(400).json(message);
     }
     res.cookie('jwt', token, { httpOnly: true, maxAge: ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS, sameSite: 'none', secure: true });
-    return res.json({ message: 'Login successful', token: token });
+    return res.json({ message: 'Login successful', token: token, Notifications: unreadCount  });
 }
 
 module.exports = { login };
