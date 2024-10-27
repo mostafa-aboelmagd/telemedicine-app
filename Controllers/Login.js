@@ -13,7 +13,7 @@ const login = async (req, res) => {
     }
     const user = await database.retrieveUser(email);
     if (!user) {
-        message = 'Invalid email or password'
+        message = 'Invalid email'
         return res.status(400).json(message);
     }
     console.log('User retrieved:', user);
