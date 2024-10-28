@@ -64,8 +64,8 @@ export default function dropdownlist(type) {
     ];
   } else if (type === "gender") {
     return [
-      { label: "Male", value: "male" },
-      { label: "Female", value: "female" },
+      { label: "Male", value: "Male" },
+      { label: "Female", value: "Female" },
     ];
   } else if (type === "years") {
     const startYear = 1900;

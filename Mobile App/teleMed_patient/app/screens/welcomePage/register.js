@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Pressable,
   Platform,
+  ScrollView,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -21,6 +22,7 @@ import LocalStorage from "../../components/LocalStorage";
 import dropdownlist from "../../components/DropDownOptions";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
+import {NEXT_PUBLIC_SERVER_NAME} from '@env'
 
 export default function Register({ navigation }) {
   const [Fname, setFName] = useState("");
@@ -39,60 +41,7 @@ export default function Register({ navigation }) {
   const [showPicker, setShowPicker] = useState(false);
   const [isPickerVisible, setIsPickerVisible] = useState(false);
   const [birth_date, setBirthDate] = useState(false);
-  const screen2 = () => {
-    if (
-      Fname &&
-      Lname &&
-      email &&
-      password &&
-      confirmPassword &&
-      phone &&
-      gender &&
-      country &&
-      city &&
-      location &&
-      speciality
-    ) {
-      // Validate if password and confirm password match
 
-      if (password !== confirmPassword) {
-        Alert.alert("Error", "Confirm passwords do not match.");
-        return;
-      }
-      // Validate password complexity (at least 8 characters, one number, and one special character)
-
-      const passwordRegex = /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      if (!passwordRegex.test(password)) {
-        Alert.alert(
-          "Invalid password. Password must be at least 8 characters, contain one number, and one special character."
-        );
-        return;
-      }
-      // Create an object to store personal information
-      const personalInfo = {
-        Fname,
-        Lname,
-        email,
-        password,
-        phone,
-        gender: gender.label,
-        country: country.label,
-        city: city.label,
-        location,
-        speciality,
-        birthdate: birth_date,
-      };
-      // Store personal information in local storage
-      LocalStorage.setItem("personalInfo", personalInfo);
-
-      // Navigate to the next registration screen (register1)
-      navigation.navigate("register1");
-
-    } else {
-      // Display an alert if any required fields are missing
-      Alert.alert("All fields are required!");
-    }
-  };
   const onBirthDateChange = (event, selectedDate) => {
     if (event.type === "set" && selectedDate) {
       setBirthDate(selectedDate);
@@ -109,12 +58,11 @@ export default function Register({ navigation }) {
   };
 
   useEffect(() => {
-    console.log(birth_date)
+    console.log(birth_date.toISOString().split('T')[0])
   }, [birth_date]);
 
   // Get gender and country options from the dropdownlist component
   const genderOptions = dropdownlist("gender");
-  const countries = dropdownlist("countries");
   // Navigate to the login page
   const login = () => {
     navigation.navigate("sign in");
@@ -139,10 +87,70 @@ export default function Register({ navigation }) {
     setIsPickerVisible(Platform.OS === "android");
   };
 
+  const handleSelect = (selectedOption) => {
+    setGender(selectedOption.value);
+    console.log(selectedOption.value)
+  };
+
+  const submitRegistration = async () => {
+    try {
+      const response = await fetch(
+        `${NEXT_PUBLIC_SERVER_NAME}/patient/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // body: JSON.stringify({
+          //   fName: Fname,
+          //   lName: Lname,
+          //   email: email,
+          //   password: password,
+          //   gender: gender,
+          //   phone: phone,
+          //   birthDate: birth_date
+          // }),
+          body:
+            {
+              "fName": Fname,
+              "lName": Lname,
+              "email": email,
+              "password": password,
+              "gender": gender,
+              "phone": String(phone),
+              "birthDate": birth_date.toISOString().split('T')[0]
+            },
+        }
+      );
+    
+      if (!response.ok) {
+        const error = await response.text();
+        console.log({
+          "fName": Fname,
+          "lName": Lname,
+          "email": email,
+          "password": password,
+          "gender": gender,
+          "phone": String(phone),
+          "birthDate": birth_date.toISOString().split('T')[0]
+        },)
+        
+        Alert.alert("Registration failed:", error);
+        return;
+      }
+
+      navigation.navigate('home page');
+
+    } catch (error) {
+      Alert.alert("An error occurred:", error.message);
+    }
+  };
+
+
   return (
     // input fields are
     <SafeArea>
-      <Scroll>
+      <ScrollView>
         <View style={styles.container}>
           <View>
             <CustomTitle>Register</CustomTitle>
@@ -207,12 +215,12 @@ export default function Register({ navigation }) {
             <View>
               <DropdownMenu
                 options={genderOptions}
-                onSelect={setGender}
+                onSelect={handleSelect}
                 placeholder="Select gender"
               />
             </View>
             {/* ... dropdown menus for country and city */}
-
+{/* 
             <View>
               <DropdownMenu
                 options={countries}
@@ -237,7 +245,7 @@ export default function Register({ navigation }) {
                 onChangeText={setLocation}
                 style={styles.input}
               />
-            </View>
+            </View> */}
 
             <View style={styles.container3}>
               <TextInput
@@ -268,7 +276,7 @@ export default function Register({ navigation }) {
                 />
               </TouchableOpacity>
             </View>
-
+{/* 
             <View style={styles.container3}>
               <TextInput
                 placeholder="Speciality"
@@ -276,7 +284,7 @@ export default function Register({ navigation }) {
                 onChangeText={setSpeciality}
                 style={styles.input}
               />
-            </View>
+            </View> */}
             {/* Link to the login page */}
 
             <View style={styles.row}>
@@ -289,8 +297,8 @@ export default function Register({ navigation }) {
           {/* Next button to proceed to the next registration screen */}
 
           <View style={{ width: "90%" }}>
-            <Custombutton onPress={screen2}>
-              <Text>Next </Text>
+            <Custombutton onPress={submitRegistration}>
+              <Text>Register</Text>
             </Custombutton>
           </View>
           {/* Support button */}
@@ -313,7 +321,7 @@ export default function Register({ navigation }) {
             onChange={onBirthDateChange}
           />
         )}
-      </Scroll>
+      </ScrollView>
     </SafeArea>
   );
 }
