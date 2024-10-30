@@ -9,6 +9,7 @@ import MenuList from "../MenuList/menuList";
 import { IoMenu } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation"; // Import the hooks
+import Notification from '../Notification/Notification';
 
 const menuIcon = (
   <div>
@@ -20,10 +21,13 @@ const signedInIcon = (
     <FaUserCircle className="h-10 w-10 text-[#035fe9]" />
   </div>
 );
+
 const Navbar = () => {
   const [token, setToken] = useState<any>();
   const [userRole, setUserRole] = useState<any>();
   const router = useRouter();
+
+  
   useEffect(() => {
     const expiryDate = localStorage.getItem("expiryDate");
     if (
@@ -103,39 +107,42 @@ const Navbar = () => {
                 linkTo={
                   userRole === "Patient" || token.userRole === "Patient"
                     ? [
-                        "/patientProfile",
-                        "/patientProfile/upcoming_appointments",
-                        "/patientProfile/patientDocuments",
-                        "/patientProfile/paymentInfo",
-                        "/auth/signout",
-                      ]
+                      "/patientProfile",
+                      "/patientProfile/upcoming_appointments",
+                      "/patientProfile/patientDocuments",
+                      "/patientProfile/paymentInfo",
+                      "/auth/signout",
+                    ]
                     : [
-                        "/doctorProfile",
-                        "/doctorProfile/timeSlots",
-                        "/doctorProfile/appointments",
-                        "/auth/signout",
-                      ]
+                      "/doctorProfile",
+                      "/doctorProfile/timeSlots",
+                      "/doctorProfile/appointments",
+                      "/auth/signout",
+                    ]
                 }
                 linkName={
                   userRole === "Patient" || token.userRole === "Patient"
                     ? [
-                        "View Profile",
-                        "My Appointments",
-                        "My Documents",
-                        "Wallet",
-                        "Sign Out",
-                      ]
+                      "View Profile",
+                      "My Appointments",
+                      "My Documents",
+                      "Wallet",
+                      "Sign Out",
+                    ]
                     : [
-                        "View Profile",
-                        "Set Time Slots",
-                        "My Appointments",
-                        "Sign Out",
-                      ]
+                      "View Profile",
+                      "Set Time Slots",
+                      "My Appointments",
+                      "Sign Out",
+                    ]
                 }
                 text={signedInIcon}
               />
             </div>
           )}
+
+          {token && <Notification />}
+
           <div className="min-[1130px]:hidden">
             <MenuList
               linkTo={["/doctors", "", "", ""]}
