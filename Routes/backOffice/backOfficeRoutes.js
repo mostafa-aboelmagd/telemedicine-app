@@ -12,7 +12,7 @@ router.get("/getPatient/:field", backOfficeController.getPatientInfo);
 
 router.get(
   "/getPatientAppointment/:id",
-  backOfficeController.getPatientAppointment
+  backOfficeController.getPatientAppointments
 );
 
 router.patch(
@@ -25,5 +25,10 @@ router.get("/getAllDoctors", backOfficeController.getAllDoctors);
 router.patch("/changeDoctorState/:id", backOfficeController.changeDoctorState);
 
 router.get("/getDoctor/:field", backOfficeController.getDoctorInfo);
+
+router.get(
+  "/getDoctorAppointments/:id",
+  backOfficeController.getDoctorAppointments
+);
 
 module.exports = router;

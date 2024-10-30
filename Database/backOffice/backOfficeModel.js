@@ -183,3 +183,46 @@ exports.changePersonState = async (user, id, state) => {
     throw new Error(`Failed to update ${user} state`);
   }
 };
+
+//to get all appointments for patient flag =true  , for doctor flag =false;
+exports.retrieveApppointmentsDetails = async (id, flag) => {
+  try {
+    let desired = "p.user_id";
+    console.log(flag);
+    if (!flag) {
+      desired = "d.user_id";
+    }
+    console.log(desired);
+    const query = `SELECT
+      p.user_id AS patient_id ,
+      p.user_first_name AS patient_first_name,
+      p.user_last_name AS patient_last_name,
+      p.user_email AS patient_email , 
+      p.user_birth_date AS patient_birth_date ,
+      p.user_phone_number AS patient_phone_number ,
+      d.user_id AS doctor_id , 
+      d.user_first_name AS doctor_first_name,
+      d.user_last_name AS doctor_last_name,
+      a.appointment_type,
+      a.appointment_duration,
+      a.appointment_complaint,
+      a.appointment_status,
+      a.appointment_parent_reference,
+      a.appointment_settings_type,
+      a.appointment_date AS doctor_availability_day_hour,
+      doc.doctor_specialization,
+      doc.doctor_clinic_location
+  FROM
+      appointment a
+  JOIN users p ON a.appointment_patient_id = p.user_id
+  JOIN users d ON a.appointment_doctor_id = d.user_id
+  JOIN doctor doc ON a.appointment_doctor_id = doc.doctor_user_id_reference
+  WHERE
+      ${desired} = $1`;
+    const result = await pool.query(query, [id]);
+    return result.rows.length ? result.rows : false;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

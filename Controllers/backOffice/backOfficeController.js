@@ -4,7 +4,7 @@ const { retrievePatientInfo } = require("../../Database/Patient/Profile");
 const {
   retrieveAllPatients,
   retrieveAllDoctors,
-  retrievePatientAppointments,
+  retrieveApppointmentsDetails,
 } = require("../../Database/backOffice/backOfficeModel");
 const {
   changePatientState,
@@ -77,24 +77,17 @@ exports.getAllPatients = catchAsyncError(async (req, res, next) => {
   });
 });
 
-exports.getPatientAppointment = catchAsyncError(async (req, res, next) => {
+exports.getPatientAppointments = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
-  const queryOptions = queryHandler(req.query);
-  const { fields } = req.query;
 
   if (!id) return next(new AppError("Please Provide Patient id ....⛔", 400));
-  const patientAppointments = await retrievePatientAppointments(
-    id,
-    queryOptions,
-    fields
-  );
-  if (patientAppointments) {
-    res.status(200).json({
-      status: "success",
-      ok: true,
-      patientAppointments,
-    });
-  }
+  let patientAppointments =
+    (await retrieveApppointmentsDetails(id, true)) || [];
+  res.status(200).json({
+    status: "success",
+    ok: true,
+    patientAppointments,
+  });
 });
 
 exports.getAllDoctors = catchAsyncError(async (req, res, next) => {
@@ -108,6 +101,7 @@ exports.getAllDoctors = catchAsyncError(async (req, res, next) => {
     ok: true,
     doctors,
   });
+  s;
 });
 
 exports.changeDoctorState = catchAsyncError(async (req, res, next) => {
@@ -152,9 +146,25 @@ exports.getDoctorInfo = catchAsyncError(async (req, res, next) => {
     id,
     email
   );
+  if (!doctor) {
+    return next(new AppError("Invalid Id .... ", 400));
+  }
   res.status(200).json({
     status: "sucess",
     ok: true,
     doctor,
+  });
+});
+
+exports.getDoctorAppointments = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id) return next(new AppError("Please Provide doctor id ....⛔", 400));
+  let doctorAppointments =
+    (await retrieveApppointmentsDetails(id, false)) || [];
+  res.status(200).json({
+    status: "success",
+    ok: true,
+    doctorAppointments,
   });
 });

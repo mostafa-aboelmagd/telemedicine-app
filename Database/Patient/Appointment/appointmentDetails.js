@@ -38,6 +38,7 @@ const getAppointmentDetails = async (appointmentId) => {
     a.appointment_status,
     a.appointment_parent_reference,
     a.appointment_settings_type,
+    p.user_id AS patient_id,
     p.user_first_name AS patient_first_name,
     p.user_last_name AS patient_last_name,
     d.user_first_name AS doctor_first_name,
