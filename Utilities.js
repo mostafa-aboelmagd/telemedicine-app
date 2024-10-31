@@ -163,7 +163,13 @@ const queryHandler = (query) => {
   return queryOptions;
   //
 };
-module.exports = AppError;
+
+const createResetPasswordToken = (id, email, role) => {
+  return jwt.sign({ id, email, role }, ACCESS_TOKEN_SECRET_KEY, {
+    expiresIn: "15m",
+  });
+};
+// module.exports = AppError;
 
 module.exports = {
   passwordValidation,
@@ -178,4 +184,5 @@ module.exports = {
   globalErrorHanlder,
   restrictTo,
   queryHandler,
+  createResetPasswordToken,
 };

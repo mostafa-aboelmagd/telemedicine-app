@@ -57,4 +57,17 @@ const getChatMessages = async (appointmentId) => {
     }
 };
 
-module.exports = { addChatMessage, getChatMessages };
+const getAppointmentDoctorandPatient = async (appointmentId) => {
+    try {
+        const result = await pool.query(
+            'SELECT appointment_doctor_id, appointment_patient_id FROM appointment WHERE appointment_id = $1',
+            [appointmentId]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error retrieving appointment doctor and patient:', error);
+        return false;
+    }
+};
+
+module.exports = { addChatMessage, getChatMessages, getAppointmentDoctorandPatient };
