@@ -140,6 +140,7 @@ const queryHandler = (query) => {
     limit = 100;
   }
   console.log(limit);
+  let queryOptions = "";
 
   if (order) {
     const orderArr = order.split(",");
