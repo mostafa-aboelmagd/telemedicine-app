@@ -69,7 +69,7 @@ exports.retrieveAllPatients = async (queryOptions, fields, id, email) => {
   }
 };
 
-exports.retrieveAllDoctors = async (queryOptions, fields, state, id, email) => {
+exports.retrieveAllDoctors = async (queryOptions, fields, queryAtributes) => {
   try {
     let query = `SELECT `;
 
@@ -117,19 +117,23 @@ exports.retrieveAllDoctors = async (queryOptions, fields, state, id, email) => {
     }
 
     // Handling state and personalize conditions
-    let whereClause = [];
 
-    if (state) {
-      whereClause.push(`d.doctor_account_state = '${state}'`);
+    let whereQuery = queryAtributes;
+    if (whereQuery) {
+      whereQuery = `WHERE ${whereQuery} `;
     }
-    if (id) {
-      whereClause.push(`u.user_id = ${id}`);
-    } else if (email) {
-      whereClause.push(`u.user_email = '${email}'`);
-    }
+    console.log(whereQuery);
+    // if (state) {
+    //   whereClause.push(`d.doctor_account_state = '${state}'`);
+    // }
+    // if (id) {
+    //   whereClause.push(`u.user_id = ${id}`);
+    // } else if (email) {
+    //   whereClause.push(`u.user_email = '${email}'`);
+    // }
 
-    let whereQuery =
-      whereClause.length > 0 ? `WHERE ${whereClause.join(" AND ")}` : "";
+    // let whereQuery =
+    //   whereClause.length > 0 ? `WHERE ${whereClause.join(" AND ")}` : "";
 
     // Construct the rest of the query
     query += `           

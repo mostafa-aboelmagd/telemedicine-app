@@ -123,7 +123,10 @@ const restrictTo = (...roles) => {
     console.log("role123", role);
     if (!roles.includes(role))
       return next(
-        new AppError(`Role '${role}' is not allowed to reach this data....💣💣⛔`, 401)
+        new AppError(
+          `Role '${role}' is not allowed to reach this data....💣💣⛔`,
+          401
+        )
       );
 
     next();
@@ -136,7 +139,7 @@ const queryHandler = (query) => {
   if (!limit || !Number.isInteger(+limit) || +limit > 10000 || +limit < 0) {
     limit = 100;
   }
-  let queryOptions = `LIMIT ${limit} `;
+  console.log(limit);
 
   if (order) {
     const orderArr = order.split(",");
@@ -153,7 +156,8 @@ const queryHandler = (query) => {
     // if (!isValidCol) {
     //   return next(new AppError("Invalid order fields....", 400));
     // }
-    queryOptions = `ORDER BY ${orderArr.join(" ")} ${orderDir}`;
+    queryOptions = `ORDER BY ${orderArr.join(" ")} ${orderDir}         `;
+    queryOptions += ` LIMIT ${limit} `;
   }
   return queryOptions;
   //

@@ -93,15 +93,31 @@ exports.getPatientAppointments = catchAsyncError(async (req, res, next) => {
 exports.getAllDoctors = catchAsyncError(async (req, res, next) => {
   const queryOptions = queryHandler(req.query);
   const { fields, state } = req.query;
+  console.log(req.query);
+  delete req.query.limit;
+  delete req.query.order;
+  console.log(queryOptions);
+  const arr = Object.entries(req.query);
 
-  let doctors = await retrieveAllDoctors(queryOptions, fields, state);
+  let queryAtributes = arr
+    .map((atribute) => {
+      if (atribute[0] === "user_id") return `${atribute[0]} = ${+atribute[1]}`;
+
+      if (atribute[0] === "user_phone_number") {
+        return `${atribute[0]} = '+${atribute[1]}'`;
+      }
+
+      return `${atribute[0]} = '${atribute[1]}'`;
+    })
+    .join(" AND ");
+
+  let doctors = await retrieveAllDoctors(queryOptions, fields, queryAtributes);
   if (!doctors) doctors = [];
   res.status(200).json({
     status: "success",
     ok: true,
     doctors,
   });
-  s;
 });
 
 exports.changeDoctorState = catchAsyncError(async (req, res, next) => {
