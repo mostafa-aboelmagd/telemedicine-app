@@ -34,7 +34,7 @@ const Banner = () => {
               </Link>
             </div>
             <div className="w-full md:w-1/2">
-              <Link className="w-full" href="/patientTools">
+              <Link className="w-full" href="/patTools">
                 <button
                   className={
                     buttonStyles.gradient_button +

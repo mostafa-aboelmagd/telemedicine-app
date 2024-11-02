@@ -1,7 +1,8 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/docTools/pendingAccounts/page": "app/docTools/pendingAccounts/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/docTools/page": "app/docTools/page.js",
+  "/docTools/doclists/page": "app/docTools/doclists/page.js",
+  "/patTools/patlists/page": "app/patTools/patlists/page.js",
   "/auth/signin/page": "app/auth/signin/page.js"
 }

@@ -29,10 +29,21 @@
       "static/css/app/docTools/page.css",
       "static/chunks/app/docTools/page.js"
     ],
-    "/docTools/pendingAccounts/page": [
+    "/docTools/doclists/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/docTools/pendingAccounts/page.js"
+      "static/chunks/app/docTools/doclists/page.js"
+    ],
+    "/patTools/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/patTools/page.css",
+      "static/chunks/app/patTools/page.js"
+    ],
+    "/patTools/patlists/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/patTools/patlists/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",

@@ -20,7 +20,7 @@ function DoctorManagementTools() {
           <div className="flex flex-col items-center justify-center space-y-4 md:max-w-[80%]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
               <div className="w-full">
-                <Link className="w-full" href="#">
+                <Link className="w-full" href="/docTools/doclists">
                   <button
                     className={
                       buttonStyles.gradient_button +
@@ -35,16 +35,15 @@ function DoctorManagementTools() {
                 <Link className="w-full" href="#">
                   <button
                     className={
-                      buttonStyles.gradient_button +
-                      " md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24"
+                      "md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24 bg-gray-500" 
                     }
                   >
-                    View Pending Profiles
+                    View Pending Profile
                   </button>
                 </Link>
               </div>
               <div className="w-full">
-                <Link className="w-full" href="/docTools/pendingAccounts">
+                <Link className="w-full" href="/docTools/doclists">
                   <button
                     className={
                       buttonStyles.gradient_button +
@@ -59,8 +58,7 @@ function DoctorManagementTools() {
                 <Link className="w-full" href="#">
                   <button
                     className={
-                      buttonStyles.gradient_button +
-                      " md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24"
+                      "md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24 bg-gray-500" 
                     }
                   >
                     Send Reminders
@@ -71,8 +69,7 @@ function DoctorManagementTools() {
                 <Link className="w-full" href="#">
                   <button
                     className={
-                      buttonStyles.gradient_button +
-                      " md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24"
+                      "md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24 bg-gray-500" 
                     }
                   >
                     View Appointment History
@@ -83,8 +80,7 @@ function DoctorManagementTools() {
                 <Link className="w-full" href="#">
                   <button
                     className={
-                      buttonStyles.gradient_button +
-                      " md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24"
+                      "md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24 bg-gray-500" 
                     }
                   >
                     Hold Accounts
@@ -95,8 +91,7 @@ function DoctorManagementTools() {
                 <Link className="w-full" href="#">
                   <button
                     className={
-                      buttonStyles.gradient_button +
-                      " md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24"
+                      "md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24 bg-gray-500" 
                     }
                   >
                     Filter Doctors
@@ -107,8 +102,7 @@ function DoctorManagementTools() {
                 <Link className="w-full" href="#">
                   <button
                     className={
-                      buttonStyles.gradient_button +
-                      " md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24"
+                      "md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24 bg-gray-500" 
                     }
                   >
                     Search Doctors
@@ -119,8 +113,7 @@ function DoctorManagementTools() {
                 <Link className="w-full" href="#">
                   <button
                     className={
-                      buttonStyles.gradient_button +
-                      " md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24"
+                      "md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24 bg-gray-500" 
                     }
                   >
                     View Doctor Details

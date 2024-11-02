@@ -102,7 +102,6 @@ export const ProfileProvider = ({
         .then((response) => setProfileData(() => response.formattedDoctor))
         .finally(() => setLoading(false));
     }
-    console.log("profileData11", profileData)
   }, [pathname, router]);
 
   return (

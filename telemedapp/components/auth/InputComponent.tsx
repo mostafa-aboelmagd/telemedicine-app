@@ -8,6 +8,7 @@ interface InputProps {
   required?: boolean;
   additionalText?: string;
   errorText?: string;
+
 }
 
 const InputComponent = ({
