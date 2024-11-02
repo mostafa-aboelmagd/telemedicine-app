@@ -62,11 +62,31 @@ exports.changePatientState = catchAsyncError(async (req, res, next) => {
 });
 
 exports.getAllPatients = catchAsyncError(async (req, res, next) => {
-  const queryOptions = queryHandler(req.query);
+  const { queryOptions, queryAtributes } = queryHandler(req.query);
   const { fields } = req.query;
+  // delete req.query.limit;
+  // delete req.query.order;
+  // console.log(queryOptions);
+  // const arr = Object.entries(req.query);
+
+  // let queryAtributes = arr
+  //   .map((atribute) => {
+  //     if (atribute[0] === "user_id") return `${atribute[0]} = ${+atribute[1]}`;
+
+  //     if (atribute[0] === "user_phone_number") {
+  //       return `${atribute[0]} = '+${atribute[1]}'`;
+  //     }
+
+  //     return `${atribute[0]} = '${atribute[1]}'`;
+  //   })
+  //   .join(" AND ");
   //
 
-  const patients = await retrieveAllPatients(queryOptions, fields);
+  const patients = await retrieveAllPatients(
+    queryOptions,
+    fields,
+    queryAtributes
+  );
   if (!patients) {
     return next(new AppError("no patients founded....", 400));
   }
@@ -91,25 +111,24 @@ exports.getPatientAppointments = catchAsyncError(async (req, res, next) => {
 });
 
 exports.getAllDoctors = catchAsyncError(async (req, res, next) => {
-  const queryOptions = queryHandler(req.query);
-  const { fields, state } = req.query;
-  console.log(req.query);
-  delete req.query.limit;
-  delete req.query.order;
-  console.log(queryOptions);
-  const arr = Object.entries(req.query);
+  const { queryOptions, queryAtributes } = queryHandler(req.query);
+  const { fields } = req.query;
+  // delete req.query.limit;
+  // delete req.query.order;
+  // console.log(queryOptions);
+  // const arr = Object.entries(req.query);
 
-  let queryAtributes = arr
-    .map((atribute) => {
-      if (atribute[0] === "user_id") return `${atribute[0]} = ${+atribute[1]}`;
+  // let queryAtributes = arr
+  //   .map((atribute) => {
+  //     if (atribute[0] === "user_id") return `${atribute[0]} = ${+atribute[1]}`;
 
-      if (atribute[0] === "user_phone_number") {
-        return `${atribute[0]} = '+${atribute[1]}'`;
-      }
+  //     if (atribute[0] === "user_phone_number") {
+  //       return `${atribute[0]} = '+${atribute[1]}'`;
+  //     }
 
-      return `${atribute[0]} = '${atribute[1]}'`;
-    })
-    .join(" AND ");
+  //     return `${atribute[0]} = '${atribute[1]}'`;
+  //   })
+  //   .join(" AND ");
 
   let doctors = await retrieveAllDoctors(queryOptions, fields, queryAtributes);
   if (!doctors) doctors = [];

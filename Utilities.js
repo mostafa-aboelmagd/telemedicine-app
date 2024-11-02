@@ -160,7 +160,23 @@ const queryHandler = (query) => {
     queryOptions = `ORDER BY ${orderArr.join(" ")} ${orderDir}         `;
     queryOptions += ` LIMIT ${limit} `;
   }
-  return queryOptions;
+  delete query.limit;
+  delete query.order;
+  const arr = Object.entries(query);
+
+  let queryAtributes = arr
+    .map((atribute) => {
+      if (atribute[0] === "user_id") return `${atribute[0]} = ${+atribute[1]}`;
+
+      if (atribute[0] === "user_phone_number") {
+        return `${atribute[0]} = '+${atribute[1]}'`;
+      }
+
+      return `${atribute[0]} = '${atribute[1]}'`;
+    })
+    .join(" AND ");
+
+  return { queryOptions, queryAtributes };
   //
 };
 module.exports = AppError;

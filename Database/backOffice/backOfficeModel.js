@@ -26,7 +26,7 @@ const pool = new pg.Pool({
   }
 })();
 
-exports.retrieveAllPatients = async (queryOptions, fields, id, email) => {
+exports.retrieveAllPatients = async (queryOptions, fields, queryAtributes) => {
   try {
     let personalize = "";
     let query = `SELECT `;
@@ -43,21 +43,16 @@ exports.retrieveAllPatients = async (queryOptions, fields, id, email) => {
       array_agg(L.language) AS languages 
       `;
     }
-    if (id) {
-      personalize = `
-      AND U.user_id=${id}
-      `;
+    let whereQuery = "";
+    if (queryAtributes) {
+      whereQuery = `AND ${queryAtributes}`;
     }
-    if (email) {
-      personalize = `
-      AND user_email='${email}'
-      `;
-    }
+
     query += `
     FROM users U
     LEFT JOIN languages L ON u.user_id = L.lang_user_id
     join patient p ON  U.user_id  = p.patient_user_id_reference 
-    WHERE  U.user_role = $1 ${personalize}
+    WHERE  U.user_role = $1 ${whereQuery} 
     GROUP BY U.user_id , U.user_email, U.user_phone_number, U.user_gender, U.user_birth_date, U.user_first_name, U.user_last_name , p.patient_account_state  ${queryOptions}`;
     const result = await pool.query(query, ["Patient"]);
     if (result.rows.length) {
