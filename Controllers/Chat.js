@@ -4,8 +4,6 @@ const sendAppointmentMessage = async (req, res) => {
   const userId = req.id;
   const { appointmentId, message, receiverId } = req.body;
 
-  console.log('userId:', userId);
-
   if (!appointmentId) {
     return res.status(400).json({ message: 'Appointment ID is required' });
   }
@@ -40,15 +38,17 @@ const getAppointmentChat = async (req, res) => {
   }
 
   try {
+    // const appointmentDetails = await database.getAppointmentDoctorandPatient(appointmentId);
+
+    // if (userId !== appointmentDetails[0].appointment_doctor_id && userId !== appointmentDetails[0].appointment_patient_id) {
+    //   return res.status(401).json({ message: 'User is not authorized to get the chat history' });
+    // }
+
     const chatMessages = await database.getChatMessages(appointmentId);
 
     if (!chatMessages.length) {
       return res.status(404).json({ message: 'No messages found' });
     }
-
-    // if (userId !== chatMessages[0].senderId && userId !== chatMessages[0].receiverId) {
-    //   return res.status(401).json({ message: 'User is not authorized to get the chat history' });
-    // }
 
     res.status(200).json(chatMessages);
 
