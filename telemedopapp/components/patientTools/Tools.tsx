@@ -43,7 +43,7 @@ function PatientManagementTools() {
                 </Link>
               </div>
               <div className="w-full">
-                <Link className="w-full" href="/docTools/doclists">
+                <Link className="w-full" href="#">
                   <button
                     className={
                       "md:px-12 py-2 my-2 text-base md:text-lg text-white rounded-lg w-full h-24 bg-gray-500" 

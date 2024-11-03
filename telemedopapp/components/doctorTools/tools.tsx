@@ -43,7 +43,7 @@ function DoctorManagementTools() {
                 </Link>
               </div>
               <div className="w-full">
-                <Link className="w-full" href="/docTools/doclists">
+                <Link className="w-full" href="/docTools/pendingAccounts">
                   <button
                     className={
                       buttonStyles.gradient_button +

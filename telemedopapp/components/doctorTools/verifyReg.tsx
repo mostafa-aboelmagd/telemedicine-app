@@ -4,6 +4,7 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import ReadMore from "@/components/common/ReadMore";
 import Image from "next/image";
 import userImage from "@/images/user.png";
+import sendEmail from "@/utils/sendEmail";
 
 interface Certificate {
   authority: string;
@@ -103,9 +104,9 @@ const VerifyReg = () => {
   }, []);
 
   useEffect(() => {
-    const tok =localStorage.getItem("jwt");
+    const tok = localStorage.getItem("jwt");
     fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_NAME}/backOffice/getAllDoctors?order=user_id&&state=On_hold`,
+      `${process.env.NEXT_PUBLIC_SERVER_NAME}/backOffice/getAllDoctors?order=user_id&&doctor_account_state=On_hold`,
       {
         mode: "cors",
         headers: {
@@ -117,11 +118,12 @@ const VerifyReg = () => {
       .then((data) => {
         setDoctorsData(data.doctors); // Update the state variable with the fetched data
       });
-      if (doctorsData){
-        setLoadingRequest(false)  }
+    if (doctorsData) {
+      setLoadingRequest(false)
+    }
   }, []);
 
-  const handleAccept = async (doctorId: number) => { // Make handleAccept async
+  const handleAccept = async (doctorId: number, doctoremail: string) => { // Make handleAccept async
     try {
       const response = await fetch( // Use await here
         `${process.env.NEXT_PUBLIC_SERVER_NAME}/backOffice/changeDoctorState/${doctorId}`,
@@ -141,17 +143,24 @@ const VerifyReg = () => {
         console.error('Failed to accept doctor:', errorData);
         throw new Error('Failed to accept doctor');
       }
+      const emailData = {
+        sendToEmail: [doctoremail],
+        subject: 'email confirmed',
+        message: 'welcome on board',
+      };
+      await sendEmail(emailData);
       console.log('Doctor accepted successfully');
+      setDoctorsData(prevDoctorsData =>
+        prevDoctorsData.filter(doctor => doctor.user_id !== doctorId)
+      );
       setshowAcceptPopup(true); // Show the confirmation popup
     } catch (error) {
       console.error('Error accepting doctor:', error);
     }
   };
-  const AcceptPopup=()=>{
-    setshowAcceptPopup(false)
-    window.location.reload(); 
-
-  }
+  const AcceptPopup = () => {
+    setshowAcceptPopup(false);
+  };
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 min-[880px]:flex-row min-[880px]:items-start">
       {loadingRequest ? (
@@ -160,7 +169,7 @@ const VerifyReg = () => {
         <>
           <div className="p-7">
             <div className="grid grid-cols-1 min-[1350px]:grid-cols-2 p-3 gap-y-10 justify-items-center">
-              {doctorsData.length > 0 ? (
+              {doctorsData && doctorsData.length > 0 ? (
                 doctorsData.map((doctors) => {
                   return (
                     <>
@@ -213,7 +222,7 @@ const VerifyReg = () => {
                               className="rounded-full border-none bg-emerald-600 text-white w-40 px-4 py-2 hover:scale-105 hover:cursor-pointer"
                               onClick={() => {
                                 if (doctors.user_id) {  // Check if doctorId is not null
-                                  handleAccept(doctors.user_id); // Pass doctorId
+                                  handleAccept(doctors.user_id, doctors.user_email); // Pass doctorId
                                 } else {
                                   // Handle the case where doctorId is null, e.g., show an error message
                                   console.error("Error: doctorId is null");
@@ -345,13 +354,12 @@ const VerifyReg = () => {
                 </div>
               )}
               {showAcceptPopup && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-75"> {/* Add blur effect */}
                   <div className="bg-white p-6 rounded-lg shadow-md">
-                    <p className="text-lg   
- text-center">This Account has been avtitated</p>
+                    <p className="text-lg text-center">This Account has been activated</p>
                     <div className="mt-4 flex justify-center gap-4">
                       <button
-                        className="bg-gray-300 text-neutral-700 text-lg p-3.5 px-6 border-none rounded-lg cursor-pointer transition-[background-color]"
+                        className="bg-blue-500 text-white text-lg p-3.5 px-6 border-none rounded-lg cursor-pointer transition-[background-color]"
                         onClick={() => AcceptPopup()}
                       >
                         OK
