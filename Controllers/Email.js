@@ -79,6 +79,7 @@ const sendEmail = async (req, res) => {
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
+        secure: true, // Add this line
         auth: {
             user: process.env.GMAIL_USER,
             pass: process.env.GMAIL_PASS,
