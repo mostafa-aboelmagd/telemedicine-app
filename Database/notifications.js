@@ -60,4 +60,28 @@ const markNotificationsAsRead = async (notificationIds) => {
         throw error;
     }
 };
-module.exports = { getUnreadNotifications, getNotifications, markNotificationsAsRead };
+
+const addNotification = async (notification) => {
+    try {
+        const query = 'INSERT INTO notifications (user_id, message) VALUES ($1, $2) RETURNING *';
+        await pool.query(query, [notification.recipientId, notification.message]);
+    } catch (error) {
+        console.error(error.stack);
+        throw error;
+    }
+};
+const fetchExpotoken = async (userid) => {
+    try {
+        const query = 'SELECT expo_push_token FROM user_push_tokens WHERE user_id = $1';
+        const result =await pool.query(query, [userid]);
+        if (result.rows.length > 0) {
+            return result.rows[0].expo_push_token; 
+        }else {
+            return null;
+        }
+    } catch (error) {
+        console.error(error.stack);
+        throw error;
+    }
+};
+module.exports = { getUnreadNotifications, getNotifications, markNotificationsAsRead, addNotification,fetchExpotoken };
