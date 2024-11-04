@@ -19,6 +19,7 @@ import { NEXT_PUBLIC_SERVER_NAME } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { Rating } from 'react-native-ratings';
+import * as Notifications from 'expo-notifications'; 
 
 let sixtyMinPrice_;
 let thirtyMinPrice_;
@@ -57,6 +58,59 @@ export default function Profile({ navigation }) {
 
   // State for new language
   const [newLanguage, setNewLanguage] = useState("");
+  useEffect(() => {
+    // Request notification permissions and get the push token
+    const registerForPushNotificationsAsync = async () => {
+      let token;
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notifications!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log("token",token);
+      // Send token to your backend
+      try {
+        const response = await fetch(`${NEXT_PUBLIC_SERVER_NAME}/users/expo-push-token`, { 
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${await getToken()}`, 
+          },
+          body: JSON.stringify({ token }),
+        });
+
+        if (!response.ok) {
+          console.error('Error storing push token on server:', response.status);
+        }
+      } catch (error) {
+        console.error('Error sending push token to server:', error);
+      }
+    };
+    registerForPushNotificationsAsync();
+    // Add notification listeners
+    const notificationListener = Notifications.addNotificationReceivedListener(notification => {
+      console.log(notification);
+      // Display a local notification or update the UI
+    });
+
+    const responseListener = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+      // Navigate to a specific screen based on the notification data
+    });
+
+    // Cleanup on unmount
+    return () => {
+      notificationListener.remove(); 
+      responseListener.remove();
+    };
+  }, []);
+
   const handleAddCertificate = async () => {
     try {
       const response = await fetch(
