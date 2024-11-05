@@ -8,9 +8,9 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import CustomTitle from '../../components/title.js';
 import { NEXT_PUBLIC_SERVER_NAME } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { registerForPushNotificationsAsync, sendNotification } from '../expo_notifications/setup.js'; // Adjust the path if needed
 
 export default function Login({ navigation }) {
-
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,8 +32,8 @@ export default function Login({ navigation }) {
         setIsLoading(false);  // Stop showing the loading spinner
       }
     };
-
     checkToken();
+    registerForPushNotificationsAsync();
   }, []);
 
   if (isLoading) {
@@ -65,10 +65,9 @@ export default function Login({ navigation }) {
         const responseData = await response.json();
         const token = responseData.token; // Assuming the server returns a token
         console.log(responseData)
-        // Store the token (e.g., in AsyncStorage or localStorage)
+        sendNotification();        // Store the token (e.g., in AsyncStorage or localStorage)
         await AsyncStorage.setItem('userToken', token);
-
-        // Navigate to the home page
+        await registerForPushNotificationsAsync(token)
         navigation.navigate('home page');
       } catch (error) {
         console.error('Login error:', error);
@@ -78,6 +77,7 @@ export default function Login({ navigation }) {
       Alert.alert('You must enter your email and password!');
     }
   };
+
   const register = () => {
     navigation.navigate('register');
   }

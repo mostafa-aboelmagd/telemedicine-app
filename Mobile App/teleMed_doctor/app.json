@@ -5,7 +5,10 @@
     "version": "1.0.0",
     "extra": {
       "SERVER_NAME": "https://telemedicine-pilot-d2anbuaxedbfdba9.southafricanorth-01.azurewebsites.net",
-      "ACCESS_TOKEN_SECRET_KEY": "982e66fdfad635a7085ea51852fba72f826836dc75bf240ca940c3ad7ff148062db1716d510c4f3b97faf82eb63360025bdc1a14ff68f47f5024c6437af3fdd3"
+      "ACCESS_TOKEN_SECRET_KEY": "982e66fdfad635a7085ea51852fba72f826836dc75bf240ca940c3ad7ff148062db1716d510c4f3b97faf82eb63360025bdc1a14ff68f47f5024c6437af3fdd3",
+      "eas": {
+        "projectId": "500a46c0-b268-4b38-9e7e-91d7104aa7b5"
+      }
     },
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
@@ -16,13 +19,19 @@
       "backgroundColor": "#f0f0f0"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yahyakhalaf.TeleMedicinePilot"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#f0f0f0"
-      }
+      },
+      "permissions": [
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR"
+      ],
+      "package": "com.yahyakhalaf.TeleMedicinePilot"
     },
     "web": {
       "favicon": "./assets/images/logo.png"
@@ -34,6 +43,10 @@
           "calendarPermission": "The app needs to access your calendar."
         }
       ]
-    ]
+    ],
+    "notification": {
+      "icon": "./assets/images/logo.png", 
+      "color": "#ffffff" 
+    }
   }
 }
