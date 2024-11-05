@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const database = require('../Database/notifications');
 const { createToken } = require('../Utilities');
 const { ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS } = process.env;
-
 const { Expo } = require('expo-server-sdk');
 // Create a new Expo SDK client
 const expo = new Expo();
@@ -80,9 +79,10 @@ const sendPushNotification = async (recipientId, title, body) => {
             sound: 'default',
             title: title,
             body: body,
-            data: "Hellow there this is a test notification",
+            data: { 
+                message: "Hello there, this is a test notification" 
+            },
         };
-
         const ticketChunk = await expo.sendPushNotificationsAsync([message]);
         console.log(ticketChunk);
         if(ticketChunk){
