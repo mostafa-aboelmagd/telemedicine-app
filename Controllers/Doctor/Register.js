@@ -35,6 +35,12 @@ const doctorRegister = async (req, res) => {
     return res.status(400).json({ message });
   }
   const hashedPassword = await bcrypt.hash(personalInfo.password, saltRounds);
+  personalInfo.firstName =
+    personalInfo.firstName[0].toUpperCase() +
+    personalInfo.firstName.slice(1).toLowerCase();
+  personalInfo.lastName =
+    personalInfo.lastName[0].toUpperCase() +
+    personalInfo.lastName.slice(1).toLowerCase();
   const user = {
     fName: personalInfo.firstName,
     lName: personalInfo.lastName,
@@ -55,16 +61,36 @@ const doctorRegister = async (req, res) => {
   if (doctor) {
     message = "Doctor created successfully";
     try {
-        const added_certificates= await database.saveDoctorcertificates(certificates,doctor.user_id);
-        const added_experiences= await database.saveDoctorexperiences(experiences,doctor.user_id);
-        const added_interests= await database.saveDoctorinterests(interests,doctor.user_id);
-        const added_Languages= await database.saveDoctorlanguage(Languages,doctor.user_id);
-        return res.json({ message: message, doctor: doctor,certificates:added_certificates,experiences:added_experiences,interests:added_interests,Languages:added_Languages });
-      } catch (error) {
-        console.error('Error saving additional doctor data:', error.stack);
-        // Handle errors appropriately, e.g., rollback database changes if possible
-        return res.status(500).json({ message: 'Internal server error' });
-      }  }
+      const added_certificates = await database.saveDoctorcertificates(
+        certificates,
+        doctor.user_id
+      );
+      const added_experiences = await database.saveDoctorexperiences(
+        experiences,
+        doctor.user_id
+      );
+      const added_interests = await database.saveDoctorinterests(
+        interests,
+        doctor.user_id
+      );
+      const added_Languages = await database.saveDoctorlanguage(
+        Languages,
+        doctor.user_id
+      );
+      return res.json({
+        message: message,
+        doctor: doctor,
+        certificates: added_certificates,
+        experiences: added_experiences,
+        interests: added_interests,
+        Languages: added_Languages,
+      });
+    } catch (error) {
+      console.error("Error saving additional doctor data:", error.stack);
+      // Handle errors appropriately, e.g., rollback database changes if possible
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
   message = "Could not create doctor";
   return res.status(400).json({ message });
 };

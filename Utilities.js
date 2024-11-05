@@ -171,10 +171,18 @@ const queryHandler = (query) => {
       if (atribute[0] === "user_phone_number") {
         return `${atribute[0]} = '+${atribute[1]}'`;
       }
-
+      if (
+        atribute[0] === "user_first_name" ||
+        atribute[0] === "user_last_name"
+      ) {
+        return `${atribute[0]} = '${
+          atribute[1][0].toUpperCase() + atribute[1].slice(1).toLowerCase()
+        }'`;
+      }
       return `${atribute[0]} = '${atribute[1]}'`;
     })
     .join(" AND ");
+  console.log(queryAtributes);
 
   return { queryOptions, queryAtributes };
   //

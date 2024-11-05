@@ -82,13 +82,13 @@ exports.getAllPatients = catchAsyncError(async (req, res, next) => {
   //   .join(" AND ");
   //
 
-  const patients = await retrieveAllPatients(
+  let patients = await retrieveAllPatients(
     queryOptions,
     fields,
     queryAtributes
   );
   if (!patients) {
-    return next(new AppError("no patients founded....", 400));
+    patients = [];
   }
   return res.status(200).json({
     status: "success",
