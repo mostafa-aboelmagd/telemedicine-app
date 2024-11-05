@@ -70,6 +70,16 @@ const addNotification = async (notification) => {
         throw error;
     }
 };
+const setExpoPushToken = async (userId,expoPushToken) => {
+    try {
+        const query = 'INSERT INTO user_push_tokens (user_id, expo_push_token) VALUES ($1, $2) RETURNING *';
+        await pool.query(query, [userId, expoPushToken]);
+    } catch (error) {
+        console.error(error.stack);
+        throw error;
+    }
+};
+
 const fetchExpotoken = async (userid) => {
     try {
         const query = 'SELECT expo_push_token FROM user_push_tokens WHERE user_id = $1';
@@ -84,4 +94,4 @@ const fetchExpotoken = async (userid) => {
         throw error;
     }
 };
-module.exports = { getUnreadNotifications, getNotifications, markNotificationsAsRead, addNotification,fetchExpotoken };
+module.exports = { setExpoPushToken, getUnreadNotifications, getNotifications, markNotificationsAsRead, addNotification,fetchExpotoken };

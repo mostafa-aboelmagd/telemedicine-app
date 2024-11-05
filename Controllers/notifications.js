@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const database = require('../Database/notifications');
 const { createToken } = require('../Utilities');
 const { ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS } = process.env;
+
 const { Expo } = require('expo-server-sdk');
 // Create a new Expo SDK client
 const expo = new Expo();
@@ -41,26 +42,39 @@ const markNotificationsAsRead = async (req, res) => {
         res.status(500).json({ error: 'Failed to mark notifications as read' });
     }
 };
-const addNotification = async (req, res) => {
+
+const setExpoPushToken = async (req, res) => {
     try {
-        const notification = req.body;
+        const userId = req.id;
+        const expoPushToken = req.body.token; 
+        if (!userId) {
+            return res.status(401).json({ error: 'Unauthorized' });
+          }
+        await database.setExpoPushToken(userId,expoPushToken);
+        res.json({ message: 'expo token saved to database successfully'});
+    } catch (error) {
+        console.error('Error marking notifications as read:', error);
+    }
+};
+
+const addNotification = async (recipientId, message) => {
+    try {
+        const notification = {
+            recipientId: recipientId, 
+            message: message
+          }
         // 1. Store the notification in the database
         await database.addNotification(notification);
-        res.json({ message: 'Notifications added' });
-        // 2. Fetch the recipient's Expo push token from the database
-        const pushToken = await database.fetchExpotoken(notification.recipientId);
-        // 3. Send the push notification
-        if (Expo.isExpoPushToken(pushToken)) {
-            await sendPushNotification(pushToken, "New Message", messageText);
-        } else {
-            console.error(`Push token ${pushToken} is not a valid Expo push token`);
-        }
+        res.json({ message: 'Notifications added'});
     } catch (error) {
         console.error("Error creating notification:", error);
     }
 };
-async function sendPushNotification(pushToken, title, body) {
+
+
+const sendPushNotification = async (recipientId, title, body) => {
     try {
+        const pushToken = await database.fetchExpotoken(recipientId);
         const message = {
             to: pushToken,
             sound: 'default',
@@ -71,9 +85,12 @@ async function sendPushNotification(pushToken, title, body) {
 
         const ticketChunk = await expo.sendPushNotificationsAsync([message]);
         console.log(ticketChunk);
+        if(ticketChunk){
+            addNotification(recipientId, body)
+        }
     } catch (error) {
         console.error(error);
     }
 }
 
-module.exports = { getUnreadNotifications, getNotifications, markNotificationsAsRead, addNotification};
+module.exports = { setExpoPushToken, getUnreadNotifications, getNotifications, markNotificationsAsRead, addNotification, sendPushNotification}
