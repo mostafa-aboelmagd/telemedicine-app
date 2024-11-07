@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { formatDate } from "../../../utils/date";
 import HistoryDetails from "./HistoryDetails";
+import { Rating } from 'primereact/rating';
 
 const AppointmentCard = ({
   appointment,
@@ -49,17 +50,95 @@ const AppointmentCard = ({
           <strong>Duration:</strong> {appointment.appointment_duration} min
         </p>
         <p>
-          <strong>Appointment Type:</strong> {appointment.appointment_type}
+          <strong>Type:</strong> {appointment.appointment_type}
         </p>
         <p>
-          <strong>Date & Time:</strong>{" "}
+          <strong>Date:</strong>{" "}
           {appointment.doctor_availability_day_hour &&
             formatDate(appointment.doctor_availability_day_hour)}
         </p>
+
+        {/* Review Section */}
+        {(appointment.appointment_review_communication_rating ||
+          appointment.appointment_review_understanding_rating ||
+          appointment.appointment_review_providing_solutions_rating ||
+          appointment.appointment_review_commitment_rating) && (
+          <div className="mt-4 pt-4 border-t border-gray-200 appointment-review-display">
+            <p className="font-semibold text-gray-700 mb-2">Your Review:</p>
+            <div className="space-y-2">
+              {appointment.appointment_review_communication_rating && (
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Communication:</span>
+                  <Rating 
+                    value={appointment.appointment_review_communication_rating} 
+                    readOnly 
+                    stars={5} 
+                    cancel={false}
+                    className="text-sm pointer-events-none"
+                  />
+                </div>
+              )}
+              {appointment.appointment_review_understanding_rating && (
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Understanding:</span>
+                  <Rating 
+                    value={appointment.appointment_review_understanding_rating} 
+                    readOnly 
+                    stars={5} 
+                    cancel={false}
+                    className="text-sm pointer-events-none"
+                  />
+                </div>
+              )}
+              {appointment.appointment_review_providing_solutions_rating && (
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Problem Solving:</span>
+                  <Rating 
+                    value={appointment.appointment_review_providing_solutions_rating} 
+                    readOnly 
+                    stars={5} 
+                    cancel={false}
+                    className="text-sm pointer-events-none"
+                  />
+                </div>
+              )}
+              {appointment.appointment_review_commitment_rating && (
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Commitment:</span>
+                  <Rating 
+                    value={appointment.appointment_review_commitment_rating} 
+                    readOnly 
+                    stars={5} 
+                    cancel={false}
+                    className="text-sm pointer-events-none"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Follow-Up Button */}
       <HistoryDetails appointment={appointment} />
+
+      <style jsx global>{`
+        .appointment-review-display .p-rating.pointer-events-none .p-rating-item {
+          cursor: default !important;
+        }
+
+        .appointment-review-display .p-rating.pointer-events-none .p-rating-item:hover {
+          color: inherit !important;
+        }
+
+        .appointment-review-display .p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
+          color: #fbbf24 !important;
+        }
+
+        .appointment-review-display .p-rating .p-rating-item .p-rating-icon {
+          color: #d1d5db !important;
+        }
+      `}</style>
     </div>
   );
 };

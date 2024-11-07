@@ -6,7 +6,14 @@ import MenuItem from '@mui/material/MenuItem';
 import Link from "next/link";
 import { IconType } from 'react-icons';
 
-const MenuList = ({ linkTo, linkName, text }: { linkTo: string[], linkName: string[], text: string | React.ReactNode }) => {
+interface MenuListProps {
+  linkTo: string[];
+  linkName: string[];
+  text: React.ReactNode;
+  onSignOut?: () => void;
+}
+
+const MenuList = ({ linkTo, linkName, text, onSignOut }: MenuListProps) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -16,13 +23,24 @@ const MenuList = ({ linkTo, linkName, text }: { linkTo: string[], linkName: stri
         setAnchorEl(null);
     };
 
-    let menuItems = linkName.map((name, index) => {
-        return (
-            <Link key={index} href={linkTo[index]}>
-                <MenuItem key={index} onClick={handleClose}>{linkName[index]}</MenuItem>
-            </Link>
-        )
-    });
+    let menuItems = linkTo.map((link, index) => (
+        <div key={index}>
+            {link === "signout" ? (
+                <button 
+                    onClick={onSignOut}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                >
+                    {linkName[index]}
+                </button>
+            ) : (
+                <Link href={link}>
+                    <div className="px-4 py-2 hover:bg-gray-100">
+                        {linkName[index]}
+                    </div>
+                </Link>
+            )}
+        </div>
+    ));
     return (
         <div>
             <Button

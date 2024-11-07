@@ -8,7 +8,7 @@ interface InputProps {
   required?: boolean;
   additionalText?: string;
   errorText?: string;
-
+  id?: string; 
 }
 
 const InputComponent = ({
@@ -21,6 +21,7 @@ const InputComponent = ({
   required = false,
   additionalText,
   errorText,
+  id,
 }: InputProps) => {
   return (
     <div className="mb-4">
@@ -32,7 +33,7 @@ const InputComponent = ({
       </label>
       <input
         type={type}
-        id={name}
+        id={id}
         name={name}
         placeholder={placeholder}
         value={value}

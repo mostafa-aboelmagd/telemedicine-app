@@ -21,20 +21,14 @@ const Notification = () => {
     const [showNotifications, setShowNotifications] = useState(false);
     const [showAllNotifications, setShowAllNotifications] = useState(false);
     const [allNotifications, setAllNotifications] = useState([]);
-    const [notifications, setNotifications] = useState<Notification[]>([
-        {
-            notification_id: 0,
-            user_id: 0,
-            message: "",
-            read: false,
-            created_at: ""
-        }
-    ]);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingAll, setIsLoadingAll] = useState(false);
 
     const token = localStorage.getItem("jwt");
 
     const getUnreadNotifications = () => {
-
+        setIsLoading(true);
         fetch(
             `${process.env.NEXT_PUBLIC_SERVER_NAME}/notifications/Unread`,
             {
@@ -45,7 +39,10 @@ const Notification = () => {
             }
         )
             .then((response) => response.json())
-            .then((response) => setNotifications(() => response))
+            .then((response) => {
+                setNotifications(() => response);
+                setIsLoading(false);
+            })
     }
 
     const markNotificationAsRead = (notificationId: number) => {
@@ -63,14 +60,17 @@ const Notification = () => {
     };
 
     const fetchAllNotifications = () => {
-
+        setIsLoadingAll(true);
         fetch(`${process.env.NEXT_PUBLIC_SERVER_NAME}/notifications/All`, {
             headers: {
                 Authorization: "Bearer " + token,
             },
         })
             .then((response) => response.json())
-            .then((data) => setAllNotifications(data));
+            .then((data) => {
+                setAllNotifications(data);
+                setIsLoadingAll(false);
+            });
     };
 
     useEffect(() => {
@@ -116,23 +116,38 @@ const Notification = () => {
                                 {showAllNotifications ? 'Show Unread' : 'View All'}
                             </button>
                         </div>
-                        {(showAllNotifications ? allNotifications : [...notifications])
-                            .filter(notification => showAllNotifications ? true : !notification.read)
-                            .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-                            .map((notification) => (
-                                <div
-                                    key={notification.notification_id}
-                                    onClick={() => markNotificationAsRead(notification.notification_id)}
-                                    className={`p-2 border-b transition-colors duration-200 ease-in-out
-                                        hover:bg-blue-100 cursor-pointer
-                                        ${notification.read ? 'bg-white' : 'bg-blue-50'}`}
-                                >
-                                    <p className="text-sm">{notification.message}</p>
-                                    <p className="text-xs text-gray-500">
-                                        {new Date(notification.created_at).toLocaleDateString()}
-                                    </p>
-                                </div>
-                            ))}
+
+                        {isLoading || (showAllNotifications && isLoadingAll) ? (
+                            <div className="flex justify-center items-center p-4">
+                                <div className="w-6 h-6 border-2 border-blue-600 rounded-full animate-spin border-t-transparent"></div>
+                            </div>
+                        ) : (
+                            <>
+                                {!isLoading && (showAllNotifications ? allNotifications : notifications).length === 0 ? (
+                                    <div className="p-4 text-center text-gray-500">
+                                        No Notifications
+                                    </div>
+                                ) : (
+                                    (showAllNotifications ? allNotifications : [...notifications])
+                                        .filter(notification => showAllNotifications ? true : !notification.read)
+                                        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                                        .map((notification) => (
+                                            <div
+                                                key={notification.notification_id}
+                                                onClick={() => markNotificationAsRead(notification.notification_id)}
+                                                className={`p-2 border-b transition-colors duration-200 ease-in-out
+                                                    hover:bg-blue-100 cursor-pointer
+                                                    ${notification.read ? 'bg-white' : 'bg-blue-50'}`}
+                                            >
+                                                <p className="text-sm">{notification.message}</p>
+                                                <p className="text-xs text-gray-500">
+                                                    {new Date(notification.created_at).toLocaleDateString()}
+                                                </p>
+                                            </div>
+                                        ))
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
             )}

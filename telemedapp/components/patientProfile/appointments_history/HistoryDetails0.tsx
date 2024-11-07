@@ -1,12 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Card } from "primereact/card";
 import { formatDate } from "../../../utils/date";
 import stylesButton from "../../navbarComp/navbar.module.css";
 import ReadMore from "../../common/ReadMore";
-import 'primereact/resources/primereact.min.css';
-import ReviewDialog from './ReviewDialog';
-
 interface HistoryDetailsProps {
   appointment: any;
 }
@@ -17,86 +14,61 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  
-
-  const fetchAppointmentDetails = useCallback(async () => {
-    if (appointment?.appointment_id) {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const token = localStorage.getItem("jwt");
-        if (!token) {
-          throw new Error("No authentication token found");
-        }
-
-        const url = `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/appointmentdetails/${appointment.appointment_id}`;
-        console.log('Fetching from URL:', url);
-
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Server response:', response.status, errorText);
-          throw new Error(`Server responded with ${response.status}: ${errorText}`);
-        }
-
-        const data = await response.json();
-        console.log('Appointment Details Response:', data);
-        
-        if (data && data.appointment) {
-          setAppointmentDetails(data.appointment);
-        } else {
-          throw new Error("Invalid data format received from server");
-        }
-      } catch (error) {
-        console.error("Error fetching details:", error);
-        setError(error instanceof Error ? error.message : "Error fetching appointment details");
-      } finally {
-        setLoading(false);
-      }
-    }
-  }, [appointment]);
-
-  useEffect(() => {
-    if (showDialog) {
-      fetchAppointmentDetails();
-    }
-  }, [showDialog, appointment, fetchAppointmentDetails]);
-
-  const handleReviewSubmitted = () => {
-    fetchAppointmentDetails();
+  const handleBack = () => {
+    setShowDialog(false);
   };
+
+  const handleFollowUpClick = () => {
+    setShowDialog(true);
+  };
+
+  // Fetch appointment details
+  useEffect(() => {
+    const fetchAppointmentsDetails = async () => {
+      if (appointment?.appointment_id) {
+        setLoading(true);
+        setError(null); // Reset error state
+        const token = localStorage.getItem("jwt");
+
+        try {
+          const response = await fetch(
+            `${
+              process.env.NEXT_PUBLIC_SERVER_NAME
+            }/patient/appointment/appointmentdetails/${Number(
+              appointment.appointment_id
+            )}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          if (!response.ok)
+            throw new Error("Failed to fetch appointment details");
+
+          const data = await response.json();
+          if (data && data.appointment) {
+            setAppointmentDetails(data.appointment);
+          } else {
+            throw new Error("Invalid data structure");
+          }
+        } catch (error) {
+          setError("Error fetching appointment details");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    fetchAppointmentsDetails();
+  }, [showDialog]);
 
   return (
     <>
-      <div className="flex gap-2">
-        <button
-          className={`${stylesButton.gradient_button} md:text-sm text-xs font-medium text-white py-2 px-4 rounded-lg w-full`}
-          onClick={() => setShowDialog(true)}
-        >
-          View Details
-        </button>
-        
-        {!appointment.appointment_review_communication_rating &&
-         !appointment.appointment_review_understanding_rating &&
-         !appointment.appointment_review_providing_solutions_rating &&
-         !appointment.appointment_review_commitment_rating && (
-          <ReviewDialog
-            appointmentId={appointment.appointment_id}
-            doctorId={appointment.appointment_doctor_id}
-            onReviewSubmitted={handleReviewSubmitted}
-          />
-        )}
-      </div>
-
-      {/* Details Dialog */}
+      <button
+        className={`${stylesButton.gradient_button} md:text-sm text-xs font-medium text-white py-2 px-4 rounded-lg w-full`}
+        onClick={handleFollowUpClick}
+      >
+        View Details
+      </button>
       <Dialog
         className="bg-opacity-100 bg-gray-50 rounded-lg shadow-2xl"
         style={{
@@ -112,7 +84,7 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
         footer={
           <button
             className={`${stylesButton.gradient_button} md:text-sm text-xs font-medium text-white mt-2 py-2 px-4 rounded-lg disabled:opacity-50`}
-            onClick={() => setShowDialog(false)}
+            onClick={handleBack}
           >
             Back
           </button>
@@ -207,7 +179,6 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
                   </div>
                 )}
             </div>
-
           </Card>
         ) : (
           <p className="mt-4 text-center text-gray-500">
@@ -215,34 +186,6 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
           </p>
         )}
       </Dialog>
-
-      <style jsx global>{`
-        /* Base star styling */
-        .p-rating .p-rating-item .p-rating-icon {
-          font-size: 1.5rem;
-          color: #64748B !important;
-          transition: all 0.2s ease;
-        }
-        
-        /* Active (selected) star styling */
-        .p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
-          color: #FCD34D !important;
-          filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.3));
-        }
-
-        /* Star spacing and size */
-        .p-rating .p-rating-item {
-          margin: 0 0.2rem;
-          cursor: default;
-        }
-
-        /* Container spacing */
-        .p-rating {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-      `}</style>
     </>
   );
 };

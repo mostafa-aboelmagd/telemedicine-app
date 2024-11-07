@@ -1,7 +1,5 @@
-import React, { useState, useMemo } from "react";
-import Rating from "@mui/material/Rating";
+import React, { useMemo } from "react";
 import Stack from "@mui/material/Stack";
-import RatingComp from "@/components/common/RatingComp";
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { IoMdAlarm } from "react-icons/io";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
@@ -61,17 +59,11 @@ const DoctorFees: React.FC<DoctorFeesProps> = ({ fees60min, fees30min }) => (
   </div>
 );
 
-// Define the type for the doctor prop
-
 interface DoctorCardProps {
   doctor: Doctor;
 }
 
 const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
-  const [doctorRating, setDoctorRating] = useState<number | null>(
-    doctor.rating || 0
-  );
-
   // Convert buffer data to base64 image
   const base64Image = useMemo(() => {
     if (!doctor.image) return null;
@@ -100,30 +92,6 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
             <p className="text-[#035fe9] text-xs md:text-sm flex items-center">
               <HiOutlineUserGroup className="h-6 w-6 mr-2" />
               {doctor.numSessions} Sessions
-            </p>
-          </div>
-          <div className="flex justify-between items-center">
-            <Stack spacing={1}>
-              {doctorRating ? (
-                <Rating
-                  name="doctor-rating"
-                  value={doctorRating}
-                  precision={0.01}
-                  readOnly
-                />
-              ) : (
-                <RatingComp
-                  text="Review"
-                  variant="text"
-                  doctor={doctor}
-                  setDoctorRating={setDoctorRating}
-                />
-              )}
-            </Stack>
-            <p className="text-[#343a40] text-xs">
-              {doctorRating && doctorRating > 0
-                ? `${doctorRating} (${doctor.numReviews} Reviews)`
-                : "No Reviews"}
             </p>
           </div>
         </div>

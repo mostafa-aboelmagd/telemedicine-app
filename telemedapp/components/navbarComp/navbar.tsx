@@ -27,8 +27,7 @@ const Navbar = () => {
   const [userRole, setUserRole] = useState<any>();
   const router = useRouter();
 
-  
-  useEffect(() => {
+  const checkAuth = () => {
     const expiryDate = localStorage.getItem("expiryDate");
     if (
       expiryDate &&
@@ -38,6 +37,19 @@ const Navbar = () => {
     }
     setToken(localStorage.getItem("jwt"));
     setUserRole(localStorage.getItem("userRole"));
+  };
+  
+  useEffect(() => {
+    checkAuth();
+    
+    // Listen for auth changes
+    window.addEventListener('storage', checkAuth);
+    window.addEventListener('auth-change', checkAuth);
+    
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+      window.removeEventListener('auth-change', checkAuth);
+    };
   }, []);
 
   return (
@@ -111,13 +123,13 @@ const Navbar = () => {
                       "/patientProfile/upcoming_appointments",
                       "/patientProfile/patientDocuments",
                       "/patientProfile/paymentInfo",
-                      "/auth/signout",
+                      "signout",
                     ]
                     : [
                       "/doctorProfile",
                       "/doctorProfile/timeSlots",
                       "/doctorProfile/appointments",
-                      "/auth/signout",
+                      "signout",
                     ]
                 }
                 linkName={
@@ -137,6 +149,11 @@ const Navbar = () => {
                     ]
                 }
                 text={signedInIcon}
+                onSignOut={() => {
+                  localStorage.clear();
+                  window.dispatchEvent(new Event('auth-change'));
+                  router.push('/');
+                }}
               />
             </div>
           )}

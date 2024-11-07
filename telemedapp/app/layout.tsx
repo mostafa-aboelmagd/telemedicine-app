@@ -6,6 +6,7 @@ import Navbar from "@/components/navbarComp/navbar";
 import { ProfileProvider } from "@/context/ProfileContext";
 import { DoctorProvider } from "@/context/GetDoctorsContext";
 import "./globals.css";
+import { ToastProvider } from '@/context/ToastContext';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,8 +32,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <DoctorProvider>
           <ProfileProvider>
-            <Navbar />
-            {children}
+            <ToastProvider>
+              <Navbar />
+              {children}
+            </ToastProvider>
           </ProfileProvider>
         </DoctorProvider>
       </body>

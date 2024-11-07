@@ -20,7 +20,7 @@ const DoctorInfo = ({ doctor }: { doctor: Doctor }) => {
             <p className="text-base text-blue-500">{doctor.title}</p>
           </div>
         </div>
-        <div className="flex items-center flex-col gap-2">
+        {/* <div className="flex items-center flex-col gap-2">
           <Stack spacing={1}>
             {doctorRating ? (
               <Rating
@@ -43,7 +43,7 @@ const DoctorInfo = ({ doctor }: { doctor: Doctor }) => {
               ? `${doctorRating} (${doctor.numReviews} Reviews)`
               : "No Reviews"}
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

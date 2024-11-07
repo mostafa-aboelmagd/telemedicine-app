@@ -5,6 +5,8 @@ import Link from "next/link";
 import InputComponent from "./InputComponent";
 import jwt from "jsonwebtoken";
 import { useRouter } from "next/navigation";
+import { useToast } from '@/context/ToastContext';
+import sendEmail from "@/utils/sendEmail"
 
 function SignInForm() {
   const router = useRouter();
@@ -16,6 +18,8 @@ function SignInForm() {
     email: "",
     password: "",
   });
+  const [isBanned, setIsBanned] = useState(false);
+  const { showSuccess, showError } = useToast();
 
   useEffect(() => {
     validateForm();
@@ -98,14 +102,21 @@ function SignInForm() {
       );
 
       if (!response.ok) {
-        console.log("error in response");
+        setLoading(false);
+        setSignedIn(false);
+        
         if (response.status === 400) {
-          setLoading(false);
-          setSignedIn(false);
           setError(true);
+          setIsBanned(false);
+          showError('Incorrect Email or Password!');
+        } else if (response.status === 403) {
+          setError(false);
+          setIsBanned(true);
+          showError('Your account has been banned. Please contact support.');
         }
         throw new Error("Failed To Sign In");
       }
+
       const users = await response.json();
       console.log("responseee",users); 
 
@@ -116,14 +127,23 @@ function SignInForm() {
         localStorage.setItem("userId", users.id);
         localStorage.setItem("firstName", users.firstName);
         localStorage.setItem("lastName", users.lastName);
+        
+        // Dispatch custom event
+        window.dispatchEvent(new Event('auth-change'));
+        
+        showSuccess('Logged-in Successfully');
         setLoading(false);
         setError(false);
         setSignedIn(true);
         router.replace("/");
       } else {
-        console.log("Error During Token Authentication");
+        showError('Error During Token Authentication');
       }
-    } catch (error) {
+    } catch (error: any) {
+      setLoading(false);
+      if (!error.message.includes("Failed To Sign In")) {
+        showError('Error During Sign In');
+      }
       console.error("Error During Sign In:", error);
     }
   };
@@ -170,7 +190,12 @@ function SignInForm() {
         </button>
         {error && (
           <p className="font-semibold text-red-700 mt-4">
-            Incorrect Email And/Or Password!
+            Incorrect Email or Password!
+          </p>
+        )}
+        {isBanned && (
+          <p className="font-semibold text-red-700 mt-4">
+            Your account has been banned. Please contact support.
           </p>
         )}
         {signedIn && (
