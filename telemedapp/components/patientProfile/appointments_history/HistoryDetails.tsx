@@ -70,9 +70,6 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
     }
   }, [showDialog, appointment, fetchAppointmentDetails]);
 
-  const handleReviewSubmitted = () => {
-    fetchAppointmentDetails();
-  };
 
   return (
     <>
@@ -91,7 +88,6 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
           <ReviewDialog
             appointmentId={appointment.appointment_id}
             doctorId={appointment.appointment_doctor_id}
-            onReviewSubmitted={handleReviewSubmitted}
           />
         )}
       </div>

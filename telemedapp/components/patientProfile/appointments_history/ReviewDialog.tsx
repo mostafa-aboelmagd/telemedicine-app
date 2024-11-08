@@ -6,13 +6,11 @@ import stylesButton from "../../navbarComp/navbar.module.css";
 interface ReviewDialogProps {
   appointmentId: number;
   doctorId: number;
-  onReviewSubmitted: () => void;
 }
 
 const ReviewDialog: React.FC<ReviewDialogProps> = ({
   appointmentId,
   doctorId,
-  onReviewSubmitted
 }) => {
   const [showReviewDialog, setShowReviewDialog] = useState(false);
   const [ratings, setRatings] = useState({
@@ -52,7 +50,7 @@ const ReviewDialog: React.FC<ReviewDialogProps> = ({
 
       if (response.ok) {
         setShowReviewDialog(false);
-        onReviewSubmitted();
+        window.location.reload();
       } else {
         throw new Error(data.message || 'Failed to submit review');
       }
