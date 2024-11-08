@@ -16,7 +16,9 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
   selectedSlot,
   handleSlotSelect,
   availableDates,
-}) => (
+}) => {
+
+  return (
   <div className="flex gap-4 flex-col">
     <div className="flex justify-between items-center mb-4">
       <h3 className="text-sm lg:text-xl font-semibold">Select time slots:</h3>
@@ -28,10 +30,6 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
       <p className="text-red-500 text-center mt-6 text-xs md:text-base italic">
         No available dates for booking at the moment. <br />
         <br /> Please try again later.
-      </p>
-    ) : availableDates.length === 1 ? (
-      <p className="text-blue-600 text-center mt-6 text-xs md:text-base italic">
-        Loading available dates...
       </p>
     ) : (
       <div className="overflow-y-hidden hover:overflow-y-auto h-52 py-4">
@@ -45,9 +43,8 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
           {selectedDate ? (
             selectedDate.slots?.length > 0 ? (
               selectedDate?.slots.map((slot) => (
-                <div className="flex flex-col gap-1">
+                <div key={slot.id} className="flex flex-col gap-1">
                   <button
-                    key={slot.id}
                     onClick={() => handleSlotSelect(slot)}
                     className={`p-3 rounded-lg border   ${
                       selectedSlot === slot.time
@@ -83,5 +80,6 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({
     )}
   </div>
 );
+}
 
 export default SlotSelector;
