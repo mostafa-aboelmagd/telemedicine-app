@@ -9,6 +9,7 @@ interface OTPDialogProps {
   onVerificationComplete: () => Promise<void>;
   loading: boolean;
   userEmail: string;
+  onDialogClose: () => void;
 }
 
 const OTPDialog: React.FC<OTPDialogProps> = ({
@@ -16,7 +17,8 @@ const OTPDialog: React.FC<OTPDialogProps> = ({
   onHide,
   onVerificationComplete,
   loading: formLoading,
-  userEmail
+  userEmail,
+  onDialogClose
 }) => {
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState(false);
@@ -90,6 +92,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({
       setErrorMessage('An error occurred during verification. Please try again.');
     } finally {
       setVerifying(false);
+      setOtp('');
     }
   };
 
@@ -100,10 +103,18 @@ const OTPDialog: React.FC<OTPDialogProps> = ({
     await handleGenerateAndSendOTP();
   };
 
+  const handleHide = () => {
+    setOtp('');
+    setOtpError(false);
+    setErrorMessage('');
+    onDialogClose(); // Call this new function to reset parent state
+    onHide();
+  };
+
   return (
     <Dialog
       visible={visible}
-      onHide={onHide}
+      onHide={handleHide}
       className="w-[90vw] max-w-md"
       header="Email Verification"
       dismissableMask={false}

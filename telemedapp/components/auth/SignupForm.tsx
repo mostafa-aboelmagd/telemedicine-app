@@ -256,7 +256,7 @@ function SignUpForm() {
       hasUpperCase: /[A-Z]/,         // At least one uppercase letter
       hasLowerCase: /[a-z]/,         // At least one lowercase letter
       hasNumber: /\d/,               // At least one number
-      hasSymbol: /[@$!%*#?&_]/        // At least one special character
+      hasSymbol: /[@$!%*#?&]/        // At least one special character
     };
 
     let changedValidation = false;
@@ -286,7 +286,7 @@ function SignUpForm() {
     if (!validations.upper) errorMessages.push("one uppercase letter");
     if (!validations.lower) errorMessages.push("one lowercase letter");
     if (!validations.number) errorMessages.push("one number");
-    if (!validations.symbol) errorMessages.push("one special character (@$!%*#?&_)");
+    if (!validations.symbol) errorMessages.push("one special character (@$!%*#?&)");
 
     const isValid = Object.values(validations).every(v => v);
 
@@ -638,6 +638,8 @@ function SignUpForm() {
     } catch (error) {
       showError('Verification failed');
       console.error("Error during verification:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -856,6 +858,11 @@ function SignUpForm() {
     if (changedValidation && validateFieldsChosen()) {
       setFormData((prevForm) => ({ ...prevForm }));
     }
+  };
+
+  const handleOTPDialogClose = () => {
+    setShowOTPDialog(false);
+    setLoading(false); // Reset loading state
   };
 
   return (
@@ -1451,6 +1458,7 @@ function SignUpForm() {
         onVerificationComplete={handleEmailVerification}
         loading={loading}
         userEmail={formData.email}
+        onDialogClose={handleOTPDialogClose}
       />
     </div>
   );
