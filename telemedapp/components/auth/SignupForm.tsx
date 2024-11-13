@@ -707,9 +707,9 @@ function SignUpForm() {
           phone: formData.phone,
           speciality: formData.speciality
         },
-        certificates: doctorCertificates.slice(1),
-        experiences: doctorExperiences.slice(1),
-        interests: doctorInterests.slice(1),
+        certificates: doctorCertificates,
+        experiences: doctorExperiences,
+        interests: doctorInterests,
         Languages: []
       };
       console.log("body", requestBody)
