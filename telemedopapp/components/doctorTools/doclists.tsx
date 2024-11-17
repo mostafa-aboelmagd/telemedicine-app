@@ -4,8 +4,8 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import ReadMore from "@/components/common/ReadMore";
 import Image from "next/image";
 import userImage from "@/images/user.png";
-import Inputcomponent from "./InputComponent"
 import InputComponent from "./InputComponent";
+import ReminderComponent from '@/components/ReminderComponent/ReminderComponent';
 
 interface Certificate {
   authority: string;
@@ -61,6 +61,8 @@ const Doclists = () => {
   const [showStatePopup, setShowStatePopup] = useState(false);
   const [popupDoctor, setPopupDoctor] = useState<any>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const [isReminderDialogOpen, setisReminderDialogOpen] = useState<boolean>(false);
 
   const [doctorsData, setDoctorsData] = useState([
     {
@@ -208,6 +210,55 @@ const Doclists = () => {
     fetchDoctors();
 
   };
+
+  const isDoctorProfileIncomplete = (doctor: any) => {
+    console.log('doctor', doctor);
+    // Check main properties
+    const mainProperties = [
+      'user_first_name',
+      'user_last_name',
+      'user_email',
+      'user_gender',
+      'user_phone_number',
+      'user_birth_date',
+      'doctor_account_state',
+      'doctor_country',
+      'doctor_specialization',
+      'doctor_city',
+      'doctor_clinic_location',
+      'doctor_sixty_min_price',
+      'doctor_thirty_min_price'
+    ];
+  
+    // Check if any main property is null
+    for (const prop of mainProperties) {
+      if (doctor[prop] === null) {
+        return true;
+      }
+    }
+  
+    // Check experiences array
+    if (!doctor.experiences || doctor.experiences.some((exp: any) => {
+      return !exp.firm || !exp.title || !exp.endDate || !exp.startDate || !exp.department;
+    })) {
+      return true;
+    }
+  
+    // Check interests array
+    if (!doctor.interests || doctor.interests.some((interest: any) => {
+      return !interest.name || !interest.category;
+    })) {
+      return true;
+    }
+  
+    // Check languages array
+    if (!doctor.languages || doctor.languages.length === 0 || doctor.languages.some((lang: any) => lang === null)) {
+      return true;
+    }
+  
+    return false;
+  };
+
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 min-[880px]:flex-row min-[880px]:items-start">
       <div className="w-full max-w-screen-lg text-center">
@@ -456,6 +507,15 @@ const Doclists = () => {
                           </div>
                         </div>
 
+                        {isDoctorProfileIncomplete(selectedDoctor) && (
+                          <button
+                            className="mt-4 bg-sky-500 text-neutral-50 text-lg p-3.5 w-full border-none rounded-lg cursor-pointer transition-[background-color]"
+                            onClick={() => setisReminderDialogOpen(true)}
+                          >
+                            Send Reminder
+                          </button>
+                        )}
+
                         <button
                           className="mt-4 bg-sky-500 text-neutral-50 text-lg p-3.5 w-full border-none rounded-lg cursor-pointer transition-[background-color]"
                           onClick={() => setSelectedDoctor(null)}
@@ -498,6 +558,17 @@ const Doclists = () => {
             </div>
           </div>
         </div>
+      )}
+      {isReminderDialogOpen && (
+        <ReminderComponent
+          isOpen={isReminderDialogOpen}
+          onClose={() => setisReminderDialogOpen(false)}
+          recipientEmail={selectedDoctor?.user_email}
+          recipientName={`Dr. ${selectedDoctor?.user_first_name}`}
+          onSendSuccess={() => {
+            setSelectedDoctor(null);
+          }}
+        />
       )}
 
     </div>
