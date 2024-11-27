@@ -6,7 +6,7 @@ import Image from "next/image";
 import userImage from "@/images/user.png";
 import InputComponent from "./InputComponent";
 import ReminderComponent from "@/components/ReminderComponent/ReminderComponent";
-import AppointmentsHistory from '../patientTools/AppointmentsHistory';
+import { useRouter } from 'next/navigation';
 
 interface Certificate {
   authority: string;
@@ -52,6 +52,7 @@ interface Doctor {
 }
 
 const Doclists = () => {
+  const router = useRouter();
   const [loadingRequest, setLoadingRequest] = useState(true);
   const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
   const [token, setToken] = useState<any>();
@@ -280,9 +281,6 @@ const Doclists = () => {
     return { percentage, missingFields };
   };
 
-  const [showAppointmentsHistory, setShowAppointmentsHistory] = useState(false);
-  const [selectedDoctorForAppointments, setSelectedDoctorForAppointments] = useState<any>(null);
-
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 min-[880px]:flex-row min-[880px]:items-start">
       <div className="w-full max-w-screen-lg text-center">
@@ -497,12 +495,11 @@ const Doclists = () => {
                                 <div className="col-span-2 flex justify-end space-x-4">
                                   <button
                                     onClick={() => {
-                                      setSelectedDoctorForAppointments(doctors);
-                                      setShowAppointmentsHistory(true);
+                                      router.push(`/appointments/history?userId=${doctors.user_id}`);
                                     }}
                                     className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
                                   >
-                                    Appointments History
+                                    View Appointments History
                                   </button>
                                   <button
                                     onClick={() => handleShowFullData(doctors)}
@@ -700,15 +697,15 @@ const Doclists = () => {
           )
         ) : null}
       </div>
-      {showAppointmentsHistory && selectedDoctorForAppointments && (
-        <AppointmentsHistory
-          patientId={selectedDoctorForAppointments.user_id}
-          token={token}
-          onClose={() => {
-            setShowAppointmentsHistory(false);
-            setSelectedDoctorForAppointments(null);
+      {selectedDoctor && (
+        <button
+          onClick={() => {
+            router.push(`/appointments/history?userId=${selectedDoctor.user_id}`);
           }}
-        />
+          className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
+        >
+          View Appointments History
+        </button>
       )}
       {showStatePopup && popupDoctor && (
         <div className="fixed inset-0 flex items-center justify-center z-50">

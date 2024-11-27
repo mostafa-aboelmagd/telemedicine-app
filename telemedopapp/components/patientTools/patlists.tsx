@@ -5,7 +5,7 @@ import ReadMore from "@/components/common/ReadMore";
 import Image from "next/image";
 import userImage from "@/images/user.png";
 import ReminderComponent from '@/components/ReminderComponent/ReminderComponent';
-import AppointmentsHistory from './AppointmentsHistory';
+import { useRouter } from 'next/navigation';
 
 interface Patient {
   patientId: number;
@@ -27,6 +27,7 @@ const filterTypeMapping: { [key: string]: string } = {
   ALL: "Nothing"
 };
 const Patlists = () => {
+  const router = useRouter();
   const [loadingRequest, setLoadingRequest] = useState(true);
   const [selectedPatient, setSelectedPatient] = useState<any>(null); // New state
   const [token, setToken] = useState<any>();
@@ -406,12 +407,11 @@ const Patlists = () => {
                                   <div className="col-span-2 flex justify-end space-x-4">
                                     <button
                                       onClick={() => {
-                                        setShowAppointmentsHistory(true);
-                                        setSelectedPatientForAppointments(patients);
+                                        router.push(`/appointments/history?userId=${patients.user_id}`);
                                       }}
                                       className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
                                     >
-                                      Appointments History
+                                      View Appointments History
                                     </button>
                                     <button
                                       onClick={() => handleShowFullData(patients)}
@@ -536,14 +536,14 @@ const Patlists = () => {
         />
       )}
       {showAppointmentsHistory && selectedPatientForAppointments && (
-        <AppointmentsHistory
-          patientId={selectedPatientForAppointments.user_id}
-          token={token}
-          onClose={() => {
-            setShowAppointmentsHistory(false);
-            setSelectedPatientForAppointments(null);
+        <button
+          onClick={() => {
+            router.push(`/appointments/history?userId=${selectedPatientForAppointments.user_id}`);
           }}
-        />
+          className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
+        >
+          View Appointments History
+        </button>
       )}
       {showStatePopup && popupPatient && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
