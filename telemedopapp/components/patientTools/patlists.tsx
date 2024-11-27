@@ -4,8 +4,8 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import ReadMore from "@/components/common/ReadMore";
 import Image from "next/image";
 import userImage from "@/images/user.png";
-import InputComponent from "./InputComponent";
 import ReminderComponent from '@/components/ReminderComponent/ReminderComponent';
+import AppointmentsHistory from './AppointmentsHistory';
 
 interface Patient {
   patientId: number;
@@ -23,6 +23,7 @@ const filterTypeMapping: { [key: string]: string } = {
   user_email: "Email",
   user_phone_number: "Phone Number",
   user_id: "User ID",
+  profile_completion: "Profile Completion",
   ALL: "Nothing"
 };
 const Patlists = () => {
@@ -38,6 +39,8 @@ const Patlists = () => {
   const [showStatePopup, setShowStatePopup] = useState(false);
   const [popupPatient, setPopupPatient] = useState<any>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showAppointmentsHistory, setShowAppointmentsHistory] = useState(false);
+  const [selectedPatientForAppointments, setSelectedPatientForAppointments] = useState<any>(null);
 
   const [isReminderDialogOpen, setisReminderDialogOpen] = useState<boolean>(false);
 
@@ -162,10 +165,30 @@ const Patlists = () => {
   const isPatientProfileIncomplete = (patient: any) => {
     const { user_email, user_first_name, user_last_name, user_phone_number, user_birth_date, languages } = patient;
 
-    const isLanguageIncomplete = !languages || languages.length === 0 || languages.every((lang: string | null) => lang === null);
-    const isIncomplete = !user_email || !user_first_name || !user_last_name || !user_phone_number || !user_birth_date;
+    const missingFields = [];
+    if (!user_email) missingFields.push('Email');
+    if (!user_first_name) missingFields.push('First Name');
+    if (!user_last_name) missingFields.push('Last Name');
+    if (!user_phone_number) missingFields.push('Phone Number');
+    if (!user_birth_date) missingFields.push('Birth Date');
+    if (!languages || languages.length === 0 || languages.every((lang: string | null) => lang === null)) {
+      missingFields.push('Languages');
+    }
 
-    return isIncomplete || isLanguageIncomplete;
+    return missingFields;
+  };
+
+  const getProfileCompletionStatus = (patient: any) => {
+    const missingFields = isPatientProfileIncomplete(patient);
+    const totalFields = 6; // Total number of required fields
+    const completedFields = totalFields - missingFields.length;
+    const percentage = Math.round((completedFields / totalFields) * 100);
+    
+    return {
+      percentage,
+      missingFields,
+      status: percentage === 100 ? 'Complete' : 'Incomplete'
+    };
   };
 
   return (
@@ -197,21 +220,23 @@ const Patlists = () => {
               <option value="user_id">User ID</option>
             </select>
           </div>
-          <div className="w-1/3 mr-4">
+          <div className="w-1/4 mr-4">
             <label htmlFor="filterValue" className="block mb-1.5 text-base font-semibold text-neutral-700">
-              .
+              Enter Value:
             </label>
-            <InputComponent
-              label=""
-              type="text"
-              name="filterValue"
-              placeholder={`Enter ${filterTypeMapping[filterType]} here`}
-              value={filterValue}
-              onChange={(e) => setFilterValue(e.target.value)}
-              className="w-1/2 "
-            />
+            <div className="bg-neutral-100 w-full rounded-lg border border-solid border-neutral-300">
+              <input
+                type="text"
+                id="filterValue"
+                name="filterValue"
+                placeholder={`Enter ${filterTypeMapping[filterType]} here`}
+                value={filterValue}
+                onChange={(e) => setFilterValue(e.target.value)}
+                className="w-full py-4 px-6 text-base bg-transparent outline-none transition-[border-color] focus:border-sky-500"
+              />
+            </div>
           </div>
-          <div className="w-1/6 mr-4">
+          <div className="w-1/4 mr-4">
             <label htmlFor="sortValue" className="block mb-1.5 text-base font-semibold text-neutral-700">
               Sort By:
             </label>
@@ -226,6 +251,7 @@ const Patlists = () => {
               <option value="user_email">Email</option>
               <option value="user_phone_number">Phone Number</option>
               <option value="user_id">ID</option>
+              <option value="profile_completion">Profile Completion</option>
             </select>
           </div>
 
@@ -245,6 +271,7 @@ const Patlists = () => {
             <CircularProgress className="mx-auto my-4" />
           ) : (
             <>
+
               <div className="p-7">
                 <div className="min-[1350px]:grid-cols-1 p-3 gap-y-10 justify-items-center">
                   <div className="p-7 w-full">
@@ -272,7 +299,6 @@ const Patlists = () => {
                                       {patients.user_id}
                                     </h3>
 
-
                                     <p>
                                       <span className="font-semibold text-gray-600">
                                         Phone:
@@ -282,7 +308,6 @@ const Patlists = () => {
 
                                   </div>
                                   <div>
-
                                     <p>
                                       <span className="font-semibold text-gray-600">
                                         Email:
@@ -296,22 +321,58 @@ const Patlists = () => {
                                       </span>
                                       {patients.patient_account_state}
                                     </p>
+                                    
+                                    {/* Profile Completion Status */}
+                                    <div className="mt-2">
+                                      <div className="flex items-center">
+                                        <span className="font-semibold text-gray-600 mr-2">
+                                          Profile Completion:
+                                        </span>
+                                        <div className="flex-1 bg-gray-200 rounded-full h-2.5">
+                                          <div 
+                                            className={`h-2.5 rounded-full ${
+                                              getProfileCompletionStatus(patients).percentage === 100
+                                                ? 'bg-green-500'
+                                                : getProfileCompletionStatus(patients).percentage > 50
+                                                ? 'bg-yellow-500'
+                                                : 'bg-red-500'
+                                            }`}
+                                            style={{ width: `${getProfileCompletionStatus(patients).percentage}%` }}
+                                          />
+                                        </div>
+                                        <span className="ml-2 text-sm">
+                                          {getProfileCompletionStatus(patients).percentage}%
+                                        </span>
+                                      </div>
+                                      {getProfileCompletionStatus(patients).missingFields.length > 0 && (
+                                        <p className="text-sm text-red-500 mt-1">
+                                          Missing: {getProfileCompletionStatus(patients).missingFields.join(', ')}
+                                        </p>
+                                      )}
+                                    </div>
                                   </div>
-                                  <div className="col-span-2 flex justify-end">
+                                  <div className="col-span-2 flex justify-end space-x-4">
+                                    <button
+                                      onClick={() => {
+                                        setShowAppointmentsHistory(true);
+                                        setSelectedPatientForAppointments(patients);
+                                      }}
+                                      className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
+                                    >
+                                      Appointments History
+                                    </button>
                                     <button
                                       onClick={() => handleShowFullData(patients)}
                                       className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
                                     >
                                       Full Profile
                                     </button>
-                                    <div className="ml-10">
-                                      <button
-                                        onClick={() => handlechangestate(patients)}
-                                        className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
-                                      >
-                                        Account State
-                                      </button>
-                                    </div>
+                                    <button
+                                      onClick={() => handlechangestate(patients)}
+                                      className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
+                                    >
+                                      Account State
+                                    </button>
                                   </div>
                                 </div>
                               </div>
@@ -384,21 +445,23 @@ const Patlists = () => {
                           </div>
                         </div>
 
-                        {isPatientProfileIncomplete(selectedPatient) && (
-                          <button
-                            className="mt-4 bg-sky-500 text-neutral-50 text-lg p-3.5 w-full border-none rounded-lg cursor-pointer transition-[background-color]"
-                            onClick={() => setisReminderDialogOpen(true)}
-                          >
-                            Send Reminder
-                          </button>
-                        )}
+                        <div className="flex flex-col gap-2 mt-4">
+                          {getProfileCompletionStatus(selectedPatient).percentage < 100 && (
+                            <button
+                              className="bg-sky-500 text-neutral-50 text-lg p-3.5 w-full border-none rounded-lg cursor-pointer transition-[background-color] hover:bg-sky-600"
+                              onClick={() => setisReminderDialogOpen(true)}
+                            >
+                              Send Reminder (Missing: {getProfileCompletionStatus(selectedPatient).missingFields.join(', ')})
+                            </button>
+                          )}
 
-                        <button
-                          className="mt-4 bg-sky-500 text-neutral-50 text-lg p-3.5 w-full border-none rounded-lg cursor-pointer transition-[background-color]"
-                          onClick={() => setSelectedPatient(null)}
-                        >
-                          Close
-                        </button>
+                          <button
+                            className="bg-sky-500 text-neutral-50 text-lg p-3.5 w-full border-none rounded-lg cursor-pointer transition-[background-color] hover:bg-sky-600"
+                            onClick={() => setSelectedPatient(null)}
+                          >
+                            Close
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -406,8 +469,30 @@ const Patlists = () => {
                 </div>
               </div>
             </>
+
           )) : null}
       </div>
+      {isReminderDialogOpen && selectedPatient && (
+        <ReminderComponent
+          isOpen={isReminderDialogOpen}
+          recipientEmail={selectedPatient.user_email}
+          recipientName={`${selectedPatient.user_first_name}`}
+          onClose={() => setisReminderDialogOpen(false)}
+          onSendSuccess={() => {
+            setSelectedPatient(null);
+          }}
+        />
+      )}
+      {showAppointmentsHistory && selectedPatientForAppointments && (
+        <AppointmentsHistory
+          patientId={selectedPatientForAppointments.user_id}
+          token={token}
+          onClose={() => {
+            setShowAppointmentsHistory(false);
+            setSelectedPatientForAppointments(null);
+          }}
+        />
+      )}
       {showStatePopup && popupPatient && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-md">
@@ -435,17 +520,6 @@ const Patlists = () => {
             </div>
           </div>
         </div>
-      )}
-      {isReminderDialogOpen && (
-        <ReminderComponent
-          isOpen={isReminderDialogOpen}
-          onClose={() => setisReminderDialogOpen(false)}
-          recipientEmail={selectedPatient?.user_email}
-          recipientName={selectedPatient?.user_first_name}
-          onSendSuccess={() => {
-            setSelectedPatient(null);
-          }}
-        />
       )}
     </div>
   );
