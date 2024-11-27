@@ -23,7 +23,7 @@ const filterTypeMapping: { [key: string]: string } = {
   user_email: "Email",
   user_phone_number: "Phone Number",
   user_id: "User ID",
-  profile_completion: "Profile Completion",
+  patient_account_state: "Account State",
   ALL: "Nothing"
 };
 const Patlists = () => {
@@ -94,7 +94,7 @@ const Patlists = () => {
     try {
       const newState =
         popupPatient.patient_account_state === "Active"
-          ? "Panned"
+          ? "Banned"
           : "Active";
 
       const response = await fetch(
@@ -137,6 +137,24 @@ const Patlists = () => {
     setPopupPatient(null);
   };
 
+  const getProfileCompletionStatus = (patient: any) => {
+    const missingFields = isPatientProfileIncomplete(patient);
+    const totalFields = 6; // Total number of required fields
+    const completedFields = totalFields - missingFields.length;
+    const percentage = Math.round((completedFields / totalFields) * 100);
+    
+    return {
+      percentage,
+      missingFields,
+      status: percentage === 100 ? 'Complete' : 'Incomplete'
+    };
+  };
+
+  const getProfileStatus = (patient: any) => {
+    const accountState = patient.patient_account_state?.toLowerCase() || '';
+    return accountState === 'banned' ? 'Banned' : 'Active';
+  };
+
   const handleSubmit = async (event?: React.FormEvent) => {
     if (event) {
       event.preventDefault();
@@ -146,17 +164,40 @@ const Patlists = () => {
     const fetchPatients = async () => {
       let url = `${process.env.NEXT_PUBLIC_SERVER_NAME}/backOffice/getAllPatients?order=${sortValue}`;
       if (filterType !== "ALL") {
-        url += `&&${filterType}=${filterValue}`;
+        if (filterType === "patient_account_state") {
+          // Handle account state filtering on the client side
+          const response = await fetch(url, {
+            mode: "cors",
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          });
+          const data = await response.json();
+          const filteredPatients = data.patients.filter(
+            (patient: any) => getProfileStatus(patient) === filterValue
+          );
+          setPatientsData(filteredPatients);
+        } else {
+          url += `&&${filterType}=${filterValue}`;
+          const response = await fetch(url, {
+            mode: "cors",
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          });
+          const data = await response.json();
+          setPatientsData(data.patients);
+        }
+      } else {
+        const response = await fetch(url, {
+          mode: "cors",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+        const data = await response.json();
+        setPatientsData(data.patients);
       }
-      const response = await fetch(url, {
-        mode: "cors",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-
-      const data = await response.json();
-      setPatientsData(data.patients);
       setLoadingRequest(false);
     };
     await fetchPatients();
@@ -178,19 +219,6 @@ const Patlists = () => {
     return missingFields;
   };
 
-  const getProfileCompletionStatus = (patient: any) => {
-    const missingFields = isPatientProfileIncomplete(patient);
-    const totalFields = 6; // Total number of required fields
-    const completedFields = totalFields - missingFields.length;
-    const percentage = Math.round((completedFields / totalFields) * 100);
-    
-    return {
-      percentage,
-      missingFields,
-      status: percentage === 100 ? 'Complete' : 'Incomplete'
-    };
-  };
-
   return (
     <div className="bg-gray-100 h-full w-full flex flex-col items-center justify-center gap-5 min-[880px]:flex-row min-[880px]:items-start">
       <div className="w-full max-w-screen-lg text-center">
@@ -209,32 +237,44 @@ const Patlists = () => {
             <select
               id="filterType"
               value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
+              onChange={(e) => {
+                setFilterType(e.target.value);
+                setFilterValue("");
+              }}
               className="bg-neutral-100 w-full py-4 px-6 text-base rounded-lg border border-solid border-neutral-300 grey-100 outline-none transition-[border-color] focus:border-sky-500 focus:bg-neutral-50"
             >
-              <option value="ALL">ALL</option>
+              <option value="ALL">All</option>
               <option value="user_first_name">First Name</option>
               <option value="user_last_name">Last Name</option>
               <option value="user_email">Email</option>
               <option value="user_phone_number">Phone Number</option>
               <option value="user_id">User ID</option>
+              <option value="patient_account_state">Account State</option>
             </select>
           </div>
           <div className="w-1/4 mr-4">
             <label htmlFor="filterValue" className="block mb-1.5 text-base font-semibold text-neutral-700">
               Enter Value:
             </label>
-            <div className="bg-neutral-100 w-full rounded-lg border border-solid border-neutral-300">
-              <input
-                type="text"
-                id="filterValue"
-                name="filterValue"
-                placeholder={`Enter ${filterTypeMapping[filterType]} here`}
+            {filterType === "patient_account_state" ? (
+              <select
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
                 value={filterValue}
                 onChange={(e) => setFilterValue(e.target.value)}
-                className="w-full py-4 px-6 text-base bg-transparent outline-none transition-[border-color] focus:border-sky-500"
+              >
+                <option value="">Select Status</option>
+                <option value="Active">Active</option>
+                <option value="Banned">Banned</option>
+              </select>
+            ) : (
+              <input
+                type="text"
+                value={filterValue}
+                onChange={(e) => setFilterValue(e.target.value)}
+                placeholder={`Enter ${filterTypeMapping[filterType]}`}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               />
-            </div>
+            )}
           </div>
           <div className="w-1/4 mr-4">
             <label htmlFor="sortValue" className="block mb-1.5 text-base font-semibold text-neutral-700">
@@ -246,19 +286,20 @@ const Patlists = () => {
               onChange={(e) => setsortValue(e.target.value)}
               className="bg-neutral-100 w-full py-4 px-6 text-base rounded-lg border border-solid border-neutral-300 grey-100 outline-none transition-[border-color] focus:border-sky-500 focus:bg-neutral-50"
             >
+              <option value="user_id">User ID</option>
               <option value="user_first_name">First Name</option>
               <option value="user_last_name">Last Name</option>
               <option value="user_email">Email</option>
               <option value="user_phone_number">Phone Number</option>
-              <option value="user_id">ID</option>
-              <option value="profile_completion">Profile Completion</option>
             </select>
           </div>
-
-          <div className="ml-6">
+          <div className="w-1/4">
+            <label className="block mb-1.5 text-base font-semibold text-neutral-700 invisible">
+              Search
+            </label>
             <button
               type="submit"
-              className="bg-sky-500 text-neutral-50 text-lg p-3.5 px-6 border-none rounded-lg cursor-pointer transition-[background-color]"
+              className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg w-full hover:bg-sky-600 transition-colors"
             >
               Search
             </button>
@@ -349,6 +390,17 @@ const Patlists = () => {
                                           Missing: {getProfileCompletionStatus(patients).missingFields.join(', ')}
                                         </p>
                                       )}
+                                    </div>
+                                    {/* Profile Status */}
+                                    <div className="mt-2">
+                                      <div className="flex items-center">
+                                        <span className="font-semibold text-gray-600 mr-2">
+                                          Account State:
+                                        </span>
+                                        <span className={`text-sm ${getProfileStatus(patients) === 'Active' ? 'text-green-500' : 'text-red-500'}`}>
+                                          {getProfileStatus(patients)}
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
                                   <div className="col-span-2 flex justify-end space-x-4">
