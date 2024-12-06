@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IoNotificationsOutline } from "react-icons/io5";
+import { useRouter } from 'next/navigation';
 
 const notificationIcon = (
     <div>
@@ -7,17 +8,17 @@ const notificationIcon = (
     </div>
 );
 
-
 interface Notification {
     notification_id: number;
     user_id: number;
     message: string;
     read: boolean;
     created_at: string;
+    notification_type: number;
 }
 
-
 const Notification = () => {
+    const router = useRouter();
     const [showNotifications, setShowNotifications] = useState(false);
     const [showAllNotifications, setShowAllNotifications] = useState(false);
     const [allNotifications, setAllNotifications] = useState([]);
@@ -81,6 +82,22 @@ const Notification = () => {
 
     const unreadNotifications = notifications.filter(n => !n.read).length;
 
+    const notificationTypes = {
+        "patient_upcoming_appointment": 10,
+        "doctor_pending_request": 20,
+    }
+
+    const handleNotificationClick = (notification: Notification) => {
+        markNotificationAsRead(notification.notification_id);
+        if (notification.notification_type === notificationTypes["patient_upcoming_appointment"]) {
+            router.push('/patientProfile/upcoming_appointments');
+        }
+        if (notification.notification_type === notificationTypes["doctor_pending_request"]) {
+            router.push('/doctorProfile/requests');
+        }
+        setShowNotifications(false);
+    };
+
     return (
         <div className="relative">
             <button
@@ -122,7 +139,7 @@ const Notification = () => {
                                 <div className="w-6 h-6 border-2 border-blue-600 rounded-full animate-spin border-t-transparent"></div>
                             </div>
                         ) : (
-                            <>
+                            < >
                                 {!isLoading && (showAllNotifications ? allNotifications : notifications).length === 0 ? (
                                     <div className="p-4 text-center text-gray-500">
                                         No Notifications
@@ -134,10 +151,8 @@ const Notification = () => {
                                         .map((notification) => (
                                             <div
                                                 key={notification.notification_id}
-                                                onClick={() => markNotificationAsRead(notification.notification_id)}
-                                                className={`p-2 border-b transition-colors duration-200 ease-in-out
-                                                    hover:bg-blue-100 cursor-pointer
-                                                    ${notification.read ? 'bg-white' : 'bg-blue-50'}`}
+                                                className="p-2 hover:bg-gray-100 cursor-pointer"
+                                                onClick={() => handleNotificationClick(notification)}
                                             >
                                                 <p className="text-sm">{notification.message}</p>
                                                 <p className="text-xs text-gray-500">
@@ -146,7 +161,7 @@ const Notification = () => {
                                             </div>
                                         ))
                                 )}
-                            </>
+                            </ >
                         )}
                     </div>
                 </div>
@@ -155,4 +170,4 @@ const Notification = () => {
     );
 };
 
-export default Notification; 
+export default Notification;

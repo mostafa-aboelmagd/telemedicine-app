@@ -5,7 +5,6 @@ import { formatDate } from "../../../utils/date";
 import stylesButton from "../../navbarComp/navbar.module.css";
 import ReadMore from "../../common/ReadMore";
 import 'primereact/resources/primereact.min.css';
-import ReviewDialog from './ReviewDialog';
 
 interface HistoryDetailsProps {
   appointment: any;
@@ -17,21 +16,18 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  
-
   const fetchAppointmentDetails = useCallback(async () => {
     if (appointment?.appointment_id) {
       setLoading(true);
       setError(null);
 
       try {
-   
         const token = localStorage.getItem("jwt");
         if (!token) {
           throw new Error("No authentication token found");
         }
 
-        const url = `${process.env.NEXT_PUBLIC_SERVER_NAME}/patient/appointment/appointmentdetails/${appointment.appointment_id}`;
+        const url = `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/appointmentDetails/${appointment.appointment_id}`;
         console.log('Fetching from URL:', url);
 
         const response = await fetch(url, {
@@ -71,7 +67,6 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
     }
   }, [showDialog, appointment, fetchAppointmentDetails]);
 
-
   return (
     <>
       <div className="flex gap-2">
@@ -81,24 +76,12 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
         >
           View Details
         </button>
-        
-        {!appointment.appointment_review_communication_rating &&
-         !appointment.appointment_review_understanding_rating &&
-         !appointment.appointment_review_providing_solutions_rating &&
-         !appointment.appointment_review_commitment_rating && (
-          <ReviewDialog
-            appointmentId={appointment.appointment_id}
-            doctorId={appointment.appointment_doctor_id}
-          />
-        )}
       </div>
 
-      {/* Details Dialog */}
       <Dialog
         className="bg-opacity-100 bg-gray-50 rounded-lg shadow-2xl"
         style={{
           width: "90vw",
-          minHeight: "200px",
           maxWidth: "600px",
           padding: "1rem",
           zIndex: 1000,
@@ -121,13 +104,9 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
           </p>
         ) : appointmentDetails ? (
           <Card
-            title={`Dr. ${appointmentDetails.doctor_first_name} ${appointmentDetails.doctor_last_name}`}
+            title={`${appointmentDetails.patient_first_name} ${appointmentDetails.patient_last_name}`}
           >
             <div className="my-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
-              <div>
-                <strong>Specialization:</strong>{" "}
-                {appointmentDetails.doctor_specialization}
-              </div>
               <div>
                 <strong>Appointment Type:</strong>{" "}
                 {appointmentDetails.appointment_type}
@@ -141,35 +120,31 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
                 <strong>Duration:</strong>{" "}
                 {appointmentDetails.appointment_duration} min
               </div>
+              <div>
+                <strong>Setting:</strong>{" "}
+                {appointmentDetails.appointment_settings_type}
+              </div>
+
+              {/* Complaint */}
+              {appointmentDetails.appointment_complaint && (
+                <div className="col-span-2">
+                  <strong>Complaint:</strong>{" "}
+                  <ReadMore text={appointmentDetails.appointment_complaint} />
+                </div>
+              )}
 
               {/* Treatment Plan */}
               {appointmentDetails.treatmentPlan && (
-                <div className="flex gap-2 flex-col">
-                  <div>
-                    <strong>Treatment Plan:</strong>{" "}
-                    {appointmentDetails.treatmentPlan.treatment_plan_operations}
-                  </div>
-                  <div>
-                    <strong>Status:</strong>{" "}
-                    {appointmentDetails.appointment_status}
-                  </div>
-                  <div>
-                    <strong>Complaint:</strong>{" "}
-                    {appointmentDetails.appointment_complaint ? (
-                      <ReadMore
-                        text={appointmentDetails.appointment_complaint}
-                      />
-                    ) : (
-                      "N/A"
-                    )}
-                  </div>
+                <div className="col-span-2">
+                  <strong>Treatment Plan:</strong>{" "}
+                  {appointmentDetails.treatmentPlan.treatment_plan_operations}
                 </div>
               )}
 
               {/* Appointment Results */}
               {appointmentDetails.appointmentResults &&
                 appointmentDetails.appointmentResults.length > 0 && (
-                  <div>
+                  <div className="col-span-2">
                     <strong>Appointment Results:</strong>
                     {appointmentDetails.appointmentResults.map(
                       (result: any, index: number) => (
@@ -183,11 +158,9 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
                 )}
 
               {/* Medications */}
-            </div>
-            <div className="my-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
               {appointmentDetails.medications &&
                 appointmentDetails.medications.length > 0 && (
-                  <div>
+                  <div className="col-span-2">
                     <strong>Medications:</strong>
                     {appointmentDetails.medications.map(
                       (med: any, index: number) => (
@@ -201,43 +174,54 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
                     )}
                   </div>
                 )}
-            </div>
 
+              {/* Reviews */}
+              {(appointmentDetails.appointment_review_communication_rating ||
+                appointmentDetails.appointment_review_understanding_rating ||
+                appointmentDetails.appointment_review_providing_solutions_rating ||
+                appointmentDetails.appointment_review_commitment_rating) && (
+                <div className="col-span-2">
+                  <strong>Patient Reviews:</strong>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                    {appointmentDetails.appointment_review_communication_rating && (
+                      <div>
+                        <strong>Communication:</strong>{" "}
+                        {appointmentDetails.appointment_review_communication_rating}/5
+                      </div>
+                    )}
+                    {appointmentDetails.appointment_review_understanding_rating && (
+                      <div>
+                        <strong>Understanding:</strong>{" "}
+                        {appointmentDetails.appointment_review_understanding_rating}/5
+                      </div>
+                    )}
+                    {appointmentDetails.appointment_review_providing_solutions_rating && (
+                      <div>
+                        <strong>Solutions:</strong>{" "}
+                        {appointmentDetails.appointment_review_providing_solutions_rating}/5
+                      </div>
+                    )}
+                    {appointmentDetails.appointment_review_commitment_rating && (
+                      <div>
+                        <strong>Commitment:</strong>{" "}
+                        {appointmentDetails.appointment_review_commitment_rating}/5
+                      </div>
+                    )}
+                    {appointmentDetails.appointment_review_comment && (
+                      <div className="col-span-2">
+                        <strong>Comment:</strong>{" "}
+                        <ReadMore text={appointmentDetails.appointment_review_comment} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </Card>
         ) : (
-          <p className="mt-4 text-center text-gray-500">
-            No appointment details available.
-          </p>
+          <p className="mt-4 text-center text-red-500">{error}</p>
         )}
       </Dialog>
-
-      <style jsx global>{`
-        /* Base star styling */
-        .p-rating .p-rating-item .p-rating-icon {
-          font-size: 1.5rem;
-          color: #64748B !important;
-          transition: all 0.2s ease;
-        }
-        
-        /* Active (selected) star styling */
-        .p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
-          color: #FCD34D !important;
-          filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.3));
-        }
-
-        /* Star spacing and size */
-        .p-rating .p-rating-item {
-          margin: 0 0.2rem;
-          cursor: default;
-        }
-
-        /* Container spacing */
-        .p-rating {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-      `}</style>
     </>
   );
 };

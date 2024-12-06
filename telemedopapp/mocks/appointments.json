@@ -1,0 +1,10 @@
+{
+    "appointments": [
+        {
+            "appointment_date": "2024-10-20",
+            "appointment_time": "10:00",
+            "appointment_status": "pending",
+            "doctor_name": "Dr. Ahmed"
+        }
+    ]
+}

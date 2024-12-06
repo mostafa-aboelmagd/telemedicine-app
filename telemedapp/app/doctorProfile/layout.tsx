@@ -37,6 +37,12 @@ export default function ProfileLayout({
             >
               My Appointments
             </button>
+            <button
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+              onClick={() => router.push("/doctorProfile/appointments_history")}
+            >
+              Appointments History
+            </button>
           </div>
 
           <div className="flex-initial m-5 bg-white rounded-xl relative max-w-lg min-w-0 md:basis-7/12 md:max-w-full">
