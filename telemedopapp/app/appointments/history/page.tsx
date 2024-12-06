@@ -1,6 +1,7 @@
 "use client";
 import { useSearchParams } from 'next/navigation';
 import AppointmentsHistory from "@/components/AppointmentsHistory/AppointmentsHistory";
+import { Suspense } from 'react';
 
 export default function AppointmentsHistoryPage() {
   const searchParams = useSearchParams();
@@ -18,7 +19,9 @@ export default function AppointmentsHistoryPage() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <AppointmentsHistory userId={parseInt(userId)} />
+     <Suspense>
+        <AppointmentsHistory userId={parseInt(userId)} />
+      </Suspense>
     </main>
   );
 }
