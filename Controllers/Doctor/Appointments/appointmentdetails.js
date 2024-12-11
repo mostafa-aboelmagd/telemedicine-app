@@ -27,7 +27,7 @@ const AppointmentDetails = async (req, res) => {
     return res.json({ appointment: formattedAppointment });
   } catch (error) {
     console.error('Error retrieving appointment details:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: error.message });
   }
 };
 

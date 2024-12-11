@@ -44,7 +44,9 @@ const retrieveDoctorAppointmentsHistory = async (doctorId) => {
             p.user_last_name AS patient_last_name,
             d.user_first_name AS doctor_first_name,
             d.user_last_name AS doctor_last_name,
-            doc.doctor_specialization
+            doc.doctor_specialization,
+            doc.doctor_rating,
+            doc.review_count
         FROM
             appointment a
         JOIN users p ON a.appointment_patient_id = p.user_id
