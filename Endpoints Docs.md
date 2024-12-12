@@ -69,9 +69,14 @@
 
 #### BackOffice Endpoints listed are:
 
-1. **retrieve all patients** `/backOffice/getAllPatients`
+1. **retrieve all patients:** `/backOffice/getAllPatients`
 2. **retrieve patient:** `/backOffice/getPatient/:patientId`
 3. **change patient state:** `/backOffice/changePatientState/:patientId`
+4. **retrieve all doctors** `/backOffice/getAllDoctors`
+5. **change doctor state:** `/backOffice/changeDoctorState/:doctorId`
+6. **retrieve doctor:** `/backOffice/getDoctor/:field`
+7. **retrieve patient appointments:** `/backOffice/getPatientAppointment/:patientId`
+8. **retrieve doctor appointments:** `/backOffice/getDoctorAppointments/:doctortId`
 
 ---
 
@@ -1717,4 +1722,100 @@ with wrong appointmentId:
       }
     ]
   }
+  ```
+
+7. **retrieve patient appointments:** `/backOffice/getPatientAppointment/:patientId`
+
+- **Method:** GET
+- **Request Headers:**
+  - `Authorization: Bearer your_access_token`
+
+- **Response Body:**
+
+  ```json
+  {
+    "status": "success",
+    "ok": true,
+    "patientAppointments": [
+        {
+            "patient_id": 75,
+            "patient_first_name": "test_fname",
+            "patient_last_name": "test_lname",
+            "patient_email": "test@mail.com",
+            "patient_birth_date": "1996-04-30T21:00:00.000Z",
+            "patient_phone_number": "0100000000",
+            "doctor_id": 74,
+            "doctor_first_name": "Mohamed",
+            "doctor_last_name": "Elsayed",
+            "appointment_id": 260,
+            "appointment_type": "First_time",
+            "appointment_duration": 30,
+            "appointment_complaint": "Chest Pain",
+            "appointment_status": "Completed",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": "Online",
+            "doctor_availability_day_hour": "2024-10-26T09:00:00.000Z",
+            "doctor_specialization": "Cardiology ",
+            "doctor_clinic_location": ""
+        },
+        {
+            "patient_id": 75,
+            "patient_first_name": "test_fname",
+            "patient_last_name": "test_lname",
+            "patient_email": "test@mail.com",
+            "patient_birth_date": "1996-04-30T21:00:00.000Z",
+            "patient_phone_number": "0100000000",
+            "doctor_id": 65,
+            "doctor_first_name": "Mohamed",
+            "doctor_last_name": "Ahmed",
+            "appointment_id": 265,
+            "appointment_type": "First_time",
+            "appointment_duration": 60,
+            "appointment_complaint": "Flu",
+            "appointment_status": "Completed",
+            "appointment_parent_reference": null,
+            "appointment_settings_type": "Online",
+            "doctor_availability_day_hour": "2024-11-04T13:00:00.000Z",
+            "doctor_specialization": "Cardiology",
+            "doctor_clinic_location": "Cairo, Egypt"
+        }
+    ]
+}
+  ```
+  
+  8. **retrieve doctor appointments:** `/backOffice/getDoctorAppointments/:doctortId`
+
+- **Method:** GET
+- **Request Headers:**
+  - `Authorization: Bearer your_access_token`
+
+- **Response Body:**
+
+  ```json
+  {
+    "status": "success",
+    "ok": true,
+    "doctorAppointments": [
+        {
+            "patient_id": 93,
+            "patient_first_name": "P",
+            "patient_last_name": "t",
+            "patient_email": "pt3@mail.com",
+            "patient_birth_date": "2004-11-01T00:00:00.000Z",
+            "patient_phone_number": "1012345677",
+            "doctor_id": 97,
+            "doctor_first_name": "mo",
+            "doctor_last_name": "sala",
+            "appointment_type": "First_time",
+            "appointment_duration": 30,
+            "appointment_complaint": "Toe infection",
+            "appointment_status": "Completed",
+            "appointment_parent_reference": 273,
+            "appointment_settings_type": "Online",
+            "doctor_availability_day_hour": "2024-12-03T16:00:00.000Z",
+            "doctor_specialization": "Surgeon",
+            "doctor_clinic_location": ""
+        }
+    ]
+}
   ```
