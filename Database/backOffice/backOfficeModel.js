@@ -202,6 +202,7 @@ exports.retrieveApppointmentsDetails = async (id, flag) => {
       d.user_id AS doctor_id , 
       d.user_first_name AS doctor_first_name,
       d.user_last_name AS doctor_last_name,
+      a.appointment_id,
       a.appointment_type,
       a.appointment_duration,
       a.appointment_complaint,
