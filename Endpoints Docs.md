@@ -1733,7 +1733,7 @@ with wrong appointmentId:
 - **Response Body:**
 
   ```json
-  {
+    {
     "status": "success",
     "ok": true,
     "patientAppointments": [
@@ -1779,11 +1779,11 @@ with wrong appointmentId:
             "doctor_specialization": "Cardiology",
             "doctor_clinic_location": "Cairo, Egypt"
         }
-    ]
-}
-  ```
-  
-  8. **retrieve doctor appointments:** `/backOffice/getDoctorAppointments/:doctortId`
+      ]
+    }
+    ```
+
+8. **Retrieve Doctor Appointments:** `/backOffice/getDoctorAppointments/:doctortId`
 
 - **Method:** GET
 - **Request Headers:**
@@ -1817,5 +1817,5 @@ with wrong appointmentId:
             "doctor_clinic_location": ""
         }
     ]
-}
+  }
   ```
