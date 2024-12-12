@@ -407,7 +407,7 @@ const Patlists = () => {
                                   <div className="col-span-2 flex justify-end space-x-4">
                                     <button
                                       onClick={() => {
-                                        router.push(`/appointments/history?userId=${patients.user_id}`);
+                                        router.push(`/appointments/patient_appointments_history?userId=${patients.user_id}`);
                                       }}
                                       className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
                                     >
@@ -534,16 +534,6 @@ const Patlists = () => {
             setSelectedPatient(null);
           }}
         />
-      )}
-      {showAppointmentsHistory && selectedPatientForAppointments && (
-        <button
-          onClick={() => {
-            router.push(`/appointments/history?userId=${selectedPatientForAppointments.user_id}`);
-          }}
-          className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
-        >
-          View Appointments History
-        </button>
       )}
       {showStatePopup && popupPatient && (
         <div className="fixed inset-0 flex items-center justify-center z-50">

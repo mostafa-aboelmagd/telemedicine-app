@@ -235,6 +235,7 @@ const Doclists = () => {
           },
         });
         const data = await response.json();
+        // console.log("data: ", data);
         setDoctorsData(data.doctors);
       }
       setLoadingRequest(false);
@@ -255,7 +256,7 @@ const Doclists = () => {
       "doctor_country",
       "doctor_specialization",
       "doctor_city",
-      "doctor_clinic_location",
+      // "doctor_clinic_location",
       // "doctor_sixty_min_price",
       // "doctor_thirty_min_price",
     ];
@@ -270,9 +271,18 @@ const Doclists = () => {
       }
     });
 
-    if (!doctor.experiences?.length) missingFields.push("work experience");
-    if (!doctor.interests?.length) missingFields.push("areas of interest");
-    if (!doctor.languages?.length) missingFields.push("languages");
+    const hasNotExperiences = Object.values(doctor.experiences[0]).some(
+      (value: any) => value === null
+    );
+    const hasNotInterests = Object.values(doctor.interests[0]).some(
+      (value: any) => value === null
+    );
+    const hasNotLanguages = doctor.languages &&
+      doctor.languages.some((value: any) => value === null);
+
+    if (hasNotExperiences) missingFields.push("work experience");
+    if (hasNotInterests) missingFields.push("areas of interest");
+    if (hasNotLanguages) missingFields.push("languages");
 
     const totalFields = mainFields.length + 3;
     const completedFields = totalFields - missingFields.length;
@@ -495,7 +505,7 @@ const Doclists = () => {
                                 <div className="col-span-2 flex justify-end space-x-4">
                                   <button
                                     onClick={() => {
-                                      router.push(`/appointments/history?userId=${doctors.user_id}`);
+                                      router.push(`/appointments/doctor_appointments_history?userId=${doctors.user_id}`);
                                     }}
                                     className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
                                   >
@@ -697,16 +707,6 @@ const Doclists = () => {
           )
         ) : null}
       </div>
-      {selectedDoctor && (
-        <button
-          onClick={() => {
-            router.push(`/appointments/history?userId=${selectedDoctor.user_id}`);
-          }}
-          className="bg-sky-500 text-neutral-50 text-lg px-4 py-2 rounded-lg hover:bg-sky-600"
-        >
-          View Appointments History
-        </button>
-      )}
       {showStatePopup && popupDoctor && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-md">
