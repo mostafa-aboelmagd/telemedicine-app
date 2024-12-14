@@ -30,6 +30,8 @@ const doctorInfo = async (req, res) => {
     thirtyMinPrice: doctor[0].doctor_thirty_min_price,
     specialization: doctor[0].doctor_specialization,
     languages: doctor[0].languages,
+    rating: doctor[0].doctor_rating,
+    reviewCount: doctor[0].review_count
   };
   message = "Doctor info retrieved successfully";
   return res.json({ message, formattedDoctor });

@@ -81,6 +81,10 @@ const getTreatmentPlan = async (appointmentId) => {
     [appointmentId]
   );
 
+  if (result.rows.length === 0) {
+    return {};
+  }
+
   return result.rows[0];
 };
 

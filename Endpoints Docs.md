@@ -77,6 +77,7 @@
 6. **retrieve doctor:** `/backOffice/getDoctor/:field`
 7. **retrieve patient appointments:** `/backOffice/getPatientAppointment/:patientId`
 8. **retrieve doctor appointments:** `/backOffice/getDoctorAppointments/:doctortId`
+9. **retrieve appointment details:** `/backOffice/appointmentdetails/:appointmentId`
 
 ---
 
@@ -1724,7 +1725,7 @@ with wrong appointmentId:
   }
   ```
 
-7. **retrieve patient appointments:** `/backOffice/getPatientAppointment/:patientId`
+7. **Retrieve patient appointments:** `/backOffice/getPatientAppointment/:patientId`
 
 - **Method:** GET
 - **Request Headers:**
@@ -1818,4 +1819,59 @@ with wrong appointmentId:
         }
     ]
   }
+  ```
+  
+9. **Retrieve appointment details:** `/backOffice/appointmentdetails/:appointmentId`
+
+- **Method:** GET
+- **Request Headers:**
+  - `Authorization: Bearer your_access_token`
+
+- **Response Body:**
+
+  ```json
+  {
+    "appointment": {
+        "appointment_patient_id": 75,
+        "appointment_doctor_id": 74,
+        "appointment_type": "First_time",
+        "appointment_duration": 30,
+        "appointment_complaint": "Chest Pain",
+        "appointment_status": "Completed",
+        "appointment_parent_reference": null,
+        "appointment_settings_type": "Online",
+        "patient_id": 75,
+        "patient_first_name": "Yayha",
+        "patient_last_name": "Ahmed",
+        "doctor_first_name": "Mohamed",
+        "doctor_last_name": "Elsayed",
+        "doctor_availability_day_hour": "2024-10-26T09:00:00.000Z",
+        "doctor_specialization": "Cardiology ",
+        "doctor_clinic_location": "",
+        "appointmentResults": [
+            {
+                "appointment_diagnosis": "Possible pericarditis, needs further investigation.",
+                "appointment_report": "Patient presented with complaints of sharp, stabbing chest pain rated7-8 out of 10, aggravated by deep breathing. No significant cardiac history reported. Initial impression suggests possible pericarditis.ECG and chestx-ray ordered to rule out other causes and assess for pericardial effusion.blood test  (including inflammatory markers) requested to further evaluation.\nPatient adviced to seek immediat in-person medical attention if symptoms worsen or new symptoms developed",
+                "updated_at": "2024-10-23T05:23:36.008Z"
+            }
+        ],
+        "treatmentPlan": {
+            "treatment_plan_operations": "",
+            "treatment_plan_speciality_referral": "",
+            "treatment_plan_referral_notes": "",
+            "treatment_plan_id": 171
+        },
+        "medications": [
+            {
+                "medication_note": "Every 6 Hours as needed for pain",
+                "medication_start_date": "2024-10-22T21:00:00.000Z",
+                "medication_end_date": "2024-10-30T21:00:00.000Z",
+                "medication_id": 82,
+                "medication_name": "Ibuprofen ",
+                "medication_dosage": "500 mg"
+            }
+        ],
+        "medicalDocuments": []
+    }
+}
   ```

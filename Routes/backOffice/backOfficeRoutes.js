@@ -1,5 +1,6 @@
 const express = require("express");
 const backOfficeController = require("../../Controllers/backOffice/backOfficeController");
+const GetDetailsController = require('../../Controllers/backOffice/appointmentDetails');
 const { tokenAuthentication } = require("../../Middleware/User/Authentication");
 const { restrictTo } = require("../../Utilities");
 const router = express.Router();
@@ -30,5 +31,7 @@ router.get(
   "/getDoctorAppointments/:id",
   backOfficeController.getDoctorAppointments
 );
+
+router.get('/appointmentdetails/:appointmentId', tokenAuthentication, GetDetailsController.AppointmentDetails);
 
 module.exports = router;
