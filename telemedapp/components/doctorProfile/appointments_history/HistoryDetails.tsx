@@ -82,6 +82,7 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
         className="bg-opacity-100 bg-gray-50 rounded-lg shadow-2xl"
         style={{
           width: "90vw",
+          minHeight: "200px",
           maxWidth: "600px",
           padding: "1rem",
           zIndex: 1000,
@@ -102,11 +103,17 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
           <p className="mt-4 text-center text-gray-500">
             Loading appointment details...
           </p>
+        ) : error ? (
+          <p className="text-center text-red-500">{error}</p>
         ) : appointmentDetails ? (
           <Card
-            title={`${appointmentDetails.patient_first_name} ${appointmentDetails.patient_last_name}`}
+            title={`Dr. ${appointmentDetails.doctor_first_name} ${appointmentDetails.doctor_last_name}`}
           >
             <div className="my-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+              <div>
+                <strong>Specialization:</strong>{" "}
+                {appointmentDetails.doctor_specialization}
+              </div>
               <div>
                 <strong>Appointment Type:</strong>{" "}
                 {appointmentDetails.appointment_type}
@@ -120,47 +127,75 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
                 <strong>Duration:</strong>{" "}
                 {appointmentDetails.appointment_duration} min
               </div>
-              <div>
-                <strong>Setting:</strong>{" "}
-                {appointmentDetails.appointment_settings_type}
-              </div>
-
-              {/* Complaint */}
-              {appointmentDetails.appointment_complaint && (
-                <div className="col-span-2">
-                  <strong>Complaint:</strong>{" "}
-                  <ReadMore text={appointmentDetails.appointment_complaint} />
-                </div>
-              )}
 
               {/* Treatment Plan */}
-              {appointmentDetails.treatmentPlan && (
-                <div className="col-span-2">
-                  <strong>Treatment Plan:</strong>{" "}
-                  {appointmentDetails.treatmentPlan.treatment_plan_operations}
-                </div>
+              {Object.values(appointmentDetails.treatmentPlan).includes("") || Object.values(appointmentDetails.treatmentPlan).length === 0 ? (
+                <div>
+                <strong>Treatment Plan:</strong> No treatment plan available
+              </div>
+              ) : (
+                <div>
+                <strong>Treatment Plan:</strong>{" "}
+                {appointmentDetails.treatmentPlan.treatment_plan_operations}
+              </div>
               )}
+
+                {/* Appointment Status and Complaint */}
+                  <div className="flex gap-2 flex-col">
+                  <div>
+                    <strong>Status:</strong>{" "}
+                    {appointmentDetails.appointment_status}
+                  </div>
+                  <div>
+                    <strong>Complaint:</strong>{" "}
+                    {appointmentDetails.appointment_complaint ? (
+                      <ReadMore
+                        text={appointmentDetails.appointment_complaint}
+                      />
+                    ) : (
+                      "N/A"
+                    )}
+                  </div>
+                </div>
+              
 
               {/* Appointment Results */}
               {appointmentDetails.appointmentResults &&
-                appointmentDetails.appointmentResults.length > 0 && (
-                  <div className="col-span-2">
+                appointmentDetails.appointmentResults.length > 0 ? (
+                  <div className="flex gap-2 flex-col">
                     <strong>Appointment Results:</strong>
                     {appointmentDetails.appointmentResults.map(
                       (result: any, index: number) => (
-                        <p key={index}>
-                          Diagnosis: {result.appointment_diagnosis} <br />
-                          Report: {result.appointment_report} <br />
+                        <div key={index}>
+
+                        <u>Diagnosis: </u>
+                        <p>
+                          {result.appointment_diagnosis} <br />
                         </p>
+
+                        <u>Report: </u>
+                        <p>
+                          {result.appointment_report} <br />
+                        </p>
+                        </div>
                       )
                     )}
                   </div>
+                ) : (
+                  <div>
+                     <strong>Appointment Results: </strong>
+                     No results available
+                  </div>
+                 
+                  
                 )}
 
               {/* Medications */}
+            </div>
+            <div className="my-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
               {appointmentDetails.medications &&
-                appointmentDetails.medications.length > 0 && (
-                  <div className="col-span-2">
+                appointmentDetails.medications.length > 0 ? (
+                  <div>
                     <strong>Medications:</strong>
                     {appointmentDetails.medications.map(
                       (med: any, index: number) => (
@@ -173,53 +208,17 @@ const HistoryDetails: React.FC<HistoryDetailsProps> = ({ appointment }) => {
                       )
                     )}
                   </div>
-                )}
-
-              {/* Reviews */}
-              {(appointmentDetails.appointment_review_communication_rating ||
-                appointmentDetails.appointment_review_understanding_rating ||
-                appointmentDetails.appointment_review_providing_solutions_rating ||
-                appointmentDetails.appointment_review_commitment_rating) && (
-                <div className="col-span-2">
-                  <strong>Patient Reviews:</strong>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                    {appointmentDetails.appointment_review_communication_rating && (
-                      <div>
-                        <strong>Communication:</strong>{" "}
-                        {appointmentDetails.appointment_review_communication_rating}/5
-                      </div>
-                    )}
-                    {appointmentDetails.appointment_review_understanding_rating && (
-                      <div>
-                        <strong>Understanding:</strong>{" "}
-                        {appointmentDetails.appointment_review_understanding_rating}/5
-                      </div>
-                    )}
-                    {appointmentDetails.appointment_review_providing_solutions_rating && (
-                      <div>
-                        <strong>Solutions:</strong>{" "}
-                        {appointmentDetails.appointment_review_providing_solutions_rating}/5
-                      </div>
-                    )}
-                    {appointmentDetails.appointment_review_commitment_rating && (
-                      <div>
-                        <strong>Commitment:</strong>{" "}
-                        {appointmentDetails.appointment_review_commitment_rating}/5
-                      </div>
-                    )}
-                    {appointmentDetails.appointment_review_comment && (
-                      <div className="col-span-2">
-                        <strong>Comment:</strong>{" "}
-                        <ReadMore text={appointmentDetails.appointment_review_comment} />
-                      </div>
-                    )}
+                ) : (
+                  <div>
+                    <strong>Medications:</strong> No medications available
                   </div>
-                </div>
-              )}
+                )}
             </div>
           </Card>
         ) : (
-          <p className="mt-4 text-center text-red-500">{error}</p>
+          <p className="mt-4 text-center text-gray-500">
+            No appointment details available.
+          </p>
         )}
       </Dialog>
     </>

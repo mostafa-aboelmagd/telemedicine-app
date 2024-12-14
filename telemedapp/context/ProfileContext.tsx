@@ -71,7 +71,6 @@ export const ProfileProvider = ({
             console.log("response", response.json())
             throw new Error("Failed to fetch profile data");
           }
-          // console.log("json",response.json());
           return response.json();
         })
         .then((response) => {
@@ -97,7 +96,9 @@ export const ProfileProvider = ({
             localStorage.clear();
             router.push("/auth/signin");
           }
-          return response.json();
+          const data = response.json();
+          console.log("data", data);
+          return data;
         })
         .then((response) => setProfileData(() => response.formattedDoctor))
         .finally(() => setLoading(false));

@@ -12,6 +12,7 @@ interface ProfileData {
   gender: string;
   birthDate: string;
   languages: string;
+  rating: string;
 }
 
 function ViewProfile() {
@@ -30,6 +31,7 @@ function ViewProfile() {
     { name: "languages", title: "Languages" },
     { name: "thirtyMinPrice", title: "30 Minutes Price" },
     { name: "sixtyMinPrice", title: "60 Minutes Price" },
+    { name: "rating", title: "Your rating based on patient reviews" },
   ];
 
   const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {

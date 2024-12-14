@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
+import HistoryDetails from './HistoryDetails';
 
 interface AppointmentsHistoryProps {
   userId: number;
@@ -15,6 +16,7 @@ interface Appointment {
   doctor_id: number;
   doctor_first_name: string;
   doctor_last_name: string;
+  appointment_id: number;
   appointment_type: string;
   appointment_duration: number;
   appointment_complaint: string;
@@ -49,6 +51,7 @@ const AppointmentsHistory = ({ userId }: AppointmentsHistoryProps) => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
+        console.log("data: ", data);
         if (data.status === "success" && data.patientAppointments) {
           setAppointmentsData(data.patientAppointments);
         }
@@ -94,6 +97,7 @@ const AppointmentsHistory = ({ userId }: AppointmentsHistoryProps) => {
   return (
     <div className="w-full max-w-6xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-6">Appointments History -  {appointmentsData[0].patient_first_name} {appointmentsData[0].patient_last_name}</h2>
+      
       <label htmlFor="appointment-filter" className="block mb-2">
         Filter Appointments:
       </label>
@@ -111,7 +115,7 @@ const AppointmentsHistory = ({ userId }: AppointmentsHistoryProps) => {
       </select>
       <div className="space-y-4">
         {filteredAppointments.map((appointment, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+          <div key={index} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"> 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <h3 className="text-xl font-semibold mb-2">
@@ -155,6 +159,7 @@ const AppointmentsHistory = ({ userId }: AppointmentsHistoryProps) => {
                     <span className="font-medium">Reference ID:</span> {appointment.appointment_parent_reference}
                   </p>
                 )}
+                 <HistoryDetails appointment_id={appointment.appointment_id} />
               </div>
             </div>
           </div>
