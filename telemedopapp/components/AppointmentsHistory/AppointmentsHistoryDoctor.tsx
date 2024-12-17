@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
+import HistoryDetails from './HistoryDetails';
 
 interface AppointmentsHistoryProps {
   userId: number;
@@ -15,6 +16,7 @@ interface Appointment {
   doctor_id: number;
   doctor_first_name: string;
   doctor_last_name: string;
+  appointment_id: number;
   appointment_type: string;
   appointment_duration: number;
   appointment_complaint: string;
@@ -173,6 +175,7 @@ const AppointmentsHistory = ({ userId }: AppointmentsHistoryProps) => {
                     <span className="font-medium">Reference ID:</span> {appointment.appointment_parent_reference}
                   </p>
                 )}
+                <HistoryDetails appointment_id={appointment.appointment_id} />
               </div>
             </div>
           </div>

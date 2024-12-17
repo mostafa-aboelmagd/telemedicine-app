@@ -11,6 +11,7 @@ interface ProfileData {
   gender: string;
   birthDate: string;
   languages: string;
+  rating: string;
 }
 
 interface ProfileContextType {
