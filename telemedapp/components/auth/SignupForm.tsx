@@ -171,12 +171,34 @@ function SignUpForm() {
   ].join(" ");
 
   const validateFieldsChosen = () => {
-    for (let key in formData) {
-      if (!formData[key as keyof typeof formData]) {
-        return false;
-      }
+    const requiredFields = [
+      'firstName', 
+      'lastName', 
+      'email', 
+      'password', 
+      'confirmPassword', 
+      'phone', 
+      'birthDate',
+      'gender'
+    ];
+
+    const doctorFields = [
+      'speciality',
+      'country', 
+      'city'
+    ];
+
+    const basicFieldsValid = requiredFields.every(field => 
+      formData[field as keyof typeof formData]
+    );
+
+    if (userType === 'doctor') {
+      return basicFieldsValid && doctorFields.every(field => 
+        formData[field as keyof typeof formData]
+      );
     }
-    return true;
+  
+    return basicFieldsValid;
   };
 
   const validateFirstName = () => {
@@ -411,65 +433,44 @@ function SignUpForm() {
   };
 
   const validateForm = () => {
-    switch (changedField) {
-      case "firstName":
-        validateFirstName();
-        break;
+  validateFirstName();
+  validateLastName();
+  validateEmail();
+  validatePassword();
+  validateConfirmPassword();
+  validatePhone();
+  validateBirthDate();
+  
+  if (userType === 'doctor') {
+    validateSpeciality();
+    validateCountry();
+    validateCity();
+  }
 
-      case "lastName":
-        validateLastName();
-        break;
+  // Check if all fields are filled and valid
+  const fieldsChosen = validateFieldsChosen();
+  const noErrors = Object.values(errorMessage).every(error => error === '');
+  const arraysValid = validateDoctorArrays();
 
-      case "email":
-        validateEmail();
-        break;
+    setFormValid(fieldsChosen && noErrors && arraysValid);
+  };
 
-      case "password":
-        validatePassword();
-        validateConfirmPassword();
-        break;
-
-      case "confirmPassword":
-        validateConfirmPassword();
-        break;
-
-      case "phone":
-        validatePhone();
-        break;
-
-      case "birthDate":
-        validateBirthDate();
-        break;
-
-      case "speciality":
-        validateSpeciality();
-        break;
-
-      case "country":
-        validateCountry();
-        break;
-
-      case "city":
-        validateCity();
-        break;
-
-      default:
-        break;
-    }
-
-    setChangedField(() => "");
-
-    if (validateFieldsChosen()) {
-      for (let key in errorMessage) {
-        if (errorMessage[key as keyof typeof errorMessage] !== "") {
-          setFormValid(() => false);
-          return;
-        }
-      }
-      setFormValid(() => true);
-    } else {
-      setFormValid(() => false);
-    }
+  const validateDoctorArrays = () => {
+    if (userType !== 'doctor') return true;
+  
+    const hasValidCertificate = doctorCertificates.some(cert => 
+      cert.name && cert.authority && cert.startDate && cert.endDate
+    );
+  
+    const hasValidExperience = doctorExperiences.some(exp => 
+      exp.title && exp.firm && exp.department && exp.startDate && exp.endDate
+    );
+  
+    const hasValidInterest = doctorInterests.some(interest => 
+      interest.name && interest.category
+    );
+  
+    return hasValidCertificate && hasValidExperience && hasValidInterest;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1445,7 +1446,7 @@ function SignUpForm() {
         <button
           type="submit"
           className={`${submitButtonClass} disabled:cursor-not-allowed disabled:opacity-50 mb-14`}
-          disabled={!formValid || loading}
+          disabled={!formValid || loading || (userType === 'doctor' && !validateDoctorArrays())}
         >
           {loading ? "Loading..." : "Register"}
         </button>
