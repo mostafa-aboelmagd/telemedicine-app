@@ -45,7 +45,7 @@
 27. **Doctor Availability Deletion:** `/doctor/availability/delete`(tested)
 28. **Doctor Profile Picture Upload:** `/doctor/profile-picture/upload`
 29. **Doctor Patient Prescription Addition:** `/doctor/patient-prescription/add`(Canceled)
-30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`(Tested)
+30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:patientId/:response`(Tested)
 31. **Patient view appointments history:** `/patient/appointment/appointmentsHistory`(Tested)
 32. **Doctor view appointments history:** `/doctor/appointmentHistory`(Tested)
 33. **Doctor view appointment details:** `/doctor/appointmentDetails/:appointmentId`(Tested)
@@ -891,7 +891,7 @@
 
 ---
 
-30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:response`
+30. **Doctor Appointment Confirm/Decline:** `/doctor/AppointmentResponse/:appointmentId/:patientId/:response`
 
 - **Method:** POST
 - **Request Headers:**
@@ -899,6 +899,7 @@
   - `Content-Type: application/json`
 - **Parameters:**
   - [`appointmentId`]The ID of the appointment
+  - [`patientId`]The ID of the patient
   - [`response`]"accept" or "decline"
 - **Response Body:**
   ```json
