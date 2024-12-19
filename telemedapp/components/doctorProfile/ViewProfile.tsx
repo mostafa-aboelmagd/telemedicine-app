@@ -34,6 +34,8 @@ function ViewProfile() {
     { name: "rating", title: "Your rating based on patient reviews" },
   ];
 
+  profileData!.rating = parseFloat(profileData!.rating).toFixed(1)
+
   const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     localStorage.clear();

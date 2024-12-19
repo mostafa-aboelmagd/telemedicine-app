@@ -85,12 +85,13 @@ const Requests = () => {
     e.preventDefault();
     const buttonName = e.currentTarget.name;
     const appointmentID = e.currentTarget.value;
+    const patientId = e.currentTarget.dataset.value1;
 
     try {
       const token = localStorage.getItem("jwt");
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/AppointmentResponse/${appointmentID}/${buttonName}`,
+        `${process.env.NEXT_PUBLIC_SERVER_NAME}/doctor/AppointmentResponse/${appointmentID}/${patientId}/${buttonName}`,
         {
           method: "POST",
           headers: {
@@ -189,7 +190,8 @@ const Requests = () => {
                           <div className="flex justify-between gap-2">
                             <button
                               name="accept"
-                              value={request.appointment_id}
+                              value={request.appointment_id}  
+                              data-value1={request.appointment_patient_id}                                        
                               className="rounded-full border-none bg-emerald-600 text-white w-40 px-4 py-2 hover:scale-105 hover:cursor-pointer"
                               onClick={handleResolveRequest}
                             >

@@ -11,6 +11,7 @@ const notificationIcon = (
 interface Notification {
     notification_id: number;
     user_id: number;
+    title: string;
     message: string;
     read: boolean;
     created_at: string;
@@ -84,6 +85,7 @@ const Notification = () => {
 
     const notificationTypes = {
         "patient_upcoming_appointment": 10,
+        "patient_pending_appointment": 11,
         "doctor_pending_request": 20,
     }
 
@@ -91,6 +93,9 @@ const Notification = () => {
         markNotificationAsRead(notification.notification_id);
         if (notification.notification_type === notificationTypes["patient_upcoming_appointment"]) {
             router.push('/patientProfile/upcoming_appointments');
+        }
+        if (notification.notification_type === notificationTypes["patient_pending_appointment"]) {
+            router.push('/patientProfile/pendingappointments');
         }
         if (notification.notification_type === notificationTypes["doctor_pending_request"]) {
             router.push('/doctorProfile/requests');
@@ -154,6 +159,7 @@ const Notification = () => {
                                                 className="p-2 hover:bg-gray-100 cursor-pointer"
                                                 onClick={() => handleNotificationClick(notification)}
                                             >
+                                                <p className="text-sm font-bold">{notification.title}</p>
                                                 <p className="text-sm">{notification.message}</p>
                                                 <p className="text-xs text-gray-500">
                                                     {new Date(notification.created_at).toLocaleDateString()}
