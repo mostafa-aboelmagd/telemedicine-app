@@ -56,11 +56,13 @@ const setExpoPushToken = async (req, res) => {
     }
 };
 
-const addNotification = async (recipientId, message) => {
+const addNotification = async (recipientId, title, message, notificationType) => {
     try {
         const notification = {
             recipientId: recipientId, 
-            message: message
+            title: title,
+            message: message,
+            notificationType: notificationType
           }
         // 1. Store the notification in the database
         await database.addNotification(notification);

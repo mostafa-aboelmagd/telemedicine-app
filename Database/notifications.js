@@ -63,8 +63,8 @@ const markNotificationsAsRead = async (notificationIds) => {
 
 const addNotification = async (notification) => {
     try {
-        const query = 'INSERT INTO notifications (user_id, message) VALUES ($1, $2) RETURNING *';
-        await pool.query(query, [notification.recipientId, notification.message]);
+        const query = 'INSERT INTO notifications (user_id, title, message, notification_type) VALUES ($1, $2, $3, $4) RETURNING *';
+        await pool.query(query, [notification.recipientId, notification.title, notification.message, notification.notificationType]);
     } catch (error) {
         console.error(error.stack);
         throw error;

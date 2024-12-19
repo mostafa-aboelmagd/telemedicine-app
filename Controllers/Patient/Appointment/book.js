@@ -1,5 +1,5 @@
 const  database  = require('../../../Database/Patient/Appointment/Book');
-const  {sendPushNotification}  = require('../../notifications');
+const  {sendPushNotification, addNotification}  = require('../../notifications');
 
 const bookAppointment = async (req, res) => {
   try {
@@ -13,6 +13,7 @@ const bookAppointment = async (req, res) => {
     }else {
       const title="New Appointment Request"
       const body=`A new appointment request has been made by the patient. at ${appointment_date}`
+      await addNotification(doctor_id, "New Appointment Request", `A new appointment request has been made by the patient. at ${appointment_date}`, 20)
       sendPushNotification (doctor_id, title, body)
       res.status(201).json({ message: 'Appointment created successfully' });
     }
