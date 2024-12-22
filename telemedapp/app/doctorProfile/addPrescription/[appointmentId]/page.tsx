@@ -25,6 +25,7 @@ const AddAppointmentResult = () => {
     });
     const [prescriptionUploaded, setPrescriptionUploaded] = useState(false);
     const [doctorId, setDoctorId] = useState("");
+    const [patientId, setPatientId] = useState("");
 
     useEffect(() => {
         const token = localStorage.getItem("jwt");
@@ -38,9 +39,11 @@ const AddAppointmentResult = () => {
         }
         )
         .then((response) => response.json())
-        .then((response) => setDoctorId(() => response.appointment.appointment_doctor_id));
+        .then((response) => {
+            setDoctorId(() => response.appointment.appointment_doctor_id)
+            setPatientId(() => response.appointment.appointment_patient_id)
+        });
       }, [prescriptionUploaded]);
-
 
     const handleChangeDiagnosis = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
@@ -117,6 +120,7 @@ const AddAppointmentResult = () => {
           mode: 'cors',
           body: JSON.stringify({
             appointment_id: appointmentId,
+            patient_id: patientId,
             diagnosis: diagnosisData.diagnosis,
             operations: diagnosisData.operations,
             report: diagnosisData.report,

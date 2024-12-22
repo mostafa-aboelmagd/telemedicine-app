@@ -86,16 +86,20 @@ const Notification = () => {
     const notificationTypes = {
         "patient_upcoming_appointment": 10,
         "patient_pending_appointment": 11,
+        "patient_completed_appointment": 12,
         "doctor_pending_request": 20,
     }
 
     const handleNotificationClick = (notification: Notification) => {
         markNotificationAsRead(notification.notification_id);
+        if (notification.notification_type === notificationTypes["patient_pending_appointment"]) {
+            router.push('/patientProfile/pendingappointments');
+        }
         if (notification.notification_type === notificationTypes["patient_upcoming_appointment"]) {
             router.push('/patientProfile/upcoming_appointments');
         }
-        if (notification.notification_type === notificationTypes["patient_pending_appointment"]) {
-            router.push('/patientProfile/pendingappointments');
+        if(notification.notification_type === notificationTypes["patient_completed_appointment"]) {
+            router.push('/patientProfile/appointments_history');
         }
         if (notification.notification_type === notificationTypes["doctor_pending_request"]) {
             router.push('/doctorProfile/requests');
