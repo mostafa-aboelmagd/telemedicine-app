@@ -66,7 +66,8 @@ const addNotification = async (recipientId, title, message, notificationType) =>
           }
         // 1. Store the notification in the database
         await database.addNotification(notification);
-        res.json({ message: 'Notifications added'});
+        // res.json({ message: 'Notifications added'});
+        console.log("Notification added successfully");
     } catch (error) {
         console.error("Error creating notification:", error);
     }

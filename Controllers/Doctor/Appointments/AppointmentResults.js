@@ -1,9 +1,10 @@
 const database = require('../../../Database/Doctor/AppointmentResults');
+const {addNotification} = require('../../notifications');
 
 // Appointment result submission form
 const AppointmentResultSubmission = async (req, res) => {
     try {
-        const { appointment_id, diagnosis, medications, operations, report, specialityReferral, specialityReferralNotes } = req.body;
+        const { appointment_id, diagnosis, medications, operations, report, specialityReferral, specialityReferralNotes, patient_id } = req.body;
     
         // Insert data into appointment_results table
         const appointmentResultsData = {
@@ -40,6 +41,8 @@ const AppointmentResultSubmission = async (req, res) => {
         // Update appointment status to "Completed"
         await database.updateAppointmentStatus(appointment_id, 'Completed');
     
+        await addNotification(patient_id, `Doctor has submitted your results`, `Your appointment with the doctor has been completed.`, 12)
+
         res.status(200).json({ message: 'Appointment results submitted successfully' });
       } catch (error) {
         console.error(error);
