@@ -56,27 +56,30 @@ const setExpoPushToken = async (req, res) => {
     }
 };
 
-const addNotification = async (recipientId, title, message, notificationType) => {
+const addNotification = async (recipientId, title, body, notificationType) => {
     try {
         const notification = {
             recipientId: recipientId, 
             title: title,
-            message: message,
+            message: body,
             notificationType: notificationType
           }
         // 1. Store the notification in the database
         await database.addNotification(notification);
-        // res.json({ message: 'Notifications added'});
         console.log("Notification added successfully");
+        // 2. Send a push notification to the mobile
+        const pushToken = await database.fetchExpotoken(recipientId);
+        if(pushToken){
+            await sendPushNotification(pushToken, title, body);
+        }
     } catch (error) {
         console.error("Error creating notification:", error);
     }
 };
 
 
-const sendPushNotification = async (recipientId, title, body) => {
+const sendPushNotification = async (pushToken, title, body) => {
     try {
-        const pushToken = await database.fetchExpotoken(recipientId);
         const message = {
             to: pushToken,
             sound: 'default',
@@ -88,9 +91,9 @@ const sendPushNotification = async (recipientId, title, body) => {
         };
         const ticketChunk = await expo.sendPushNotificationsAsync([message]);
         console.log(ticketChunk);
-        if(ticketChunk){
-            addNotification(recipientId, body)
-        }
+        // if(ticketChunk){
+        //     addNotification(recipientId, body)
+        // }
     } catch (error) {
         console.error(error);
     }
