@@ -1,0 +1,6 @@
+local build:
+https://docs.expo.dev/guides/local-app-development/
+connect mobile with usb in debugging mode then run:
+
+npx expo run:android
+

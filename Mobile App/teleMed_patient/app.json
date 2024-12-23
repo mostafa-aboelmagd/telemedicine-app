@@ -22,7 +22,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#f0f0f0"
-      }
+      },
+      "permissions": [
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR"
+      ],
+      "package": "com.yahyakhalaf.TeleMedPatient"
     },
     "web": {
       "favicon": "./assets/images/logo.png"
