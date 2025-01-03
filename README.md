@@ -1,142 +1,62 @@
+# Telemedicine Web App
+![alt text](screenshots/home.png)
 
-<div style="display: flex;flex-direction: row; align-items: center; justify-content: center;">
-  <img src="https://tele-med-pilot.vercel.app/assets/logo.png" alt="TeleMedPilot Icon" width="100" />
-</div>
+## Live Demo
+https://telemedicine-mansy.vercel.app/
 
-# TeleMedPilot
+## Description
 
-## **Your Virtual Healthcare Companion**
+- A Telemedicine Platform (Shezlong Clone) Designed To Connect Patients With Certified Doctors Via Secure Online Consultations.
+- Simplifies Providing Healthcare Serivces By Offering Features Such As Appointment Booking, Scheduling Follow Ups, Medical Record Management.
+- Allows Doctors To Input Free Time Slots Indicating Availablity For An Appointment.
+- Introduces Review & Rating System Between Patients And Doctors.
 
-TeleMedPilot provides a comprehensive platform to connect patients with certified doctors through secure online consultations. From booking appointments to managing medical records, our goal is to make healthcare accessible and convenient for everyone.
+## Tech Stack Used
 
+|**Front End** | [![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#) [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#)|
+|--- | --- |
+|**Styling** | [![TailwindCSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](#) |
+|**Back End** | [![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)](#) [![Express.js](https://img.shields.io/badge/Express.js-%23404d59.svg?logo=express&logoColor=%2361DAFB)](#)|
+|**Database** | [![Postgres](https://img.shields.io/badge/Postgres-%23316192.svg?logo=postgresql&logoColor=white)](#) |
+|**Deployment** | [![Vercel](https://img.shields.io/badge/Vercel-%23000000.svg?logo=vercel&logoColor=white)](#) |
 
+## Features
 
+- Simple Patient & Doctor Registeration
+   
+![alt text](screenshots/registeration.png)
+- Intuitive Doctors Filtering
 
-## **Why Choose TeleMedPilot?**
+![alt text](screenshots/filter.gif)
+- Dynamic Availablity Scheduling
+  
+![alt text](screenshots/time_slots.gif)
+- Flexible Appointment Booking
 
-- **Flexible Appointments:** Book online or in-person consultations at your convenience.
-- **Doctor Search & Filters:** Find the right doctor based on specialty, experience, and availability.
-- **Personalized Care:** Get customized treatment plans and prescriptions.
-- **Secure Communication:** Send messages securely to your doctor for follow-ups or additional questions.
-- **Medical Record Management:** Easily access and manage your prescriptions, test results, and visit history.
+![alt text](screenshots/booking.gif)
+- Doctor Rating System
+  
+![alt text](screenshots/rating.gif)
 
----
+## How It Works
+1. **Create An Account:** Sign Up And Set Up Your Profile.
+   
+2. **Book An Appointment:** Search For Doctors And Choose a Suitable Time For You.
+   
+3. **Consult Online:** Meet With Your Doctor Via Video Or Phone.
+   
+4. **Receive Treatment:** Get A Diagnosis And Personalized Treatment Plan.
+   
+5. **Access Medical Records:** Safely Manage Your Prescriptions And Visit History Online.
 
-## **How TeleMedPilot Works**
+## Contributors
 
-1. **Create an Account:** Sign up and set up your profile.
-2. **Book an Appointment:** Search for doctors and choose a time that works for you.
-3. **Consult Online:** Meet with your doctor via video or phone.
-4. **Receive Treatment:** Get a diagnosis and personalized treatment plan.
-5. **Access Medical Records:** Safely manage your prescriptions and visit history online.
-
----
-
-## **Live Demo**
-
-Visit the live website: [TeleMedPilot](https://telemed-mansy.vercel.app)
-
----
-
-## **Technology Stack**
-
-- **Frontend:** Next.js (with TypeScript)
-- **Backend:** Node.js, Express
-- **Mobile:** Flutter
-- **Database:** MongoDB
-- **Cloud Services:** AWS for hosting and data storage
-- **Video Conferencing:** WebRTC for seamless online consultations
-
----
-## **Technologies Used (Frontend)**
-
-- **Next.js (TypeScript):** For building user interfaces.
-- **Tailwind CSS:** For styling and responsive design.
-- **Custom Hooks:** For efficient state management.
-- **Git:** Version control.
-- **Responsive Design:** Optimized for mobile and desktop experiences.
-
----
-
-## **Learnings from This Project**
-
-In this project, I learned how to effectively manage:
-
-1. **Team Communication:**
-   Working in an Agile team with daily standups and sprints helped keep the project on track and enabled quick problem resolution.
-
-2. **API Integration:**
-   I handled intensive API integrations, debugging common issues like CORS and authentication, and ensuring real-time data sync between frontend and backend.
-
----
-
-## **Acknowledgements**
-
-Special thanks to the TeleMedPilot team for their dedication to building this platform. The project wouldn't have been possible without contributions from:
-
-- **Frontend Team:** UI/UX development and responsive design.
-- **Backend Team:** API integrations and data security.
-- **Cloud Engineers:** Ensuring smooth deployment and scalability.
-- **Mobile App Team:** Flutter and Figma Design
-
----
-
-### **Installation**
-
-**For Developers:**
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/innovay.io/TeleMedPilot.git
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install "dependency-tracking"
-   ```
-
-3. **Set up environment variables:**
-   Create a `.env` file and add necessary environment variables (e.g., API keys, database credentials).
-
-### **Running the App**
-
-**For Developers:**
-
-1. **Start the development server:**
-   ```bash
-   npm start
-   ```
-
-### **Deployment**
-
-**For Developers:**
-
-1. **Build the application:**
-   ```bash
-   npm run build
-   ```
-
-2. **Deploy to your chosen cloud platform:**
-   Follow the specific deployment instructions for your cloud provider.
-
----
-
-
-### TeleMedPilot Architecture
-* **Introduce High-level archetecture of TeleMedPilot**
----
-
-#### Data Model Design
-* **Introduce High-level archetecture of TeleMedPilot**
----
-
-### **License**
-
-[Specify the license under which your project is released, e.g., MIT, Apache]
-
-### **Acknowledgements**
-Acknowledgements
-
-
-* **Include screenshots or mockups**
-* **Highlight unique features or benefits**
+| Name | GitHub | LinkedIn |
+| ---- | ------ | -------- |
+| Mostafa Ayman | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/mostafa-aboelmagd) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mostafa--aboelmagd/) |
+| Yahya Alariny | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/yahya-khalaf) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yahya-khalaf54/) |
+| Assem Sadek | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/AssemSadek90) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/assem-sadek-13aa132a0/) |
+| Mahmoud Mansy | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/MMansy19)| [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mahmood-mansy) |
+| Youssef Hassanien | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/YoussefHassanien) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/youssef-hassanien/) |
+| Ahmed El Deeb | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/AhmedXAlDeeb)| [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ahmed-mohamed-aldeeb/) |
+| Amr Safwat | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/amr21ss)| [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/amr-safwat-7854b0298/) |
