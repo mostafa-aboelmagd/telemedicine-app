@@ -22,23 +22,23 @@ https://telemedicine-mansy.vercel.app/
 
 ## Features
 
-**- Simple Patient & Doctor Registeration**
+- **Simple Patient & Doctor Registeration**
    
 ![Registeration](screenshots/registeration.png)
 
-**- Intuitive Doctors Filtering**
+- **Intuitive Doctors Filtering**
 
 ![Doctor Filters](screenshots/filter.gif)
 
-**- Dynamic Availability Scheduling**
+- **Dynamic Availability Scheduling**
   
 ![availability scheduling](screenshots/time_slots.gif)
 
-**- Flexible Appointment Booking**
+- **Flexible Appointment Booking**
 
 ![appointment booking](screenshots/booking.gif)
 
-**- Doctor Rating System**
+- **Doctor Rating System**
   
 ![doctor rating](screenshots/rating.gif)
 
