@@ -22,21 +22,25 @@ https://telemedicine-mansy.vercel.app/
 
 ## Features
 
-- Simple Patient & Doctor Registeration
+**- Simple Patient & Doctor Registeration**
    
-![alt text](screenshots/registeration.png)
-- Intuitive Doctors Filtering
+![Registeration](screenshots/registeration.png)
 
-![alt text](screenshots/filter.gif)
-- Dynamic Availablity Scheduling
-  
-![alt text](screenshots/time_slots.gif)
-- Flexible Appointment Booking
+**- Intuitive Doctors Filtering**
 
-![alt text](screenshots/booking.gif)
-- Doctor Rating System
+![Doctor Filters](screenshots/filter.gif)
+
+**- Dynamic Availability Scheduling**
   
-![alt text](screenshots/rating.gif)
+![availability scheduling](screenshots/time_slots.gif)
+
+**- Flexible Appointment Booking**
+
+![appointment booking](screenshots/booking.gif)
+
+**- Doctor Rating System**
+  
+![doctor rating](screenshots/rating.gif)
 
 ## How It Works
 1. **Create An Account:** Sign Up And Set Up Your Profile.
@@ -53,10 +57,10 @@ https://telemedicine-mansy.vercel.app/
 
 | Name | GitHub | LinkedIn |
 | ---- | ------ | -------- |
-| Mostafa Ayman | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/mostafa-aboelmagd) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mostafa--aboelmagd/) |
-| Yahya Alariny | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/yahya-khalaf) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yahya-khalaf54/) |
-| Assem Sadek | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/AssemSadek90) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/assem-sadek-13aa132a0/) |
-| Mahmoud Mansy | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/MMansy19)| [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mahmood-mansy) |
-| Youssef Hassanien | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/YoussefHassanien) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/youssef-hassanien/) |
-| Ahmed El Deeb | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/AhmedXAlDeeb)| [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ahmed-mohamed-aldeeb/) |
-| Amr Safwat | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/amr21ss)| [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/amr-safwat-7854b0298/) |
+| Mostafa Ayman | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/mostafa-aboelmagd) | [![linkedin](https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?logo=linkedin-white&logoColor=fff)](https://www.linkedin.com/in/mostafa--aboelmagd/) |
+| Yahya Alariny | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/yahya-khalaf) | [![linkedin](https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?logo=linkedin-white&logoColor=fff)](https://www.linkedin.com/in/yahya-khalaf54/) |
+| Assem Sadek | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/AssemSadek90) | [![linkedin](https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?logo=linkedin-white&logoColor=fff)](https://www.linkedin.com/in/assem-sadek-13aa132a0/) |
+| Mahmoud Mansy | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/MMansy19)| [![linkedin](https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?logo=linkedin-white&logoColor=fff)](https://www.linkedin.com/in/mahmood-mansy) |
+| Youssef Hassanien | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/YoussefHassanien) | [![linkedin](https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?logo=linkedin-white&logoColor=fff)](https://www.linkedin.com/in/youssef-hassanien/) |
+| Ahmed El Deeb | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/AhmedXAlDeeb)| [![linkedin](https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?logo=linkedin-white&logoColor=fff)](https://www.linkedin.com/in/ahmed-mohamed-aldeeb/) |
+| Amr Safwat | [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/amr21ss)| [![linkedin](https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?logo=linkedin-white&logoColor=fff)](https://www.linkedin.com/in/amr-safwat-7854b0298/) |
